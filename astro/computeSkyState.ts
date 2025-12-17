@@ -11,24 +11,99 @@
  * - Deterministic outputs only
  */
 
+import { calcBody, julianDayFor } from "./ephemeris/swisseph";
+
 export interface ComputeSkyStateInput {
   date: string; // YYYY-MM-DD
   timezone: "UTC";
 }
 
-/**
- * Compute the canonical sky_state for a given date.
- *
- * NOTE:
- * This function is intentionally unimplemented.
- * Swiss Ephemeris integration will be added in a later phase.
- */
-export async function computeSkyState(
-  _input: ComputeSkyStateInput
-): Promise<never> {
-  throw new Error(
-    "computeSkyState is not implemented yet. " +
-      "Swiss Ephemeris integration will be added in Phase 2.4."
-  );
+const BODY_ORDER = [
+  "sun",
+  "moon",
+  "mercury",
+  "venus",
+  "mars",
+  "jupiter",
+  "saturn",
+  "uranus",
+  "neptune",
+  "pluto",
+];
+
+const SIGNS = [
+  "aries",
+  "taurus",
+  "gemini",
+  "cancer",
+  "leo",
+  "virgo",
+  "libra",
+  "scorpio",
+  "sagittarius",
+  "capricorn",
+  "aquarius",
+  "pisces",
+];
+
+function normalizeDegrees(value: number) {
+  let v = value % 360;
+  if (v < 0) v += 360;
+  return v;
+}
+
+export async function computeSkyState(input: ComputeSkyStateInput) {
+  if (input.timezone !== "UTC") {
+    throw new Error("Only UTC timezone is supported");
+  }
+
+  const date = input.date;
+  const jd = julianDayFor(date, 12.0); // 12:00 UTC
+
+  const bodies: Record<
+    string,
+    {
+      longitude: number;
+      speed_deg_per_day: number;
+      retrograde: boolean;
+      sign: string;
+      sign_degree: number;
+      latitude?: number;
+      distance_au?: number;
+    }
+  > = {};
+
+  for (const body of BODY_ORDER) {
+    const result = calcBody(jd, body);
+    const longitude = normalizeDegrees(result.longitude);
+    const signIndex = Math.floor(longitude / 30);
+    const signDegree = longitude - signIndex * 30;
+
+    bodies[body] = {
+      longitude,
+      speed_deg_per_day: result.speed_deg_per_day,
+      retrograde: result.retrograde,
+      sign: SIGNS[signIndex],
+      sign_degree: signDegree,
+      latitude: result.latitude,
+      distance_au: result.distance_au,
+    };
+  }
+
+  return {
+    meta: {
+      engine: "swisseph",
+      coordinate_system: "tropical",
+    },
+    timestamp: {
+      date,
+      utc_datetime: `${date}T12:00:00.000Z`,
+      timezone: "UTC",
+      julian_day: jd,
+    },
+    bodies,
+    aspects: [],
+    lunar: {},
+  };
 }
 

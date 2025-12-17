@@ -1,0 +1,18 @@
+0 verbose cli /Users/lolttyn/.nvm/versions/node/v20.19.6/bin/node /Users/lolttyn/.nvm/versions/node/v20.19.6/bin/npm
+1 info using npm@10.8.2
+2 info using node@v20.19.6
+3 silly config load:file:/Users/lolttyn/.nvm/versions/node/v20.19.6/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/lolttyn/Desktop/cloudia/.npmrc
+5 silly config load:file:/Users/lolttyn/.nvm/versions/node/v20.19.6/etc/npmrc
+6 verbose title npm ls vitest
+7 verbose argv "ls" "vitest"
+8 verbose logfile logs-max:10 dir:/Users/lolttyn/Desktop/cloudia/.npm-cache/_logs/2025-12-17T20_42_44_943Z-
+9 verbose logfile /Users/lolttyn/Desktop/cloudia/.npm-cache/_logs/2025-12-17T20_42_44_943Z-debug-0.log
+10 silly logfile done cleaning log files
+11 verbose cwd /Users/lolttyn/Desktop/cloudia
+12 verbose os Darwin 24.6.0
+13 verbose node v20.19.6
+14 verbose npm  v10.8.2
+15 verbose exit 1
+16 verbose code 1
+17 error A complete log of this run can be found in: /Users/lolttyn/Desktop/cloudia/.npm-cache/_logs/2025-12-17T20_42_44_943Z-debug-0.log

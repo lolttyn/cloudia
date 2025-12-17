@@ -4,8 +4,15 @@
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
+  "scripts": {
+    "test": "vitest run"
+  },
   "dependencies": {
+    "swisseph": "^0.5.17",
     "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.4"
   }
 }
 
