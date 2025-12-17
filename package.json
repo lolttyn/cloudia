@@ -10,6 +10,7 @@
     "cloudia:batch": "tsx crew_cloudia/runner/runEpisodeBatch.ts"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.48.0",
     "swisseph": "^0.5.17",
     "zod": "3.23.8"
   },

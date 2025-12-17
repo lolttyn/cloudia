@@ -4,6 +4,8 @@ import crypto from "crypto";
 
 import { runIntroForDate } from "../../run-intro.js";
 import { runMainThemesForDate } from "../../run-main-themes.js";
+import { evaluateEpisodeGate } from "../editorial/gate/evaluateEpisodeGate.js";
+import { persistEpisodeGateResult } from "../editorial/gate/persistEpisodeGateResult.js";
 
 type ParsedArgs = {
   program_slug: string;
@@ -66,23 +68,69 @@ function deterministicEpisodeId(program_slug: string, episode_date: string): str
     .createHash("sha256")
     .update(`${program_slug}:${episode_date}`)
     .digest("hex");
-  return `episode-${hash.slice(0, 32)}`;
+
+  // Format first 32 hex chars into UUID shape to satisfy uuid column types
+  const base = hash.slice(0, 32);
+  return [
+    base.slice(0, 8),
+    base.slice(8, 12),
+    base.slice(12, 16),
+    base.slice(16, 20),
+    base.slice(20, 32),
+  ].join("-");
 }
 
 async function runForDate(program_slug: string, episode_date: string): Promise<void> {
   const episode_id = deterministicEpisodeId(program_slug, episode_date);
+  const today = new Date().toISOString().slice(0, 10);
+  const time_context = episode_date === today ? "day_of" : "future";
 
-  await runIntroForDate({
+  const introResult = await runIntroForDate({
     program_slug,
     episode_date,
     episode_id,
   });
 
-  await runMainThemesForDate({
+  const mainThemesResult = await runMainThemesForDate({
     program_slug,
     episode_date,
     episode_id,
   });
+
+  const segment_results = [
+    {
+      segment_key: introResult.segment_key,
+      decision: introResult.gate_result.decision,
+      blocking_reasons: introResult.gate_result.blocking_reasons,
+    },
+    {
+      segment_key: mainThemesResult.segment_key,
+      decision: mainThemesResult.gate_result.decision,
+      blocking_reasons: mainThemesResult.gate_result.blocking_reasons,
+    },
+  ];
+
+  const episodeGate = evaluateEpisodeGate({
+    episode_id,
+    episode_date,
+    time_context,
+    segment_results,
+    policy_version: "v0.1",
+  });
+
+  await persistEpisodeGateResult({
+    episode_id,
+    episode_date,
+    gate_result: episodeGate,
+  });
+
+  if (time_context === "day_of" && episodeGate.decision === "fail") {
+    throw new Error(
+      `Episode ${episode_date} failed editorial gate: ${episodeGate.failed_segments
+        .map((s) => s.segment_key)
+        .join(", ")}`
+    );
+  }
 }
 
 async function main() {

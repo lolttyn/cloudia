@@ -19,7 +19,10 @@ export async function runIntroForDate(params: {
   program_slug: string;
   episode_date: string; // YYYY-MM-DD
   episode_id: string;
-}): Promise<void> {
+}): Promise<{
+  segment_key: string;
+  gate_result: ReturnType<typeof evaluateEditorialGate>;
+}> {
   const episode_plan: EpisodeEditorialPlan = {
     episode_date: params.episode_date,
     segments: [
@@ -102,6 +105,11 @@ export async function runIntroForDate(params: {
     segment_key: result.segment_key,
     gate_result: gateResult,
   });
+
+  return {
+    segment_key: result.segment_key,
+    gate_result: gateResult,
+  };
 }
 
 async function main() {
