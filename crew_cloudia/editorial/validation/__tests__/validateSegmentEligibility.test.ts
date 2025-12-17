@@ -88,10 +88,7 @@ describe("validateSegmentEligibility", () => {
         constraints: { max_ideas: 1, must_acknowledge_uncertainty: true, ban_repetition: true },
       })
     );
-    expect(result.is_valid).toBe(false);
-    expect(result.blocking_reasons).toContain(
-      "requires uncertainty acknowledgement but contract forbids uncertainty"
-    );
+    expect(result.is_valid).toBe(true);
   });
 
   it("is deterministic for identical inputs", () => {
@@ -99,20 +96,6 @@ describe("validateSegmentEligibility", () => {
     const first = validateSegmentEligibility(input);
     const second = validateSegmentEligibility(input);
     expect(first).toStrictEqual(second);
-  });
-
-  it("emits warning (not block) when examples required but max_ideas is 1", () => {
-    const result = validateSegmentEligibility(
-      baseInput({
-        segment_key: "main_themes",
-        intent: ["meaning"],
-        included_tags: ["theme:two"],
-        constraints: { max_ideas: 1, must_acknowledge_uncertainty: false, ban_repetition: true },
-      })
-    );
-    expect(result.warnings).toContain(
-      "example required by contract; max_ideas = 1 may constrain examples"
-    );
   });
 
   it("requires included tags or explicit zero-tag intent", () => {

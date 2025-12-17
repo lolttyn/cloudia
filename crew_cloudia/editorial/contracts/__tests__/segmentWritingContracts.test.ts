@@ -24,38 +24,26 @@ describe("segmentWritingContracts", () => {
   it("ensures contract completeness", () => {
     SEGMENT_KEYS.forEach((key) => {
       const contract = getWritingContract(key);
-      expect(contract.required_elements.length).toBeGreaterThan(0);
-      expect(contract.forbidden_elements.length).toBeGreaterThan(0);
-      expect(contract.failure_modes.length).toBeGreaterThan(0);
-      expect(contract.tone_constraints.emotional_range.length).toBeGreaterThan(0);
+      expect(contract.segment_kind).toBeTruthy();
+      expect(contract.intent).toBeTypeOf("string");
+      expect(contract.required_sections.length).toBeGreaterThan(0);
+      expect(contract.forbidden_elements.phrases).toBeInstanceOf(Array);
+      expect(contract.forbidden_elements.claims).toBeInstanceOf(Array);
+      expect(contract.forbidden_elements.tones).toBeInstanceOf(Array);
+      expect(contract.voice_constraints.perspective).toMatch(/first_person|second_person/);
+      expect(contract.voice_constraints.allowed_tones.length).toBeGreaterThan(0);
+      expect(contract.length_constraints.min_words).toBeGreaterThan(0);
+      expect(contract.length_constraints.max_words).toBeGreaterThan(
+        contract.length_constraints.min_words
+      );
     });
   });
 
-  it("enforces structural bounds", () => {
+  it("captures formatting rules explicitly", () => {
     SEGMENT_KEYS.forEach((key) => {
-      const structural = getWritingContract(key).structural_requirements;
-      expect(structural.min_paragraphs).toBeGreaterThanOrEqual(1);
-      expect(structural.max_paragraphs).toBeGreaterThanOrEqual(structural.min_paragraphs);
-    });
-  });
-
-  it("enforces example requirements only for main themes", () => {
-    const mainThemes = getWritingContract("main_themes");
-    expect(mainThemes.structural_requirements.requires_example).toBe(true);
-
-    ["intro", "reflection", "closing"].forEach((key) => {
-      const contract = getWritingContract(key as SegmentWritingContract["segment_key"]);
-      expect(contract.structural_requirements.requires_example).toBe(false);
-    });
-  });
-
-  it("aligns uncertainty allowances by segment", () => {
-    const reflection = getWritingContract("reflection");
-    expect(reflection.tone_constraints.allows_uncertainty).toBe(true);
-
-    ["intro", "closing"].forEach((key) => {
-      const contract = getWritingContract(key as SegmentWritingContract["segment_key"]);
-      expect(contract.tone_constraints.allows_uncertainty).toBe(false);
+      const contract = getWritingContract(key);
+      expect(typeof contract.formatting_rules.allow_bullets).toBe("boolean");
+      expect(typeof contract.formatting_rules.allow_questions).toBe("boolean");
     });
   });
 

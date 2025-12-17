@@ -1,4 +1,3 @@
-import { getWritingContract } from "../contracts/segmentWritingContracts.js";
 import { SegmentPromptInput } from "../contracts/segmentPromptInput.js";
 import { SegmentValidationResult } from "./segmentValidationResult.js";
 
@@ -18,18 +17,12 @@ export function validateSegmentEligibility(input: SegmentPromptInput): SegmentVa
   const blocking_reasons: string[] = [];
   const warnings: string[] = [];
 
-  const contract = getWritingContract(input.segment_key);
-
   if (input.intent.length < 1) {
     blocking_reasons.push("intent is empty");
   }
 
   if (input.constraints.max_ideas < 1) {
     blocking_reasons.push("max_ideas must be at least 1");
-  }
-
-  if (input.constraints.must_acknowledge_uncertainty && !contract.tone_constraints.allows_uncertainty) {
-    blocking_reasons.push("requires uncertainty acknowledgement but contract forbids uncertainty");
   }
 
   if (input.constraints.ban_repetition && continuityIndicatesRepetitionRisk(input.continuity_notes)) {
@@ -71,13 +64,6 @@ export function validateSegmentEligibility(input: SegmentPromptInput): SegmentVa
     default: {
       blocking_reasons.push(`unsupported segment ${input.segment_key}`);
     }
-  }
-
-  if (
-    contract.structural_requirements.requires_example &&
-    input.constraints.max_ideas === 1
-  ) {
-    warnings.push("example required by contract; max_ideas = 1 may constrain examples");
   }
 
   const is_valid = blocking_reasons.length === 0;

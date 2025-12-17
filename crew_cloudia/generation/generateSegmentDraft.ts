@@ -1,7 +1,8 @@
 import { EpisodeEditorialPlan } from "../editorial/planner/types.js";
 import { SegmentPromptInput } from "../editorial/contracts/segmentPromptInput.js";
-import { SegmentWritingContract } from "../editorial/contracts/segmentWritingContracts.js";
+import { SegmentWritingContract } from "../editorial/types/SegmentWritingContract.js";
 import { EpisodeValidationResult } from "../editorial/validation/episodeValidationResult.js";
+import { buildSegmentPrompt } from "./buildSegmentPrompt.js";
 
 export type SegmentGenerationResult = {
   segment_key: string;
@@ -54,6 +55,13 @@ export function generateSegmentDraft(input: {
       `Writing contract does not match segment key (${segment.segment_key})`
     );
   }
+
+  const assembled_prompt = buildSegmentPrompt({
+    episode_plan,
+    segment,
+    writing_contract,
+    episode_validation,
+  });
 
   // --- Prompt Assembly (placeholder) ---
   // NOTE: Actual prompt construction will be layered later.
