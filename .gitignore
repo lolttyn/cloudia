@@ -1,0 +1,4 @@
+# Swiss Ephemeris data files (Phase 2 artifacts)
+*.se1
+/ephe/
+
