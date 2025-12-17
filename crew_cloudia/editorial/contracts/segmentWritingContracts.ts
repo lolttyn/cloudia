@@ -38,11 +38,13 @@ const INTRO_CONTRACT = freezeContract({
       key: "orientation",
       description: "Orient the listener to today's episode and context.",
       required: true,
+      enforcement: "semantic",
     },
     {
       key: "context_framing",
       description: "Provide context framing without deep analysis.",
       required: true,
+      enforcement: "semantic",
     },
   ],
   forbidden_elements: {
@@ -74,21 +76,25 @@ const MAIN_THEMES_CONTRACT = freezeContract({
       key: "primary_meanings",
       description: "State primary meanings for today.",
       required: true,
+      enforcement: "structural",
     },
     {
       key: "relevance",
       description: "Connect themes to current relevance.",
       required: true,
+      enforcement: "structural",
     },
     {
       key: "concrete_example",
       description: "Provide at least one concrete example.",
       required: true,
+      enforcement: "structural",
     },
     {
       key: "confidence_alignment",
       description: "Align framing to the stated confidence level.",
       required: true,
+      enforcement: "structural",
     },
   ],
   forbidden_elements: {
@@ -120,16 +126,19 @@ const REFLECTION_CONTRACT = freezeContract({
       key: "integration",
       description: "Integrate today's themes into a cohesive takeaway.",
       required: true,
+      enforcement: "structural",
     },
     {
       key: "uncertainty",
       description: "Acknowledge uncertainty explicitly.",
       required: true,
+      enforcement: "structural",
     },
     {
       key: "lived_perspective",
       description: "Connect themes to a lived perspective without adding new analysis.",
       required: true,
+      enforcement: "structural",
     },
   ],
   forbidden_elements: {
@@ -161,11 +170,13 @@ const CLOSING_CONTRACT = freezeContract({
       key: "emotional_resolution",
       description: "Deliver an emotional resolution for today.",
       required: true,
+      enforcement: "structural",
     },
     {
       key: "reaffirmation",
       description: "Reaffirm the present-day stance without expansion.",
       required: true,
+      enforcement: "structural",
     },
   ],
   forbidden_elements: {

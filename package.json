@@ -5,14 +5,17 @@
   "type": "module",
   "license": "UNLICENSED",
   "scripts": {
-    "test": "vitest run"
+    "test": "vitest run",
+    "inspect:intro": "tsx run-intro.ts"
   },
   "dependencies": {
     "swisseph": "^0.5.17",
     "zod": "3.23.8"
   },
   "devDependencies": {
-    "vitest": "^2.1.4"
+    "@types/node": "^20.17.9",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.21.0",
+    "vitest": "^4.0.16"
   }
 }
-

@@ -1,9 +1,25 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi, beforeEach } from "vitest";
 import { generateSegmentDraft } from "../generateSegmentDraft.js";
 import { getWritingContract } from "../../editorial/contracts/segmentWritingContracts.js";
 import { EpisodeEditorialPlan } from "../../editorial/planner/types.js";
 import { SegmentPromptInput } from "../../editorial/contracts/segmentPromptInput.js";
 import { EpisodeValidationResult } from "../../editorial/validation/episodeValidationResult.js";
+
+const mockInvokeLLM = vi.hoisted(() => vi.fn());
+
+vi.mock("../invokeLLM.js", () => ({
+  __esModule: true,
+  invokeLLM: (...args: any[]) => mockInvokeLLM(...args),
+  CLOUDIA_LLM_CONFIG: {
+    provider: "openai",
+    model: "mock-model",
+    temperature: 0.6,
+    max_tokens: 800,
+    frequency_penalty: 0.2,
+    presence_penalty: 0.0,
+    stop_sequences: null,
+  },
+}));
 
 const episode_plan: EpisodeEditorialPlan = {
   episode_date: "2025-01-01",
@@ -58,18 +74,56 @@ const blocked_validation: EpisodeValidationResult = {
   warnings: [],
 };
 
+const passing_validation: EpisodeValidationResult = {
+  episode_date: "2025-01-01",
+  is_valid: true,
+  segment_results: [],
+  blocking_segments: [],
+  warnings: [],
+};
+
 describe("generateSegmentDraft", () => {
-  it("throws when segment is globally blocked", () => {
+  beforeEach(() => {
+    mockInvokeLLM.mockReset();
+  });
+
+  it("throws when segment is globally blocked", async () => {
     const writing_contract = getWritingContract("intro");
 
-    expect(() =>
+    await expect(
       generateSegmentDraft({
         episode_plan,
         segment,
         writing_contract,
         episode_validation: blocked_validation,
       })
-    ).toThrow(/globally blocked/);
+    ).rejects.toThrow(/globally blocked/);
+  });
+
+  it("surfaces forbidden phrase violations from generated draft", async () => {
+    const writing_contract = getWritingContract("intro");
+    const generatedText =
+      "orientation context_framing deep interpretation " +
+      "filler ".repeat(90);
+
+    mockInvokeLLM.mockResolvedValueOnce({
+      status: "ok",
+      text: generatedText,
+      model: "mock-model",
+    });
+
+    const result = await generateSegmentDraft({
+      episode_plan,
+      segment,
+      writing_contract,
+      episode_validation: passing_validation,
+    });
+
+    expect(result.draft_script).toContain("deep interpretation");
+    expect(result.metadata.model_id).toBe("mock-model");
+    expect(result.self_check.contract_violations).toContain(
+      "forbidden_phrase:deep interpretation"
+    );
   });
 });
 

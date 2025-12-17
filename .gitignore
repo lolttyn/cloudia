@@ -2,3 +2,6 @@
 *.se1
 /ephe/
 
+# Local environment variables
+.env
+.env.local

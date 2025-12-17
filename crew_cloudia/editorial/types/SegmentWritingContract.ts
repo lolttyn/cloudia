@@ -8,6 +8,7 @@ export type SegmentWritingContract = {
     key: string;
     description: string;
     required: boolean;
+    enforcement: "structural" | "semantic";
   }[];
 
   forbidden_elements: {
