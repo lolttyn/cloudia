@@ -51,7 +51,8 @@ export type CombinationRule = {
 
 export type CombinationResult = {
   matchedRules: CombinationRule[];
-  aggregate: AggregatedOutputs;
+  activeTags: TagRecord[];
+  suppressedTags: TagRecord[];
   trace: {
     applied_rules: Array<{
       id: string;
@@ -81,58 +82,89 @@ export const EMPTY_AGGREGATE: AggregatedOutputs = {
   recommended_response_tags: [],
 };
 
+export type TagField = keyof AggregatedOutputs;
+
+export type TagRecord = {
+  field: TagField;
+  value: string;
+  ruleId: string;
+  ruleVersion: string;
+  priority: number;
+  matched_on: string;
+  salience?: string;
+  suppressed_reason?: string;
+};
+
 export function applyCombinationRules(
   facts: MockFacts,
   rules: CombinationRule[]
 ): CombinationResult {
-  const matched = rules.filter((rule) =>
-    facts.transits.some((transit) => {
-      if (
-        transit.planet !== rule.when.planet ||
-        transit.sign !== rule.when.sign
-      ) {
-        return false;
-      }
-      if (
-        rule.when.salience !== undefined &&
-        transit.salience !== rule.when.salience
-      ) {
-        return false;
-      }
-      if (
-        rule.when.retrograde !== undefined &&
-        transit.retrograde !== rule.when.retrograde
-      ) {
-        return false;
-      }
-      return true;
-    })
-  );
+  const matchedRules: CombinationRule[] = [];
+  const tagRecords: TagRecord[] = [];
+  const appliedTrace: CombinationResult["trace"]["applied_rules"] = [];
 
-  const sorted = matched.sort((a, b) => b.priority - a.priority);
+  for (const transit of facts.transits) {
+    for (const rule of rules) {
+      const matchPlanet = transit.planet === rule.when.planet;
+      const matchSign = transit.sign === rule.when.sign;
+      const matchSalience =
+        rule.when.salience === undefined ||
+        transit.salience === rule.when.salience;
+      const matchRetro =
+        rule.when.retrograde === undefined ||
+        transit.retrograde === rule.when.retrograde;
+      if (!(matchPlanet && matchSign && matchSalience && matchRetro)) continue;
 
-  const aggregate: AggregatedOutputs = structuredClone(EMPTY_AGGREGATE);
+      matchedRules.push(rule);
+      appliedTrace.push({
+        id: rule.id,
+        version: rule.version,
+        matched_on: `${transit.planet}:${transit.sign}:${transit.salience}`,
+        priority: rule.priority,
+      });
 
-  for (const rule of sorted) {
-    Object.entries(rule.outputs).forEach(([key, value]) => {
-      const arr = value ?? [];
-      arr.forEach((item) => shortTag.parse(item));
-      (aggregate as Record<string, string[]>)[key] = [
-        ...(aggregate as Record<string, string[]>)[key],
-        ...arr,
-      ];
-    });
+      Object.entries(rule.outputs).forEach(([key, value]) => {
+        const arr = value ?? [];
+        arr.forEach((item) => {
+          shortTag.parse(item);
+          tagRecords.push({
+            field: key as TagField,
+            value: item,
+            ruleId: rule.id,
+            ruleVersion: rule.version,
+            priority: rule.priority,
+            matched_on: `${transit.planet}:${transit.sign}:${transit.salience}`,
+            salience: transit.salience,
+          });
+        });
+      });
+    }
+  }
+
+  // Resolve conflicts: higher-priority tags win, lower-priority duplicates are suppressed.
+  const activeTags: TagRecord[] = [];
+  const suppressedTags: TagRecord[] = [];
+  const seenByField = new Map<TagField, Set<string>>();
+
+  const sortedTags = tagRecords.sort((a, b) => b.priority - a.priority);
+  for (const tag of sortedTags) {
+    const seen = seenByField.get(tag.field) ?? new Set<string>();
+    if (seen.has(tag.value)) {
+      suppressedTags.push({
+        ...tag,
+        suppressed_reason: "lower_priority_duplicate",
+      });
+      continue;
+    }
+    seen.add(tag.value);
+    seenByField.set(tag.field, seen);
+    activeTags.push(tag);
   }
 
   const trace = {
-    applied_rules: sorted.map((rule) => ({
-      id: rule.id,
-      version: rule.version,
-      matched_on: `${rule.when.planet}:${rule.when.sign}`,
-      priority: rule.priority,
-    })),
+    applied_rules: appliedTrace.sort((a, b) => b.priority - a.priority),
   };
 
-  return { matchedRules: sorted, aggregate, trace };
+  return { matchedRules: matchedRules.sort((a, b) => b.priority - a.priority), activeTags, suppressedTags, trace };
 }
 

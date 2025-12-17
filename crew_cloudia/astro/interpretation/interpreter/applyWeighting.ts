@@ -10,7 +10,7 @@ export type WeightingRule = {
     time_horizon: "short" | "medium" | "long";
     psychological_weight: number;
     behavioral_weight: number;
-    speakability: "low" | "medium" | "high";
+    speakability: "must_say" | "can_say" | "avoid";
   };
   fallback_outputs?: Partial<CombinationResult["aggregate"]>;
 };
@@ -29,6 +29,7 @@ export type WeightingResult = {
       applied: boolean;
     }>;
   };
+  speakabilityMap: Record<string, WeightingRule["weights"]["speakability"]>;
 };
 
 export function applyWeighting(
@@ -40,9 +41,7 @@ export function applyWeighting(
     .filter((rule) => {
       if (!rule.when) return true;
       if (rule.when.salience) {
-        return facts.transits.some(
-          (t) => t.salience === rule.when!.salience
-        );
+        return facts.transits.some((t) => t.salience === rule.when!.salience);
       }
       return true;
     })
@@ -54,10 +53,22 @@ export function applyWeighting(
       time_horizon: "medium",
       psychological_weight: 0.5,
       behavioral_weight: 0.5,
-      speakability: "medium",
+      speakability: "can_say",
     };
 
   const fallback_outputs = primary?.fallback_outputs ?? {};
+
+  const speakabilityMap: Record<string, WeightingRule["weights"]["speakability"]> =
+    {};
+  combo.matchedRules.forEach((rule) => {
+    const best = policy.rules
+      .filter((pol) => {
+        if (!pol.when?.salience) return true;
+        return pol.when.salience === rule.when.salience;
+      })
+      .sort((a, b) => b.priority - a.priority)[0];
+    speakabilityMap[rule.id] = best?.weights.speakability ?? "can_say";
+  });
 
   const trace = {
     weights: policy.rules.map((rule) => ({
@@ -67,6 +78,6 @@ export function applyWeighting(
     })),
   };
 
-  return { weights, fallback_outputs, trace };
+  return { weights, fallback_outputs, trace, speakabilityMap };
 }
 
