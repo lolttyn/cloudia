@@ -2,64 +2,72 @@ import "dotenv/config";
 
 import { generateSegmentDraft } from "./crew_cloudia/generation/generateSegmentDraft.js";
 import { getWritingContract } from "./crew_cloudia/editorial/contracts/segmentWritingContracts.js";
+import { mapDiagnosticsToEditorialViolations } from "./crew_cloudia/editorial/diagnostics/mapDiagnosticsToEditorialViolations.js";
+import { evaluateEditorialGate } from "./crew_cloudia/editorial/gate/evaluateEditorialGate.js";
+import { persistEditorialGateResult } from "./crew_cloudia/editorial/gate/persistEditorialGateResult.js";
 import { EpisodeEditorialPlan } from "./crew_cloudia/editorial/planner/types.js";
 import { SegmentPromptInput } from "./crew_cloudia/editorial/contracts/segmentPromptInput.js";
 import { EpisodeValidationResult } from "./crew_cloudia/editorial/validation/episodeValidationResult.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
+  argv: string[];
   exit(code?: number): never;
 };
 
-const episode_plan: EpisodeEditorialPlan = {
-  episode_date: "2025-01-01",
-  segments: [
-    {
-      segment_key: "main_themes",
-      intent: ["develop_primary_themes"],
-      included_tags: ["theme:one"],
-      suppressed_tags: [],
-      rationale: ["rule:main_themes"],
+export async function runMainThemesForDate(params: {
+  program_slug: string;
+  episode_date: string;
+  episode_id: string;
+}): Promise<void> {
+  const episode_plan: EpisodeEditorialPlan = {
+    episode_date: params.episode_date,
+    segments: [
+      {
+        segment_key: "main_themes",
+        intent: ["develop_primary_themes"],
+        included_tags: ["theme:one"],
+        suppressed_tags: [],
+        rationale: ["rule:main_themes"],
+      },
+    ],
+    continuity_notes: {
+      callbacks: [],
+      avoided_repetition: [],
     },
-  ],
-  continuity_notes: {
-    callbacks: [],
-    avoided_repetition: [],
-  },
-  debug: {
-    selected_by_segment: {
-      intro: [],
-      main_themes: ["rule:main_themes"],
-      reflection: [],
-      closing: [],
+    debug: {
+      selected_by_segment: {
+        intro: [],
+        main_themes: ["rule:main_themes"],
+        reflection: [],
+        closing: [],
+      },
+      suppressed_by_rule: {},
     },
-    suppressed_by_rule: {},
-  },
-};
+  };
 
-const segment: SegmentPromptInput = {
-  episode_date: "2025-01-01",
-  segment_key: "main_themes",
-  intent: ["develop_primary_themes"],
-  included_tags: ["theme:one"],
-  suppressed_tags: [],
-  confidence_level: "high",
-  constraints: {
-    max_ideas: 1,
-    must_acknowledge_uncertainty: true,
-    ban_repetition: true,
-  },
-};
+  const segment: SegmentPromptInput = {
+    episode_date: params.episode_date,
+    segment_key: "main_themes",
+    intent: ["develop_primary_themes"],
+    included_tags: ["theme:one"],
+    suppressed_tags: [],
+    confidence_level: "high",
+    constraints: {
+      max_ideas: 1,
+      must_acknowledge_uncertainty: true,
+      ban_repetition: true,
+    },
+  };
 
-const episode_validation: EpisodeValidationResult = {
-  episode_date: "2025-01-01",
-  is_valid: true,
-  segment_results: [],
-  blocking_segments: [],
-  warnings: [],
-};
+  const episode_validation: EpisodeValidationResult = {
+    episode_date: params.episode_date,
+    is_valid: true,
+    segment_results: [],
+    blocking_segments: [],
+    warnings: [],
+  };
 
-async function main() {
   const writing_contract = getWritingContract("main_themes");
   const result = await generateSegmentDraft({
     episode_plan,
@@ -68,11 +76,57 @@ async function main() {
     episode_validation,
   });
 
-  console.dir(result, { depth: null });
+  const today = new Date().toISOString().slice(0, 10);
+  const mappedDiagnostics = mapDiagnosticsToEditorialViolations({
+    canon_violations: result.self_check.canon_flags,
+    structural_violations: result.self_check.contract_violations,
+  });
+
+  const gateResult = evaluateEditorialGate({
+    episode_id: params.episode_id,
+    episode_date: params.episode_date,
+    segment_key: result.segment_key,
+    time_context: params.episode_date === today ? "day_of" : "future",
+    generated_script: result.draft_script,
+    diagnostics: mappedDiagnostics,
+    segment_contract: {
+      allows_rewrites: false,
+    },
+    policy_version: "v0.1",
+    max_attempts_remaining: 0,
+  });
+
+  await persistEditorialGateResult({
+    episode_id: params.episode_id,
+    episode_date: params.episode_date,
+    segment_key: result.segment_key,
+    gate_result: gateResult,
+  });
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+async function main() {
+  const episode_date = "2025-01-01";
+  const episode_id = `episode-${episode_date}`;
+  await runMainThemesForDate({
+    program_slug: "cloudia",
+    episode_date,
+    episode_id,
+  });
+}
+
+if (process.argv[1]) {
+  const invokedPath = (() => {
+    try {
+      return new URL(`file://${process.argv[1]}`).href;
+    } catch {
+      return undefined;
+    }
+  })();
+  if (invokedPath && invokedPath === import.meta.url) {
+    main().catch((err) => {
+      console.error(err);
+      process.exit(1);
+    });
+  }
+}
 

@@ -6,7 +6,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "test": "vitest run",
-    "inspect:intro": "tsx run-intro.ts"
+    "inspect:intro": "tsx run-intro.ts",
+    "cloudia:batch": "tsx crew_cloudia/runner/runEpisodeBatch.ts"
   },
   "dependencies": {
     "swisseph": "^0.5.17",
