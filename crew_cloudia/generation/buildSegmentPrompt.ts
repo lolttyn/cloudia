@@ -41,6 +41,8 @@ ${writing_contract.intent}
 
 If an interpretive_frame is provided, it is the authoritative interpretation for the day. Express that meaning faithfully; use other fields only to shape how you deliver it, not to replace it.
 
+All required sections must be rendered with their exact titles, verbatim, as provided in the writing contract. Use clear standalone headings (e.g., markdown **Primary Meanings**) and place each section's content directly under its matching header.
+
 You must follow ALL constraints below without exception.
 
 Forbidden phrases:
