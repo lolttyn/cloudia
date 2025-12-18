@@ -88,6 +88,8 @@ async function runForDate(program_slug: string, episode_date: string): Promise<v
   const time_context = episode_date === today ? "day_of" : "future";
   const batch_id = batchId;
 
+  console.log(`[batch:date] ${episode_date}`);
+
   const introResult = await runIntroForDate({
     program_slug,
     episode_date,
@@ -144,9 +146,13 @@ async function main() {
   const { program_slug, start_date, window_days } = parseArgs(process.argv);
   const dates = expandDates(start_date, window_days);
 
+  console.log(`[batch:start] ${batchId}`);
+
   for (const date of dates) {
     await runForDate(program_slug, date);
   }
+
+  console.log(`[batch:complete] ${batchId}`);
 }
 
 main().catch((err) => {

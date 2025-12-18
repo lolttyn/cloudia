@@ -1,0 +1,28 @@
+{
+  "version": "0.1",
+  "sun_sign_meanings": {
+    "Capricorn": "structure, consolidation, disciplined progress",
+    "Sagittarius": "expansion, exploration, aligning with purpose"
+  },
+  "moon_sign_meanings": {
+    "Virgo": "discernment, refinement, practical care",
+    "Leo": "expressive warmth, creative confidence"
+  },
+  "major_aspect_meanings": {
+    "conjunction": "merging focus and amplifying the shared theme",
+    "trine": "supportive flow and ease of expression",
+    "square": "friction that demands adjustment"
+  },
+  "priority_rules": {
+    "order": [
+      "sun_sign",
+      "moon_sign",
+      "strongest_major_aspect"
+    ],
+    "notes": [
+      "Always anchor interpretation on Sun and Moon before adding transits.",
+      "Limit major aspects to those with clear relevance to today's themes."
+    ]
+  }
+}
+
