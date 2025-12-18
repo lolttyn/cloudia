@@ -17,20 +17,30 @@ export async function runInterpreter(input: InterpreterInput): Promise<Interpret
       primary: "integration",
       counter: "momentum",
     },
-    tone_descriptor: "quiet but deliberate",
-    why_today: ["pressure is easing while discernment increases"],
-    supporting_themes: ["discernment", "alignment", "settling"],
+    tone_descriptor: "measured and discerning",
+    why_today: [
+      "brief Virgo Moon transit sharpens alignment today",
+      "short window favors integration before momentum resumes",
+    ],
+    supporting_themes: [
+      "noticing misalignments before pressing forward",
+      "pausing to recalibrate",
+    ],
     sky_anchors: [
-      { type: "sun_sign", label: "Sun in Capricorn", meaning: "structure + consolidation" },
-      { type: "moon_sign", label: "Moon in Virgo", meaning: "discernment + refinement" },
+      { type: "moon_sign", label: "Moon in Virgo", meaning: "refinement and calibration" },
+      {
+        type: "sun_sign",
+        label: "Sun in Sagittarius",
+        meaning: "direction and broad meaning",
+      },
     ],
     causal_logic: [
-      "Sun in Capricorn emphasizes consolidation and steady grounding, which favors integration",
-      "Moon in Virgo adds discernment and deliberate pacing, counterbalancing raw momentum",
+      "Because the Moon is in Virgo, attention shifts to alignment and fine-tuning before pressing ahead.",
+      "Because the Sun remains in Sagittarius, the drive for direction stays present but yields to integration.",
     ],
-    why_today_clause: "Post-peak window with Moon in Virgo while Sun holds Capricorn—signals settling and integration today specifically.",
-    timing: { state: "settling", notes: "post-peak integration window" },
-    confidence_level: "high",
+    why_today_clause: "Today is a brief Virgo Moon window to integrate before momentum returns.",
+    timing: { state: "settling", notes: "short integration window before momentum resumes" },
+    confidence_level: "medium",
     canon_compliance: { violations: [], notes: [] },
   };
 
