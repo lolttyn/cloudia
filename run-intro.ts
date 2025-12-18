@@ -8,6 +8,11 @@ import { mapDiagnosticsToEditorialViolations } from "./crew_cloudia/editorial/di
 import { EpisodeEditorialPlan } from "./crew_cloudia/editorial/planner/types.js";
 import { SegmentPromptInput } from "./crew_cloudia/editorial/contracts/segmentPromptInput.js";
 import { EpisodeValidationResult } from "./crew_cloudia/editorial/validation/episodeValidationResult.js";
+import { persistSegmentVersion } from "./crew_cloudia/editorial/persistence/persistSegmentVersion.js";
+import { upsertCurrentSegment } from "./crew_cloudia/editorial/persistence/upsertCurrentSegment.js";
+import { getNextAttemptNumber } from "./crew_cloudia/editorial/persistence/getNextAttemptNumber.js";
+import { markSegmentReadyForAudio } from "./crew_cloudia/audio/markSegmentReadyForAudio.js";
+import { markSegmentReadyForAudio } from "./crew_cloudia/audio/markSegmentReadyForAudio.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -19,6 +24,8 @@ export async function runIntroForDate(params: {
   program_slug: string;
   episode_date: string; // YYYY-MM-DD
   episode_id: string;
+  batch_id: string;
+  time_context: "day_of" | "future";
 }): Promise<{
   segment_key: string;
   gate_result: ReturnType<typeof evaluateEditorialGate>;
@@ -85,11 +92,16 @@ export async function runIntroForDate(params: {
     structural_violations: result.self_check.contract_violations,
   });
 
+  const attemptNumber = await getNextAttemptNumber({
+    episode_id: params.episode_id,
+    segment_key: result.segment_key,
+  });
+
   const gateResult = evaluateEditorialGate({
     episode_id: params.episode_id,
     episode_date: params.episode_date,
     segment_key: result.segment_key,
-    time_context: params.episode_date === today ? "day_of" : "future",
+    time_context: params.time_context ?? (params.episode_date === today ? "day_of" : "future"),
     generated_script: result.draft_script,
     diagnostics: mappedDiagnostics,
     segment_contract: {
@@ -98,6 +110,34 @@ export async function runIntroForDate(params: {
     policy_version: "v0.1",
     max_attempts_remaining: 0,
   });
+
+  await persistSegmentVersion({
+    episode_id: params.episode_id,
+    episode_date: params.episode_date,
+    segment_key: result.segment_key,
+    attempt_number: attemptNumber,
+    script_text: result.draft_script,
+    gate_decision: gateResult.decision,
+    blocking_reasons: gateResult.blocking_reasons,
+    gate_policy_version: gateResult.policy_version,
+    batch_id: params.batch_id,
+  });
+
+  if (gateResult.decision === "approve") {
+    await upsertCurrentSegment({
+      episode_id: params.episode_id,
+      episode_date: params.episode_date,
+      segment_key: result.segment_key,
+      script_text: result.draft_script,
+      script_version: attemptNumber,
+      gate_policy_version: gateResult.policy_version,
+    });
+
+    await markSegmentReadyForAudio({
+      episode_id: params.episode_id,
+      segment_key: result.segment_key,
+    });
+  }
 
   await persistEditorialGateResult({
     episode_id: params.episode_id,
@@ -119,6 +159,8 @@ async function main() {
     program_slug: "cloudia",
     episode_date,
     episode_id,
+    batch_id: "demo-batch",
+    time_context: "future",
   });
 }
 

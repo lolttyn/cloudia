@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import crypto from "crypto";
+import crypto, { randomUUID } from "crypto";
 
 import { runIntroForDate } from "../../run-intro.js";
 import { runMainThemesForDate } from "../../run-main-themes.js";
@@ -13,6 +13,8 @@ type ParsedArgs = {
   window_days: number;
   scripts_only: boolean;
 };
+
+const batchId = randomUUID();
 
 function parseArgs(argv: string[]): ParsedArgs {
   const [, , program_slug, start_date, ...rest] = argv;
@@ -84,17 +86,22 @@ async function runForDate(program_slug: string, episode_date: string): Promise<v
   const episode_id = deterministicEpisodeId(program_slug, episode_date);
   const today = new Date().toISOString().slice(0, 10);
   const time_context = episode_date === today ? "day_of" : "future";
+  const batch_id = batchId;
 
   const introResult = await runIntroForDate({
     program_slug,
     episode_date,
     episode_id,
+    batch_id,
+    time_context,
   });
 
   const mainThemesResult = await runMainThemesForDate({
     program_slug,
     episode_date,
     episode_id,
+    batch_id,
+    time_context,
   });
 
   const segment_results = [
