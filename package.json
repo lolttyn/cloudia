@@ -5,7 +5,7 @@
   "type": "module",
   "license": "UNLICENSED",
   "scripts": {
-    "test": "vitest run",
+    "test": "env $(cat env.test | xargs) vitest run",
     "inspect:intro": "tsx run-intro.ts",
     "cloudia:batch": "tsx crew_cloudia/runner/runEpisodeBatch.ts"
   },

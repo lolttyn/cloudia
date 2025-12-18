@@ -4,14 +4,18 @@ import { SegmentWritingContract } from "../editorial/types/SegmentWritingContrac
 import { EpisodeValidationResult } from "../editorial/validation/episodeValidationResult.js";
 import { buildSegmentPrompt } from "./buildSegmentPrompt.js";
 import { CLOUDIA_LLM_CONFIG, invokeLLM } from "./invokeLLM.js";
+import { buildIntroScaffold } from "./introScaffold.js";
+import { buildClosingScaffold } from "./closingScaffold.js";
 
 export type SegmentGenerationResult = {
   segment_key: string;
   draft_script: string;
+  generation_mode: "llm" | "hybrid" | "template";
+  llm_usage: unknown | null;
 
   metadata: {
     word_count: number;
-    model_id: string;
+    model_id: string | null;
     generation_timestamp: string;
   };
 
@@ -57,22 +61,25 @@ export async function generateSegmentDraft(input: {
     );
   }
 
-  const assembled_prompt = buildSegmentPrompt({
-    episode_plan,
-    segment,
-    writing_contract,
-    episode_validation,
-  });
+  const generation =
+    segment.segment_key === "intro"
+      ? await generateIntroDraft({
+          segment,
+          interpretive_frame: (segment.constraints as any)?.interpretive_frame,
+        })
+      : segment.segment_key === "closing"
+      ? await generateClosingDraft({
+          segment,
+          interpretive_frame: (segment.constraints as any)?.interpretive_frame,
+        })
+      : await generateGenericDraft({
+          episode_plan,
+          segment,
+          writing_contract,
+          episode_validation,
+        });
 
-  const llm_result = await invokeLLM(assembled_prompt, CLOUDIA_LLM_CONFIG);
-
-  if (llm_result.status !== "ok") {
-    throw new Error(
-      `LLM generation failed (${llm_result.error_type}): ${llm_result.message}`
-    );
-  }
-
-  const draft_script = llm_result.text;
+  const draft_script = generation.text;
 
   // --- Self-checks (intentionally shallow for now) ---
   const word_count = draft_script.trim() === "" ? 0 : draft_script.trim().split(/\s+/).length;
@@ -92,9 +99,9 @@ export async function generateSegmentDraft(input: {
     // Semantic sections are evaluated by editors/scorers, not auto-flagged here.
   }
 
-  // Word count bounds
+  // Word count bounds (skip min check for intro/closing since scaffold is fixed-length)
   const { min_words, max_words } = writing_contract.length_constraints;
-  if (word_count < min_words) {
+  if (!["intro", "closing"].includes(segment.segment_key) && word_count < min_words) {
     contract_violations.push(`word_count_below_min:${word_count}<${min_words}`);
   }
   if (word_count > max_words) {
@@ -122,15 +129,190 @@ export async function generateSegmentDraft(input: {
   return {
     segment_key: segment.segment_key,
     draft_script,
+    generation_mode: generation.mode,
+    llm_usage: generation.llm_usage ?? null,
     metadata: {
       word_count,
-      model_id: llm_result.model ?? CLOUDIA_LLM_CONFIG.model,
+      model_id: generation.model_id ?? CLOUDIA_LLM_CONFIG.model ?? null,
       generation_timestamp: new Date().toISOString(),
     },
     self_check: {
       contract_violations,
       canon_flags,
     },
+  };
+}
+
+async function generateGenericDraft(params: {
+  episode_plan: EpisodeEditorialPlan;
+  segment: SegmentPromptInput;
+  writing_contract: SegmentWritingContract;
+  episode_validation: EpisodeValidationResult;
+}): Promise<{
+  text: string;
+  mode: "llm";
+  model_id: string | null;
+  llm_usage: unknown | null;
+}> {
+  const assembled_prompt = buildSegmentPrompt({
+    episode_plan: params.episode_plan,
+    segment: params.segment,
+    writing_contract: params.writing_contract,
+    episode_validation: params.episode_validation,
+  });
+
+  const llm_result = await invokeLLM(assembled_prompt, CLOUDIA_LLM_CONFIG);
+
+  if (llm_result.status !== "ok") {
+    throw new Error(
+      `LLM generation failed (${llm_result.error_type}): ${llm_result.message}`
+    );
+  }
+
+  return {
+    text: llm_result.text,
+    mode: "llm",
+    model_id: llm_result.model ?? CLOUDIA_LLM_CONFIG.model ?? null,
+    llm_usage: llm_result.usage ?? null,
+  };
+}
+
+async function generateIntroDraft(params: {
+  segment: SegmentPromptInput;
+  interpretive_frame?: {
+    dominant_contrast_axis?: { statement?: string };
+    why_today_clause?: string;
+    sky_anchors?: { label?: string }[];
+  };
+}): Promise<{
+  text: string;
+  mode: "hybrid";
+  model_id: string | null;
+  llm_usage: unknown | null;
+}> {
+  const frame = params.interpretive_frame;
+  if (!frame) {
+    throw new Error("Intro generation requires an interpretive_frame");
+  }
+  const axis = frame.dominant_contrast_axis?.statement;
+  const whyClause = frame.why_today_clause;
+  if (!axis || !whyClause) {
+    throw new Error("Intro generation requires dominant_contrast_axis and why_today_clause");
+  }
+
+  const scaffold = buildIntroScaffold({
+    episode_date: params.segment.episode_date,
+    axis,
+    why_today_clause: whyClause,
+  });
+
+  const anchorLabels = (frame.sky_anchors ?? []).map((a) => a.label).filter(Boolean);
+  if (anchorLabels.length === 0) {
+    throw new Error("Intro generation requires at least one sky anchor label");
+  }
+
+  const user_prompt = `
+Write exactly two sentences.
+Each sentence must:
+- Reference at least one of these sky anchors by label: ${anchorLabels.join(", ")}.
+- Reinforce the dominant contrast axis: "${axis}".
+- Include causal language using the word "because".
+
+Additional constraints:
+- Do not greet.
+- Do not restate the axis line.
+- Do not restate the why-today clause.
+- Do not describe episode structure or meta framing.
+- Target 20-30 words per sentence.
+
+Return only the two sentences, nothing else.`.trim();
+
+  const llm_result = await invokeLLM(
+    {
+      system_prompt: "You are Cloudia’s concise intro micro-expression writer.",
+      user_prompt,
+    },
+    { ...CLOUDIA_LLM_CONFIG, max_tokens: 160 }
+  );
+
+  if (llm_result.status !== "ok") {
+    throw new Error(
+      `LLM generation failed (${llm_result.error_type}): ${llm_result.message}`
+    );
+  }
+
+  const micro = llm_result.text.trim();
+  return {
+    text: `${scaffold}\n${micro}`,
+    mode: "hybrid",
+    model_id: llm_result.model ?? CLOUDIA_LLM_CONFIG.model ?? null,
+    llm_usage: llm_result.usage ?? null,
+  };
+}
+
+async function generateClosingDraft(params: {
+  segment: SegmentPromptInput;
+  interpretive_frame?: {
+    dominant_contrast_axis?: { statement?: string };
+    timing?: { state?: string; notes?: string };
+  };
+}): Promise<{
+  text: string;
+  mode: "hybrid";
+  model_id: string | null;
+  llm_usage: unknown | null;
+}> {
+  const frame = params.interpretive_frame;
+  if (!frame) {
+    throw new Error("Closing generation requires an interpretive_frame");
+  }
+  const axis = frame.dominant_contrast_axis?.statement;
+  if (!axis) {
+    throw new Error("Closing generation requires dominant_contrast_axis");
+  }
+
+  const timingNote = frame.timing?.notes ?? frame.timing?.state;
+  const { scaffold, signoff } = buildClosingScaffold({
+    episode_date: params.segment.episode_date,
+    axis_statement: axis,
+    timing_note: timingNote,
+  });
+
+  const user_prompt = `
+Write exactly two sentences.
+Each sentence must:
+- Be reflective and observational, not directive or advisory.
+- Reinforce (without restating verbatim) the dominant contrast axis: "${axis}".
+- Avoid predictions or moralizing.
+
+Additional constraints:
+- No greeting.
+- No sign-off language.
+- No "you should" or advice verbs.
+- Keep it concise and calm.
+
+Return only the two sentences, nothing else.`.trim();
+
+  const llm_result = await invokeLLM(
+    {
+      system_prompt: "You are Cloudia’s concise closing micro-reflection writer.",
+      user_prompt,
+    },
+    { ...CLOUDIA_LLM_CONFIG, max_tokens: 160 }
+  );
+
+  if (llm_result.status !== "ok") {
+    throw new Error(
+      `LLM generation failed (${llm_result.error_type}): ${llm_result.message}`
+    );
+  }
+
+  const micro = llm_result.text.trim();
+  return {
+    text: `${scaffold}\n${micro}\n${signoff}`,
+    mode: "hybrid",
+    model_id: llm_result.model ?? CLOUDIA_LLM_CONFIG.model ?? null,
+    llm_usage: llm_result.usage ?? null,
   };
 }
 

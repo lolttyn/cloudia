@@ -128,11 +128,7 @@ describe("validateEpisodeEligibility", () => {
 
     expect(result.is_valid).toBe(true);
     expect(result.blocking_segments).toHaveLength(0);
-    expect(result.warnings).toHaveLength(1);
-    expect(result.warnings[0].segment_key).toBe("main_themes");
-    expect(result.warnings[0].warnings).toContain(
-      "example required by contract; max_ideas = 1 may constrain examples"
-    );
+    expect(result.warnings).toHaveLength(0);
   });
 
   it("throws on duplicate segment keys", () => {

@@ -58,6 +58,26 @@ const segment: SegmentPromptInput = {
     max_ideas: 1,
     must_acknowledge_uncertainty: false,
     ban_repetition: true,
+    interpretive_frame: {
+      date: "2025-01-01",
+      dominant_contrast_axis: {
+        statement: "integration over momentum",
+        primary: "integration",
+        counter: "momentum",
+      },
+      tone_descriptor: "measured and discerning",
+      why_today: ["brief transit today"],
+      supporting_themes: ["noticing misalignments"],
+      sky_anchors: [
+        { type: "moon_sign", label: "Moon in Virgo", meaning: "refinement and calibration" },
+        { type: "sun_sign", label: "Sun in Sagittarius", meaning: "direction and broad meaning" },
+      ],
+      causal_logic: ["Because the Moon in Virgo refines momentum."],
+      why_today_clause: "Today is a brief Virgo Moon window to integrate before momentum returns.",
+      timing: { state: "settling", notes: "short integration window" },
+      confidence_level: "medium",
+      canon_compliance: { violations: [], notes: [] },
+    },
   },
 };
 

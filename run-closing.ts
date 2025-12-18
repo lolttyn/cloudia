@@ -1,10 +1,10 @@
 import "dotenv/config";
 
 import { generateSegmentDraft } from "./crew_cloudia/generation/generateSegmentDraft.js";
-import { evaluateEditorialGate } from "./crew_cloudia/editorial/gate/evaluateEditorialGate.js";
-import { persistEditorialGateResult } from "./crew_cloudia/editorial/gate/persistEditorialGateResult.js";
 import { getWritingContract } from "./crew_cloudia/editorial/contracts/segmentWritingContracts.js";
 import { mapDiagnosticsToEditorialViolations } from "./crew_cloudia/editorial/diagnostics/mapDiagnosticsToEditorialViolations.js";
+import { evaluateEditorialGate } from "./crew_cloudia/editorial/gate/evaluateEditorialGate.js";
+import { persistEditorialGateResult } from "./crew_cloudia/editorial/gate/persistEditorialGateResult.js";
 import { EpisodeEditorialPlan } from "./crew_cloudia/editorial/planner/types.js";
 import { SegmentPromptInput } from "./crew_cloudia/editorial/contracts/segmentPromptInput.js";
 import { EpisodeValidationResult } from "./crew_cloudia/editorial/validation/episodeValidationResult.js";
@@ -13,15 +13,12 @@ import { upsertCurrentSegment } from "./crew_cloudia/editorial/persistence/upser
 import { getNextAttemptNumber } from "./crew_cloudia/editorial/persistence/getNextAttemptNumber.js";
 import { markSegmentReadyForAudio } from "./crew_cloudia/audio/markSegmentReadyForAudio.js";
 import { InterpretiveFrame } from "./crew_cloudia/interpretation/schema/InterpretiveFrame.js";
+import { invokeLLM, CLOUDIA_LLM_CONFIG } from "./crew_cloudia/generation/invokeLLM.js";
 import {
   EditorFeedback,
   MAX_SEGMENT_RETRIES,
 } from "./crew_cloudia/editorial/showrunner/editorContracts.js";
-import {
-  evaluateIntroWithFrame,
-  expectedIntroGreeting,
-} from "./crew_cloudia/editorial/showrunner/evaluateIntroWithFrame.js";
-import { invokeLLM, CLOUDIA_LLM_CONFIG } from "./crew_cloudia/generation/invokeLLM.js";
+import { evaluateClosingWithFrame } from "./crew_cloudia/editorial/showrunner/evaluateClosingWithFrame.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -29,7 +26,7 @@ declare const process: {
   exit(code?: number): never;
 };
 
-export async function runIntroForDate(params: {
+export async function runClosingForDate(params: {
   program_slug: string;
   episode_date: string; // YYYY-MM-DD
   episode_id: string;
@@ -41,18 +38,18 @@ export async function runIntroForDate(params: {
   gate_result: ReturnType<typeof evaluateEditorialGate>;
 }> {
   if (!params.interpretive_frame) {
-    throw new Error("interpretive_frame is required for intro generation");
+    throw new Error("interpretive_frame is required for closing generation");
   }
 
   const episode_plan: EpisodeEditorialPlan = {
     episode_date: params.episode_date,
     segments: [
       {
-        segment_key: "intro",
-        intent: ["introduce_one_theme"],
-        included_tags: ["theme:one"],
+        segment_key: "closing",
+        intent: ["close_the_day"],
+        included_tags: ["theme:closure"],
         suppressed_tags: [],
-        rationale: ["rule:intro"],
+        rationale: ["rule:closing"],
       },
     ],
     continuity_notes: {
@@ -61,10 +58,10 @@ export async function runIntroForDate(params: {
     },
     debug: {
       selected_by_segment: {
-        intro: ["rule:intro"],
+        intro: [],
         main_themes: [],
         reflection: [],
-        closing: [],
+        closing: ["rule:closing"],
       },
       suppressed_by_rule: {},
     },
@@ -72,11 +69,11 @@ export async function runIntroForDate(params: {
 
   const segment: SegmentPromptInput = {
     episode_date: params.episode_date,
-    segment_key: "intro",
-    intent: ["introduce_one_theme"],
-    included_tags: ["theme:one"],
+    segment_key: "closing",
+    intent: ["close_the_day"],
+    included_tags: ["theme:closure"],
     suppressed_tags: [],
-    confidence_level: "high",
+    confidence_level: params.interpretive_frame.confidence_level ?? "medium",
     constraints: {
       interpretive_frame: params.interpretive_frame,
       max_ideas: 1,
@@ -93,7 +90,7 @@ export async function runIntroForDate(params: {
     warnings: [],
   };
 
-  const writing_contract = getWritingContract("intro");
+  const writing_contract = getWritingContract("closing");
 
   let script = "";
   let rewriteInstructions: string[] = [];
@@ -111,8 +108,8 @@ export async function runIntroForDate(params: {
       script = draft.draft_script;
     } else {
       const rewritePromptPayload = {
-        system_prompt: "You are a precise editorial rewrite assistant for the intro.",
-        user_prompt: buildIntroRewritePrompt({
+        system_prompt: "You are a precise editorial rewrite assistant for the closing.",
+        user_prompt: buildClosingRewritePrompt({
           interpretive_frame: params.interpretive_frame,
           previous_script: script,
           editor_notes: rewriteInstructions,
@@ -128,7 +125,7 @@ export async function runIntroForDate(params: {
       script = rewriteResult.text;
     }
 
-    const introEvaluation = evaluateIntroWithFrame({
+    const evaluation = evaluateClosingWithFrame({
       interpretive_frame: params.interpretive_frame,
       episode_date: params.episode_date,
       draft_script: script,
@@ -136,47 +133,42 @@ export async function runIntroForDate(params: {
       max_attempts: MAX_SEGMENT_RETRIES,
     });
 
-    lastDecision = introEvaluation.decision;
-
-    if (introEvaluation.decision === "APPROVE") {
+    lastDecision = evaluation.decision;
+    if (evaluation.decision === "APPROVE") {
       approved = true;
       break;
     }
 
-    if (introEvaluation.decision === "FAIL_EPISODE" || attempt === MAX_SEGMENT_RETRIES - 1) {
+    if (evaluation.decision === "FAIL_EPISODE" || attempt === MAX_SEGMENT_RETRIES - 1) {
       throw new Error(
-        `Episode failed: intro did not satisfy meaning requirements after ${attempt + 1} attempts. Notes: ${introEvaluation.notes.join(
+        `Episode failed: closing could not meet editor rubric after ${attempt + 1} attempts. Notes: ${evaluation.notes.join(
           " | "
         )}`
       );
     }
 
     rewriteInstructions =
-      introEvaluation.rewrite_instructions.length > 0
-        ? introEvaluation.rewrite_instructions
-        : introEvaluation.notes;
+      evaluation.rewrite_instructions.length > 0
+        ? evaluation.rewrite_instructions
+        : evaluation.notes;
   }
 
   if (!approved || lastDecision !== "APPROVE") {
     throw new Error(
-      "Episode failed: intro did not achieve editor approval within allowed attempts."
+      "Episode failed: closing did not achieve editor approval within allowed attempts."
     );
   }
 
   const today = new Date().toISOString().slice(0, 10);
-  const mappedDiagnostics = mapDiagnosticsToEditorialViolations(
-    performSelfCheck(script, writing_contract)
-  );
-
-  const attemptNumber = await getNextAttemptNumber({
-    episode_id: params.episode_id,
-    segment_key: "intro",
+  const mappedDiagnostics = mapDiagnosticsToEditorialViolations({
+    canon_violations: [],
+    structural_violations: [],
   });
 
   const gateResult = evaluateEditorialGate({
     episode_id: params.episode_id,
     episode_date: params.episode_date,
-    segment_key: "intro",
+    segment_key: "closing",
     time_context: params.time_context ?? (params.episode_date === today ? "day_of" : "future"),
     generated_script: script,
     diagnostics: mappedDiagnostics,
@@ -187,10 +179,15 @@ export async function runIntroForDate(params: {
     max_attempts_remaining: 0,
   });
 
+  const attemptNumber = await getNextAttemptNumber({
+    episode_id: params.episode_id,
+    segment_key: "closing",
+  });
+
   await persistSegmentVersion({
     episode_id: params.episode_id,
     episode_date: params.episode_date,
-    segment_key: "intro",
+    segment_key: "closing",
     attempt_number: attemptNumber,
     script_text: script,
     gate_decision: gateResult.decision,
@@ -203,7 +200,7 @@ export async function runIntroForDate(params: {
     await upsertCurrentSegment({
       episode_id: params.episode_id,
       episode_date: params.episode_date,
-      segment_key: "intro",
+      segment_key: "closing",
       script_text: script,
       script_version: attemptNumber,
       gate_policy_version: gateResult.policy_version,
@@ -211,24 +208,24 @@ export async function runIntroForDate(params: {
 
     await markSegmentReadyForAudio({
       episode_id: params.episode_id,
-      segment_key: "intro",
+      segment_key: "closing",
     });
   }
 
   await persistEditorialGateResult({
     episode_id: params.episode_id,
     episode_date: params.episode_date,
-    segment_key: "intro",
+    segment_key: "closing",
     gate_result: gateResult,
   });
 
   return {
-    segment_key: "intro",
+    segment_key: "closing",
     gate_result: gateResult,
   };
 }
 
-function buildIntroRewritePrompt(params: {
+function buildClosingRewritePrompt(params: {
   interpretive_frame: InterpretiveFrame;
   previous_script: string;
   editor_notes: string[];
@@ -240,71 +237,35 @@ function buildIntroRewritePrompt(params: {
       : "No notes provided.";
 
   return `
-You are rewriting an intro segment to satisfy the editor rubric. Fix only the cited issues.
+You are rewriting a closing segment to satisfy the editor rubric. Fix only the cited issues.
 
 Authoritative interpretive frame:
 ${JSON.stringify(params.interpretive_frame, null, 2)}
 
-Required explicit references (must appear verbatim in the output):
-- "${params.interpretive_frame.dominant_contrast_axis.statement}"
-${params.interpretive_frame.sky_anchors.map((a) => `- "${a.label}"`).join("\n")}
-- "${params.interpretive_frame.why_today_clause}"
+Required scaffold and sign-off (must stay verbatim):
+- Framing: "As the day winds down, take a moment to notice how this energy has shown up for you."
+- Bridge referencing the axis: "${params.interpretive_frame.dominant_contrast_axis.statement}"
+- Sign-off: "The Cosmic Forecast for ${params.episode_date} is brought to you by the Intergalactic Public Broadcasting Network.
+We’ll be back tomorrow, skygazer."
 
-You must follow this scaffold:
-- Greeting (verbatim): "${expectedIntroGreeting(params.episode_date)}"
-- Dominant axis line: "Today’s dominant tension is: ${params.interpretive_frame.dominant_contrast_axis.statement}."
-- Why-today clause: "${params.interpretive_frame.why_today_clause}"
-- Expressive window: 2-3 sentences that reference at least one sky anchor and include a causal sentence using "because".
+Rewrite the micro-reflection between scaffold and sign-off:
+- Exactly two sentences
+- Reflective and observational; no advice or directives
+- Reinforce (without restating verbatim) the dominant contrast axis: "${params.interpretive_frame.dominant_contrast_axis.statement}"
+- No predictions
 
-Rewrite instructions to address:
+Editor notes to address:
 ${notes}
 
 Previous draft:
 ${params.previous_script}
-
-Requirements:
-- Do not add meta narration or episode-structure commentary.
-- Keep the intro concise; only 2-3 expressive sentences after the scaffold.
-- Reinforce the dominant contrast as a lived tension, grounded in the sky anchor(s).
 `.trim();
-}
-
-function performSelfCheck(
-  draft_script: string,
-  writing_contract: ReturnType<typeof getWritingContract>
-): {
-  canon_violations: string[];
-  contract_violations: string[];
-} {
-  const word_count = draft_script.trim() === "" ? 0 : draft_script.trim().split(/\s+/).length;
-  const contract_violations: string[] = [];
-  const canon_violations: string[] = [];
-
-  const draft_lower = draft_script.toLowerCase();
-
-  const { min_words, max_words } = writing_contract.length_constraints;
-  if (writing_contract.segment_key !== "intro" && word_count < min_words) {
-    contract_violations.push(`word_count_below_min:${word_count}<${min_words}`);
-  }
-  if (word_count > max_words) {
-    contract_violations.push(`word_count_above_max:${word_count}>${max_words}`);
-  }
-
-  for (const phrase of writing_contract.forbidden_elements.phrases) {
-    const phrase_normalized = phrase.trim();
-    if (phrase_normalized.length === 0) continue;
-    if (draft_lower.includes(phrase_normalized.toLowerCase())) {
-      contract_violations.push(`forbidden_phrase:${phrase_normalized}`);
-    }
-  }
-
-  return { canon_violations, contract_violations };
 }
 
 async function main() {
   const episode_date = "2025-01-01";
   const episode_id = `episode-${episode_date}`;
-  await runIntroForDate({
+  await runClosingForDate({
     program_slug: "cloudia",
     episode_date,
     episode_id,

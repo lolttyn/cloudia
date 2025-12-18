@@ -1,5 +1,6 @@
 import { InterpretiveFrame } from "../../interpretation/schema/InterpretiveFrame.js";
 import { EditorFeedback } from "./editorContracts.js";
+import { buildIntroScaffold } from "../../generation/introScaffold.js";
 
 export function expectedIntroGreeting(episode_date: string): string {
   const parsed = new Date(`${episode_date}T00:00:00Z`);
@@ -88,17 +89,28 @@ export function evaluateIntroWithFrame(params: {
     rewrite_instructions.push('Add a causal sentence that includes the word "because".');
   }
 
-  // Expressive window: constrain to 2–3 sentences beyond the immutable scaffold.
-  const sentenceCount = script
+  // Scaffold presence
+  const scaffold = buildIntroScaffold({
+    episode_date: params.episode_date,
+    axis: params.interpretive_frame.dominant_contrast_axis.statement,
+    why_today_clause: params.interpretive_frame.why_today_clause,
+  });
+  if (!script.includes(scaffold)) {
+    notes.push("Intro scaffold is missing or altered.");
+    blocking_reasons.push("intro:scaffold_missing");
+    rewrite_instructions.push("Ensure the scaffold lines appear verbatim and first.");
+  }
+
+  // Expressive window: must be exactly two sentences beyond the scaffold.
+  const remainder = script.replace(scaffold, "").trim();
+  const sentenceCount = remainder
     .split(/[.!?]/)
     .map((s) => s.trim())
     .filter((s) => s.length > 0).length;
-  if (sentenceCount < 3) {
-    notes.push("Intro should include at least two expressive sentences beyond the scaffold.");
-    rewrite_instructions.push("Add 1-2 concise sentences that reinforce the axis as lived tension.");
-  } else if (sentenceCount > 6) {
-    notes.push("Intro should stay concise; reduce to the scaffold plus 2-3 expressive sentences.");
-    rewrite_instructions.push("Reduce verbosity; keep only 2-3 expressive sentences after the scaffold.");
+  if (sentenceCount !== 2) {
+    notes.push("Intro must include exactly two expressive sentences after the scaffold.");
+    blocking_reasons.push("intro:expressive_window_length");
+    rewrite_instructions.push("Return exactly two sentences after the scaffold.");
   }
 
   if (notes.length === 0) {

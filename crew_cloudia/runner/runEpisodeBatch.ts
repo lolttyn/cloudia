@@ -4,6 +4,7 @@ import crypto, { randomUUID } from "crypto";
 
 import { runIntroForDate } from "../../run-intro.js";
 import { runMainThemesForDate } from "../../run-main-themes.js";
+import { runClosingForDate } from "../../run-closing.js";
 import { evaluateEpisodeGate } from "../editorial/gate/evaluateEpisodeGate.js";
 import { persistEpisodeGateResult } from "../editorial/gate/persistEpisodeGateResult.js";
 import { runInterpreter } from "../interpretation/runInterpreter.js";
@@ -111,6 +112,15 @@ async function runForDate(program_slug: string, episode_date: string): Promise<v
     interpretive_frame,
   });
 
+  const closingResult = await runClosingForDate({
+    program_slug,
+    episode_date,
+    episode_id,
+    batch_id,
+    time_context,
+    interpretive_frame,
+  });
+
   const segment_results = [
     {
       segment_key: introResult.segment_key,
@@ -121,6 +131,11 @@ async function runForDate(program_slug: string, episode_date: string): Promise<v
       segment_key: mainThemesResult.segment_key,
       decision: mainThemesResult.gate_result.decision,
       blocking_reasons: mainThemesResult.gate_result.blocking_reasons,
+    },
+    {
+      segment_key: closingResult.segment_key,
+      decision: closingResult.gate_result.decision,
+      blocking_reasons: closingResult.gate_result.blocking_reasons,
     },
   ];
 
