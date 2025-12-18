@@ -14,6 +14,10 @@ import { getNextAttemptNumber } from "./crew_cloudia/editorial/persistence/getNe
 import { markSegmentReadyForAudio } from "./crew_cloudia/audio/markSegmentReadyForAudio.js";
 import { InterpretiveFrame } from "./crew_cloudia/interpretation/schema/InterpretiveFrame.js";
 import { invokeLLM, CLOUDIA_LLM_CONFIG } from "./crew_cloudia/generation/invokeLLM.js";
+import {
+  EditorFeedback,
+  MAX_SEGMENT_RETRIES,
+} from "./crew_cloudia/editorial/showrunner/editorContracts.js";
 import { evaluateSegmentWithFrame } from "./crew_cloudia/editorial/showrunner/evaluateSegmentWithFrame.js";
 
 declare const process: {
@@ -21,8 +25,6 @@ declare const process: {
   argv: string[];
   exit(code?: number): never;
 };
-
-const MAX_EDITOR_RETRIES = 5;
 
 export async function runMainThemesForDate(params: {
   program_slug: string;
@@ -99,11 +101,11 @@ export async function runMainThemesForDate(params: {
   const writing_contract = getWritingContract("main_themes");
 
   let script = "";
-  let editorNotes: string[] = [];
+  let rewriteInstructions: string[] = [];
   let approved = false;
-  let lastDecision: "APPROVE" | "REVISE" | "FAIL_EPISODE" | null = null;
+  let lastDecision: EditorFeedback["decision"] | null = null;
 
-  for (let attempt = 0; attempt < MAX_EDITOR_RETRIES; attempt++) {
+  for (let attempt = 0; attempt < MAX_SEGMENT_RETRIES; attempt++) {
     if (attempt === 0) {
       const draft = await generateSegmentDraft({
         episode_plan,
@@ -118,7 +120,7 @@ export async function runMainThemesForDate(params: {
         user_prompt: buildShowrunnerRewritePrompt({
           interpretive_frame: params.interpretive_frame,
           previous_script: script,
-          editor_notes: editorNotes,
+          editor_notes: rewriteInstructions,
         }),
       };
 
@@ -136,7 +138,7 @@ export async function runMainThemesForDate(params: {
       segment_key: "main_themes",
       draft_script: script,
       attempt,
-      max_attempts: MAX_EDITOR_RETRIES,
+      max_attempts: MAX_SEGMENT_RETRIES,
     });
 
     lastDecision = evaluation.decision;
@@ -145,7 +147,7 @@ export async function runMainThemesForDate(params: {
       break;
     }
 
-    if (evaluation.decision === "FAIL_EPISODE" || attempt === MAX_EDITOR_RETRIES - 1) {
+    if (evaluation.decision === "FAIL_EPISODE" || attempt === MAX_SEGMENT_RETRIES - 1) {
       throw new Error(
         `Episode failed: main_themes could not meet editor rubric after ${attempt + 1} attempts. Notes: ${evaluation.notes.join(
           " | "
@@ -153,7 +155,9 @@ export async function runMainThemesForDate(params: {
       );
     }
 
-    editorNotes = evaluation.notes;
+    rewriteInstructions = evaluation.rewrite_instructions.length
+      ? evaluation.rewrite_instructions
+      : evaluation.notes;
   }
 
   if (!approved || lastDecision !== "APPROVE") {

@@ -164,24 +164,33 @@ ${
 
         const frame = interpretiveFrame as {
           dominant_contrast_axis?: { statement?: string };
+          why_today_clause?: string;
+          sky_anchors?: { label?: string }[];
         };
         const axisStatement = frame.dominant_contrast_axis?.statement ?? "";
+        const whyTodayClause = frame.why_today_clause ?? "";
+        const anchors = frame.sky_anchors ?? [];
+        const anchorExample = anchors[0]?.label ?? "one sky anchor (e.g., 'Moon in Virgo')";
+        const anchorLines = anchors.map((a) => `- "${a.label ?? ""}"`).join("\n");
 
         return `
-You must begin the intro with the following exact greeting (verbatim). Do not paraphrase or omit it:
+Immutable scaffold (must appear verbatim and in this order):
+1) Greeting: "Hey Celestial Besties. It’s me, Cloudia Rey, here with the Cosmic Forecast for ${formatBroadcastDate(
+          segment.episode_date
+        )}."
+2) Dominant axis line: "Today’s dominant tension is: ${axisStatement}."
+3) Why-today clause: "${whyTodayClause}"
 
-"Hey Celestial Besties. It’s me, Cloudia Rey, here with the Cosmic Forecast for ${formatBroadcastDate(
-        segment.episode_date
-      )}."
+Expressive window (2-3 sentences only):
+- Must reference at least one sky anchor by label (e.g., ${anchorExample}).
+- Must include a causal sentence that uses the word "because" to link meaning to a sky anchor.
+- Must reinforce the dominant contrast as lived tension; do not introduce new themes.
+- No episode meta language, no structural narration, no abstract theme invention.
 
-You must include the following line immediately after the greeting, verbatim. Do not alter it:
-
-"Today’s dominant tension is: ${axisStatement}."
-
-Intro meaning requirements:
-- Express the day’s dominant contrast axis from the InterpretiveFrame. Paraphrase is allowed; introducing a different primary theme is not.
-- You may briefly reference the sky setup at a high level, but do not swap in a different theme.
-- Do not describe the episode structure or talk about “this episode” as an object. Set the day’s tone instead.
+Required explicit references (must appear verbatim):
+- "${axisStatement}"
+${anchorLines}
+- "${whyTodayClause}"
 `.trim();
       })()
     : ""

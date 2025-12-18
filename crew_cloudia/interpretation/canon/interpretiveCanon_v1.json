@@ -1,0 +1,259 @@
+{
+  "version": "1.0.0",
+  "allowed_axes": [
+    "momentum over deliberation",
+    "stability over disruption",
+    "connection over certainty",
+    "care over detachment",
+    "expression over accommodation",
+    "integration over momentum",
+    "balance over insistence",
+    "depth over surface",
+    "meaning over minutiae",
+    "structure over spontaneity",
+    "systems over sentiment",
+    "surrender over control",
+    "alignment over diversification",
+    "adjustment over inertia",
+    "flow over force",
+    "balance over insistence",
+    "activation over drift"
+  ],
+  "sun_signs": {
+    "Aries": {
+      "core_meanings": ["initiative", "courage", "decisive action"],
+      "modulates": ["start before perfect", "choose momentum when unsure"]
+    },
+    "Taurus": {
+      "core_meanings": ["steadiness", "resources", "measured progress"],
+      "modulates": ["preserve what works", "stabilize the plan"]
+    },
+    "Gemini": {
+      "core_meanings": ["exchange", "adaptability", "curiosity"],
+      "modulates": ["keep options open", "name the moving parts"]
+    },
+    "Cancer": {
+      "core_meanings": ["care", "protection", "nurturing foundations"],
+      "modulates": ["lead with empathy", "guard the essentials"]
+    },
+    "Leo": {
+      "core_meanings": ["creative expression", "visibility", "boldness"],
+      "modulates": ["show the work", "choose a proud stance"]
+    },
+    "Virgo": {
+      "core_meanings": ["refinement", "calibration", "useful craft"],
+      "modulates": ["improve the details", "test against reality"]
+    },
+    "Libra": {
+      "core_meanings": ["equilibrium", "rapport", "fair exchange"],
+      "modulates": ["seek balance", "harmonize the moving pieces"]
+    },
+    "Scorpio": {
+      "core_meanings": ["depth", "commitment", "pressure that reveals truth"],
+      "modulates": ["stay with intensity", "cut to the root"]
+    },
+    "Sagittarius": {
+      "core_meanings": ["direction", "meaning", "expansion"],
+      "modulates": ["aim for coherence", "connect dots to purpose"]
+    },
+    "Capricorn": {
+      "core_meanings": ["structure", "accountability", "long-range focus"],
+      "modulates": ["commit to the plan", "organize for durability"]
+    },
+    "Aquarius": {
+      "core_meanings": ["systems", "collective view", "principled change"],
+      "modulates": ["think in patterns", "prioritize the network"]
+    },
+    "Pisces": {
+      "core_meanings": ["synthesis", "empathy", "imaginal reach"],
+      "modulates": ["allow emergence", "listen beneath the surface"]
+    }
+  },
+  "moon_signs": {
+    "Aries": {
+      "core_meanings": ["ignition", "courage to act", "clean break"],
+      "shadow": ["impulse without aim", "abrasion"],
+      "dominant_axis": {
+        "statement": "momentum over deliberation",
+        "primary": "momentum",
+        "counter": "deliberation"
+      },
+      "tone": "urgent and straightforward",
+      "supporting_themes": ["move first", "act cleanly", "simplify the choice"]
+    },
+    "Taurus": {
+      "core_meanings": ["stability", "patience", "material grounding"],
+      "shadow": ["stagnation", "over-attachment"],
+      "dominant_axis": {
+        "statement": "stability over disruption",
+        "primary": "stability",
+        "counter": "disruption"
+      },
+      "tone": "steady and measured",
+      "supporting_themes": ["protect the baseline", "slow deliberate moves"]
+    },
+    "Gemini": {
+      "core_meanings": ["exchange", "lightness", "adaptable thinking"],
+      "shadow": ["scattered focus", "surface-level hopping"],
+      "dominant_axis": {
+        "statement": "connection over certainty",
+        "primary": "connection",
+        "counter": "certainty"
+      },
+      "tone": "curious and agile",
+      "supporting_themes": ["ask and adapt", "move between options"]
+    },
+    "Cancer": {
+      "core_meanings": ["care", "containment", "emotional attunement"],
+      "shadow": ["clinginess", "avoidance of exposure"],
+      "dominant_axis": {
+        "statement": "care over detachment",
+        "primary": "care",
+        "counter": "detachment"
+      },
+      "tone": "protective and receptive",
+      "supporting_themes": ["center belonging", "respond to needs"]
+    },
+    "Leo": {
+      "core_meanings": ["expression", "courage to be seen", "creative pride"],
+      "shadow": ["performative flare", "ego defense"],
+      "dominant_axis": {
+        "statement": "expression over accommodation",
+        "primary": "expression",
+        "counter": "accommodation"
+      },
+      "tone": "bold and affirming",
+      "supporting_themes": ["lead with heart", "present with warmth"]
+    },
+    "Virgo": {
+      "core_meanings": ["refinement", "calibration", "useful service"],
+      "shadow": ["overcorrection", "nitpicking"],
+      "dominant_axis": {
+        "statement": "integration over momentum",
+        "primary": "integration",
+        "counter": "momentum"
+      },
+      "tone": "measured and discerning",
+      "supporting_themes": ["notice gaps", "test and adjust", "prune noise"]
+    },
+    "Libra": {
+      "core_meanings": ["balance", "rapport", "measured exchange"],
+      "shadow": ["appeasement", "indecision"],
+      "dominant_axis": {
+        "statement": "balance over insistence",
+        "primary": "balance",
+        "counter": "insistence"
+      },
+      "tone": "mediating and fair",
+      "supporting_themes": ["re-balance commitments", "create room for both sides"]
+    },
+    "Scorpio": {
+      "core_meanings": ["depth", "resolve", "transformational pressure"],
+      "shadow": ["fixation", "withholding"],
+      "dominant_axis": {
+        "statement": "depth over surface",
+        "primary": "depth",
+        "counter": "surface"
+      },
+      "tone": "intense and committed",
+      "supporting_themes": ["stay with the hard thing", "name the stakes"]
+    },
+    "Sagittarius": {
+      "core_meanings": ["meaning", "trajectory", "expansive sightlines"],
+      "shadow": ["overreach", "restless gloss"],
+      "dominant_axis": {
+        "statement": "meaning over minutiae",
+        "primary": "meaning",
+        "counter": "minutiae"
+      },
+      "tone": "wide and declarative",
+      "supporting_themes": ["state the aim", "connect the dots", "choose direction"]
+    },
+    "Capricorn": {
+      "core_meanings": ["structure", "accountability", "durable progress"],
+      "shadow": ["rigidity", "control fixation"],
+      "dominant_axis": {
+        "statement": "structure over spontaneity",
+        "primary": "structure",
+        "counter": "spontaneity"
+      },
+      "tone": "composed and committed",
+      "supporting_themes": ["commit to constraints", "sequence the steps"]
+    },
+    "Aquarius": {
+      "core_meanings": ["systems", "principles", "collective lens"],
+      "shadow": ["aloofness", "over-theorizing"],
+      "dominant_axis": {
+        "statement": "systems over sentiment",
+        "primary": "systems",
+        "counter": "sentiment"
+      },
+      "tone": "cool and clarifying",
+      "supporting_themes": ["zoom out to pattern", "standardize the approach"]
+    },
+    "Pisces": {
+      "core_meanings": ["surrender", "empathy", "integration through flow"],
+      "shadow": ["diffusion", "avoidance"],
+      "dominant_axis": {
+        "statement": "surrender over control",
+        "primary": "surrender",
+        "counter": "control"
+      },
+      "tone": "open and imaginal",
+      "supporting_themes": ["allow emergence", "listen below the noise"]
+    }
+  },
+  "moon_phases": {
+    "new": {
+      "timing_state": "building",
+      "why_today": "today begins a fresh lunar push; initiation is favored"
+    },
+    "waxing": {
+      "timing_state": "building",
+      "why_today": "today builds momentum; add energy to what is growing"
+    },
+    "full": {
+      "timing_state": "peaking",
+      "why_today": "peaks today; exposure and decision points surface"
+    },
+    "waning": {
+      "timing_state": "settling",
+      "why_today": "today releases and integrates; refinement over expansion"
+    }
+  },
+  "aspects": {
+    "sun_moon": {
+      "conjunction": {
+        "meaning": "solar and lunar aims merge; one direction dominates",
+        "axis_hint": "alignment over diversification",
+        "tone": "singular focus"
+      },
+      "sextile": {
+        "meaning": "latent opportunities appear if you engage them",
+        "axis_hint": "activation over drift",
+        "tone": "engaged curiosity"
+      },
+      "square": {
+        "meaning": "friction demands an adjustment; something must give",
+        "axis_hint": "adjustment over inertia",
+        "tone": "pressurized"
+      },
+      "trine": {
+        "meaning": "supportive flow makes progress easy when you act",
+        "axis_hint": "flow over force",
+        "tone": "smooth but awake"
+      },
+      "opposition": {
+        "meaning": "polarities seek balance; visibility forces a choice",
+        "axis_hint": "balance over insistence",
+        "tone": "illuminated tension"
+      }
+    }
+  },
+  "why_today_templates": {
+    "ingress": "today marks a brief sign change that re-weights attention",
+    "aspect": "today's exact geometry makes this emphasis unavoidable",
+    "phase": "today's lunar pacing sets how hard to push"
+  }
+}
+

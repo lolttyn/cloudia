@@ -1,22 +1,47 @@
 import { describe, expect, it } from "vitest";
+import interpretiveCanon from "../canon/interpretiveCanon_v1.json" assert { type: "json" };
 import { runInterpreter } from "../runInterpreter.js";
 import { InterpretiveFrameSchema } from "../schema/InterpretiveFrame.js";
 
-describe("runInterpreter (stub)", () => {
-  it("returns a schema-valid frame for 2025-12-18 with explicit anchors and causality", async () => {
-    const frame = await runInterpreter({ date: "2025-12-18" });
+const stubFeatures = {
+  date: "2025-12-18",
+  sun: { sign: "Sagittarius" },
+  moon: { sign: "Virgo", phase: "waning" as const },
+  highlights: [
+    {
+      type: "aspect" as const,
+      bodies: ["Sun", "Moon"] as const,
+      aspect: "square" as const,
+      orb_deg: 2.1,
+    },
+    {
+      type: "ingress" as const,
+      body: "Moon" as const,
+      from_sign: "Leo",
+      to_sign: "Virgo",
+      window: "past_24h" as const,
+    },
+  ],
+};
 
-    expect(() => InterpretiveFrameSchema.parse(frame)).not.toThrow();
-    expect(frame.date).toBe("2025-12-18");
-    expect(frame.dominant_contrast_axis.statement).toMatch(/integration over momentum/i);
-    expect(frame.sky_anchors.map((a) => a.label)).toEqual(
+describe("runInterpreter (production engine)", () => {
+  it("produces deterministic frames for the same date input", async () => {
+    const first = await runInterpreter({ date: stubFeatures.date, features: stubFeatures });
+    const second = await runInterpreter({ date: stubFeatures.date, features: stubFeatures });
+
+    expect(() => InterpretiveFrameSchema.parse(first)).not.toThrow();
+    expect(first).toStrictEqual(second);
+    expect(first.sky_anchors.map((a) => a.label)).toEqual(
       expect.arrayContaining(["Moon in Virgo", "Sun in Sagittarius"])
     );
-    expect(frame.causal_logic.some((line) => /because.*moon in virgo/i.test(line))).toBe(true);
   });
 
-  it("throws for unsupported dates", async () => {
-    await expect(runInterpreter({ date: "2025-12-19" })).rejects.toThrow();
+  it("fails loudly when canon coverage is missing for a sky state", async () => {
+    const canonMissingMoon = { ...interpretiveCanon, moon_signs: {} } as typeof interpretiveCanon;
+
+    await expect(
+      runInterpreter({ date: stubFeatures.date, features: stubFeatures, canon: canonMissingMoon })
+    ).rejects.toThrow(/No canon entry for Moon in Virgo/i);
   });
 
   it("fails schema when dominant axis collapses to a single abstract theme", () => {
