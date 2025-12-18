@@ -99,6 +99,7 @@ async function runForDate(program_slug: string, episode_date: string): Promise<v
     episode_id,
     batch_id,
     time_context,
+    interpretive_frame,
   });
 
   const mainThemesResult = await runMainThemesForDate({

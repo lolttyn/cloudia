@@ -69,8 +69,8 @@ export async function runIntroForDate(params: {
     included_tags: ["theme:one"],
     suppressed_tags: [],
     confidence_level: "high",
-    interpretive_frame: params.interpretive_frame,
     constraints: {
+      interpretive_frame: params.interpretive_frame,
       max_ideas: 1,
       must_acknowledge_uncertainty: false,
       ban_repetition: true,

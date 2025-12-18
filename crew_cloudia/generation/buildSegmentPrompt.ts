@@ -126,16 +126,25 @@ ${segment_plan.intent.join(", ")}
 
 ${
   interpretiveFrame
-    ? `Authoritative interpretive frame for this day:
+    ? (() => {
+        const frame = interpretiveFrame as {
+          dominant_contrast_axis?: { statement?: string };
+          sky_anchors?: { label?: string }[];
+          why_today_clause?: string;
+        };
+        const axis = frame.dominant_contrast_axis?.statement ?? "";
+        const anchors = frame.sky_anchors ?? [];
+        const whyToday = frame.why_today_clause ?? "";
+        const anchorLines = anchors.map((a) => `- "${a.label ?? ""}"`).join("\n");
+        return `Authoritative interpretive frame for this day:
 ${JSON.stringify(interpretiveFrame, null, 2)}
 
 Required explicit references (must appear verbatim in the output):
-- "${interpretiveFrame.dominant_contrast_axis.statement}"
-${interpretiveFrame.sky_anchors
-  .map((a) => `- "${a.label}"`)
-  .join("\n")}
-- "${interpretiveFrame.why_today_clause}"
-`
+- "${axis}"
+${anchorLines}
+- "${whyToday}"
+`;
+      })()
     : ""
 }
 
@@ -146,13 +155,35 @@ ${writing_contract.required_sections
 
 ${
   segment.segment_key === "intro"
-    ? `
+    ? (() => {
+        if (!interpretiveFrame) {
+          throw new Error(
+            "Intro prompt assembly requires an interpretive_frame but none was provided."
+          );
+        }
+
+        const frame = interpretiveFrame as {
+          dominant_contrast_axis?: { statement?: string };
+        };
+        const axisStatement = frame.dominant_contrast_axis?.statement ?? "";
+
+        return `
 You must begin the intro with the following exact greeting (verbatim). Do not paraphrase or omit it:
 
 "Hey Celestial Besties. It’s me, Cloudia Rey, here with the Cosmic Forecast for ${formatBroadcastDate(
         segment.episode_date
       )}."
-`.trim()
+
+You must include the following line immediately after the greeting, verbatim. Do not alter it:
+
+"Today’s dominant tension is: ${axisStatement}."
+
+Intro meaning requirements:
+- Express the day’s dominant contrast axis from the InterpretiveFrame. Paraphrase is allowed; introducing a different primary theme is not.
+- You may briefly reference the sky setup at a high level, but do not swap in a different theme.
+- Do not describe the episode structure or talk about “this episode” as an object. Set the day’s tone instead.
+`.trim();
+      })()
     : ""
 }
 
