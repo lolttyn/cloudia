@@ -40,6 +40,20 @@ Your task is to write a single segment with the following intent:
 ${writing_contract.intent}
 
 If an interpretive_frame is provided, it is the authoritative interpretation for the day. Express that meaning faithfully; use other fields only to shape how you deliver it, not to replace it.
+${
+  segment.segment_key === "main_themes"
+    ? `
+
+For main_themes, you must bind the provided interpretive_frame fields to the required sections exactly:
+- Primary Meanings: explicitly express the frame's dominant_contrast_axis; do not introduce any different theme.
+- Relevance: explain the frame's causal_logic and why_today; this section answers why this meaning applies today.
+- Concrete Example: illustrate the frame's experiential pressure implied by the dominant_contrast_axis and sky_anchors; make the abstract meaning tangible.
+- Confidence Alignment: mirror the frame's confidence_level; do not introduce stronger certainty than the frame provides.
+
+If an interpretive_frame is provided, do not invent or substitute a different meaning. Your task is to express the provided frame, not reinterpret it.
+`.trim()
+    : ""
+}
 
 All required sections must be rendered with their exact titles, verbatim, as provided in the writing contract. Use clear standalone headings (e.g., markdown **Primary Meanings**) and place each section's content directly under its matching header.
 
@@ -75,6 +89,10 @@ Formatting rules:
     plan_rationale: segment_plan.rationale,
   };
 
+  const interpretiveFrame =
+    (segment as unknown as { constraints?: { interpretive_frame?: unknown } })?.constraints
+      ?.interpretive_frame;
+
   const warningsSection =
     episode_validation.warnings.length > 0
       ? episode_validation.warnings
@@ -86,6 +104,14 @@ Formatting rules:
   const user_prompt = `
 Episode context:
 ${segment_plan.intent.join(", ")}
+
+${
+  interpretiveFrame
+    ? `Authoritative interpretive frame for this day:
+${JSON.stringify(interpretiveFrame, null, 2)}
+`
+    : ""
+}
 
 Required sections:
 ${writing_contract.required_sections
