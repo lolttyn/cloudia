@@ -10,14 +10,20 @@ export const SkyAnchorSchema = z.object({
 
 export const InterpretiveFrameSchema = z.object({
   date: DateStringSchema,
-  dominant_axis: z.object({
-    x: z.string().min(1),
-    y: z.string().min(1),
+  dominant_contrast_axis: z.object({
+    statement: z
+      .string()
+      .min(1)
+      .regex(/ over /i, "contrast statement must express X over Y"),
+    primary: z.string().min(1),
+    counter: z.string().min(1),
   }),
   tone_descriptor: z.string().min(1),
-  why_today: z.array(z.string().min(1)).min(2).max(4),
+  why_today: z.array(z.string().min(1)).min(1).max(4),
   supporting_themes: z.array(z.string().min(1)).max(8),
-  sky_anchors: z.array(SkyAnchorSchema).min(2).max(6),
+  sky_anchors: z.array(SkyAnchorSchema).min(1).max(2),
+  causal_logic: z.array(z.string().min(1)).min(1),
+  why_today_clause: z.string().min(1),
   timing: z.object({
     state: z.enum(["building", "peaking", "settling", "transitioning"]),
     notes: z.string().min(1).optional(),
