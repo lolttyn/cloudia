@@ -13,6 +13,7 @@ import { upsertCurrentSegment } from "./crew_cloudia/editorial/persistence/upser
 import { getNextAttemptNumber } from "./crew_cloudia/editorial/persistence/getNextAttemptNumber.js";
 import { markSegmentReadyForAudio } from "./crew_cloudia/audio/markSegmentReadyForAudio.js";
 import { InterpretiveFrame } from "./crew_cloudia/interpretation/schema/InterpretiveFrame.js";
+import { evaluateIntroWithFrame } from "./crew_cloudia/editorial/showrunner/evaluateIntroWithFrame.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -31,6 +32,10 @@ export async function runIntroForDate(params: {
   segment_key: string;
   gate_result: ReturnType<typeof evaluateEditorialGate>;
 }> {
+  if (!params.interpretive_frame) {
+    throw new Error("interpretive_frame is required for intro generation");
+  }
+
   const episode_plan: EpisodeEditorialPlan = {
     episode_date: params.episode_date,
     segments: [
@@ -87,6 +92,20 @@ export async function runIntroForDate(params: {
     writing_contract,
     episode_validation,
   });
+
+  const introEvaluation = evaluateIntroWithFrame({
+    interpretive_frame: params.interpretive_frame,
+    episode_date: params.episode_date,
+    draft_script: result.draft_script,
+  });
+
+  if (introEvaluation.decision === "FAIL_EPISODE") {
+    throw new Error(
+      `Episode failed: intro did not satisfy meaning or greeting requirements. Notes: ${introEvaluation.notes.join(
+        " | "
+      )}`
+    );
+  }
 
   const today = new Date().toISOString().slice(0, 10);
   const mappedDiagnostics = mapDiagnosticsToEditorialViolations({

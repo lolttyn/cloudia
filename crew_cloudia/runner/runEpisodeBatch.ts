@@ -6,6 +6,7 @@ import { runIntroForDate } from "../../run-intro.js";
 import { runMainThemesForDate } from "../../run-main-themes.js";
 import { evaluateEpisodeGate } from "../editorial/gate/evaluateEpisodeGate.js";
 import { persistEpisodeGateResult } from "../editorial/gate/persistEpisodeGateResult.js";
+import { runInterpreter } from "../interpretation/runInterpreter.js";
 
 type ParsedArgs = {
   program_slug: string;
@@ -90,6 +91,8 @@ async function runForDate(program_slug: string, episode_date: string): Promise<v
 
   console.log(`[batch:date] ${episode_date}`);
 
+  const interpretive_frame = await runInterpreter({ date: episode_date });
+
   const introResult = await runIntroForDate({
     program_slug,
     episode_date,
@@ -104,6 +107,7 @@ async function runForDate(program_slug: string, episode_date: string): Promise<v
     episode_id,
     batch_id,
     time_context,
+    interpretive_frame,
   });
 
   const segment_results = [

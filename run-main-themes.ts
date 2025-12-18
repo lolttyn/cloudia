@@ -11,11 +11,10 @@ import { EpisodeValidationResult } from "./crew_cloudia/editorial/validation/epi
 import { persistSegmentVersion } from "./crew_cloudia/editorial/persistence/persistSegmentVersion.js";
 import { upsertCurrentSegment } from "./crew_cloudia/editorial/persistence/upsertCurrentSegment.js";
 import { getNextAttemptNumber } from "./crew_cloudia/editorial/persistence/getNextAttemptNumber.js";
-import { getBatchAttemptCount } from "./crew_cloudia/editorial/persistence/getBatchAttemptCount.js";
-import { buildRewritePrompt } from "./crew_cloudia/editorial/rewrite/buildRewritePrompt.js";
-import { invokeLLM, CLOUDIA_LLM_CONFIG } from "./crew_cloudia/generation/invokeLLM.js";
 import { markSegmentReadyForAudio } from "./crew_cloudia/audio/markSegmentReadyForAudio.js";
 import { InterpretiveFrame } from "./crew_cloudia/interpretation/schema/InterpretiveFrame.js";
+import { invokeLLM, CLOUDIA_LLM_CONFIG } from "./crew_cloudia/generation/invokeLLM.js";
+import { evaluateSegmentWithFrame } from "./crew_cloudia/editorial/showrunner/evaluateSegmentWithFrame.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -23,7 +22,7 @@ declare const process: {
   exit(code?: number): never;
 };
 
-const MAX_BATCH_ATTEMPTS = 5;
+const MAX_EDITOR_RETRIES = 5;
 
 export async function runMainThemesForDate(params: {
   program_slug: string;
@@ -36,6 +35,10 @@ export async function runMainThemesForDate(params: {
   segment_key: string;
   gate_result: ReturnType<typeof evaluateEditorialGate>;
 }> {
+  if (!params.interpretive_frame) {
+    throw new Error("interpretive_frame is required for main_themes generation");
+  }
+
   const episode_plan: EpisodeEditorialPlan = {
     episode_date: params.episode_date,
     segments: [
@@ -68,12 +71,10 @@ export async function runMainThemesForDate(params: {
     ban_repetition: true,
   };
 
-  const segmentConstraints = params.interpretive_frame
-    ? ({
-        ...baseConstraints,
-        interpretive_frame: params.interpretive_frame,
-      } as SegmentPromptInput["constraints"])
-    : baseConstraints;
+  const segmentConstraints = {
+    ...baseConstraints,
+    interpretive_frame: params.interpretive_frame,
+  } as SegmentPromptInput["constraints"];
 
   const segment: SegmentPromptInput = {
     episode_date: params.episode_date,
@@ -93,35 +94,85 @@ export async function runMainThemesForDate(params: {
     warnings: [],
   };
 
-  const writing_contract = getWritingContract("main_themes");
-  const result = await generateSegmentDraft({
-    episode_plan,
-    segment,
-    writing_contract,
-    episode_validation,
-  });
-
   const today = new Date().toISOString().slice(0, 10);
-  const mappedDiagnostics = mapDiagnosticsToEditorialViolations({
-    canon_violations: result.self_check.canon_flags,
-    structural_violations: result.self_check.contract_violations,
-  });
-
-  const attemptNumber = await getNextAttemptNumber({
-    episode_id: params.episode_id,
-    segment_key: result.segment_key,
-  });
-
   const time_context = params.time_context ?? (params.episode_date === today ? "day_of" : "future");
-  let script = result.draft_script;
+  const writing_contract = getWritingContract("main_themes");
 
-  let gateResult = evaluateEditorialGate({
+  let script = "";
+  let editorNotes: string[] = [];
+  let approved = false;
+  let lastDecision: "APPROVE" | "REVISE" | "FAIL_EPISODE" | null = null;
+
+  for (let attempt = 0; attempt < MAX_EDITOR_RETRIES; attempt++) {
+    if (attempt === 0) {
+      const draft = await generateSegmentDraft({
+        episode_plan,
+        segment,
+        writing_contract,
+        episode_validation,
+      });
+      script = draft.draft_script;
+    } else {
+      const rewritePromptPayload = {
+        system_prompt: "You are a precise editorial rewrite assistant.",
+        user_prompt: buildShowrunnerRewritePrompt({
+          interpretive_frame: params.interpretive_frame,
+          previous_script: script,
+          editor_notes: editorNotes,
+        }),
+      };
+
+      const rewriteResult = await invokeLLM(rewritePromptPayload, CLOUDIA_LLM_CONFIG);
+      if (rewriteResult.status !== "ok") {
+        throw new Error(
+          `LLM rewrite failed (${rewriteResult.error_type}): ${rewriteResult.message}`
+        );
+      }
+      script = rewriteResult.text;
+    }
+
+    const evaluation = evaluateSegmentWithFrame({
+      interpretive_frame: params.interpretive_frame,
+      segment_key: "main_themes",
+      draft_script: script,
+      attempt,
+      max_attempts: MAX_EDITOR_RETRIES,
+    });
+
+    lastDecision = evaluation.decision;
+    if (evaluation.decision === "APPROVE") {
+      approved = true;
+      break;
+    }
+
+    if (evaluation.decision === "FAIL_EPISODE" || attempt === MAX_EDITOR_RETRIES - 1) {
+      throw new Error(
+        `Episode failed: main_themes could not meet editor rubric after ${attempt + 1} attempts. Notes: ${evaluation.notes.join(
+          " | "
+        )}`
+      );
+    }
+
+    editorNotes = evaluation.notes;
+  }
+
+  if (!approved || lastDecision !== "APPROVE") {
+    throw new Error(
+      "Episode failed: main_themes did not achieve editor approval within allowed attempts."
+    );
+  }
+
+  const diagnostics = mapDiagnosticsToEditorialViolations(
+    performSelfCheck(script, writing_contract)
+  );
+
+  const gateResult = evaluateEditorialGate({
     episode_id: params.episode_id,
     episode_date: params.episode_date,
-    segment_key: result.segment_key,
+    segment_key: "main_themes",
     time_context,
     generated_script: script,
-    diagnostics: mappedDiagnostics,
+    diagnostics,
     segment_contract: {
       allows_rewrites: false,
     },
@@ -129,10 +180,15 @@ export async function runMainThemesForDate(params: {
     max_attempts_remaining: 0,
   });
 
+  const attemptNumber = await getNextAttemptNumber({
+    episode_id: params.episode_id,
+    segment_key: "main_themes",
+  });
+
   await persistSegmentVersion({
     episode_id: params.episode_id,
     episode_date: params.episode_date,
-    segment_key: result.segment_key,
+    segment_key: "main_themes",
     attempt_number: attemptNumber,
     script_text: script,
     gate_decision: gateResult.decision,
@@ -145,7 +201,7 @@ export async function runMainThemesForDate(params: {
     await upsertCurrentSegment({
       episode_id: params.episode_id,
       episode_date: params.episode_date,
-      segment_key: result.segment_key,
+      segment_key: "main_themes",
       script_text: script,
       script_version: attemptNumber,
       gate_policy_version: gateResult.policy_version,
@@ -153,120 +209,19 @@ export async function runMainThemesForDate(params: {
 
     await markSegmentReadyForAudio({
       episode_id: params.episode_id,
-      segment_key: result.segment_key,
+      segment_key: "main_themes",
     });
   }
 
   await persistEditorialGateResult({
     episode_id: params.episode_id,
     episode_date: params.episode_date,
-    segment_key: result.segment_key,
+    segment_key: "main_themes",
     gate_result: gateResult,
   });
 
-  while (time_context === "future" && gateResult.decision === "block") {
-    const batchAttempts = await getBatchAttemptCount({
-      episode_id: params.episode_id,
-      segment_key: result.segment_key,
-      batch_id: params.batch_id,
-    });
-
-    if (batchAttempts >= MAX_BATCH_ATTEMPTS) {
-      break;
-    }
-
-    const rewritePrompt = buildRewritePrompt({
-      original_script: script,
-      blocking_reasons: gateResult.blocking_reasons,
-    });
-
-    const attemptNumberRewrite = await getNextAttemptNumber({
-      episode_id: params.episode_id,
-      segment_key: result.segment_key,
-    });
-
-    const rewritePromptPayload = {
-      system_prompt: "You are a precise editorial rewrite assistant.",
-      user_prompt: rewritePrompt,
-    };
-
-    const rewriteResult = await invokeLLM(rewritePromptPayload, CLOUDIA_LLM_CONFIG);
-    if (rewriteResult.status !== "ok") {
-      throw new Error(
-        `LLM rewrite failed (${rewriteResult.error_type}): ${rewriteResult.message}`
-      );
-    }
-
-    script = rewriteResult.text;
-
-    const rewriteDiagnostics = mapDiagnosticsToEditorialViolations(
-      performSelfCheck(script, writing_contract)
-    );
-
-    gateResult = evaluateEditorialGate({
-      episode_id: params.episode_id,
-      episode_date: params.episode_date,
-      segment_key: result.segment_key,
-      time_context,
-      generated_script: script,
-      diagnostics: rewriteDiagnostics,
-      segment_contract: {
-        allows_rewrites: false,
-      },
-      policy_version: "v0.1",
-      max_attempts_remaining: Math.max(
-        0,
-        MAX_BATCH_ATTEMPTS - batchAttempts - 1
-      ),
-    });
-
-    await persistSegmentVersion({
-      episode_id: params.episode_id,
-      episode_date: params.episode_date,
-      segment_key: result.segment_key,
-      attempt_number: attemptNumberRewrite,
-      script_text: script,
-      gate_decision: gateResult.decision,
-      blocking_reasons: gateResult.blocking_reasons,
-      gate_policy_version: gateResult.policy_version,
-      batch_id: params.batch_id,
-    });
-
-    if (gateResult.decision === "approve") {
-      await upsertCurrentSegment({
-        episode_id: params.episode_id,
-        episode_date: params.episode_date,
-        segment_key: result.segment_key,
-        script_text: script,
-        script_version: attemptNumberRewrite,
-        gate_policy_version: gateResult.policy_version,
-      });
-
-      await markSegmentReadyForAudio({
-        episode_id: params.episode_id,
-        segment_key: result.segment_key,
-      });
-
-      await persistEditorialGateResult({
-        episode_id: params.episode_id,
-        episode_date: params.episode_date,
-        segment_key: result.segment_key,
-        gate_result: gateResult,
-      });
-
-      break;
-    }
-
-    await persistEditorialGateResult({
-      episode_id: params.episode_id,
-      episode_date: params.episode_date,
-      segment_key: result.segment_key,
-      gate_result: gateResult,
-    });
-  }
-
   return {
-    segment_key: result.segment_key,
+    segment_key: "main_themes",
     gate_result: gateResult,
   };
 }
@@ -318,6 +273,56 @@ function performSelfCheck(
   }
 
   return { canon_violations, contract_violations };
+}
+
+function buildShowrunnerRewritePrompt(params: {
+  interpretive_frame: InterpretiveFrame;
+  previous_script: string;
+  editor_notes: string[];
+}): string {
+  const notes =
+    params.editor_notes.length > 0
+      ? params.editor_notes.map((n, i) => `${i + 1}. ${n}`).join("\n")
+      : "No notes provided.";
+
+  return `
+You are rewriting a main_themes segment to satisfy the editor rubric. Fix only the cited issues.
+
+Authoritative interpretive frame:
+${JSON.stringify(params.interpretive_frame, null, 2)}
+
+Required explicit references (must appear verbatim in the output):
+- "${params.interpretive_frame.dominant_contrast_axis.statement}"
+${params.interpretive_frame.sky_anchors.map((a) => `- "${a.label}"`).join("\n")}
+- "${params.interpretive_frame.why_today_clause}"
+
+You must output the following structure exactly, filling in content beneath each heading. Do not remove, rename, or reorder these headings:
+
+**Primary Meanings**
+(write here)
+
+**Relevance**
+(write here)
+
+**Concrete Example**
+(write here)
+
+**Confidence Alignment**
+(write here)
+
+Editor notes to address:
+${notes}
+
+Previous draft:
+${params.previous_script}
+
+Requirements:
+- Preserve the dominant_contrast_axis and meaning from the interpretive frame.
+- Include the specified sky anchors and causal logic using "because".
+- Keep required sections and headings intact.
+- Match the frame's confidence_level; do not increase certainty.
+- Do not add new themes; fix only the listed issues.
+`.trim();
 }
 
 function hasOverconfidentFutureLanguage(text: string): boolean {

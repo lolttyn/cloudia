@@ -56,6 +56,25 @@ If an interpretive_frame is provided, do not invent or substitute a different me
 }
 
 All required sections must be rendered with their exact titles, verbatim, as provided in the writing contract. Use clear standalone headings (e.g., markdown **Primary Meanings**) and place each section's content directly under its matching header.
+${
+  segment.segment_key === "main_themes"
+    ? `
+You must output the following structure exactly, filling in content beneath each heading. Do not remove, rename, or reorder these headings:
+
+**Primary Meanings**
+(write here)
+
+**Relevance**
+(write here)
+
+**Concrete Example**
+(write here)
+
+**Confidence Alignment**
+(write here)
+`.trim()
+    : ""
+}
 
 You must follow ALL constraints below without exception.
 
@@ -109,6 +128,13 @@ ${
   interpretiveFrame
     ? `Authoritative interpretive frame for this day:
 ${JSON.stringify(interpretiveFrame, null, 2)}
+
+Required explicit references (must appear verbatim in the output):
+- "${interpretiveFrame.dominant_contrast_axis.statement}"
+${interpretiveFrame.sky_anchors
+  .map((a) => `- "${a.label}"`)
+  .join("\n")}
+- "${interpretiveFrame.why_today_clause}"
 `
     : ""
 }
@@ -117,6 +143,30 @@ Required sections:
 ${writing_contract.required_sections
   .map((s) => `- ${s.key} (${s.required ? "required" : "optional"}): ${s.description}`)
   .join("\n")}
+
+${
+  segment.segment_key === "intro"
+    ? `
+You must begin the intro with the following exact greeting (verbatim). Do not paraphrase or omit it:
+
+"Hey Celestial Besties. It’s me, Cloudia Rey, here with the Cosmic Forecast for ${formatBroadcastDate(
+        segment.episode_date
+      )}."
+`.trim()
+    : ""
+}
+
+${
+  segment.segment_key === "closing"
+    ? `
+You must end the episode with the following exact sign-off (verbatim). Do not paraphrase or alter it:
+
+"The Cosmic Forecast for ${formatBroadcastDate(
+        segment.episode_date
+      )} is brought to you by the Intergalactic Public Broadcasting Network and is made possible by listeners like you. Tune in tomorrow, skygazer."
+`.trim()
+    : ""
+}
 
 Factual and interpretive inputs:
 ${JSON.stringify(payload, null, 2)}
@@ -133,5 +183,35 @@ and ${writing_contract.length_constraints.max_words} words.
     system_prompt,
     user_prompt,
   };
+}
+
+function formatBroadcastDate(date: string): string {
+  const parsed = new Date(`${date}T00:00:00Z`);
+  if (Number.isNaN(parsed.getTime())) {
+    return date;
+  }
+
+  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const dayName = dayNames[parsed.getUTCDay()];
+  const monthName = monthNames[parsed.getUTCMonth()];
+  const dayOfMonth = parsed.getUTCDate();
+  const year = parsed.getUTCFullYear();
+
+  return `${dayName}, ${monthName} ${dayOfMonth}, ${year}`;
 }
 
