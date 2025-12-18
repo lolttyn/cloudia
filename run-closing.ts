@@ -19,6 +19,7 @@ import {
   MAX_SEGMENT_RETRIES,
 } from "./crew_cloudia/editorial/showrunner/editorContracts.js";
 import { evaluateClosingWithFrame } from "./crew_cloudia/editorial/showrunner/evaluateClosingWithFrame.js";
+import { buildClosingScaffold } from "./crew_cloudia/generation/closingScaffold.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -97,6 +98,14 @@ export async function runClosingForDate(params: {
   let approved = false;
   let lastDecision: EditorFeedback["decision"] | null = null;
 
+  const axis = params.interpretive_frame.dominant_contrast_axis.statement;
+  const timingNote = params.interpretive_frame.timing?.notes ?? params.interpretive_frame.timing?.state;
+  const { scaffold, signoff } = buildClosingScaffold({
+    episode_date: params.episode_date,
+    axis_statement: axis,
+    timing_note: timingNote,
+  });
+
   for (let attempt = 0; attempt < MAX_SEGMENT_RETRIES; attempt++) {
     if (attempt === 0) {
       const draft = await generateSegmentDraft({
@@ -109,11 +118,10 @@ export async function runClosingForDate(params: {
     } else {
       const rewritePromptPayload = {
         system_prompt: "You are a precise editorial rewrite assistant for the closing.",
-        user_prompt: buildClosingRewritePrompt({
+        user_prompt: buildClosingMicroRewritePrompt({
           interpretive_frame: params.interpretive_frame,
-          previous_script: script,
+          previous_micro: extractMicroReflection(script, scaffold, signoff),
           editor_notes: rewriteInstructions,
-          episode_date: params.episode_date,
         }),
       };
       const rewriteResult = await invokeLLM(rewritePromptPayload, CLOUDIA_LLM_CONFIG);
@@ -122,7 +130,8 @@ export async function runClosingForDate(params: {
           `LLM rewrite failed (${rewriteResult.error_type}): ${rewriteResult.message}`
         );
       }
-      script = rewriteResult.text;
+      const micro = rewriteResult.text.trim();
+      script = [scaffold, micro, signoff].join("\n");
     }
 
     const evaluation = evaluateClosingWithFrame({
@@ -137,6 +146,18 @@ export async function runClosingForDate(params: {
     if (evaluation.decision === "APPROVE") {
       approved = true;
       break;
+    }
+
+    const hasScaffoldBug =
+      evaluation.blocking_reasons.includes("closing:scaffold_missing") ||
+      evaluation.blocking_reasons.includes("closing:signoff_missing");
+
+    if (hasScaffoldBug) {
+      throw new Error(
+        `Closing scaffold/sign-off missing or altered; this is a code bug, not a rewrite issue. Notes: ${evaluation.notes.join(
+          " | "
+        )}`
+      );
     }
 
     if (evaluation.decision === "FAIL_EPISODE" || attempt === MAX_SEGMENT_RETRIES - 1) {
@@ -225,11 +246,10 @@ export async function runClosingForDate(params: {
   };
 }
 
-function buildClosingRewritePrompt(params: {
+function buildClosingMicroRewritePrompt(params: {
   interpretive_frame: InterpretiveFrame;
-  previous_script: string;
+  previous_micro: string;
   editor_notes: string[];
-  episode_date: string;
 }) {
   const notes =
     params.editor_notes.length > 0
@@ -237,29 +257,30 @@ function buildClosingRewritePrompt(params: {
       : "No notes provided.";
 
   return `
-You are rewriting a closing segment to satisfy the editor rubric. Fix only the cited issues.
+Rewrite the closing micro-reflection (two sentences only). Do not change the scaffold or sign-off; they are fixed outside this prompt.
 
 Authoritative interpretive frame:
 ${JSON.stringify(params.interpretive_frame, null, 2)}
 
-Required scaffold and sign-off (must stay verbatim):
-- Framing: "As the day winds down, take a moment to notice how this energy has shown up for you."
-- Bridge referencing the axis: "${params.interpretive_frame.dominant_contrast_axis.statement}"
-- Sign-off: "The Cosmic Forecast for ${params.episode_date} is brought to you by the Intergalactic Public Broadcasting Network.
-We’ll be back tomorrow, skygazer."
-
-Rewrite the micro-reflection between scaffold and sign-off:
-- Exactly two sentences
-- Reflective and observational; no advice or directives
-- Reinforce (without restating verbatim) the dominant contrast axis: "${params.interpretive_frame.dominant_contrast_axis.statement}"
-- No predictions
+Requirements:
+- Produce exactly two sentences.
+- Reflective and observational; no advice, no directives, no "you should".
+- Reinforce (without restating verbatim) the dominant contrast axis: "${params.interpretive_frame.dominant_contrast_axis.statement}".
+- No predictions; stay with today.
+- No greeting, no sign-off language.
 
 Editor notes to address:
 ${notes}
 
-Previous draft:
-${params.previous_script}
+Previous micro-reflection (for reference only, do not copy):
+${params.previous_micro}
 `.trim();
+}
+
+function extractMicroReflection(script: string, scaffold: string, signoff: string): string {
+  const withoutScaffold = script.replace(scaffold, "").trim();
+  const withoutSignoff = withoutScaffold.replace(signoff, "").trim();
+  return withoutSignoff;
 }
 
 async function main() {

@@ -26,16 +26,17 @@ export function evaluateClosingWithFrame(params: {
     timing_note: timingNote,
   });
 
-  if (!script.includes(scaffold)) {
+  const hasScaffold = script.includes(scaffold);
+  const hasSignoff = script.includes(signoff);
+
+  if (!hasScaffold) {
     notes.push("Closing scaffold is missing or altered.");
     blocking_reasons.push("closing:scaffold_missing");
-    rewrite_instructions.push("Ensure the framing and bridge lines appear verbatim and first.");
   }
 
-  if (!script.includes(signoff)) {
+  if (!hasSignoff) {
     notes.push("Closing sign-off is missing or altered.");
     blocking_reasons.push("closing:signoff_missing");
-    rewrite_instructions.push("Append the exact sign-off after the micro-reflection.");
   }
 
   // Extract the middle micro-reflection content
