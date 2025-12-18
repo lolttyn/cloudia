@@ -57,19 +57,6 @@ export async function runIntroForDate(params: {
     },
   };
 
-  const baseConstraints: SegmentPromptInput["constraints"] = {
-    max_ideas: 1,
-    must_acknowledge_uncertainty: false,
-    ban_repetition: true,
-  };
-
-  const segmentConstraints = params.interpretive_frame
-    ? ({
-        ...baseConstraints,
-        interpretive_frame: params.interpretive_frame,
-      } as SegmentPromptInput["constraints"])
-    : baseConstraints;
-
   const segment: SegmentPromptInput = {
     episode_date: params.episode_date,
     segment_key: "intro",
@@ -77,7 +64,12 @@ export async function runIntroForDate(params: {
     included_tags: ["theme:one"],
     suppressed_tags: [],
     confidence_level: "high",
-    constraints: segmentConstraints,
+    interpretive_frame: params.interpretive_frame,
+    constraints: {
+      max_ideas: 1,
+      must_acknowledge_uncertainty: false,
+      ban_repetition: true,
+    },
   };
 
   const episode_validation: EpisodeValidationResult = {
