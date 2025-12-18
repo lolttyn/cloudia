@@ -12,7 +12,7 @@ import { persistSegmentVersion } from "./crew_cloudia/editorial/persistence/pers
 import { upsertCurrentSegment } from "./crew_cloudia/editorial/persistence/upsertCurrentSegment.js";
 import { getNextAttemptNumber } from "./crew_cloudia/editorial/persistence/getNextAttemptNumber.js";
 import { markSegmentReadyForAudio } from "./crew_cloudia/audio/markSegmentReadyForAudio.js";
-import { markSegmentReadyForAudio } from "./crew_cloudia/audio/markSegmentReadyForAudio.js";
+import { InterpretiveFrame } from "./crew_cloudia/interpretation/schema/InterpretiveFrame.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -26,6 +26,7 @@ export async function runIntroForDate(params: {
   episode_id: string;
   batch_id: string;
   time_context: "day_of" | "future";
+  interpretive_frame?: InterpretiveFrame;
 }): Promise<{
   segment_key: string;
   gate_result: ReturnType<typeof evaluateEditorialGate>;
@@ -56,6 +57,19 @@ export async function runIntroForDate(params: {
     },
   };
 
+  const baseConstraints: SegmentPromptInput["constraints"] = {
+    max_ideas: 1,
+    must_acknowledge_uncertainty: false,
+    ban_repetition: true,
+  };
+
+  const segmentConstraints = params.interpretive_frame
+    ? ({
+        ...baseConstraints,
+        interpretive_frame: params.interpretive_frame,
+      } as SegmentPromptInput["constraints"])
+    : baseConstraints;
+
   const segment: SegmentPromptInput = {
     episode_date: params.episode_date,
     segment_key: "intro",
@@ -63,11 +77,7 @@ export async function runIntroForDate(params: {
     included_tags: ["theme:one"],
     suppressed_tags: [],
     confidence_level: "high",
-    constraints: {
-      max_ideas: 1,
-      must_acknowledge_uncertainty: false,
-      ban_repetition: true,
-    },
+    constraints: segmentConstraints,
   };
 
   const episode_validation: EpisodeValidationResult = {

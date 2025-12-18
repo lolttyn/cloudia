@@ -15,6 +15,7 @@ import { getBatchAttemptCount } from "./crew_cloudia/editorial/persistence/getBa
 import { buildRewritePrompt } from "./crew_cloudia/editorial/rewrite/buildRewritePrompt.js";
 import { invokeLLM, CLOUDIA_LLM_CONFIG } from "./crew_cloudia/generation/invokeLLM.js";
 import { markSegmentReadyForAudio } from "./crew_cloudia/audio/markSegmentReadyForAudio.js";
+import { InterpretiveFrame } from "./crew_cloudia/interpretation/schema/InterpretiveFrame.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -30,6 +31,7 @@ export async function runMainThemesForDate(params: {
   episode_id: string;
   batch_id: string;
   time_context: "day_of" | "future";
+  interpretive_frame?: InterpretiveFrame;
 }): Promise<{
   segment_key: string;
   gate_result: ReturnType<typeof evaluateEditorialGate>;
@@ -60,6 +62,19 @@ export async function runMainThemesForDate(params: {
     },
   };
 
+  const baseConstraints: SegmentPromptInput["constraints"] = {
+    max_ideas: 1,
+    must_acknowledge_uncertainty: true,
+    ban_repetition: true,
+  };
+
+  const segmentConstraints = params.interpretive_frame
+    ? ({
+        ...baseConstraints,
+        interpretive_frame: params.interpretive_frame,
+      } as SegmentPromptInput["constraints"])
+    : baseConstraints;
+
   const segment: SegmentPromptInput = {
     episode_date: params.episode_date,
     segment_key: "main_themes",
@@ -67,11 +82,7 @@ export async function runMainThemesForDate(params: {
     included_tags: ["theme:one"],
     suppressed_tags: [],
     confidence_level: "high",
-    constraints: {
-      max_ideas: 1,
-      must_acknowledge_uncertainty: true,
-      ban_repetition: true,
-    },
+    constraints: segmentConstraints,
   };
 
   const episode_validation: EpisodeValidationResult = {
