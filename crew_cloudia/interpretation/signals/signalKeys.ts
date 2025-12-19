@@ -20,3 +20,7 @@ export function moonIngressKey(toSign: string, window: string): string {
 
 export { normalizeSign };
 
+export function moonInSignKey(sign: string): string {
+  return `moon_in_${normalizeSign(sign)}`;
+}
+

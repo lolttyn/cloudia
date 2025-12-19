@@ -1,0 +1,103 @@
+{
+    "slug": "venus_opposition_mars",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Venus opposition Mars",
+    "summary": "A polarity between desire and action expressed through relationships or external dynamics. Attraction and assertion face each other, creating tension that highlights differences in timing, approach, or appetite. The opportunity is to negotiate rather than polarize.",
+    "trigger": {
+      "signal_key": "venus_mars_opposition",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "Desire and pursuit meet through opposition.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Venus–Mars oppositions surface tension between what is desired and how action is taken, often reflected through other people."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect highlights differences in pace, approach, or expectations that require conscious negotiation."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Attraction may feel charged when preferences and assertiveness don’t naturally align."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Relational dynamics can clarify where boundaries or expectations need adjustment."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This guarantees conflict, rejection, or sexual tension."
+        }
+      ],
+      "frictions": [
+        "Polarizing desire and effort",
+        "Projecting unmet wants onto others",
+        "Escalating pursuit in response to resistance",
+        "Confusing attraction with compatibility",
+        "Letting competition override cooperation"
+      ],
+      "opportunities": [
+        "Clarifying desires through dialogue",
+        "Negotiating pacing and expectations",
+        "Developing relational awareness",
+        "Balancing receptivity with assertiveness",
+        "Using polarity to refine connection"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Notice where desire and approach differ.",
+        "Communicate expectations before escalating effort.",
+        "Respect differences in timing or appetite.",
+        "Use tension to clarify boundaries.",
+        "Choose negotiation over polarization."
+      ],
+      "avoid": [
+        "Assuming opposition equals incompatibility",
+        "Forcing alignment through intensity",
+        "Interpreting resistance as rejection",
+        "Turning attraction into a power struggle",
+        "Letting competition define connection"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Polarity asks for negotiation, not escalation."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Attraction clarifies when differences are named."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting relational outcomes or conflict",
+        "Sexualizing the aspect",
+        "Deterministic conclusions about compatibility"
+      ],
+      "allowed_framing": [
+        "Relational language: 'negotiation', 'expectations'",
+        "Agency-forward framing: 'you can communicate…'",
+        "Contextual framing: 'if dynamics feel polarized…'"
+      ]
+    },
+    "tags": [
+      "attraction",
+      "polarity",
+      "relationships",
+      "negotiation",
+      "desire",
+      "boundaries"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Venus–Mars opposition as desire/assertion polarity archetype"
+    ]
+  }
+  

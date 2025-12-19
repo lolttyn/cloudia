@@ -1,0 +1,103 @@
+{
+    "slug": "sun_opposition_mars",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Sun opposition Mars",
+    "summary": "A polarity between intention and action expressed through external pressure. Motivation meets resistance, often via other people or situational demands. The opportunity is to respond with clarity rather than react defensively.",
+    "trigger": {
+      "signal_key": "sun_moon_opposition",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "Your direction is tested by external resistance.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Sun–Mars oppositions highlight moments where assertion meets challenge, often surfacing through conflict, competition, or opposing agendas."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect asks for conscious response rather than reflexive reaction when momentum is interrupted."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Pressure from others can clarify where motivation is strongest."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Tension increases when effort is mirrored back as resistance."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This guarantees conflict, anger, or confrontation."
+        }
+      ],
+      "frictions": [
+        "Reacting defensively to challenge",
+        "Escalating effort to overpower resistance",
+        "Projecting frustration onto others",
+        "Mistaking opposition for personal attack",
+        "Forcing outcomes to prove strength"
+      ],
+      "opportunities": [
+        "Clarifying priorities under pressure",
+        "Developing assertiveness without aggression",
+        "Learning when to push and when to pivot",
+        "Strengthening self-awareness through feedback",
+        "Channeling competitive energy constructively"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Pause before responding to resistance.",
+        "Differentiate between challenge and threat.",
+        "Use opposition to refine strategy.",
+        "Assert boundaries without escalation.",
+        "Let feedback inform direction."
+      ],
+      "avoid": [
+        "Reacting impulsively to provocation",
+        "Taking resistance personally",
+        "Doubling down without reassessment",
+        "Turning competition into conflict",
+        "Forcing resolution through intensity"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Opposition tests how you respond under pressure."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Strength shows in response, not reaction."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting fights, accidents, or aggression",
+        "Glorifying anger or dominance",
+        "Deterministic outcomes around conflict"
+      ],
+      "allowed_framing": [
+        "Response-based language: 'challenge', 'feedback', 'pressure'",
+        "Agency-forward framing: 'you can choose how to respond…'",
+        "Contextual framing: 'if resistance shows up through others…'"
+      ]
+    },
+    "tags": [
+      "pressure",
+      "assertion",
+      "resistance",
+      "response",
+      "competition",
+      "boundaries"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Sun–Mars opposition as will/force polarity archetype"
+    ]
+  }
+  

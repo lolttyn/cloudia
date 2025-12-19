@@ -1,0 +1,103 @@
+{
+    "slug": "mercury_opposition_mars",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Mercury opposition Mars",
+    "summary": "A polarity between thinking and action expressed through external pressure. Ideas meet urgency or challenge, often through debate, competition, or opposing viewpoints. The opportunity is to respond with clarity rather than escalation.",
+    "trigger": {
+      "signal_key": "mercury_mars_opposition",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "Ideas are tested through challenge.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Mercury–Mars oppositions highlight tension between thought and action, often surfacing through debate, urgency, or opposing viewpoints."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect asks for mental restraint and clear boundaries when pressure rises."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Conversations may feel sharper or more reactive under time constraints."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Opposition can clarify where arguments replace understanding."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This guarantees arguments, mistakes, or verbal conflict."
+        }
+      ],
+      "frictions": [
+        "Speaking before thinking",
+        "Escalating debate into confrontation",
+        "Reacting defensively to opposing views",
+        "Letting urgency override accuracy",
+        "Confusing assertiveness with clarity"
+      ],
+      "opportunities": [
+        "Refining arguments under pressure",
+        "Practicing restraint in communication",
+        "Learning when to pause rather than respond",
+        "Clarifying priorities through challenge",
+        "Strengthening focus amid distraction"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Pause before responding to provocation.",
+        "Separate urgency from importance.",
+        "Choose clarity over speed in communication.",
+        "Listen for what’s being challenged beneath the surface.",
+        "Use opposition to refine thinking."
+      ],
+      "avoid": [
+        "Reacting impulsively in conversations",
+        "Turning disagreement into competition",
+        "Assuming opposition requires a response",
+        "Rushing decisions to relieve pressure",
+        "Letting intensity replace accuracy"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Pressure tests how clearly you think."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Not every challenge needs an immediate response."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting arguments or verbal conflict",
+        "Glorifying confrontation or aggression",
+        "Deterministic mental outcomes"
+      ],
+      "allowed_framing": [
+        "Cognitive language: 'clarity', 'restraint', 'response'",
+        "Agency-forward framing: 'you can choose how to respond…'",
+        "Contextual framing: 'if conversations feel pressured…'"
+      ]
+    },
+    "tags": [
+      "communication",
+      "pressure",
+      "opposition",
+      "clarity",
+      "restraint",
+      "mental_focus"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Mercury–Mars opposition as thought/action polarity archetype"
+    ]
+  }
+  

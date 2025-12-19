@@ -1,0 +1,102 @@
+{
+    "slug": "sun_square_moon",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Sun square Moon",
+    "summary": "A moment of friction between conscious intention and emotional needs. Motivation and mood pull in different directions, creating tension that requires adjustment rather than force. The opportunity is to refine timing and expectations.",
+    "trigger": {
+      "signal_key": "sun_moon_square",
+      "constraints": {
+        "orb_max_degrees": 6
+      }
+    },
+    "meaning": {
+      "headline": "What you want to do and what you need may not match.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Sun–Moon squares highlight tension between intention and emotional reality, making misalignment harder to ignore."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect asks for adjustment in pacing or approach rather than pushing through discomfort."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Irritability or distraction can surface when internal needs are unmet."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Clarity improves when you acknowledge emotional constraints."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This means emotional conflict or inevitable frustration."
+        }
+      ],
+      "frictions": [
+        "Acting against emotional capacity",
+        "Forcing decisions to resolve discomfort",
+        "Misreading mood as a problem to fix",
+        "Impatience with internal resistance",
+        "Letting tension dictate reactions"
+      ],
+      "opportunities": [
+        "Identifying what needs adjustment",
+        "Refining plans to match capacity",
+        "Developing emotional self-awareness",
+        "Choosing timing over force",
+        "Strengthening resilience through responsiveness"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Pause to assess emotional capacity before acting.",
+        "Adjust expectations or timing instead of pushing harder.",
+        "Name the source of friction without dramatizing it.",
+        "Use tension as information about priorities.",
+        "Create space for both intention and need."
+      ],
+      "avoid": [
+        "Forcing alignment prematurely",
+        "Treating mood as an obstacle",
+        "Escalating effort to overcome discomfort",
+        "Making snap decisions to relieve tension",
+        "Assuming friction equals failure"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Tension is a signal to adjust, not a reason to push."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Timing matters as much as intention."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting emotional conflict or negative outcomes",
+        "Framing discomfort as weakness",
+        "Deterministic mood-based conclusions"
+      ],
+      "allowed_framing": [
+        "Process-oriented language: 'adjustment', 'timing'",
+        "Agency-forward framing: 'you can recalibrate…'",
+        "Contextual framing: 'if things feel out of sync…'"
+      ]
+    },
+    "tags": [
+      "tension",
+      "adjustment",
+      "emotional_awareness",
+      "timing",
+      "self_regulation"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Sun–Moon square as intention/emotion tension archetype"
+    ]
+  }
+  

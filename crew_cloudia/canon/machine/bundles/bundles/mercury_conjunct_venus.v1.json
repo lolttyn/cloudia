@@ -1,0 +1,103 @@
+{
+    "slug": "mercury_conjunct_venus",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Mercury conjunct Venus",
+    "summary": "A convergence of thinking and values. Communication becomes more attuned to tone, preference, and relational context. The opportunity is to express ideas in ways that reflect what you actually value.",
+    "trigger": {
+      "signal_key": "mercury_venus_conjunction",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "Thought and expression align with what you value.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Mercury–Venus conjunctions align thinking with values, making communication more considered and relationally aware."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect supports expressing ideas in ways that reflect taste, preference, and social context."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Words may land more smoothly when intention and tone are aligned."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Decision-making benefits from weighing what feels right alongside what makes sense."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This guarantees agreement, likability, or persuasion."
+        }
+      ],
+      "frictions": [
+        "Softening messages to avoid discomfort",
+        "Over-prioritizing harmony over clarity",
+        "Indecision caused by weighing too many preferences",
+        "Assuming politeness equals honesty",
+        "Avoiding necessary disagreement"
+      ],
+      "opportunities": [
+        "Communicating with clarity and care",
+        "Aligning words with values",
+        "Negotiating agreements more thoughtfully",
+        "Refining ideas through dialogue",
+        "Strengthening relationships through considered expression"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Choose words that reflect what you actually value.",
+        "Balance clarity with consideration.",
+        "Listen for what matters to others, not just what’s said.",
+        "Refine ideas through respectful exchange.",
+        "Let tone support meaning, not replace it."
+      ],
+      "avoid": [
+        "Saying what sounds good instead of what’s true",
+        "Avoiding clarity to keep things pleasant",
+        "Over-editing thoughts before sharing them",
+        "Confusing agreement with understanding",
+        "Letting charm replace substance"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Communication works best when words reflect values."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Tone matters most when it supports clarity."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting agreement or positive outcomes",
+        "Framing diplomacy as manipulation",
+        "Deterministic relational conclusions"
+      ],
+      "allowed_framing": [
+        "Communication-based language: 'express', 'listen', 'negotiate'",
+        "Agency-forward framing: 'you can choose how to say it…'",
+        "Contextual framing: 'if conversations or decisions are in focus…'"
+      ]
+    },
+    "tags": [
+      "communication",
+      "values",
+      "clarity",
+      "relationships",
+      "expression",
+      "consideration"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Mercury–Venus conjunction as cognition/value alignment archetype"
+    ]
+  }
+  

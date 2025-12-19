@@ -1,0 +1,103 @@
+{
+    "slug": "sun_trine_mars",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Sun trine Mars",
+    "summary": "A supportive alignment between intention and action. Motivation flows with less resistance, making it easier to act decisively and productively. The opportunity is to use momentum intentionally rather than waste it.",
+    "trigger": {
+      "signal_key": "sun_mars_trine",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "Effort supports direction.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Sun–Mars trines align purpose with energy, supporting confident and effective action."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect favors initiative that feels both timely and sustainable."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Momentum increases when actions reflect clear intent."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Physical or practical tasks tend to move more smoothly."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This guarantees success or effortless outcomes."
+        }
+      ],
+      "frictions": [
+        "Overextending because things feel easy",
+        "Assuming momentum will last without maintenance",
+        "Acting quickly without prioritization",
+        "Letting confidence turn into complacency",
+        "Skipping reflection in favor of speed"
+      ],
+      "opportunities": [
+        "Advancing goals with focused effort",
+        "Taking initiative without unnecessary strain",
+        "Building confidence through follow-through",
+        "Using energy efficiently",
+        "Making tangible progress on active projects"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Act on priorities that benefit from momentum.",
+        "Choose tasks that require initiative and follow-through.",
+        "Use confidence to simplify decisions.",
+        "Pace energy to sustain progress.",
+        "Let effectiveness guide action."
+      ],
+      "avoid": [
+        "Taking on more than you can sustain",
+        "Rushing past planning because things feel smooth",
+        "Equating ease with importance",
+        "Ignoring limits while energy is high",
+        "Assuming momentum replaces discipline"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Momentum works best when it serves clear intent."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Effective action feels focused, not forced."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting guaranteed success",
+        "Framing ease as superiority",
+        "Deterministic outcomes tied to action"
+      ],
+      "allowed_framing": [
+        "Action-oriented language: 'initiative', 'follow-through'",
+        "Agency-forward framing: 'you can use momentum…'",
+        "Contextual framing: 'if energy and clarity align…'"
+      ]
+    },
+    "tags": [
+      "momentum",
+      "initiative",
+      "confidence",
+      "effective_action",
+      "progress",
+      "alignment"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Sun–Mars trine as will/action harmony archetype"
+    ]
+  }
+  

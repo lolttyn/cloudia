@@ -1,0 +1,103 @@
+{
+    "slug": "mercury_square_venus",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Mercury square Venus",
+    "summary": "A tension between logic and values. What sounds reasonable may not feel satisfying, and what feels right may be hard to articulate. The opportunity is to clarify priorities without smoothing over real differences.",
+    "trigger": {
+      "signal_key": "mercury_venus_square",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "What makes sense and what feels right may diverge.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Mercury–Venus squares highlight friction between reasoning and values, making compromises harder to ignore."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect surfaces where communication choices don’t fully align with personal or relational priorities."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Conversations may feel slightly off even when they are polite or logical."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Decisions can stall when preference and practicality compete."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This guarantees conflict, misunderstanding, or hurt feelings."
+        }
+      ],
+      "frictions": [
+        "Saying what’s reasonable instead of what’s true",
+        "Over-explaining to justify preferences",
+        "Avoiding clarity to keep things pleasant",
+        "Feeling dissatisfied after seemingly productive conversations",
+        "Compromising values for short-term harmony"
+      ],
+      "opportunities": [
+        "Clarifying which values matter most in communication",
+        "Separating politeness from honesty",
+        "Improving decision-making through explicit tradeoffs",
+        "Refining agreements to better reflect priorities",
+        "Strengthening integrity in expression"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Name the value at stake before negotiating details.",
+        "Distinguish between being agreeable and being aligned.",
+        "Allow some discomfort in honest conversations.",
+        "Revisit decisions that feel logically sound but emotionally thin.",
+        "Use friction to refine priorities."
+      ],
+      "avoid": [
+        "Smoothing over differences to move faster",
+        "Rationalizing choices that feel misaligned",
+        "Assuming politeness equals agreement",
+        "Letting style override substance",
+        "Treating discomfort as a failure of communication"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Clarity improves when values are named, not assumed."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Honest alignment matters more than sounding agreeable."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting arguments or relational fallout",
+        "Moralizing preferences or communication styles",
+        "Deterministic conclusions about compatibility"
+      ],
+      "allowed_framing": [
+        "Tradeoff language: 'priorities', 'alignment', 'compromise'",
+        "Agency-forward framing: 'you can clarify…'",
+        "Contextual framing: 'if conversations or decisions feel strained…'"
+      ]
+    },
+    "tags": [
+      "communication",
+      "values",
+      "tension",
+      "priorities",
+      "decision_making",
+      "alignment"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Mercury–Venus square as cognition/value tension archetype"
+    ]
+  }
+  

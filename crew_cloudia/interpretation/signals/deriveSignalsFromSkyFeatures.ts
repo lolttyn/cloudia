@@ -4,6 +4,7 @@ import {
   moonPhaseKey,
   sunInSignKey,
   sunMoonAspectKey,
+  moonInSignKey,
 } from "./signalKeys.js";
 import {
   InterpretationSignal,
@@ -38,6 +39,15 @@ export function deriveSignalsFromSkyFeatures(
     salience: 0.35,
     source: "sky_features",
     meta: { sign: features.sun.sign.toLowerCase(), body: "sun" },
+  });
+
+  // Moon in sign
+  signals.push({
+    signal_key: moonInSignKey(features.moon.sign),
+    kind: "planet_in_sign",
+    salience: 0.3,
+    source: "sky_features",
+    meta: { sign: features.moon.sign.toLowerCase(), body: "moon" },
   });
 
   // Moon phase

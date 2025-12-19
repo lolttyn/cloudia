@@ -1,0 +1,102 @@
+{
+    "slug": "sun_conjunct_moon",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Sun conjunct Moon",
+    "summary": "A moment of alignment between inner experience and outward expression. Feelings and intentions move in the same direction, reducing friction and clarifying priorities. The opportunity is to act from coherence rather than impulse.",
+    "trigger": {
+      "signal_key": "sun_moon_conjunction",
+      "constraints": {
+        "orb_max_degrees": 6
+      }
+    },
+    "meaning": {
+      "headline": "Inner and outer motivations align.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Sun–Moon conjunctions bring coherence between emotional needs and conscious intention, making it easier to move decisively."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect supports unified focus, reducing the push–pull between what you feel and what you do."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Attention turns inward briefly to set direction before outward action."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Clarity increases when competing priorities fall quiet."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This guarantees emotional satisfaction or success."
+        }
+      ],
+      "frictions": [
+        "Overidentifying with the current mood",
+        "Acting too quickly because alignment feels certain",
+        "Ignoring external feedback",
+        "Assuming clarity removes the need for follow-through",
+        "Treating alignment as completion rather than a starting point"
+      ],
+      "opportunities": [
+        "Setting clear intentions",
+        "Making decisions without internal conflict",
+        "Resetting focus and priorities",
+        "Beginning something with internal buy-in",
+        "Acting with emotional consistency"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Name your intention before acting on it.",
+        "Use the sense of alignment to simplify decisions.",
+        "Start something that benefits from focused attention.",
+        "Check that clarity is grounded, not rushed.",
+        "Let coherence guide pacing, not urgency."
+      ],
+      "avoid": [
+        "Assuming alignment removes the need for reflection",
+        "Mistaking certainty for completeness",
+        "Dismissing outside input",
+        "Overcommitting in the moment",
+        "Treating the day as emotionally neutral or consequence-free"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "When inner and outer priorities align, decisions feel cleaner."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Clarity is most useful when it sets direction, not when it rushes action."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting emotional outcomes or success",
+        "Framing alignment as permanent",
+        "Suggesting destiny or inevitability"
+      ],
+      "allowed_framing": [
+        "Present-tense language: 'today', 'this moment'",
+        "Agency-forward framing: 'you can set intentions…'",
+        "Contextual framing: 'if focus feels unified…'"
+      ]
+    },
+    "tags": [
+      "alignment",
+      "coherence",
+      "focus",
+      "emotional_clarity",
+      "intentionality"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Sun–Moon conjunction as coherence archetype"
+    ]
+  }
+  

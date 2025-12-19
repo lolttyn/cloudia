@@ -19,6 +19,19 @@ describe("deriveSignalsFromSkyFeatures", () => {
     expect(sunSignal?.salience).toBe(0.35);
   });
 
+  it("emits moon_in_<sign> with fixed salience", () => {
+    const signals = deriveSignalsFromSkyFeatures({
+      ...baseFeatures(),
+      moon: { sign: "Leo", phase: "full" },
+    });
+    const moonSignal = signals.find((s) => s.signal_key === "moon_in_leo");
+    expect(moonSignal).toBeDefined();
+    expect(moonSignal?.salience).toBe(0.3);
+    // Sorting stability with sun + moon + aspect
+    const orderedKeys = signals.map((s) => s.signal_key);
+    expect(new Set(orderedKeys).size).toBe(orderedKeys.length);
+  });
+
   it("emits moon phase with phase salience", () => {
     const signals = deriveSignalsFromSkyFeatures(baseFeatures());
     const phase = signals.find((s) => s.signal_key === "moon_phase_full");

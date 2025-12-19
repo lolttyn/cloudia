@@ -1,0 +1,103 @@
+{
+    "slug": "mercury_trine_venus",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Mercury trine Venus",
+    "summary": "A supportive alignment between thinking and values. Communication flows with consideration and ease, making it simpler to express ideas in ways that resonate. The opportunity is to translate thought into connection without forcing agreement.",
+    "trigger": {
+      "signal_key": "mercury_venus_trine",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "Ideas express themselves with ease.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Mercury–Venus trines support communication that reflects both clarity and consideration."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect favors understanding through tone, timing, and shared context."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Conversations tend to feel smoother when values and reasoning align."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Decision-making benefits from reduced friction around preferences."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This guarantees agreement, approval, or positive outcomes."
+        }
+      ],
+      "frictions": [
+        "Assuming ease equals depth",
+        "Avoiding necessary disagreement",
+        "Letting comfort delay clear decisions",
+        "Overvaluing smooth delivery over substance",
+        "Mistaking mutual understanding for full alignment"
+      ],
+      "opportunities": [
+        "Communicating ideas with clarity and tact",
+        "Strengthening relationships through understanding",
+        "Refining decisions through balanced dialogue",
+        "Expressing appreciation clearly",
+        "Reducing friction in negotiations"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Use ease to clarify rather than gloss over details.",
+        "Express ideas in ways that respect shared values.",
+        "Let dialogue refine decisions.",
+        "Appreciate moments of mutual understanding.",
+        "Translate thoughts into cooperative action."
+      ],
+      "avoid": [
+        "Avoiding difficult topics because things feel pleasant",
+        "Assuming consensus without confirmation",
+        "Letting tone substitute for substance",
+        "Postponing decisions indefinitely",
+        "Over-smoothing necessary distinctions"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Ease in communication supports understanding."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Clarity lands best when values are respected."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting agreement or harmony",
+        "Framing ease as moral or intellectual superiority",
+        "Deterministic relational outcomes"
+      ],
+      "allowed_framing": [
+        "Communication-based language: 'dialogue', 'understanding'",
+        "Agency-forward framing: 'you can express…'",
+        "Contextual framing: 'if conversations feel smoother…'"
+      ]
+    },
+    "tags": [
+      "communication",
+      "values",
+      "ease",
+      "understanding",
+      "cooperation",
+      "clarity"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Mercury–Venus trine as cognition/value harmony archetype"
+    ]
+  }
+  
