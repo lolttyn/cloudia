@@ -3,7 +3,7 @@
     "version": 1,
     "kind": "aspect",
     "title": "Sun square Mars",
-    "summary": "A high-friction alignment between intention and execution. Motivation is strong, but resistance—internal or external—forces choices about timing, direction, and restraint. The task is to act without burning momentum.",
+    "summary": "A high-friction alignment between intention and execution. Motivation is strong, but resistance-internal or external-forces choices about timing, direction, and restraint. The task is to act without burning momentum.",
     "trigger": {
       "signal_key": "sun_square_mars",
       "constraints": {
@@ -15,7 +15,7 @@
       "frames": [
         {
           "speakability": "must_say",
-          "text": "Sun–Mars squares create urgency without clear release, surfacing impatience when progress feels blocked."
+          "text": "Sun-Mars squares create urgency without clear release, surfacing impatience when progress feels blocked."
         },
         {
           "speakability": "must_say",
@@ -51,7 +51,7 @@
     },
     "guidance": {
       "do": [
-        "Pause before acting and ask what outcome you’re actually pushing for.",
+        "Pause before acting and ask what outcome you're actually pushing for.",
         "Choose one priority and direct energy there.",
         "Use physical movement to discharge excess tension.",
         "Break actions into short, controlled bursts.",
@@ -67,7 +67,7 @@
       "reusable_lines": [
         {
           "speakability": "must_say",
-          "text": "Friction doesn’t mean stop—it means steer."
+          "text": "Friction doesn't mean stop-it means steer."
         },
         {
           "speakability": "can_say",
@@ -84,7 +84,7 @@
       "allowed_framing": [
         "Energy-management language: 'pressure', 'activation', 'direction'",
         "Agency-based framing: 'you can choose how to respond'",
-        "Contextual framing: 'depending on stress levels and demands…'"
+        "Contextual framing: 'depending on stress levels and demands...'"
       ]
     },
     "tags": [
@@ -97,7 +97,7 @@
     ],
     "sources": [
       "Modern psychological astrology",
-      "Sun–Mars square as will/action tension archetype"
+      "Sun-Mars square as will/action tension archetype"
     ]
   }
   

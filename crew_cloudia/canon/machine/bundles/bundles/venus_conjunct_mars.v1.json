@@ -15,7 +15,7 @@
       "frames": [
         {
           "speakability": "must_say",
-          "text": "Venus–Mars conjunctions bring coherence between what you want and what you’re willing to do about it."
+          "text": "Venus-Mars conjunctions bring coherence between what you want and what you're willing to do about it."
         },
         {
           "speakability": "must_say",
@@ -27,7 +27,7 @@
         },
         {
           "speakability": "can_say",
-          "text": "Attraction is easier to express when there’s clarity about appetite and boundaries."
+          "text": "Attraction is easier to express when there's clarity about appetite and boundaries."
         },
         {
           "speakability": "avoid",
@@ -59,7 +59,7 @@
       ],
       "avoid": [
         "Equating intensity with depth",
-        "Forcing alignment where it doesn’t exist",
+        "Forcing alignment where it doesn't exist",
         "Ignoring pacing because things feel good",
         "Letting excitement bypass communication",
         "Overcommitting in the heat of the moment"
@@ -71,7 +71,7 @@
         },
         {
           "speakability": "can_say",
-          "text": "Move with what wants to move—while staying responsive."
+          "text": "Move with what wants to move-while staying responsive."
         }
       ]
     },
@@ -82,9 +82,9 @@
         "Guarantees of success or mutuality"
       ],
       "allowed_framing": [
-        "Agency-forward language: 'you can choose to act…'",
+        "Agency-forward language: 'you can choose to act...'",
         "Embodiment language: 'alignment', 'momentum'",
-        "Contextual framing: 'if desire and clarity are present…'"
+        "Contextual framing: 'if desire and clarity are present...'"
       ]
     },
     "tags": [
@@ -97,7 +97,7 @@
     ],
     "sources": [
       "Modern psychological astrology",
-      "Venus–Mars conjunction as desire/action alignment archetype"
+      "Venus-Mars conjunction as desire/action alignment archetype"
     ]
   }
   

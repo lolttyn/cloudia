@@ -3,7 +3,7 @@
     "version": 1,
     "kind": "aspect",
     "title": "Sun square Venus",
-    "summary": "A tension between self-expression and values. What feels authentic may not align smoothly with what’s pleasing, comfortable, or socially reinforced. The task is to clarify priorities without sacrificing integrity or connection.",
+    "summary": "A tension between self-expression and values. What feels authentic may not align smoothly with what's pleasing, comfortable, or socially reinforced. The task is to clarify priorities without sacrificing integrity or connection.",
     "trigger": {
       "signal_key": "sun_square_venus",
       "constraints": {
@@ -15,11 +15,11 @@
       "frames": [
         {
           "speakability": "must_say",
-          "text": "Sun–Venus squares surface friction between authenticity and approval, asking for clearer prioritization of values."
+          "text": "Sun-Venus squares surface friction between authenticity and approval, asking for clearer prioritization of values."
         },
         {
           "speakability": "must_say",
-          "text": "This aspect highlights where harmony has been maintained at the expense of honesty—or vice versa."
+          "text": "This aspect highlights where harmony has been maintained at the expense of honesty-or vice versa."
         },
         {
           "speakability": "can_say",
@@ -39,10 +39,10 @@
         "Resentment caused by unspoken compromises",
         "Difficulty choosing between desire and duty",
         "Overvaluing appearance or harmony",
-        "Withdrawing when needs aren’t met"
+        "Withdrawing when needs aren't met"
       ],
       "opportunities": [
-        "Clarifying what truly matters versus what’s merely pleasant",
+        "Clarifying what truly matters versus what's merely pleasant",
         "Renegotiating relational or creative expectations",
         "Strengthening boundaries around values",
         "Choosing alignment over superficial harmony",
@@ -51,8 +51,8 @@
     },
     "guidance": {
       "do": [
-        "Name the value you’re protecting in any decision.",
-        "Check where you’re compromising out of habit rather than choice.",
+        "Name the value you're protecting in any decision.",
+        "Check where you're compromising out of habit rather than choice.",
         "Have honest conversations about needs and expectations.",
         "Let discomfort inform refinement, not withdrawal.",
         "Adjust aesthetics or agreements to better reflect priorities."
@@ -83,8 +83,8 @@
       ],
       "allowed_framing": [
         "Value-clarification language: 'misalignment', 'priorities'",
-        "Agency-forward framing: 'you can renegotiate…'",
-        "Contextual framing: 'if relationships or choices feel strained…'"
+        "Agency-forward framing: 'you can renegotiate...'",
+        "Contextual framing: 'if relationships or choices feel strained...'"
       ]
     },
     "tags": [
@@ -97,7 +97,7 @@
     ],
     "sources": [
       "Modern psychological astrology",
-      "Sun–Venus square as identity/value tension archetype"
+      "Sun-Venus square as identity/value tension archetype"
     ]
   }
   

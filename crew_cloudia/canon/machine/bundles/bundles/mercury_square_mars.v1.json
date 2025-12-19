@@ -15,15 +15,15 @@
       "frames": [
         {
           "speakability": "must_say",
-          "text": "Mercury–Mars squares heighten mental urgency, making ideas feel immediate and action feel necessary—even when clarity isn’t complete."
+          "text": "Mercury-Mars squares heighten mental urgency, making ideas feel immediate and action feel necessary-even when clarity isn't complete."
         },
         {
           "speakability": "must_say",
-          "text": "Reactivity increases when thoughts are acted on before they’re fully formed."
+          "text": "Reactivity increases when thoughts are acted on before they're fully formed."
         },
         {
           "speakability": "can_say",
-          "text": "Conversations may feel sharper or more confrontational if pacing isn’t managed."
+          "text": "Conversations may feel sharper or more confrontational if pacing isn't managed."
         },
         {
           "speakability": "can_say",
@@ -67,7 +67,7 @@
       "reusable_lines": [
         {
           "speakability": "must_say",
-          "text": "Speed is useful only when it’s controlled."
+          "text": "Speed is useful only when it's controlled."
         },
         {
           "speakability": "can_say",
@@ -79,12 +79,12 @@
       "forbidden_claims": [
         "Predicting fights, hostility, or aggression",
         "Moralizing anger or impatience",
-        "Attributing conflict to others’ intent"
+        "Attributing conflict to others' intent"
       ],
       "allowed_framing": [
         "Energy-management language: 'mental urgency', 'pacing'",
-        "Agency-based framing: 'you can slow this down…'",
-        "Contextual framing: 'if conversations feel heated…'"
+        "Agency-based framing: 'you can slow this down...'",
+        "Contextual framing: 'if conversations feel heated...'"
       ]
     },
     "tags": [
@@ -97,7 +97,7 @@
     ],
     "sources": [
       "Modern psychological astrology",
-      "Mercury–Mars square as thought/impulse tension archetype"
+      "Mercury-Mars square as thought/impulse tension archetype"
     ]
   }
   

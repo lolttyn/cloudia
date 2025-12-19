@@ -3,7 +3,7 @@
     "version": 1,
     "kind": "aspect",
     "title": "Saturn conjunct Venus",
-    "summary": "A convergence of values and responsibility. What you care about seeks form, commitment, and durability. The opportunity is to invest in what matters with realism and restraint—without emotional shutdown.",
+    "summary": "A convergence of values and responsibility. What you care about seeks form, commitment, and durability. The opportunity is to invest in what matters with realism and restraint-without emotional shutdown.",
     "trigger": {
       "signal_key": "saturn_conjunct_venus",
       "constraints": {
@@ -11,11 +11,11 @@
       }
     },
     "meaning": {
-      "headline": "Value becomes real when it’s supported by commitment.",
+      "headline": "Value becomes real when it's supported by commitment.",
       "frames": [
         {
           "speakability": "must_say",
-          "text": "Saturn–Venus conjunctions ask for seriousness about what you value, turning preference into practice."
+          "text": "Saturn-Venus conjunctions ask for seriousness about what you value, turning preference into practice."
         },
         {
           "speakability": "must_say",
@@ -27,7 +27,7 @@
         },
         {
           "speakability": "can_say",
-          "text": "Commitment can feel grounding when it’s chosen consciously."
+          "text": "Commitment can feel grounding when it's chosen consciously."
         },
         {
           "speakability": "avoid",
@@ -51,7 +51,7 @@
     },
     "guidance": {
       "do": [
-        "Name what you’re willing to commit to long-term.",
+        "Name what you're willing to commit to long-term.",
         "Express care through reliability and follow-through.",
         "Create structures that support what you value.",
         "Let restraint coexist with warmth.",
@@ -83,8 +83,8 @@
       ],
       "allowed_framing": [
         "Commitment-based language: 'investment', 'durability'",
-        "Agency-forward framing: 'you can choose to commit…'",
-        "Contextual framing: 'if you’re focused on long-term stability…'"
+        "Agency-forward framing: 'you can choose to commit...'",
+        "Contextual framing: 'if you're focused on long-term stability...'"
       ]
     },
     "tags": [
@@ -97,7 +97,7 @@
     ],
     "sources": [
       "Modern psychological astrology",
-      "Saturn–Venus conjunction as value/structure synthesis archetype"
+      "Saturn-Venus conjunction as value/structure synthesis archetype"
     ]
   }
   
