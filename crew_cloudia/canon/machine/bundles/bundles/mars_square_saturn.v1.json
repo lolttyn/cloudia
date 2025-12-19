@@ -1,0 +1,102 @@
+{
+  "slug": "mars_square_saturn",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Mars square Saturn",
+  "summary": "Mars presses against Saturnian limits, creating friction between drive and duty. The tension exposes weak structures and asks for sturdier pacing. Balance comes from measured action, not force.",
+  "trigger": {
+    "signal_key": "mars_square_saturn",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Reality checks push against initiative and drive, forcing adjustments.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Accountability is emphasized; effort needs structure to land."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Mars themes are tempered by deadlines, boundaries, or reality checks."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Patience and sequencing help momentum survive pressure."
+      },
+      {
+        "speakability": "can_say",
+        "text": "The atmosphere favors measured commitments over improvisation."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Fate is shutting you down no matter what you do."
+      }
+    ],
+    "frictions": [
+      "Pressure to prove initiative and drive with limited time or support",
+      "Delays that make simple tasks feel heavier than expected",
+      "Fear of making a wrong move leading to overcautious pacing",
+      "Rigid expectations from self or others that tighten options",
+      "Weariness from shouldering obligations without visible progress"
+    ],
+    "opportunities": [
+      "Refining initiative and drive into something durable",
+      "Building resilience through steady, repeatable effort",
+      "Clarifying boundaries that protect priorities",
+      "Choosing long-term stability over quick wins",
+      "Turning pressure into practiced competence"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Name the specific responsibility that matters most today and honor it first",
+      "Break commitments into smaller, repeatable actions with a time box",
+      "Ask for clearer expectations instead of guessing them",
+      "Track progress in simple checkpoints to see traction",
+      "Rest when needed so discipline stays sustainable"
+    ],
+    "avoid": [
+      "Catastrophizing minor setbacks as permanent failures",
+      "Taking on extra duties to prove worthiness",
+      "Letting fear of judgment block necessary communication",
+      "Using perfectionism to delay a decision that is already clear",
+      "Ignoring bodily limits in the name of productivity"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Reality checks can steady your momentum when you move with intention."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Boundaries are tools, not walls-use them to focus your effort."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions of unavoidable hardship or failure",
+      "Guarantees that discipline will produce a specific outcome",
+      "Judgments about worthiness or moral character"
+    ],
+    "allowed_framing": [
+      "Process-focused language about effort and timing",
+      "Agency framing that highlights choice and pacing",
+      "Conditional statements tied to context and follow-through"
+    ]
+  },
+  "tags": [
+    "discipline",
+    "boundaries",
+    "reality_check",
+    "patience",
+    "accountability",
+    "structure"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Saturn as structure/limits archetype"
+  ]
+}
