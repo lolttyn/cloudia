@@ -24,7 +24,7 @@
       },
       {
         "speakability": "can_say",
-        "text": "Physical discipline—like training or structured movement—feels productive."
+        "text": "Physical discipline-like training or structured movement-feels productive."
       },
       {
         "speakability": "avoid",
@@ -64,7 +64,7 @@
     "reusable_lines": [
       {
         "speakability": "must_say",
-        "text": "Discipline can carry you far today—pair it with rest."
+        "text": "Discipline can carry you far today-pair it with rest."
       },
       {
         "speakability": "can_say",
@@ -76,7 +76,7 @@
     "forbidden_claims": [
       "Career or financial guarantees",
       "Moralizing productivity",
-      "Assuming authority over others’ paths"
+      "Assuming authority over others' paths"
     ],
     "allowed_framing": [
       "Supportive framing: can strengthen perseverance and structure",

@@ -3,7 +3,7 @@
     "version": 1,
     "kind": "cycle",
     "title": "Mercury retrograde (general)",
-    "summary": "A review-oriented communication cycle that exposes weak systems, unclear agreements, and outdated assumptions. The emphasis is on revision, retrieval, and recalibration—not disruption for its own sake.",
+    "summary": "A review-oriented communication cycle that exposes weak systems, unclear agreements, and outdated assumptions. The emphasis is on revision, retrieval, and recalibration-not disruption for its own sake.",
     "trigger": {
       "signal_key": "mercury_retrograde_general"
     },
@@ -12,11 +12,11 @@
       "frames": [
         {
           "speakability": "must_say",
-          "text": "Mercury retrograde shifts attention from forward momentum to inspection: what’s unfinished, miscommunicated, or poorly designed becomes visible."
+          "text": "Mercury retrograde shifts attention from forward momentum to inspection: what's unfinished, miscommunicated, or poorly designed becomes visible."
         },
         {
           "speakability": "must_say",
-          "text": "Issues that surface now are rarely new—they’re reminders of things that were skipped, rushed, or assumed."
+          "text": "Issues that surface now are rarely new-they're reminders of things that were skipped, rushed, or assumed."
         },
         {
           "speakability": "can_say",
@@ -64,7 +64,7 @@
       "reusable_lines": [
         {
           "speakability": "must_say",
-          "text": "Mercury retrograde doesn’t stop progress—it asks for a better draft."
+          "text": "Mercury retrograde doesn't stop progress-it asks for a better draft."
         },
         {
           "speakability": "can_say",
@@ -81,7 +81,7 @@
       "allowed_framing": [
         "Process-oriented language: 'review', 'revisit', 'adjust'",
         "Probabilistic framing: 'more likely', 'tends to surface'",
-        "Agency-forward framing: 'you can use this period to…'"
+        "Agency-forward framing: 'you can use this period to...'"
       ]
     },
     "tags": [

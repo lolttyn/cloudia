@@ -15,7 +15,7 @@
     "frames": [
       {
         "speakability": "must_say",
-        "text": "Sun–Venus trines foster charm and receptivity that reflect genuine preference."
+        "text": "Sun-Venus trines foster charm and receptivity that reflect genuine preference."
       },
       {
         "speakability": "must_say",
@@ -27,7 +27,7 @@
       },
       {
         "speakability": "can_say",
-        "text": "It’s a good moment to refresh style, art, or environments to match current tastes."
+        "text": "It's a good moment to refresh style, art, or environments to match current tastes."
       },
       {
         "speakability": "avoid",
@@ -67,7 +67,7 @@
     "reusable_lines": [
       {
         "speakability": "must_say",
-        "text": "Warmth and self-expression are in sync—use it to build real rapport."
+        "text": "Warmth and self-expression are in sync-use it to build real rapport."
       },
       {
         "speakability": "can_say",
@@ -97,6 +97,6 @@
   ],
   "sources": [
     "Modern psychological astrology",
-    "Sun–Venus trine as relational ease"
+    "Sun-Venus trine as relational ease"
   ]
 }

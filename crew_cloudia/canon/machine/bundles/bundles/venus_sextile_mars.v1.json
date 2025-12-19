@@ -3,7 +3,7 @@
   "version": 1,
   "kind": "aspect",
   "title": "Venus sextile Mars",
-  "summary": "Desire and action cooperate with a light touch. It’s easier to take initiative in relationships, creative work, or pleasure without feeling forced. The opportunity is to use this accessible spark to build real momentum.",
+  "summary": "Desire and action cooperate with a light touch. It's easier to take initiative in relationships, creative work, or pleasure without feeling forced. The opportunity is to use this accessible spark to build real momentum.",
   "trigger": {
     "signal_key": "venus_sextile_mars",
     "constraints": {
@@ -15,7 +15,7 @@
     "frames": [
       {
         "speakability": "must_say",
-        "text": "Venus–Mars sextiles support approachable chemistry that invites action."
+        "text": "Venus-Mars sextiles support approachable chemistry that invites action."
       },
       {
         "speakability": "must_say",
@@ -27,7 +27,7 @@
       },
       {
         "speakability": "can_say",
-        "text": "It’s a good time to test a creative or relational idea with light effort."
+        "text": "It's a good time to test a creative or relational idea with light effort."
       },
       {
         "speakability": "avoid",
@@ -97,6 +97,6 @@
   ],
   "sources": [
     "Modern psychological astrology",
-    "Venus–Mars sextile as approachable drive"
+    "Venus-Mars sextile as approachable drive"
   ]
 }

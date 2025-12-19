@@ -3,7 +3,7 @@
     "version": 1,
     "kind": "aspect",
     "title": "Saturn square Mercury",
-    "summary": "A pressure-test on thinking and communication: constraints expose weak logic, sloppy planning, and unspoken assumptions. The win condition is precision, pacing, and mature boundaries—especially around commitments and messaging.",
+    "summary": "A pressure-test on thinking and communication: constraints expose weak logic, sloppy planning, and unspoken assumptions. The win condition is precision, pacing, and mature boundaries-especially around commitments and messaging.",
     "trigger": {
       "signal_key": "saturn_square_mercury",
       "constraints": {
@@ -11,23 +11,23 @@
       }
     },
     "meaning": {
-      "headline": "Today’s friction isn’t lack of intelligence—it’s the cost of imprecision.",
+      "headline": "Today's friction isn't lack of intelligence-it's the cost of imprecision.",
       "frames": [
         {
           "speakability": "must_say",
-          "text": "This transit tends to slow the mind down on purpose: it surfaces where your plan, your words, or your timeline doesn’t actually hold."
+          "text": "This transit tends to slow the mind down on purpose: it surfaces where your plan, your words, or your timeline doesn't actually hold."
         },
         {
           "speakability": "must_say",
-          "text": "If something feels harder to articulate, treat that as a signal to tighten the thinking—not as a sign you’re ‘behind.’"
+          "text": "If something feels harder to articulate, treat that as a signal to tighten the thinking-not as a sign you're 'behind.'"
         },
         {
           "speakability": "can_say",
-          "text": "Expect more edits than usual: the first draft is rarely the final draft under Saturn–Mercury pressure."
+          "text": "Expect more edits than usual: the first draft is rarely the final draft under Saturn-Mercury pressure."
         },
         {
           "speakability": "can_say",
-          "text": "Conversations may feel more serious or more easily misunderstood—especially when people skip definitions."
+          "text": "Conversations may feel more serious or more easily misunderstood-especially when people skip definitions."
         },
         {
           "speakability": "avoid",
@@ -36,7 +36,7 @@
       ],
       "frictions": [
         "Overthinking that turns into avoidance",
-        "Harsh self-critique or ‘I’m not good enough’ narratives",
+        "Harsh self-critique or 'I'm not good enough' narratives",
         "Misunderstandings caused by vague language or missing context",
         "Delays from underestimating time/effort",
         "Rigid thinking: mistaking caution for truth",
@@ -52,19 +52,19 @@
     },
     "guidance": {
       "do": [
-        "Write the problem in one sentence, then define the key terms you’re using.",
+        "Write the problem in one sentence, then define the key terms you're using.",
         "Reduce scope: pick the smallest version that still matters and ship that.",
         "Confirm assumptions explicitly (timeline, owner, definition of done).",
         "Prefer asynchronous clarity: summarize decisions in writing after a call.",
-        "If you’re stuck, ask: ‘What exactly would make this true?’ and list the evidence.",
+        "If you're stuck, ask: 'What exactly would make this true?' and list the evidence.",
         "Build friction into the plan: add buffer time and name the risks."
       ],
       "avoid": [
-        "Making promises you can’t operationalize",
+        "Making promises you can't operationalize",
         "Arguing semantics without first agreeing on definitions",
         "Catastrophizing a delay into an identity verdict",
-        "Sending emotionally loaded messages when you’re unclear on the facts",
-        "Confusing ‘more thinking’ with ‘better thinking’"
+        "Sending emotionally loaded messages when you're unclear on the facts",
+        "Confusing 'more thinking' with 'better thinking'"
       ],
       "reusable_lines": [
         {
@@ -73,7 +73,7 @@
         },
         {
           "speakability": "can_say",
-          "text": "Slow is fine today—sloppy is expensive."
+          "text": "Slow is fine today-sloppy is expensive."
         }
       ]
     },
@@ -85,8 +85,8 @@
       ],
       "allowed_framing": [
         "Tendency language: 'can', 'may', 'often', 'watch for'",
-        "Agency-forward framing: 'you can respond by…', 'a useful move is…'",
-        "Contextual uncertainty: 'depending on workload and stress levels…'"
+        "Agency-forward framing: 'you can respond by...', 'a useful move is...'",
+        "Contextual uncertainty: 'depending on workload and stress levels...'"
       ]
     },
     "tags": [

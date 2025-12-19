@@ -27,7 +27,7 @@
       },
       {
         "speakability": "can_say",
-        "text": "Confidence comes from congruence—your actions match your tastes, priorities, and boundaries."
+        "text": "Confidence comes from congruence-your actions match your tastes, priorities, and boundaries."
       },
       {
         "speakability": "avoid",
@@ -51,7 +51,7 @@
   },
   "guidance": {
     "do": [
-      "Act while motivation and alignment are present—this is a good day for clean initiative.",
+      "Act while motivation and alignment are present-this is a good day for clean initiative.",
       "Say what you want plainly, without hedging or pressure.",
       "Channel momentum into something constructive rather than scattering it.",
       "Notice where cooperation shows up and reinforce it with follow-through.",
@@ -71,7 +71,7 @@
       },
       {
         "speakability": "can_say",
-        "text": "Ease is a resource—use it deliberately."
+        "text": "Ease is a resource-use it deliberately."
       }
     ]
   },

@@ -15,11 +15,11 @@
     "frames": [
       {
         "speakability": "must_say",
-        "text": "Sun–Moon sextiles offer a supportive link between feelings and actions, making practical tasks feel less emotionally costly."
+        "text": "Sun-Moon sextiles offer a supportive link between feelings and actions, making practical tasks feel less emotionally costly."
       },
       {
         "speakability": "must_say",
-        "text": "It’s a helpful day for integrating needs into plans without losing momentum."
+        "text": "It's a helpful day for integrating needs into plans without losing momentum."
       },
       {
         "speakability": "can_say",
@@ -97,6 +97,6 @@
   ],
   "sources": [
     "Modern psychological astrology",
-    "Sun–Moon sextile as supportive alignment"
+    "Sun-Moon sextile as supportive alignment"
   ]
 }

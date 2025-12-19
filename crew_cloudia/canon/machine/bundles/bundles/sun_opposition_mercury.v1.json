@@ -3,7 +3,7 @@
   "version": 1,
   "kind": "aspect",
   "title": "Sun opposition Mercury",
-  "summary": "Identity and viewpoint pull in opposite directions. What you intend to express may clash with how you’re processing information. The opportunity is to let feedback sharpen clarity instead of defaulting to defensiveness.",
+  "summary": "Identity and viewpoint pull in opposite directions. What you intend to express may clash with how you're processing information. The opportunity is to let feedback sharpen clarity instead of defaulting to defensiveness.",
   "trigger": {
     "signal_key": "sun_opposition_mercury",
     "constraints": {
@@ -15,7 +15,7 @@
     "frames": [
       {
         "speakability": "must_say",
-        "text": "Sun–Mercury oppositions surface tension between personal stance and the facts or messages being received."
+        "text": "Sun-Mercury oppositions surface tension between personal stance and the facts or messages being received."
       },
       {
         "speakability": "must_say",
@@ -97,6 +97,6 @@
   ],
   "sources": [
     "Modern psychological astrology",
-    "Sun–Mercury opposition as clarity tension"
+    "Sun-Mercury opposition as clarity tension"
   ]
 }

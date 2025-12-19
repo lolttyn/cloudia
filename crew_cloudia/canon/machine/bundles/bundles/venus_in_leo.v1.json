@@ -43,7 +43,7 @@
       "Offering heartfelt compliments",
       "Showcasing a creative gift",
       "Being generous with time or resources",
-      "Celebrating someone else’s win"
+      "Celebrating someone else's win"
     ]
   },
   "guidance": {
@@ -68,7 +68,7 @@
       },
       {
         "speakability": "can_say",
-        "text": "Bold affection works best when it’s grounded in truth."
+        "text": "Bold affection works best when it's grounded in truth."
       }
     ]
   },

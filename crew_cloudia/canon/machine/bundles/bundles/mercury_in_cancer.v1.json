@@ -59,7 +59,7 @@
       "Letting nostalgia block needed change",
       "Using guilt to get agreement",
       "Holding grudges instead of naming hurt",
-      "Overexplaining to manage others’ feelings"
+      "Overexplaining to manage others' feelings"
     ],
     "reusable_lines": [
       {
@@ -68,7 +68,7 @@
       },
       {
         "speakability": "can_say",
-        "text": "Memory can guide you—just confirm what is true now."
+        "text": "Memory can guide you-just confirm what is true now."
       }
     ]
   },

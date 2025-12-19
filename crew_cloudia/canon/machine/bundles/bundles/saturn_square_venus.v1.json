@@ -15,11 +15,11 @@
       "frames": [
         {
           "speakability": "must_say",
-          "text": "Saturn–Venus squares surface friction between desire and duty, asking for honest evaluation of what’s worth sustaining."
+          "text": "Saturn-Venus squares surface friction between desire and duty, asking for honest evaluation of what's worth sustaining."
         },
         {
           "speakability": "must_say",
-          "text": "This aspect doesn’t remove value—it tests whether value is being supported by structure."
+          "text": "This aspect doesn't remove value-it tests whether value is being supported by structure."
         },
         {
           "speakability": "can_say",
@@ -52,7 +52,7 @@
     "guidance": {
       "do": [
         "Assess whether your current commitments support what you value.",
-        "Name the constraint clearly—time, money, energy, or obligation.",
+        "Name the constraint clearly-time, money, energy, or obligation.",
         "Make deliberate choices about what to delay versus what to sustain.",
         "Build structure around pleasure rather than eliminating it.",
         "Practice patience without framing desire as weakness."
@@ -67,7 +67,7 @@
       "reusable_lines": [
         {
           "speakability": "must_say",
-          "text": "Constraint doesn’t erase value—it asks how you support it."
+          "text": "Constraint doesn't erase value-it asks how you support it."
         },
         {
           "speakability": "can_say",
@@ -83,8 +83,8 @@
       ],
       "allowed_framing": [
         "Resource-based language: 'capacity', 'support', 'sustainability'",
-        "Agency-forward framing: 'you can reassess…'",
-        "Contextual framing: 'if resources or time feel tight…'"
+        "Agency-forward framing: 'you can reassess...'",
+        "Contextual framing: 'if resources or time feel tight...'"
       ]
     },
     "tags": [
@@ -97,7 +97,7 @@
     ],
     "sources": [
       "Modern psychological astrology",
-      "Saturn–Venus square as value/structure tension archetype"
+      "Saturn-Venus square as value/structure tension archetype"
     ]
   }
   

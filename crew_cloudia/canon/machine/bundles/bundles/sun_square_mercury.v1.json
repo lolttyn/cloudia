@@ -3,7 +3,7 @@
     "version": 1,
     "kind": "aspect",
     "title": "Sun square Mercury",
-    "summary": "A tension between intention and interpretation. Thoughts, words, and self-understanding don’t line up cleanly, increasing the chance of miscommunication and mental friction. The task is to slow down and realign meaning before acting.",
+    "summary": "A tension between intention and interpretation. Thoughts, words, and self-understanding don't line up cleanly, increasing the chance of miscommunication and mental friction. The task is to slow down and realign meaning before acting.",
     "trigger": {
       "signal_key": "sun_square_mercury",
       "constraints": {
@@ -15,7 +15,7 @@
       "frames": [
         {
           "speakability": "must_say",
-          "text": "Sun–Mercury squares surface gaps between identity and thinking—what feels true internally may not be articulated clearly."
+          "text": "Sun-Mercury squares surface gaps between identity and thinking-what feels true internally may not be articulated clearly."
         },
         {
           "speakability": "must_say",
@@ -31,7 +31,7 @@
         },
         {
           "speakability": "avoid",
-          "text": "This means you can’t think clearly today."
+          "text": "This means you can't think clearly today."
         }
       ],
       "frictions": [
@@ -54,7 +54,7 @@
         "Slow conversations down and ask for confirmation.",
         "Write before you speak if clarity matters.",
         "Treat confusion as information, not failure.",
-        "Restate what you’ve heard to ensure alignment.",
+        "Restate what you've heard to ensure alignment.",
         "Allow ideas to evolve before locking decisions."
       ],
       "avoid": [
@@ -83,8 +83,8 @@
       ],
       "allowed_framing": [
         "Process-based language: 'misalignment', 'refinement'",
-        "Agency-forward framing: 'you can slow this down…'",
-        "Contextual framing: 'if conversations feel unclear…'"
+        "Agency-forward framing: 'you can slow this down...'",
+        "Contextual framing: 'if conversations feel unclear...'"
       ]
     },
     "tags": [
@@ -97,7 +97,7 @@
     ],
     "sources": [
       "Modern psychological astrology",
-      "Sun–Mercury square as identity/thought tension archetype"
+      "Sun-Mercury square as identity/thought tension archetype"
     ]
   }
   

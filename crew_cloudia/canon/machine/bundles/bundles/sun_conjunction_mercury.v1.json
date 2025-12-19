@@ -15,7 +15,7 @@
       "frames": [
         {
           "speakability": "must_say",
-          "text": "Sun–Mercury conjunctions support clarity of expression: ideas move more cleanly from mind to voice or action."
+          "text": "Sun-Mercury conjunctions support clarity of expression: ideas move more cleanly from mind to voice or action."
         },
         {
           "speakability": "must_say",
@@ -78,13 +78,13 @@
     "safety": {
       "forbidden_claims": [
         "Claims of superior intelligence or correctness",
-        "Deterministic statements about decisions being ‘right’",
+        "Deterministic statements about decisions being 'right'",
         "Framing identity as fixed by thoughts"
       ],
       "allowed_framing": [
         "Process-oriented framing: 'helps clarify', 'supports expression'",
-        "Agency-forward language: 'you can articulate…'",
-        "Contextual framing: 'if you’ve been sorting through ideas…'"
+        "Agency-forward language: 'you can articulate...'",
+        "Contextual framing: 'if you've been sorting through ideas...'"
       ]
     },
     "tags": [
@@ -97,7 +97,7 @@
     ],
     "sources": [
       "Modern psychological astrology",
-      "Sun–Mercury conjunction as identity/thought alignment archetype"
+      "Sun-Mercury conjunction as identity/thought alignment archetype"
     ]
   }
   

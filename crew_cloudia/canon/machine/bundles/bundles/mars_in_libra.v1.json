@@ -24,7 +24,7 @@
       },
       {
         "speakability": "can_say",
-        "text": "Physical movement with others—dancing, sports—feels motivating."
+        "text": "Physical movement with others-dancing, sports-feels motivating."
       },
       {
         "speakability": "avoid",
@@ -64,7 +64,7 @@
     "reusable_lines": [
       {
         "speakability": "must_say",
-        "text": "Act together—fairly and clearly."
+        "text": "Act together-fairly and clearly."
       },
       {
         "speakability": "can_say",

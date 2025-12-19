@@ -33,7 +33,7 @@
     ],
     "frictions": [
       "Procrastination or drifting",
-      "Taking on others’ pain and losing focus",
+      "Taking on others' pain and losing focus",
       "Avoiding confrontation even when needed",
       "Escapism through substances or distractions",
       "Confusion about priorities"
@@ -57,14 +57,14 @@
     "avoid": [
       "Agreeing to tasks out of guilt",
       "Letting fantasy replace planning",
-      "Blurring your needs with others’",
+      "Blurring your needs with others'",
       "Numbing out when feelings rise",
       "Promising more than you can give"
     ],
     "reusable_lines": [
       {
         "speakability": "must_say",
-        "text": "Let compassion move you—and let boundaries steer you."
+        "text": "Let compassion move you-and let boundaries steer you."
       },
       {
         "speakability": "can_say",

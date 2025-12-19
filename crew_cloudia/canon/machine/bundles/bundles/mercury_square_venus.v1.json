@@ -15,11 +15,11 @@
       "frames": [
         {
           "speakability": "must_say",
-          "text": "Mercury–Venus squares highlight friction between reasoning and values, making compromises harder to ignore."
+          "text": "Mercury-Venus squares highlight friction between reasoning and values, making compromises harder to ignore."
         },
         {
           "speakability": "must_say",
-          "text": "This aspect surfaces where communication choices don’t fully align with personal or relational priorities."
+          "text": "This aspect surfaces where communication choices don't fully align with personal or relational priorities."
         },
         {
           "speakability": "can_say",
@@ -35,7 +35,7 @@
         }
       ],
       "frictions": [
-        "Saying what’s reasonable instead of what’s true",
+        "Saying what's reasonable instead of what's true",
         "Over-explaining to justify preferences",
         "Avoiding clarity to keep things pleasant",
         "Feeling dissatisfied after seemingly productive conversations",
@@ -83,8 +83,8 @@
       ],
       "allowed_framing": [
         "Tradeoff language: 'priorities', 'alignment', 'compromise'",
-        "Agency-forward framing: 'you can clarify…'",
-        "Contextual framing: 'if conversations or decisions feel strained…'"
+        "Agency-forward framing: 'you can clarify...'",
+        "Contextual framing: 'if conversations or decisions feel strained...'"
       ]
     },
     "tags": [
@@ -97,7 +97,7 @@
     ],
     "sources": [
       "Modern psychological astrology",
-      "Mercury–Venus square as cognition/value tension archetype"
+      "Mercury-Venus square as cognition/value tension archetype"
     ]
   }
   

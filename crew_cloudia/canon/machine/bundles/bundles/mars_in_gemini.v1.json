@@ -8,7 +8,7 @@
     "signal_key": "mars_in_gemini"
   },
   "meaning": {
-    "headline": "Drive is agile, verbal, and curious—and needs direction.",
+    "headline": "Drive is agile, verbal, and curious-and needs direction.",
     "frames": [
       {
         "speakability": "must_say",
@@ -64,7 +64,7 @@
     "reusable_lines": [
       {
         "speakability": "must_say",
-        "text": "Use quick moves—then tie them off."
+        "text": "Use quick moves-then tie them off."
       },
       {
         "speakability": "can_say",

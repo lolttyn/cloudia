@@ -33,7 +33,7 @@
     ],
     "frictions": [
       "Confusion from vague language",
-      "Absorbing others’ moods and losing focus",
+      "Absorbing others' moods and losing focus",
       "Escapism instead of problem-solving",
       "Over-idealizing people or plans",
       "Difficulty with precise details"
@@ -51,7 +51,7 @@
       "Translate imagery into clear steps before acting.",
       "Set time limits for daydreaming and planning.",
       "Clarify what is yours versus what you are picking up from others.",
-      "Use grounding tools—lists, timers, or collaborators.",
+      "Use grounding tools-lists, timers, or collaborators.",
       "Speak gently while still naming specifics."
     ],
     "avoid": [
@@ -68,7 +68,7 @@
       },
       {
         "speakability": "can_say",
-        "text": "Softness can communicate plenty—just pair it with clarity."
+        "text": "Softness can communicate plenty-just pair it with clarity."
       }
     ]
   },

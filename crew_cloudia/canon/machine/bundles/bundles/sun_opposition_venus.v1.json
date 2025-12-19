@@ -15,7 +15,7 @@
     "frames": [
       {
         "speakability": "must_say",
-        "text": "Sun–Venus oppositions surface tension between pursuing personal aims and maintaining ease with others."
+        "text": "Sun-Venus oppositions surface tension between pursuing personal aims and maintaining ease with others."
       },
       {
         "speakability": "must_say",
@@ -27,7 +27,7 @@
       },
       {
         "speakability": "can_say",
-        "text": "Negotiation becomes easier when values—not approval—lead the conversation."
+        "text": "Negotiation becomes easier when values-not approval-lead the conversation."
       },
       {
         "speakability": "avoid",
@@ -52,7 +52,7 @@
   "guidance": {
     "do": [
       "State what matters to you before negotiating.",
-      "Listen for the value beneath someone’s ask.",
+      "Listen for the value beneath someone's ask.",
       "Offer collaboration instead of over-functioning.",
       "Acknowledge any envy or insecurity without acting from it.",
       "Let appreciation be specific and grounded."
@@ -67,7 +67,7 @@
     "reusable_lines": [
       {
         "speakability": "must_say",
-        "text": "Balance what you value with what you share—both deserve airtime."
+        "text": "Balance what you value with what you share-both deserve airtime."
       },
       {
         "speakability": "can_say",
@@ -97,6 +97,6 @@
   ],
   "sources": [
     "Modern psychological astrology",
-    "Sun–Venus opposition as alignment check"
+    "Sun-Venus opposition as alignment check"
   ]
 }

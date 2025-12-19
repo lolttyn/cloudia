@@ -11,15 +11,15 @@
       }
     },
     "meaning": {
-      "headline": "Pushing harder isn’t always the answer.",
+      "headline": "Pushing harder isn't always the answer.",
       "frames": [
         {
           "speakability": "must_say",
-          "text": "Saturn–Mars squares expose where raw effort collides with structural limits, making inefficiency impossible to ignore."
+          "text": "Saturn-Mars squares expose where raw effort collides with structural limits, making inefficiency impossible to ignore."
         },
         {
           "speakability": "must_say",
-          "text": "This aspect asks for disciplined action—strength that’s applied with awareness of constraints."
+          "text": "This aspect asks for disciplined action-strength that's applied with awareness of constraints."
         },
         {
           "speakability": "can_say",
@@ -31,7 +31,7 @@
         },
         {
           "speakability": "avoid",
-          "text": "This means you’re stuck or destined to fail."
+          "text": "This means you're stuck or destined to fail."
         }
       ],
       "frictions": [
@@ -67,7 +67,7 @@
       "reusable_lines": [
         {
           "speakability": "must_say",
-          "text": "Strength works best when it’s applied with awareness of limits."
+          "text": "Strength works best when it's applied with awareness of limits."
         },
         {
           "speakability": "can_say",
@@ -83,8 +83,8 @@
       ],
       "allowed_framing": [
         "Effort-based language: 'pacing', 'strategy', 'endurance'",
-        "Agency-forward framing: 'you can redirect effort…'",
-        "Contextual framing: 'if resistance feels high…'"
+        "Agency-forward framing: 'you can redirect effort...'",
+        "Contextual framing: 'if resistance feels high...'"
       ]
     },
     "tags": [
@@ -97,7 +97,7 @@
     ],
     "sources": [
       "Modern psychological astrology",
-      "Saturn–Mars square as effort/constraint tension archetype"
+      "Saturn-Mars square as effort/constraint tension archetype"
     ]
   }
   

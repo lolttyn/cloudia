@@ -24,7 +24,7 @@
       },
       {
         "speakability": "can_say",
-        "text": "Physical grounding—gardening, walking, building—helps focus."
+        "text": "Physical grounding-gardening, walking, building-helps focus."
       },
       {
         "speakability": "avoid",
@@ -64,7 +64,7 @@
     "reusable_lines": [
       {
         "speakability": "must_say",
-        "text": "Slow, steady effort can make today’s progress stick."
+        "text": "Slow, steady effort can make today's progress stick."
       },
       {
         "speakability": "can_say",

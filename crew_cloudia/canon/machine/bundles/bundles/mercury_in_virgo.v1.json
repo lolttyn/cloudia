@@ -43,7 +43,7 @@
       "Building checklists or templates",
       "Clarifying instructions",
       "Refining health or daily routines",
-      "Offering practical help where it’s welcome"
+      "Offering practical help where it's welcome"
     ]
   },
   "guidance": {
@@ -57,14 +57,14 @@
     "avoid": [
       "Nitpicking to manage anxiety",
       "Assuming others know your standards",
-      "Taking on all the work to ensure it’s done right",
+      "Taking on all the work to ensure it's done right",
       "Using precision to delay decisions",
       "Confusing usefulness with worth"
     ],
     "reusable_lines": [
       {
         "speakability": "must_say",
-        "text": "Precision helps today—focus on what improves the whole."
+        "text": "Precision helps today-focus on what improves the whole."
       },
       {
         "speakability": "can_say",

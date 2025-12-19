@@ -3,7 +3,7 @@
   "version": 1,
   "kind": "aspect",
   "title": "Sun trine Moon",
-  "summary": "A harmonious link between feelings and expression. It’s easier to act from a place of inner coherence, making relationships and decisions feel natural. The opportunity is to use this ease to build continuity, not just comfort.",
+  "summary": "A harmonious link between feelings and expression. It's easier to act from a place of inner coherence, making relationships and decisions feel natural. The opportunity is to use this ease to build continuity, not just comfort.",
   "trigger": {
     "signal_key": "sun_trine_moon",
     "constraints": {
@@ -15,7 +15,7 @@
     "frames": [
       {
         "speakability": "must_say",
-        "text": "Sun–Moon trines support emotional steadiness that translates into smooth action."
+        "text": "Sun-Moon trines support emotional steadiness that translates into smooth action."
       },
       {
         "speakability": "must_say",
@@ -97,6 +97,6 @@
   ],
   "sources": [
     "Modern psychological astrology",
-    "Sun–Moon trine as easeful alignment"
+    "Sun-Moon trine as easeful alignment"
   ]
 }

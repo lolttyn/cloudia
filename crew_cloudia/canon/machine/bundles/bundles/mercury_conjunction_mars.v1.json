@@ -15,7 +15,7 @@
       "frames": [
         {
           "speakability": "must_say",
-          "text": "Mercury–Mars conjunctions energize the mind, making decisions feel urgent and actions feel mentally justified."
+          "text": "Mercury-Mars conjunctions energize the mind, making decisions feel urgent and actions feel mentally justified."
         },
         {
           "speakability": "must_say",
@@ -23,11 +23,11 @@
         },
         {
           "speakability": "can_say",
-          "text": "Mental focus sharpens when there’s a clear target or problem to solve."
+          "text": "Mental focus sharpens when there's a clear target or problem to solve."
         },
         {
           "speakability": "can_say",
-          "text": "Directness increases—both as a strength and a potential stressor."
+          "text": "Directness increases-both as a strength and a potential stressor."
         },
         {
           "speakability": "avoid",
@@ -61,17 +61,17 @@
         "Equating speed with certainty",
         "Forcing decisions without sufficient information",
         "Using bluntness as a substitute for clarity",
-        "Overriding others’ input prematurely",
+        "Overriding others' input prematurely",
         "Ignoring the need for reflection"
       ],
       "reusable_lines": [
         {
           "speakability": "must_say",
-          "text": "Decisiveness works best when it’s aimed."
+          "text": "Decisiveness works best when it's aimed."
         },
         {
           "speakability": "can_say",
-          "text": "Move quickly—but not blindly."
+          "text": "Move quickly-but not blindly."
         }
       ]
     },
@@ -82,9 +82,9 @@
         "Predicting conflict or dominance"
       ],
       "allowed_framing": [
-        "Agency-based framing: 'you can choose to act…'",
+        "Agency-based framing: 'you can choose to act...'",
         "Process language: 'focus', 'aim', 'direct'",
-        "Contextual framing: 'if clarity is present…'"
+        "Contextual framing: 'if clarity is present...'"
       ]
     },
     "tags": [
@@ -97,7 +97,7 @@
     ],
     "sources": [
       "Modern psychological astrology",
-      "Mercury–Mars conjunction as thought/action fusion archetype"
+      "Mercury-Mars conjunction as thought/action fusion archetype"
     ]
   }
   

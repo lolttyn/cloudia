@@ -15,7 +15,7 @@
     "frames": [
       {
         "speakability": "must_say",
-        "text": "Sun–Moon oppositions highlight a split between public-facing duties and private feelings that requires conscious balancing."
+        "text": "Sun-Moon oppositions highlight a split between public-facing duties and private feelings that requires conscious balancing."
       },
       {
         "speakability": "must_say",
@@ -23,7 +23,7 @@
       },
       {
         "speakability": "can_say",
-        "text": "You may notice projections—assuming others are carrying what you’d rather not acknowledge."
+        "text": "You may notice projections-assuming others are carrying what you'd rather not acknowledge."
       },
       {
         "speakability": "can_say",
@@ -67,7 +67,7 @@
     "reusable_lines": [
       {
         "speakability": "must_say",
-        "text": "Balance the task and the feeling—both matter today."
+        "text": "Balance the task and the feeling-both matter today."
       },
       {
         "speakability": "can_say",
@@ -97,6 +97,6 @@
   ],
   "sources": [
     "Modern psychological astrology",
-    "Sun–Moon opposition as integration practice"
+    "Sun-Moon opposition as integration practice"
   ]
 }

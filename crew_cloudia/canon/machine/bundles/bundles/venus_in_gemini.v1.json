@@ -64,11 +64,11 @@
     "reusable_lines": [
       {
         "speakability": "must_say",
-        "text": "Curiosity is attractive—keep it paired with clarity."
+        "text": "Curiosity is attractive-keep it paired with clarity."
       },
       {
         "speakability": "can_say",
-        "text": "Play, talk, and ask—but close the loop when you decide."
+        "text": "Play, talk, and ask-but close the loop when you decide."
       }
     ]
   },

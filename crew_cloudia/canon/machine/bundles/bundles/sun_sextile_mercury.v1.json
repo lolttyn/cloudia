@@ -15,7 +15,7 @@
     "frames": [
       {
         "speakability": "must_say",
-        "text": "Sun–Mercury sextiles support smooth communication where personal voice and reasoning reinforce each other."
+        "text": "Sun-Mercury sextiles support smooth communication where personal voice and reasoning reinforce each other."
       },
       {
         "speakability": "must_say",
@@ -67,7 +67,7 @@
     "reusable_lines": [
       {
         "speakability": "must_say",
-        "text": "Clear words come easier today—use them to move plans forward."
+        "text": "Clear words come easier today-use them to move plans forward."
       },
       {
         "speakability": "can_say",
@@ -97,6 +97,6 @@
   ],
   "sources": [
     "Modern psychological astrology",
-    "Sun–Mercury sextile as communication support"
+    "Sun-Mercury sextile as communication support"
   ]
 }

@@ -32,7 +32,7 @@
       }
     ],
     "frictions": [
-      "Interrupting or finishing others’ sentences",
+      "Interrupting or finishing others' sentences",
       "Assuming agreement because you spoke first",
       "Impatience with details or nuance",
       "Arguments sparked by tone rather than content",
@@ -64,7 +64,7 @@
     "reusable_lines": [
       {
         "speakability": "must_say",
-        "text": "Quick thinking is available—aim it before you fire."
+        "text": "Quick thinking is available-aim it before you fire."
       },
       {
         "speakability": "can_say",

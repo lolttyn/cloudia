@@ -15,7 +15,7 @@
       "frames": [
         {
           "speakability": "must_say",
-          "text": "Venus–Mars oppositions surface tension between what is desired and how action is taken, often reflected through other people."
+          "text": "Venus-Mars oppositions surface tension between what is desired and how action is taken, often reflected through other people."
         },
         {
           "speakability": "must_say",
@@ -23,7 +23,7 @@
         },
         {
           "speakability": "can_say",
-          "text": "Attraction may feel charged when preferences and assertiveness don’t naturally align."
+          "text": "Attraction may feel charged when preferences and assertiveness don't naturally align."
         },
         {
           "speakability": "can_say",
@@ -83,8 +83,8 @@
       ],
       "allowed_framing": [
         "Relational language: 'negotiation', 'expectations'",
-        "Agency-forward framing: 'you can communicate…'",
-        "Contextual framing: 'if dynamics feel polarized…'"
+        "Agency-forward framing: 'you can communicate...'",
+        "Contextual framing: 'if dynamics feel polarized...'"
       ]
     },
     "tags": [
@@ -97,7 +97,7 @@
     ],
     "sources": [
       "Modern psychological astrology",
-      "Venus–Mars opposition as desire/assertion polarity archetype"
+      "Venus-Mars opposition as desire/assertion polarity archetype"
     ]
   }
   
