@@ -1,0 +1,102 @@
+{
+  "slug": "mars_square_pluto",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Mars square Pluto",
+  "summary": "Mars locks horns with Pluto, stirring friction around control and consequence. Pressure exposes where habits need transformation. Courage comes from addressing the root.",
+  "trigger": {
+    "signal_key": "mars_square_pluto",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Intensity challenges initiative and drive to confront power dynamics.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Pluto themes influence initiative and drive, shifting default patterns."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Expect movement; adaptability matters more than certainty."
+      },
+      {
+        "speakability": "can_say",
+        "text": "There is room to experiment with how you respond."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Signals may arrive quickly; small, conscious steps keep you oriented."
+      },
+      {
+        "speakability": "avoid",
+        "text": "A dramatic event is guaranteed to happen."
+      }
+    ],
+    "frictions": [
+      "Power struggles that escalate quickly",
+      "Compulsive focus on one outcome",
+      "All-or-nothing reactions that skip nuance",
+      "Hidden tensions surfacing under pressure",
+      "Fear of losing control leading to rigid behavior"
+    ],
+    "opportunities": [
+      "Facing root causes instead of surface symptoms",
+      "Channeling intensity into thorough research or repair",
+      "Setting clean boundaries in charged dynamics",
+      "Letting go of outdated control habits",
+      "Regenerating after a honest confrontation"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Name the real issue beneath the surface conflict",
+      "Choose one area to clean up or simplify today",
+      "Share motives plainly to reduce suspicion",
+      "Pause before responding when emotions spike",
+      "Redirect intensity into problem-solving, not surveillance"
+    ],
+    "avoid": [
+      "Using pressure to force compliance",
+      "Assuming worst-case scenarios without evidence",
+      "Treating vulnerability as weakness to exploit",
+      "Fixating on blame instead of solutions",
+      "Letting secrecy grow when transparency is possible"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Honest depth work beats trying to manage everything on the surface."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Intensity can be fuel when you steer it toward regeneration."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions of crisis, trauma, or loss",
+      "Fated outcomes around power or control",
+      "Guarantees of total transformation"
+    ],
+    "allowed_framing": [
+      "Process language about confronting depth",
+      "Agency framing around choice and response",
+      "Conditional statements about outcomes depending on engagement"
+    ]
+  },
+  "tags": [
+    "depth",
+    "power",
+    "transformation",
+    "intensity",
+    "regeneration",
+    "truth"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Pluto as transformation/power archetype"
+  ]
+}

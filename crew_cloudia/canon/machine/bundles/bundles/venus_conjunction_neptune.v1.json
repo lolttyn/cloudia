@@ -1,0 +1,102 @@
+{
+  "slug": "venus_conjunction_neptune",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Venus conjunction Neptune",
+  "summary": "Venus merges with Neptune, dissolving edges while opening creative vision. Sensitivity increases, making both empathy and confusion more likely. The task is to stay porous without getting lost.",
+  "trigger": {
+    "signal_key": "venus_conjunction_neptune",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Imagination floods values and relating, blurring and inspiring at once.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Neptune themes influence values and relating, shifting default patterns."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Expect movement; adaptability matters more than certainty."
+      },
+      {
+        "speakability": "can_say",
+        "text": "There is room to experiment with how you respond."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Signals may arrive quickly; small, conscious steps keep you oriented."
+      },
+      {
+        "speakability": "avoid",
+        "text": "A dramatic event is guaranteed to happen."
+      }
+    ],
+    "frictions": [
+      "Foggy signals that blur priorities",
+      "Projecting wishes onto unclear situations",
+      "Escaping into fantasy instead of addressing basics",
+      "Leaky boundaries that invite confusion",
+      "Overidealizing people or plans without verification"
+    ],
+    "opportunities": [
+      "Letting imagination inform compassionate choices",
+      "Using symbolism or music to process feelings",
+      "Allowing softness to dissolve rigid stances",
+      "Practicing discernment alongside empathy",
+      "Resting or meditating to reset perception"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Check facts before acting on a hunch",
+      "Create one grounded ritual to focus attention",
+      "Use creative outlets to translate intuition into form",
+      "Clarify boundaries kindly when signals feel blurry",
+      "Hydrate, rest, and simplify commitments to reduce overwhelm"
+    ],
+    "avoid": [
+      "Making promises while details are unclear",
+      "Letting nostalgia override present information",
+      "Using substances or distractions to dodge discomfort",
+      "Assuming silence means agreement",
+      "Treating intuition as certainty without corroboration"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Stay receptive, then anchor the feeling in one clear step."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Let imagination flow, but give it a container before acting."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions of psychic events or spiritual destiny",
+      "Certainty about hidden truths or revelations",
+      "Promises of bliss or inevitable confusion"
+    ],
+    "allowed_framing": [
+      "Process language about discernment and sensitivity",
+      "Agency framing around choices and boundaries",
+      "Conditional statements about clarity and context"
+    ]
+  },
+  "tags": [
+    "imagination",
+    "permeability",
+    "ideals",
+    "empathy",
+    "dreamwork",
+    "inspiration"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Neptune as permeability/idealism archetype"
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "slug": "venus_conjunction_uranus",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Venus conjunction Uranus",
+  "summary": "Venus and Uranus align in a spark that scrambles default patterns. Excitement and instability arrive together. The work is to channel the charge without frying circuits.",
+  "trigger": {
+    "signal_key": "venus_conjunction_uranus",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Innovation jolts values and relating, demanding fresh expression.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Uranus themes influence values and relating, shifting default patterns."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Expect movement; adaptability matters more than certainty."
+      },
+      {
+        "speakability": "can_say",
+        "text": "There is room to experiment with how you respond."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Signals may arrive quickly; small, conscious steps keep you oriented."
+      },
+      {
+        "speakability": "avoid",
+        "text": "A dramatic event is guaranteed to happen."
+      }
+    ],
+    "frictions": [
+      "Restlessness that makes routine feel stifling",
+      "Sudden pivots that scramble plans",
+      "Overreacting to constraints with abrupt exits",
+      "Impatience with slower collaborators",
+      "Scattered focus from chasing every new signal"
+    ],
+    "opportunities": [
+      "Spotting the experiment that can refresh a stale pattern",
+      "Welcoming surprises as data rather than threats",
+      "Testing a bold idea in a contained way",
+      "Choosing authenticity even if it breaks a minor rule",
+      "Updating habits quickly once a better option appears"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Give yourself one safe place to try the unconventional move first",
+      "Document changes so quick shifts stay coordinated",
+      "Share the \"why\" behind a pivot to reduce shock for others",
+      "Leave room in the schedule for interruptions and insights",
+      "Ground the breakthrough with one immediate, practical step"
+    ],
+    "avoid": [
+      "Burning bridges just to feel free",
+      "Assuming novelty automatically improves outcomes",
+      "Dropping commitments without communicating",
+      "Overloading with simultaneous experiments",
+      "Using chaos as a shortcut to avoid discomfort"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Breakthroughs land best when you ground the shock in one clear action."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Not every shake-up is a threat; some are invitations to refresh the pattern."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of sudden success or disaster",
+      "Deterministic claims about accidents or breakups",
+      "Assumptions that change will be permanent or total"
+    ],
+    "allowed_framing": [
+      "Agency and choice under rapid change",
+      "Process framing about experimenting and iterating",
+      "Conditional language about openings and pivots"
+    ]
+  },
+  "tags": [
+    "innovation",
+    "disruption",
+    "breakthrough",
+    "liberation",
+    "experimentation",
+    "surprise"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Uranus as disruption/innovation archetype"
+  ]
+}
