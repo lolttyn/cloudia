@@ -289,21 +289,30 @@ async function generateClosingDraft(params: {
     episode_date: params.segment.episode_date,
     axis_statement: axis,
     timing_note: timingNote,
+    temporal_phase: (frame.temporal_phase as any) ?? "baseline",
   });
 
   const user_prompt = `
-Write exactly two sentences.
+The dominant contrast axis is "${axis}". Do not restate or quote it.
+Today's temporal phase is "${frame.temporal_phase}". Match the polarity without naming it:
+- building → anticipation, gathering, noticing
+- peak → intensity, presence, immediacy
+- releasing → letting go, settling, integration
+- aftershock → echo, residue, quiet clarity
+
+Write exactly two sentences that help the listener feel today's close.
 Each sentence must:
-- Be reflective and observational, not directive or advisory.
-- Reinforce (without restating verbatim) the dominant contrast axis: "${axis}".
-- Avoid predictions or moralizing.
-- Acknowledge the temporal phase "${frame.temporal_phase ?? ""}" in tone.
+- Speak directly to the listener ("you", "your", or "this moment").
+- Be reflective and experiential; stay with what is felt or noticed right now.
+- Stay non-prescriptive (no advice) and non-predictive (no future claims).
+- Avoid introducing new concepts or re-explaining earlier sections.
+- Keep energy at or below the phase.
 
 Additional constraints:
 - No greeting.
 - No sign-off language.
-- No "you should" or advice verbs.
-- Keep it concise and calm.
+- Do not restate the dominant axis or temporal phase; they are already stated above.
+- Keep it concise and calm; no commands.
 
 Return only the two sentences, nothing else.`.trim();
 

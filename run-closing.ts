@@ -98,15 +98,21 @@ export async function runClosingForDate(params: {
   let approved = false;
   let lastDecision: EditorFeedback["decision"] | null = null;
 
-  const axis = params.interpretive_frame.dominant_contrast_axis.statement;
-  const timingNote = params.interpretive_frame.timing?.notes ?? params.interpretive_frame.timing?.state;
-  const { scaffold, signoff } = buildClosingScaffold({
-    episode_date: params.episode_date,
-    axis_statement: axis,
-    timing_note: timingNote,
-  });
-
+  let scaffold = "";
+  let signoff = "";
   for (let attempt = 0; attempt < MAX_SEGMENT_RETRIES; attempt++) {
+    const axis = params.interpretive_frame.dominant_contrast_axis.statement;
+    const timingNote =
+      params.interpretive_frame.timing?.notes ?? params.interpretive_frame.timing?.state;
+    const scaffoldBuild = buildClosingScaffold({
+      episode_date: params.episode_date,
+      axis_statement: axis,
+      timing_note: timingNote,
+      temporal_phase: params.interpretive_frame.temporal_phase,
+    });
+    scaffold = scaffoldBuild.scaffold;
+    signoff = scaffoldBuild.signoff;
+
     if (attempt === 0) {
       const draft = await generateSegmentDraft({
         episode_plan,
@@ -114,7 +120,8 @@ export async function runClosingForDate(params: {
         writing_contract,
         episode_validation,
       });
-      script = draft.draft_script;
+      const micro = extractMicroReflection(draft.draft_script, scaffold, signoff);
+      script = assembleClosingScript(scaffold, micro, signoff);
     } else {
       const rewritePromptPayload = {
         system_prompt: "You are a precise editorial rewrite assistant for the closing.",
@@ -131,7 +138,7 @@ export async function runClosingForDate(params: {
         );
       }
       const micro = rewriteResult.text.trim();
-      script = [scaffold, micro, signoff].join("\n");
+      script = assembleClosingScript(scaffold, micro, signoff);
     }
 
     const evaluation = evaluateClosingWithFrame({
@@ -140,6 +147,8 @@ export async function runClosingForDate(params: {
       draft_script: script,
       attempt,
       max_attempts: MAX_SEGMENT_RETRIES,
+      scaffold,
+      signoff,
     });
 
     lastDecision = evaluation.decision;
@@ -179,6 +188,8 @@ export async function runClosingForDate(params: {
       "Episode failed: closing did not achieve editor approval within allowed attempts."
     );
   }
+
+  assertClosingAssemblyInvariant(script, scaffold, signoff);
 
   const today = new Date().toISOString().slice(0, 10);
   const mappedDiagnostics = mapDiagnosticsToEditorialViolations({
@@ -281,6 +292,17 @@ function extractMicroReflection(script: string, scaffold: string, signoff: strin
   const withoutScaffold = script.replace(scaffold, "").trim();
   const withoutSignoff = withoutScaffold.replace(signoff, "").trim();
   return withoutSignoff;
+}
+
+function assembleClosingScript(scaffold: string, micro: string, signoff: string): string {
+  const microClean = micro.trim();
+  return `${scaffold}\n\n${microClean}\n\n${signoff}`;
+}
+
+function assertClosingAssemblyInvariant(script: string, scaffold: string, signoff: string): void {
+  if (!script.includes(scaffold) || !script.includes(signoff)) {
+    throw new Error("Closing assembly invariant violated");
+  }
 }
 
 async function main() {

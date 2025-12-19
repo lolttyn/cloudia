@@ -2,6 +2,8 @@ import interpretiveCanon from "./canon/interpretiveCanon_v1.json" assert { type:
 import { extractSkyFeatures, SkyFeatures, SkyAspect } from "./sky/extractSkyFeatures.js";
 import { InterpretiveFrame, InterpretiveFrameSchema } from "./schema/InterpretiveFrame.js";
 
+const INGRESS_SENSITIVE_BODIES = ["Moon", "Sun"] as const;
+
 type InterpretiveCanon = typeof interpretiveCanon;
 
 type InterpreterInput = {
@@ -61,6 +63,7 @@ function buildAnchors(
   sunEntry: CanonSunSign,
   moonEntry: CanonMoonSign
 ): InterpretiveFrame["sky_anchors"] {
+  // Always emit static anchors for ingress-sensitive bodies (Moon and Sun)
   return [
     {
       type: "moon_sign",
@@ -109,11 +112,23 @@ function pickWhyToday(
 ) {
   const reasons: string[] = [];
 
-  const ingress = features.highlights.find((h) => h.type === "ingress");
+  const ingress = features.highlights.find(
+    (h) => h.type === "ingress" && INGRESS_SENSITIVE_BODIES.includes(h.body)
+  );
+
   if (ingress?.type === "ingress") {
-    reasons.push(
-      `Today the Moon enters ${ingress.to_sign}, a brief shift that highlights ${moonEntry.core_meanings[0]}.`
-    );
+    const bodyLabel = ingress.body;
+    const currentSign = bodyLabel === "Moon" ? features.moon.sign : features.sun.sign;
+
+    if (ingress.window === "next_24h" && ingress.to_sign !== currentSign) {
+      reasons.push(
+        `The ${bodyLabel} is in ${currentSign} today and enters ${ingress.to_sign} within the next 24 hours, emphasizing ${moonEntry.core_meanings[0]}.`
+      );
+    } else {
+      reasons.push(
+        `The ${bodyLabel} is in ${currentSign} today after entering from ${ingress.from_sign} within the past 24 hours, emphasizing ${moonEntry.core_meanings[0]}.`
+      );
+    }
     reasons.push(templates.ingress);
   } else if (aspect?.type === "aspect") {
     reasons.push(

@@ -43,6 +43,16 @@ export function evaluateIntroWithFrame(params: {
   const blocking_reasons: string[] = [];
   const script = params.draft_script;
   const lower = script.toLowerCase();
+  const ingressSensitiveBodies = ["moon", "sun"];
+  const ADVICE_PATTERNS = [/you should/i, /\bshould\b/i, /\bneed to\b/i, /\bmust\b/i, /\btry to\b/i];
+  const PREDICTION_PATTERNS = [/\bwill\b/i, /\bgoing to\b/i, /\bsoon\b/i];
+  const LISTENER_PATTERN = /\b(you|your|today|this moment)\b/i;
+  const INTENSITY_CUES: Record<string, string[]> = {
+    emerging: ["opening", "fresh", "just starting", "early", "arriving"],
+    strengthening: ["building", "rising", "gathering", "picking up", "mounting"],
+    dominant: ["intense", "all in", "at the forefront", "commanding", "center stage"],
+    softening: ["settling", "easing", "unwinding", "softening", "exhale"],
+  };
 
   // Hard gate: greeting must be verbatim
   const greeting = expectedIntroGreeting(params.episode_date);
@@ -54,9 +64,6 @@ export function evaluateIntroWithFrame(params: {
 
   // Hard gate: meaning coherence with dominant axis (verbatim)
   const axis = params.interpretive_frame.dominant_contrast_axis.statement.toLowerCase();
-  const temporalPhase = params.interpretive_frame.temporal_phase.toLowerCase();
-  const intensity = params.interpretive_frame.intensity_modifier.toLowerCase();
-  const continuity = params.interpretive_frame.continuity;
   if (!lower.includes(axis)) {
     notes.push("Intro must include the dominant contrast axis verbatim (no substitutions).");
     blocking_reasons.push("intro:axis_missing");
@@ -73,16 +80,27 @@ export function evaluateIntroWithFrame(params: {
     rewrite_instructions.push(`Insert the why-today clause verbatim: "${whyTodayClause}".`);
   }
 
-  // At least one sky anchor referenced
-  const anchorReferenced = params.interpretive_frame.sky_anchors.some((anchor) =>
-    lower.includes(anchor.label.toLowerCase())
-  );
-  if (!anchorReferenced) {
-    notes.push("Intro must reference at least one sky anchor label.");
-    blocking_reasons.push("intro:sky_anchor_missing");
-    rewrite_instructions.push(
-      `Reference at least one sky anchor verbatim, e.g., "${params.interpretive_frame.sky_anchors[0]?.label}".`
+  // Require static anchors for ingress-sensitive bodies present in the frame
+  const missingIngressAnchors: string[] = [];
+  for (const anchor of params.interpretive_frame.sky_anchors) {
+    const lowerLabel = anchor.label.toLowerCase();
+    const bodyMentioned = ingressSensitiveBodies.some((body) =>
+      lowerLabel.startsWith(`${body} in `)
     );
+    if (bodyMentioned && !lower.includes(lowerLabel)) {
+      missingIngressAnchors.push(anchor.label);
+    }
+  }
+  if (missingIngressAnchors.length > 0) {
+    notes.push(
+      `Intro must reference ingress-sensitive anchors: ${missingIngressAnchors
+        .map((a) => `"${a}"`)
+        .join(", ")}.`
+    );
+    blocking_reasons.push("intro:ingress_anchor_missing");
+    for (const label of missingIngressAnchors) {
+      rewrite_instructions.push(`Include the exact anchor phrase: "${label}".`);
+    }
   }
 
   // Require causal language
@@ -90,43 +108,6 @@ export function evaluateIntroWithFrame(params: {
     notes.push('Intro must include causal language using "because".');
     blocking_reasons.push("intro:causal_missing");
     rewrite_instructions.push('Add a causal sentence that includes the word "because".');
-  }
-
-  // Require temporal markers
-  if (!lower.includes(temporalPhase)) {
-    notes.push("Intro should acknowledge the temporal phase for today.");
-    rewrite_instructions.push(`Reference the temporal phase "${params.interpretive_frame.temporal_phase}".`);
-  }
-  if (!lower.includes(intensity)) {
-    notes.push("Intro should acknowledge intensity modulation for today.");
-    rewrite_instructions.push(
-      `Reference the intensity modifier "${params.interpretive_frame.intensity_modifier}".`
-    );
-  }
-
-  // Continuity hooks must appear if provided
-  if (continuity?.references_yesterday && !lower.includes(continuity.references_yesterday.toLowerCase())) {
-    notes.push("Intro continuity hook for yesterday is missing.");
-    blocking_reasons.push("intro:continuity_yesterday_missing");
-    rewrite_instructions.push(`Include: "${continuity.references_yesterday}".`);
-  }
-  if (continuity?.references_tomorrow && !lower.includes(continuity.references_tomorrow.toLowerCase())) {
-    notes.push("Intro continuity hook for tomorrow is missing.");
-    blocking_reasons.push("intro:continuity_tomorrow_missing");
-    rewrite_instructions.push(`Include: "${continuity.references_tomorrow}".`);
-  }
-
-  if (params.interpretive_frame.temporal_arc.arc_day_index > 1) {
-    const hasHook =
-      (continuity?.references_yesterday &&
-        lower.includes(continuity.references_yesterday.toLowerCase())) ||
-      (continuity?.references_tomorrow &&
-        lower.includes(continuity.references_tomorrow.toLowerCase()));
-    if (!hasHook) {
-      notes.push("Intro must include a continuity hook on arc day > 1.");
-      blocking_reasons.push("intro:continuity_missing_for_arc");
-      rewrite_instructions.push("Add the provided continuity hook to situate today in the arc.");
-    }
   }
 
   // Scaffold presence
@@ -151,6 +132,34 @@ export function evaluateIntroWithFrame(params: {
     notes.push("Intro must include exactly two expressive sentences after the scaffold.");
     blocking_reasons.push("intro:expressive_window_length");
     rewrite_instructions.push("Return exactly two sentences after the scaffold.");
+  }
+
+  // Expressive window constraints (affective only)
+  if (!LISTENER_PATTERN.test(remainder)) {
+    notes.push('Intro expressive lines should address the listener (e.g., "you", "today", "this moment").');
+    rewrite_instructions.push('Address the listener directly in the two expressive sentences (e.g., "you", "your", "today").');
+  }
+
+  const intensityKey = params.interpretive_frame.intensity_modifier.toLowerCase();
+  const cues = INTENSITY_CUES[intensityKey] ?? [];
+  if (cues.length > 0 && !cues.some((cue) => remainder.toLowerCase().includes(cue))) {
+    notes.push("Intro expressive tone should reflect today's intensity modulation (use matching tone cues, not arc explanations).");
+    rewrite_instructions.push("Match the intensity tone (e.g., use cues that feel like the current intensity) without restating arc mechanics.");
+  }
+
+  if (/\b(yesterday|tomorrow)\b/i.test(remainder)) {
+    notes.push("Intro expressive lines should not mention yesterday or tomorrow; continuity is handled by the scaffold.");
+    rewrite_instructions.push("Remove explicit mentions of yesterday or tomorrow from the expressive lines.");
+  }
+
+  if (ADVICE_PATTERNS.some((re) => re.test(remainder))) {
+    notes.push("Intro expressive lines should avoid advice or directives.");
+    rewrite_instructions.push("Remove advice/directive language (e.g., 'should', 'need to').");
+  }
+
+  if (PREDICTION_PATTERNS.some((re) => re.test(remainder))) {
+    notes.push("Intro expressive lines should avoid predictions; keep to present-moment tone.");
+    rewrite_instructions.push("Remove predictive language (e.g., 'will', 'going to', 'soon').");
   }
 
   if (notes.length === 0) {

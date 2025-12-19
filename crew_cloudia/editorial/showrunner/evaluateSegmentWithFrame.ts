@@ -10,8 +10,11 @@ export function evaluateSegmentWithFrame(params: {
 }): EditorFeedback {
   const notes: string[] = [];
   const rewrite_instructions: string[] = [];
+  const blocking_reasons: string[] = [];
   const scriptLower = params.draft_script.toLowerCase();
   const frame = params.interpretive_frame;
+  const ingressSensitiveBodies = ["moon", "sun"];
+  const ingressLanguagePattern = /\b(enter|enters|entering|ingress|approaching)\b/;
 
   // Temporal enforcement
   if (!scriptLower.includes(frame.temporal_phase.toLowerCase())) {
@@ -72,6 +75,23 @@ export function evaluateSegmentWithFrame(params: {
     }
   }
 
+  // Ingress language must include the static anchor for ingress-sensitive bodies
+  for (const anchor of frame.sky_anchors) {
+    const labelLower = anchor.label.toLowerCase();
+    const body = ingressSensitiveBodies.find((b) => labelLower.startsWith(`${b} in `));
+    if (!body) continue;
+
+    const bodyMentionedWithIngress =
+      ingressLanguagePattern.test(scriptLower) && scriptLower.includes(body);
+
+    if (bodyMentionedWithIngress && !scriptLower.includes(labelLower)) {
+      const msg = `Ingress language detected for ${body} without static anchor "${anchor.label}".`;
+      notes.push(msg);
+      rewrite_instructions.push(`Include the exact anchor "${anchor.label}" when mentioning ${body} ingress.`);
+      blocking_reasons.push(`segment:ingress_anchor_missing:${body}`);
+    }
+  }
+
   if (!/\bbecause\b/i.test(params.draft_script)) {
     const msg = 'Astro grounding: include causal logic with the word "because".';
     notes.push(msg);
@@ -118,5 +138,10 @@ export function evaluateSegmentWithFrame(params: {
 
   const nextDecision = params.attempt + 1 >= params.max_attempts ? "FAIL_EPISODE" : "REVISE";
 
-  return { decision: nextDecision, notes, blocking_reasons: [...notes], rewrite_instructions };
+  return {
+    decision: nextDecision,
+    notes,
+    blocking_reasons: blocking_reasons.length > 0 ? blocking_reasons : [...notes],
+    rewrite_instructions,
+  };
 }

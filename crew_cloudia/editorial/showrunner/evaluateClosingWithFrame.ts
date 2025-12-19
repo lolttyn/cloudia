@@ -1,9 +1,16 @@
 import { InterpretiveFrame } from "../../interpretation/schema/InterpretiveFrame.js";
 import { EditorFeedback } from "./editorContracts.js";
-import { buildClosingScaffold } from "../../generation/closingScaffold.js";
 
 const ADVICE_PATTERNS = [/you should/i, /\bshould\b/i, /\bneed to\b/i, /\bmust\b/i, /\btry to\b/i];
 const PREDICTION_PATTERNS = [/\bwill\b/i, /\bgoing to\b/i, /\bsoon\b/i];
+const REFLECTIVE_PATTERNS = [/\bfeel\b/i, /\bnotice\b/i, /\bsense\b/i, /\bbreath/i, /\bholding\b/i, /\bsitting with\b/i, /\bcaring\b/i, /\bcarrying\b/i];
+const LISTENER_PATTERN = /\b(you|your|this moment)\b/i;
+const PHASE_POLARITY_CUES: Record<string, string[]> = {
+  building: ["gather", "forming", "ready", "opening", "anticipation", "noticing"],
+  peak: ["alive", "immediate", "now", "intense", "charged", "present"],
+  releasing: ["exhale", "letting go", "soften", "ease", "settling", "unwind", "unclench"],
+  aftershock: ["echo", "residue", "afterglow", "linger", "trace", "quiet"],
+};
 
 export function evaluateClosingWithFrame(params: {
   interpretive_frame: InterpretiveFrame;
@@ -11,21 +18,18 @@ export function evaluateClosingWithFrame(params: {
   draft_script: string;
   attempt: number;
   max_attempts: number;
+  scaffold: string;
+  signoff: string;
 }): EditorFeedback {
   const notes: string[] = [];
   const rewrite_instructions: string[] = [];
   const blocking_reasons: string[] = [];
   const script = params.draft_script.trim();
-  const lower = script.toLowerCase();
 
   const axis = params.interpretive_frame.dominant_contrast_axis.statement;
   const timingNote = params.interpretive_frame.timing?.notes ?? params.interpretive_frame.timing?.state;
   const temporalPhase = params.interpretive_frame.temporal_phase.toLowerCase();
-  const { scaffold, signoff } = buildClosingScaffold({
-    episode_date: params.episode_date,
-    axis_statement: axis,
-    timing_note: timingNote,
-  });
+  const { scaffold, signoff } = params;
 
   const hasScaffold = script.includes(scaffold);
   const hasSignoff = script.includes(signoff);
@@ -46,6 +50,8 @@ export function evaluateClosingWithFrame(params: {
     .replace(signoff, "")
     .trim();
 
+  const middleLower = middle.toLowerCase();
+
   const sentences = middle
     .split(/[.!?]/)
     .map((s) => s.trim())
@@ -57,15 +63,22 @@ export function evaluateClosingWithFrame(params: {
     rewrite_instructions.push("Provide exactly two reflective sentences (no more, no less).");
   }
 
-  const hasAxisReinforcement = sentences.some((s) => s.toLowerCase().includes(axis.toLowerCase().split(" ")[0]));
-  if (!hasAxisReinforcement) {
-    const msg = "Closing should reinforce the dominant contrast axis in the reflective lines.";
+  if (!LISTENER_PATTERN.test(middleLower)) {
+    const msg = "Closing should speak to the listener directly (e.g., 'you', 'your', or 'this moment').";
     notes.push(msg);
     rewrite_instructions.push(msg);
   }
 
-  if (!middle.toLowerCase().includes(temporalPhase)) {
-    const msg = "Closing should acknowledge the temporal phase (e.g., building, releasing).";
+  if (!REFLECTIVE_PATTERNS.some((re) => re.test(middle))) {
+    const msg = "Closing lines should feel reflective/experiential, not informational or directive.";
+    notes.push(msg);
+    rewrite_instructions.push(msg);
+  }
+
+  const phaseCues = PHASE_POLARITY_CUES[temporalPhase] ?? [];
+  if (phaseCues.length > 0 && !phaseCues.some((cue) => middleLower.includes(cue))) {
+    const msg =
+      "Closing should match the temporal phase polarity (tone cues for building/peak/releasing/aftershock) without naming the phase.";
     notes.push(msg);
     rewrite_instructions.push(msg);
   }
@@ -78,6 +91,18 @@ export function evaluateClosingWithFrame(params: {
     notes.push("Closing tone should not escalate when energy is releasing/aftershock.");
     blocking_reasons.push("closing:tone_mismatch_phase");
     rewrite_instructions.push("Soften the tone to match releasing/aftershock; avoid escalation verbs.");
+  }
+
+  if (axis && middleLower.includes(axis.toLowerCase())) {
+    const msg = "Do not restate the dominant axis verbatim in the closing; let the scaffold carry that meaning.";
+    notes.push(msg);
+    rewrite_instructions.push(msg);
+  }
+
+  if (middleLower.includes(temporalPhase)) {
+    const msg = "Do not restate the temporal phase label in the closing; it's already in the scaffold.";
+    notes.push(msg);
+    rewrite_instructions.push(msg);
   }
 
   const hasAdvice = ADVICE_PATTERNS.some((re) => re.test(middle));
