@@ -21,6 +21,7 @@ import {
   evaluateIntroWithFrame,
   expectedIntroGreeting,
 } from "./crew_cloudia/editorial/showrunner/evaluateIntroWithFrame.js";
+import { buildIntroScaffold } from "./crew_cloudia/generation/introScaffold.js";
 import { invokeLLM, CLOUDIA_LLM_CONFIG } from "./crew_cloudia/generation/invokeLLM.js";
 
 declare const process: {
@@ -112,9 +113,8 @@ export async function runIntroForDate(params: {
     } else {
       const rewritePromptPayload = {
         system_prompt: "You are a precise editorial rewrite assistant for the intro.",
-        user_prompt: buildIntroRewritePrompt({
+        user_prompt: buildIntroExpressiveRewritePrompt({
           interpretive_frame: params.interpretive_frame,
-          previous_script: script,
           editor_notes: rewriteInstructions,
           episode_date: params.episode_date,
         }),
@@ -125,7 +125,23 @@ export async function runIntroForDate(params: {
           `LLM rewrite failed (${rewriteResult.error_type}): ${rewriteResult.message}`
         );
       }
-      script = rewriteResult.text;
+
+      const expressiveText = rewriteResult.text.trim();
+      const sentenceCount = countSentences(expressiveText);
+      if (sentenceCount !== 2) {
+        rewriteInstructions = [
+          `Return exactly two sentences (found ${sentenceCount}). No greeting, no scaffold, no sign-off.`,
+        ];
+        continue;
+      }
+
+      const scaffold = buildIntroScaffold({
+        episode_date: params.episode_date,
+        axis: params.interpretive_frame.dominant_contrast_axis.statement,
+        why_today_clause: params.interpretive_frame.why_today_clause,
+      });
+
+      script = `${scaffold}\n\n${expressiveText}`;
     }
 
     const introEvaluation = evaluateIntroWithFrame({
@@ -228,9 +244,8 @@ export async function runIntroForDate(params: {
   };
 }
 
-function buildIntroRewritePrompt(params: {
+function buildIntroExpressiveRewritePrompt(params: {
   interpretive_frame: InterpretiveFrame;
-  previous_script: string;
   editor_notes: string[];
   episode_date: string;
 }) {
@@ -239,34 +254,48 @@ function buildIntroRewritePrompt(params: {
       ? params.editor_notes.map((n, i) => `${i + 1}. ${n}`).join("\n")
       : "No notes provided.";
 
-  return `
-You are rewriting an intro segment to satisfy the editor rubric. Fix only the cited issues.
+  const intensity = params.interpretive_frame.intensity_modifier.toLowerCase();
+  const intensityCues: Record<string, string[]> = {
+    emerging: ["calm", "spacious", "gentle", "fresh", "opening"],
+    strengthening: ["gathering", "rising", "stirring", "picking up", "sharpening"],
+    dominant: ["vivid", "charged", "immediate", "center-stage", "alive"],
+    softening: ["easing", "unwinding", "integrating", "settling", "exhale"],
+  };
+  const cues = intensityCues[intensity] ?? [];
 
-Authoritative interpretive frame:
+  return `
+You are rewriting ONLY the two expressive sentences of the intro. The scaffold (greeting + axis line + why-today clause) is locked and will be inserted by the system. You must NOT include the greeting, scaffold lines, or sign-off. Return EXACTLY TWO sentences, plain text only.
+
+Authoritative interpretive frame (context only, do not restate as scaffold):
 ${JSON.stringify(params.interpretive_frame, null, 2)}
 
-Required explicit references (must appear verbatim in the output):
-- "${params.interpretive_frame.dominant_contrast_axis.statement}"
-${params.interpretive_frame.sky_anchors.map((a) => `- "${a.label}"`).join("\n")}
-- "${params.interpretive_frame.why_today_clause}"
+Required explicit references (must appear verbatim in your two sentences):
+- At least one sky anchor from: ${params.interpretive_frame.sky_anchors.map((a) => `"${a.label}"`).join(", ")}
+- Include a causal sentence that uses the word "because".
 
-You must follow this scaffold:
-- Greeting (verbatim): "${expectedIntroGreeting(params.episode_date)}"
-- Dominant axis line: "Today’s dominant tension is: ${params.interpretive_frame.dominant_contrast_axis.statement}."
-- Why-today clause: "${params.interpretive_frame.why_today_clause}"
-- Expressive window: 2-3 sentences that reference at least one sky anchor and include a causal sentence using "because".
+Tone and intensity:
+- Today’s intensity: ${intensity}.
+- Use tone/word choice only; do NOT explain intensity, arcs, or phases.
+${cues.length > 0 ? `- Helpful tone cues: ${cues.join(", ")}.` : ""}
+
+Other rules:
+- Address the listener (e.g., "you", "your", "today", "this moment").
+- No greeting, no sign-off, no scaffold text.
+- No meta narration or episode-structure commentary.
+- No predictions, no advice/directives.
+- Exactly two sentences; nothing more, nothing less.
 
 Rewrite instructions to address:
 ${notes}
-
-Previous draft:
-${params.previous_script}
-
-Requirements:
-- Do not add meta narration or episode-structure commentary.
-- Keep the intro concise; only 2-3 expressive sentences after the scaffold.
-- Reinforce the dominant contrast as a lived tension, grounded in the sky anchor(s).
 `.trim();
+}
+
+function countSentences(text: string): number {
+  const sentences = text
+    .split(/[.!?]/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+  return sentences.length;
 }
 
 function performSelfCheck(
