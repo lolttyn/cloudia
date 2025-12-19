@@ -1,11 +1,20 @@
 import { InterpretiveFrame } from "../../interpretation/schema/InterpretiveFrame.js";
+import { buildIntroScaffold } from "../../generation/introScaffold.js";
 
 const INGRESS_SENSITIVE_BODIES = ["moon", "sun"];
+const INTENSITY_CUES: Record<string, string[]> = {
+  emerging: ["calm", "spacious", "gentle", "fresh", "opening"],
+  strengthening: ["gathering", "rising", "stirring", "picking up", "sharpening"],
+  dominant: ["vivid", "charged", "immediate", "center-stage", "alive"],
+  softening: ["easing", "unwinding", "integrating", "settling", "exhale"],
+};
 
 export function buildRewritePrompt(params: {
   original_script: string;
   blocking_reasons: string[];
   interpretive_frame?: InterpretiveFrame;
+  segment_key?: string;
+  episode_date?: string;
 }): string {
   const ingressAnchorDirectives: string[] = [];
 
@@ -28,7 +37,35 @@ export function buildRewritePrompt(params: {
 
   const ingressAnchorBlock =
     ingressAnchorDirectives.length > 0
-      ? `\nIngress-sensitive anchors:\n${ingressAnchorDirectives.join("\n")}\n`
+      ? `\nIngress-sensitive anchors (must appear verbatim):\n${ingressAnchorDirectives.join("\n")}\n`
+      : "";
+
+  const lockedScaffold =
+    params.segment_key === "intro" &&
+    params.interpretive_frame &&
+    params.episode_date
+      ? buildIntroScaffold({
+          episode_date: params.episode_date,
+          axis: params.interpretive_frame.dominant_contrast_axis.statement,
+          why_today_clause: params.interpretive_frame.why_today_clause,
+        })
+      : undefined;
+
+  const scaffoldFence = lockedScaffold
+    ? `
+The intro scaffold below is LOCKED. Copy it verbatim. Do NOT edit, paraphrase, merge, or delete it. You may only rewrite the expressive sentences that come AFTER the locked scaffold. Return the full intro as: locked scaffold + EXACTLY two expressive sentences.
+
+--- BEGIN LOCKED SCAFFOLD ---
+${lockedScaffold}
+--- END LOCKED SCAFFOLD ---
+`
+    : "";
+
+  const intensity = params.interpretive_frame?.intensity_modifier?.toLowerCase();
+  const intensityCues = intensity ? INTENSITY_CUES[intensity] ?? [] : [];
+  const intensityBlock =
+    intensityCues.length > 0
+      ? `\nIntensity tone cues for today (${intensity}): ${intensityCues.join(", ")}.\nUse tone and word choice only. Do NOT explain intensity, arcs, or phases. Do NOT mention yesterday or tomorrow.\n`
       : "";
 
   return `
@@ -45,6 +82,6 @@ Rules:
 - Ensure all required sections are present.
 - Do not add predictions or advice.
 - Return the full revised segment text only.
-${ingressAnchorBlock}`;
+${scaffoldFence}${ingressAnchorBlock}${intensityBlock}`.trim();
 }
 
