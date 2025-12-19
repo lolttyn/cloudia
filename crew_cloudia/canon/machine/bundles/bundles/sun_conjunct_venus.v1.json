@@ -1,0 +1,103 @@
+{
+    "slug": "sun_conjunct_venus",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Sun conjunct Venus",
+    "summary": "A convergence of identity and values. Expression softens, relationships and aesthetics come into focus, and choices are guided by what feels worth sustaining. The opportunity is coherence without complacency.",
+    "trigger": {
+      "signal_key": "sun_conjunct_venus",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "What you value becomes easier to embody.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Sun–Venus conjunctions highlight alignment between self-expression and personal values, making interactions feel more natural and affirming."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect supports ease in connection when actions reflect genuine priorities rather than performance."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Social and creative choices tend to feel more intuitive when guided by taste and preference."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Confidence increases when identity and values are not at odds."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This guarantees harmony, love, or approval."
+        }
+      ],
+      "frictions": [
+        "Avoiding necessary tension to preserve comfort",
+        "Over-identifying with being liked",
+        "Indulgence that blurs priorities",
+        "Confusing ease with depth",
+        "Letting aesthetics replace substance"
+      ],
+      "opportunities": [
+        "Strengthening relationships through authenticity",
+        "Making choices that reflect true values",
+        "Expressing appreciation clearly",
+        "Advancing creative work with coherence",
+        "Aligning self-presentation with inner priorities"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Choose actions that reflect what you actually value.",
+        "Express appreciation without overperforming it.",
+        "Let ease inform decisions, not replace discernment.",
+        "Refine aesthetics or presentation to match intent.",
+        "Notice where comfort supports sustainability."
+      ],
+      "avoid": [
+        "Smoothing over issues to keep things pleasant",
+        "Prioritizing approval over integrity",
+        "Overindulging as a stand-in for fulfillment",
+        "Confusing attraction with alignment",
+        "Letting harmony delay necessary decisions"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Alignment shows when what you value and how you show up match."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Ease is meaningful when it reflects integrity."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Guarantees of love, approval, or success",
+        "Framing harmony as moral superiority",
+        "Deterministic relationship outcomes"
+      ],
+      "allowed_framing": [
+        "Value-based language: 'what feels worth sustaining…'",
+        "Agency-forward framing: 'you can choose alignment…'",
+        "Contextual framing: 'if relationships or aesthetics are in focus…'"
+      ]
+    },
+    "tags": [
+      "values",
+      "alignment",
+      "relationships",
+      "harmony",
+      "self_expression",
+      "aesthetics"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Sun–Venus conjunction as identity/value alignment archetype"
+    ]
+  }
+  

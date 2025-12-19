@@ -1,0 +1,103 @@
+{
+    "slug": "saturn_square_venus",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Saturn square Venus",
+    "summary": "A tension between values, pleasure, and responsibility. What feels desirable may be constrained by time, resources, or commitments, prompting a reassessment of priorities. The task is to refine value without collapsing into scarcity thinking.",
+    "trigger": {
+      "signal_key": "saturn_square_venus",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "Not everything you want is available on your current timeline.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Saturn–Venus squares surface friction between desire and duty, asking for honest evaluation of what’s worth sustaining."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect doesn’t remove value—it tests whether value is being supported by structure."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Pleasure may feel delayed or conditional when resources are tight or standards are high."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Discomfort often points to misalignment between wants and realistic capacity."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This means deprivation, rejection, or lack of love."
+        }
+      ],
+      "frictions": [
+        "Scarcity thinking around time, money, or affection",
+        "Resentment caused by unmet expectations",
+        "Over-sacrificing pleasure to appear responsible",
+        "Withholding affection or enjoyment as self-control",
+        "Judging desires as impractical or immature"
+      ],
+      "opportunities": [
+        "Clarifying which values are worth long-term investment",
+        "Building structures that support sustainable pleasure",
+        "Renegotiating commitments that drain resources",
+        "Strengthening boundaries around time and energy",
+        "Developing patience without self-denial"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Assess whether your current commitments support what you value.",
+        "Name the constraint clearly—time, money, energy, or obligation.",
+        "Make deliberate choices about what to delay versus what to sustain.",
+        "Build structure around pleasure rather than eliminating it.",
+        "Practice patience without framing desire as weakness."
+      ],
+      "avoid": [
+        "Interpreting limits as proof of unworthiness",
+        "Withholding enjoyment as a form of discipline",
+        "Assuming value must be earned through deprivation",
+        "Letting resentment replace honest negotiation",
+        "Confusing maturity with emotional coldness"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Constraint doesn’t erase value—it asks how you support it."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Sustainable pleasure needs structure."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting rejection, loneliness, or loss",
+        "Moralizing pleasure or desire",
+        "Deterministic relationship or financial outcomes"
+      ],
+      "allowed_framing": [
+        "Resource-based language: 'capacity', 'support', 'sustainability'",
+        "Agency-forward framing: 'you can reassess…'",
+        "Contextual framing: 'if resources or time feel tight…'"
+      ]
+    },
+    "tags": [
+      "values",
+      "constraint",
+      "resources",
+      "priorities",
+      "patience",
+      "sustainability"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Saturn–Venus square as value/structure tension archetype"
+    ]
+  }
+  

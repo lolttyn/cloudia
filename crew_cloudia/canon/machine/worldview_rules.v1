@@ -1,0 +1,240 @@
+worldview_rules.v1.json — Schema + Semantics
+1. Purpose of this file (machine-side)
+This file answers, in code:
+What kinds of claims are allowed?
+What kinds of claims are forbidden?
+How causality may be expressed
+How uncertainty must be expressed
+What language is categorically illegal
+This file is consulted by:
+Interpreter (pre-generation)
+QA (post-generation)
+Editorial gate (final check)
+If this file is missing or invalid → pipeline must fail.
+
+2. High-level shape
+{
+  "version": "1.0",
+  "status": "locked",
+  "epistemology": { ... },
+  "causality_model": { ... },
+  "agency_rules": { ... },
+  "power_and_identity": { ... },
+  "time_and_prediction": { ... },
+  "language_constraints": { ... },
+  "violation_classes": { ... }
+}
+
+Everything below is explicit and enumerable.
+No free-text interpretation.
+
+3. Full JSON schema (v1)
+3.1 Top-level metadata
+{
+  "version": "1.0",
+  "status": "locked",
+  "last_updated": "2025-12-19",
+  "human_canon_reference": "canon/human/worldview_ethics.v1.md"
+}
+
+
+3.2 Epistemology
+"epistemology": {
+  "astrology_definition": "symbolic_sensemaking",
+  "disallowed_models": [
+    "deterministic_fate",
+    "event_prediction",
+    "moral_judgment_system",
+    "personality_typing"
+  ],
+  "allowed_descriptions": [
+    "context",
+    "pattern",
+    "psychological_condition",
+    "experiential_climate"
+  ]
+}
+
+Interpreter rule:
+If an output implies astrology is any disallowed model → hard fail
+
+3.3 Causality model
+"causality_model": {
+  "type": "non_deterministic",
+  "allowed_frames": [
+    "correlational",
+    "symbolic",
+    "contextual"
+  ],
+  "forbidden_frames": [
+    "causal_force",
+    "guaranteed_outcome",
+    "inevitability"
+  ],
+  "allowed_verbs": [
+    "highlight",
+    "surface",
+    "emphasize",
+    "invite",
+    "correlate_with",
+    "tend_to"
+  ],
+  "forbidden_verbs": [
+    "cause",
+    "force",
+    "ensure",
+    "guarantee",
+    "make",
+    "determine"
+  ]
+}
+
+QA rule:
+Verb scan + dependency parse
+Any forbidden verb used in causal proximity → block
+
+3.4 Agency rules
+"agency_rules": {
+  "agency_required": true,
+  "forbidden_patterns": [
+    "you must",
+    "you should",
+    "you have to",
+    "this requires you to"
+  ],
+  "allowed_patterns": [
+    "you may notice",
+    "you might find",
+    "this can feel like",
+    "there is an invitation to"
+  ],
+  "autonomy_statements_required": false
+}
+
+Note:
+We don’t require autonomy disclaimers every time
+But we forbid directive language
+
+3.5 Power & identity constraints
+"power_and_identity": {
+  "anti_essentialism": true,
+  "forbidden_identity_mappings": [
+    "gendered_planets",
+    "gendered_signs",
+    "fixed_personality_traits",
+    "hierarchical_consciousness"
+  ],
+  "forbidden_terms": [
+    "masculine",
+    "feminine",
+    "evolved",
+    "unevolved",
+    "higher",
+    "lower"
+  ],
+  "victim_blaming_prohibited": true
+}
+
+Interpreter rule:
+If planet metadata includes gender tags → reject
+If output includes forbidden terms → reject
+
+3.6 Time & prediction boundaries
+"time_and_prediction": {
+  "prediction_allowed": false,
+  "event_claims_allowed": false,
+  "allowed_time_frames": [
+    "psychological_tempo",
+    "emotional_pacing",
+    "attention_shift"
+  ],
+  "forbidden_time_claims": [
+    "will happen",
+    "expect results",
+    "this is when",
+    "on this date"
+  ]
+}
+
+This pairs directly with the Lunar Manual later, but stands alone as a gate.
+
+3.7 Language constraints (worldview-level)
+"language_constraints": {
+  "forbidden_nouns": [
+    "fate",
+    "destiny",
+    "karma",
+    "curse",
+    "blessing"
+  ],
+  "forbidden_phrases": [
+    "meant to be",
+    "the universe wants",
+    "this is a sign that"
+  ],
+  "allowed_uncertainty_markers": [
+    "may",
+    "might",
+    "can",
+    "often",
+    "tends to"
+  ]
+}
+
+Important:
+This is not the full voice guide
+This is worldview-level enforcement only
+
+3.8 Violation classes (for reporting)
+"violation_classes": {
+  "DETERMINISTIC_CLAIM": {
+    "severity": "blocking",
+    "description": "Claims guaranteed outcomes or inevitability"
+  },
+  "PREDICTIVE_EVENT": {
+    "severity": "blocking",
+    "description": "Predicts external events"
+  },
+  "AGENCY_OVERRIDE": {
+    "severity": "blocking",
+    "description": "Removes listener choice or autonomy"
+  },
+  "ESSENTIALISM": {
+    "severity": "blocking",
+    "description": "Assigns fixed identity traits"
+  },
+  "FEAR_FRAMING": {
+    "severity": "blocking",
+    "description": "Uses alarmist or threatening language"
+  }
+}
+
+These map cleanly to:
+QA reports
+Editorial suppression reasons
+Metrics
+
+4. How this is used in code (conceptual)
+Interpreter side:
+validateWorldview(outputText, worldviewRules);
+
+QA side:
+const violations = detectWorldviewViolations(
+  outputText,
+  worldviewRules
+);
+
+if (violations.some(v => v.severity === "blocking")) {
+  throw new WorldviewViolationError(violations);
+}
+
+No heuristics.
+Just rule evaluation.
+
+5. What not to do
+Do not:
+Encode long prose explanations here
+Add “temporary exceptions”
+Let prompts override this
+Soft-fail violations
+This file is constitutional law, not guidance.

@@ -1,0 +1,100 @@
+{
+    "slug": "sun_in_capricorn",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Sun in Capricorn",
+    "summary": "A period emphasizing responsibility, realism, and long-term orientation. Attention gravitates toward structure, results, and the practical steps required to sustain momentum over time.",
+    "trigger": {
+      "signal_key": "sun_in_capricorn"
+    },
+    "meaning": {
+      "headline": "The environment rewards seriousness and follow-through.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Sun in Capricorn, the collective tone shifts toward practicality: effort matters more than intention, and consistency matters more than urgency."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This is an atmosphere that supports building, maintaining, and taking responsibility for outcomes."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Progress tends to favor realistic plans, clear hierarchies, and respect for limits."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Motivation may feel quieter but more durable—less excitement, more resolve."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This is a cold, joyless time."
+        }
+      ],
+      "frictions": [
+        "Overidentifying worth with productivity",
+        "Harsh self-assessment or unrealistic standards",
+        "Resistance to rest or play",
+        "Impatience with inefficiency or ambiguity",
+        "Mistaking restraint for stagnation"
+      ],
+      "opportunities": [
+        "Setting goals that can actually be sustained",
+        "Clarifying roles, responsibilities, and priorities",
+        "Committing to habits that compound over time",
+        "Strengthening structures that support long-term effort",
+        "Earning credibility through consistency"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Choose goals based on durability rather than speed.",
+        "Break ambitions into concrete, trackable steps.",
+        "Respect limits—time, energy, and resources are part of the equation.",
+        "Honor commitments you’ve already made before adding new ones.",
+        "Let progress be quiet and cumulative."
+      ],
+      "avoid": [
+        "Measuring success only by external validation",
+        "Overworking to prove seriousness",
+        "Dismissing rest as weakness",
+        "Setting goals without infrastructure",
+        "Confusing rigidity with discipline"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "This is a season for building something that lasts."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Slow, steady effort is the advantage right now."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Deterministic claims about success or failure",
+        "Moralizing productivity or ambition",
+        "Identity statements about being a Capricorn"
+      ],
+      "allowed_framing": [
+        "Environmental framing: 'the tone favors…'",
+        "Agency-based choices: 'you may find it useful to…'",
+        "Contextual realism: 'if you’re working toward long-term goals…'"
+      ]
+    },
+    "tags": [
+      "structure",
+      "responsibility",
+      "long_term",
+      "discipline",
+      "goals",
+      "sustainability"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Sun in Capricorn as collective focus on structure and responsibility"
+    ]
+  }
+  

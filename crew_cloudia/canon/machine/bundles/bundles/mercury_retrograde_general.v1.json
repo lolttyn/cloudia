@@ -1,0 +1,100 @@
+{
+    "slug": "mercury_retrograde_general",
+    "version": 1,
+    "kind": "cycle",
+    "title": "Mercury retrograde (general)",
+    "summary": "A review-oriented communication cycle that exposes weak systems, unclear agreements, and outdated assumptions. The emphasis is on revision, retrieval, and recalibration—not disruption for its own sake.",
+    "trigger": {
+      "signal_key": "mercury_retrograde_general"
+    },
+    "meaning": {
+      "headline": "This cycle favors revision over acceleration.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Mercury retrograde shifts attention from forward momentum to inspection: what’s unfinished, miscommunicated, or poorly designed becomes visible."
+        },
+        {
+          "speakability": "must_say",
+          "text": "Issues that surface now are rarely new—they’re reminders of things that were skipped, rushed, or assumed."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Delays and reversals often function as correction mechanisms, not failures."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Past conversations, projects, or decisions may resurface asking for a second pass."
+        },
+        {
+          "speakability": "avoid",
+          "text": "Everything will break during Mercury retrograde."
+        }
+      ],
+      "frictions": [
+        "Miscommunications caused by unspoken assumptions",
+        "Technical or logistical issues revealing fragile systems",
+        "Frustration with slower-than-expected progress",
+        "Reopening conversations people assumed were closed",
+        "Mental loops driven by incomplete information"
+      ],
+      "opportunities": [
+        "Repairing systems before they scale further",
+        "Clarifying agreements and expectations",
+        "Editing, revising, or refactoring existing work",
+        "Recovering lost ideas, contacts, or context",
+        "Building redundancy and resilience into plans"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Double-check information, timelines, and dependencies.",
+        "Treat confusion as a design flaw to fix, not a personal failure.",
+        "Revisit past work with fresh eyes and better constraints.",
+        "Document decisions and agreements in writing.",
+        "Allow extra buffer time for communication and logistics."
+      ],
+      "avoid": [
+        "Rushing launches that depend on fragile systems",
+        "Assuming others have the same context you do",
+        "Ignoring small errors because they feel inconvenient",
+        "Interpreting delays as bad luck or sabotage",
+        "Overloading your schedule without contingency"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Mercury retrograde doesn’t stop progress—it asks for a better draft."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Slowdowns now often prevent bigger problems later."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting inevitable chaos or failure",
+        "Advising against all decisions or commitments",
+        "Attributing unrelated problems solely to Mercury retrograde"
+      ],
+      "allowed_framing": [
+        "Process-oriented language: 'review', 'revisit', 'adjust'",
+        "Probabilistic framing: 'more likely', 'tends to surface'",
+        "Agency-forward framing: 'you can use this period to…'"
+      ]
+    },
+    "tags": [
+      "review",
+      "communication",
+      "systems",
+      "revision",
+      "logistics",
+      "assumptions"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Mercury retrograde as review/revision cycle archetype"
+    ]
+  }
+  

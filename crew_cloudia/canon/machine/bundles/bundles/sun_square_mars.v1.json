@@ -1,0 +1,103 @@
+{
+    "slug": "sun_square_mars",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Sun square Mars",
+    "summary": "A high-friction alignment between intention and execution. Motivation is strong, but resistance—internal or external—forces choices about timing, direction, and restraint. The task is to act without burning momentum.",
+    "trigger": {
+      "signal_key": "sun_square_mars",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "Pressure builds where desire meets resistance.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Sun–Mars squares create urgency without clear release, surfacing impatience when progress feels blocked."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This is activation energy: how you respond to friction matters more than how fast you move."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Conflict often reveals misalignment between intention and available capacity."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Physical energy may spike before strategy catches up."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This guarantees conflict or anger."
+        }
+      ],
+      "frictions": [
+        "Impatience with obstacles or other people",
+        "Reactive decision-making",
+        "Overexertion followed by burnout",
+        "Escalating minor frustrations",
+        "Misplaced blame when momentum stalls"
+      ],
+      "opportunities": [
+        "Identifying where effort is misdirected",
+        "Channeling intensity into focused action",
+        "Strengthening self-control under pressure",
+        "Clarifying which battles are worth energy",
+        "Turning frustration into strategic adjustment"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Pause before acting and ask what outcome you’re actually pushing for.",
+        "Choose one priority and direct energy there.",
+        "Use physical movement to discharge excess tension.",
+        "Break actions into short, controlled bursts.",
+        "Adjust tactics instead of doubling down automatically."
+      ],
+      "avoid": [
+        "Forcing outcomes through sheer will",
+        "Reacting before understanding the resistance",
+        "Taking delays personally",
+        "Escalating conflicts unnecessarily",
+        "Ignoring signs of fatigue or strain"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Friction doesn’t mean stop—it means steer."
+        },
+        {
+          "speakability": "can_say",
+          "text": "How you apply force matters more than how much you have."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting fights, accidents, or violence",
+        "Moralizing anger or aggression",
+        "Framing resistance as intentional opposition"
+      ],
+      "allowed_framing": [
+        "Energy-management language: 'pressure', 'activation', 'direction'",
+        "Agency-based framing: 'you can choose how to respond'",
+        "Contextual framing: 'depending on stress levels and demands…'"
+      ]
+    },
+    "tags": [
+      "friction",
+      "initiative",
+      "energy",
+      "resistance",
+      "pressure",
+      "self_control"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Sun–Mars square as will/action tension archetype"
+    ]
+  }
+  

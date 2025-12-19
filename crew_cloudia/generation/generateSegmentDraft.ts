@@ -186,6 +186,7 @@ async function generateIntroDraft(params: {
     temporal_phase?: string;
     intensity_modifier?: string;
     continuity?: { references_yesterday?: string; references_tomorrow?: string };
+    interpretation_bundles?: { primary?: unknown[]; secondary?: unknown[] };
   };
 }): Promise<{
   text: string;
@@ -237,6 +238,16 @@ Additional constraints:
 - Do not describe episode structure or meta framing.
 - Target 20-30 words per sentence.
 
+Interpretation bundles (only allowed meaning):
+${JSON.stringify(
+  {
+    primary: frame.interpretation_bundles?.primary ?? [],
+    secondary: frame.interpretation_bundles?.secondary ?? [],
+  },
+  null,
+  2
+)}
+
 Return only the two sentences, nothing else.`.trim();
 
   const llm_result = await invokeLLM(
@@ -268,6 +279,7 @@ async function generateClosingDraft(params: {
     dominant_contrast_axis?: { statement?: string };
     timing?: { state?: string; notes?: string };
     temporal_phase?: string;
+    interpretation_bundles?: { primary?: unknown[]; secondary?: unknown[] };
   };
 }): Promise<{
   text: string;
@@ -313,6 +325,16 @@ Additional constraints:
 - No sign-off language.
 - Do not restate the dominant axis or temporal phase; they are already stated above.
 - Keep it concise and calm; no commands.
+
+Interpretation bundles (only allowed meaning):
+${JSON.stringify(
+  {
+    primary: frame.interpretation_bundles?.primary ?? [],
+    secondary: frame.interpretation_bundles?.secondary ?? [],
+  },
+  null,
+  2
+)}
 
 Return only the two sentences, nothing else.`.trim();
 

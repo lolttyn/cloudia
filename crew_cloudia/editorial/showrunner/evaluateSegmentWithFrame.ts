@@ -15,6 +15,53 @@ export function evaluateSegmentWithFrame(params: {
   const frame = params.interpretive_frame;
   const ingressSensitiveBodies = ["moon", "sun"];
   const ingressLanguagePattern = /\b(enter|enters|entering|ingress|approaching)\b/;
+  const allowedAstroTokens = new Set<string>();
+  for (const bundle of [
+    ...(frame.interpretation_bundles?.primary ?? []),
+    ...(frame.interpretation_bundles?.secondary ?? []),
+  ]) {
+    if (!bundle) continue;
+    const tokens = [
+      bundle.slug,
+      bundle.trigger?.signal_key ?? "",
+      bundle.title ?? "",
+      bundle.summary ?? "",
+    ]
+      .join(" ")
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .filter(Boolean);
+    tokens.forEach((t) => allowedAstroTokens.add(t));
+  }
+  const astroEntities = [
+    "sun",
+    "moon",
+    "mercury",
+    "venus",
+    "mars",
+    "jupiter",
+    "saturn",
+    "uranus",
+    "neptune",
+    "pluto",
+    "conjunction",
+    "conjunct",
+    "square",
+    "trine",
+    "sextile",
+    "opposition",
+    "capricorn",
+    "sagittarius",
+    "virgo",
+    "leo",
+    "cancer",
+    "libra",
+    "scorpio",
+    "taurus",
+    "gemini",
+    "aquarius",
+    "pisces",
+  ];
 
   // Temporal enforcement
   if (!scriptLower.includes(frame.temporal_phase.toLowerCase())) {
@@ -96,6 +143,21 @@ export function evaluateSegmentWithFrame(params: {
     const msg = 'Astro grounding: include causal logic with the word "because".';
     notes.push(msg);
     rewrite_instructions.push(msg);
+  }
+
+  // Interpretation grounding: no astrological entities outside selected bundles
+  const ungroundedEntities = astroEntities.filter(
+    (entity) =>
+      scriptLower.includes(entity) &&
+      !Array.from(allowedAstroTokens).some((token) => token.includes(entity))
+  );
+  if (ungroundedEntities.length > 0) {
+    const msg = `Interpretation constraint: references (${ungroundedEntities.join(
+      ", "
+    )}) are not present in selected bundles.`;
+    notes.push(msg);
+    rewrite_instructions.push(msg);
+    blocking_reasons.push("UNGROUNDED_INTERPRETATION");
   }
 
   // Hard gate: section contract compliance — headings present and tied

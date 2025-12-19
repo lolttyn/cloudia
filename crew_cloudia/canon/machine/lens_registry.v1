@@ -1,0 +1,254 @@
+lens_registry.v1.json — Schema + Semantics
+1. Purpose of this file
+Defines:
+Canonical lens inventory
+Lens selection constraints
+Rotation/cooldown enforcement
+Arc-based depth progression rules
+Phase-sensitive preferences (soft rules)
+Used by:
+Interpreter (select lens for each configuration)
+Editorial planner (avoid repetition across segments/days)
+QA (detect illegal reuse / regression)
+If missing or invalid → pipeline must fail.
+
+2. High-level shape
+{
+  "version": "1.0",
+  "status": "locked",
+  "defaults": { ... },
+  "lenses": { ... },
+  "rotation_rules": { ... },
+  "arc_progression": { ... },
+  "phase_preferences": { ... },
+  "violation_classes": { ... }
+}
+
+
+3. Full JSON document (v1)
+3.1 Metadata + defaults
+{
+  "version": "1.0",
+  "status": "locked",
+  "last_updated": "2025-12-19",
+  "human_canon_reference": "canon/human/interpretive_lenses.v1.md",
+  "defaults": {
+    "cooldown_days_daily": 5,
+    "cooldown_days_weekly": 7,
+    "min_frames_shortform": 1,
+    "max_frames_shortform": 2,
+    "min_frames_longform": 1,
+    "max_frames_longform": 3
+  }
+}
+
+
+3.2 Lens definitions
+Each lens includes:
+id
+display_name
+focus_domains
+allowed_question_templates
+failure_modes
+allowed_content_constraints (guards against drift)
+"lenses": {
+  "psychological": {
+    "id": "psychological",
+    "display_name": "Psychological",
+    "focus_domains": ["cognition", "emotion", "identity", "attention"],
+    "allowed_question_templates": [
+      "What internal tension is being navigated?",
+      "How is attention organized right now?",
+      "What is being integrated or clarified?"
+    ],
+    "failure_modes": ["over_introspection", "context_blind_individualism"],
+    "allowed_content_constraints": {
+      "allow_event_forecasting": false,
+      "allow_diagnosis_language": false
+    }
+  },
+  "relational": {
+    "id": "relational",
+    "display_name": "Relational",
+    "focus_domains": ["boundaries", "mirroring", "negotiation", "consent"],
+    "allowed_question_templates": [
+      "Where is negotiation needed?",
+      "What is being mirrored between people?",
+      "Where might projection be occurring?"
+    ],
+    "failure_modes": ["externalizing_responsibility", "mind_reading"],
+    "allowed_content_constraints": {
+      "allow_event_forecasting": false,
+      "allow_diagnosis_language": false
+    }
+  },
+  "somatic": {
+    "id": "somatic",
+    "display_name": "Somatic / Nervous System",
+    "focus_domains": ["regulation", "arousal", "capacity", "embodiment"],
+    "allowed_question_templates": [
+      "How does this show up as load or capacity?",
+      "What supports regulation here?",
+      "Where might pacing be needed?"
+    ],
+    "failure_modes": ["medicalization", "diagnostic_drift"],
+    "allowed_content_constraints": {
+      "allow_event_forecasting": false,
+      "allow_diagnosis_language": false
+    }
+  },
+  "creative": {
+    "id": "creative",
+    "display_name": "Creative / Expressive",
+    "focus_domains": ["expression", "experimentation", "authorship", "visibility"],
+    "allowed_question_templates": [
+      "What wants expression?",
+      "Where is creative friction or flow?",
+      "What is ready for experimentation?"
+    ],
+    "failure_modes": ["romanticizing_struggle", "ignoring_constraints"],
+    "allowed_content_constraints": {
+      "allow_event_forecasting": false,
+      "allow_diagnosis_language": false
+    }
+  },
+  "systems": {
+    "id": "systems",
+    "display_name": "Systems / Structural",
+    "focus_domains": ["routines", "institutions", "feedback_loops", "process"],
+    "allowed_question_templates": [
+      "What system is being stressed or refined?",
+      "Where is a process bottleneck forming?",
+      "What structure needs adjustment?"
+    ],
+    "failure_modes": ["emotional_flattening", "over_abstraction"],
+    "allowed_content_constraints": {
+      "allow_event_forecasting": false,
+      "allow_diagnosis_language": false
+    }
+  },
+  "shadow": {
+    "id": "shadow",
+    "display_name": "Shadow",
+    "focus_domains": ["avoidance", "defense", "control", "displacement"],
+    "allowed_question_templates": [
+      "What is being avoided?",
+      "Where is control substituting for safety?",
+      "What pattern repeats when pressure rises?"
+    ],
+    "failure_modes": ["pathologizing", "over_intensity"],
+    "allowed_content_constraints": {
+      "allow_event_forecasting": false,
+      "allow_diagnosis_language": false
+    }
+  },
+  "integrative": {
+    "id": "integrative",
+    "display_name": "Integrative",
+    "focus_domains": ["synthesis", "cross_domain_links", "meaning_making"],
+    "allowed_question_templates": [
+      "How do these dynamics connect across life areas?",
+      "What pattern links internal and external experience?",
+      "What is being integrated?"
+    ],
+    "failure_modes": ["vagueness", "overgeneralization"],
+    "allowed_content_constraints": {
+      "allow_event_forecasting": false,
+      "allow_diagnosis_language": false
+    }
+  },
+  "narrative": {
+    "id": "narrative",
+    "display_name": "Narrative",
+    "focus_domains": ["arc", "sequencing", "chaptering", "transition"],
+    "allowed_question_templates": [
+      "Where are we in the story arc?",
+      "What chapter is opening or closing experientially?",
+      "What transition is being metabolized?"
+    ],
+    "failure_modes": ["implied_destiny", "forced_coherence"],
+    "allowed_content_constraints": {
+      "allow_event_forecasting": false,
+      "allow_diagnosis_language": false
+    }
+  }
+}
+
+
+3.3 Rotation rules (hard enforcement)
+This is what blocks repetition.
+"rotation_rules": {
+  "enforce_cooldown": true,
+  "cooldown_days_by_format": {
+    "daily": 5,
+    "weekly": 7
+  },
+  "scope": {
+    "by_configuration_signature": true,
+    "by_segment_key": true
+  },
+  "hard_rules": [
+    {
+      "rule_id": "NO_REPEAT_SAME_LENS_WITHIN_COOLDOWN",
+      "severity": "blocking",
+      "description": "Do not reuse the same lens for the same dominant configuration within the cooldown window."
+    }
+  ]
+}
+
+
+3.4 Arc progression (soft preference, can be enforced by planner)
+"arc_progression": {
+  "default_arc_length_days": 7,
+  "stages": [
+    {
+      "stage_id": "early",
+      "day_range": [1, 2],
+      "preferred_lenses": ["psychological", "somatic"]
+    },
+    {
+      "stage_id": "middle",
+      "day_range": [3, 5],
+      "preferred_lenses": ["relational", "systems", "creative"]
+    },
+    {
+      "stage_id": "late",
+      "day_range": [6, 7],
+      "preferred_lenses": ["shadow", "integrative", "narrative"]
+    }
+  ],
+  "enforcement": {
+    "mode": "warning"
+  }
+}
+
+
+3.5 Lunar phase preferences (soft preference)
+"phase_preferences": {
+  "new_moon": ["psychological", "somatic"],
+  "waxing_crescent": ["psychological", "creative"],
+  "first_quarter": ["systems", "relational"],
+  "waxing_gibbous": ["systems", "psychological"],
+  "full_moon": ["integrative", "narrative", "relational"],
+  "waning_gibbous": ["integrative", "psychological"],
+  "last_quarter": ["shadow", "somatic"],
+  "waning_crescent": ["somatic", "shadow"]
+}
+
+
+3.6 Violation classes (reporting)
+"violation_classes": {
+  "LENS_COOLDOWN_VIOLATION": {
+    "severity": "blocking",
+    "description": "Lens reuse occurred within cooldown window."
+  },
+  "ARC_REGRESSION": {
+    "severity": "warning",
+    "description": "Lens choice appears shallower than expected given arc stage."
+  },
+  "PHASE_MISALIGNMENT": {
+    "severity": "warning",
+    "description": "Lens choice is atypical for current lunar phase."
+  }
+}
+

@@ -1,0 +1,481 @@
+sign_environments.v1.json — Schema + Semantics
+1. Purpose of this file
+This file defines, in code:
+What each sign represents as a developmental environment
+The question being asked, not the answer
+Early / mature expressions (developmental, not moral)
+Shadow patterns (non-pathologized)
+Modern-life analogies
+Explicit prohibitions against identity language
+Used by:
+Interpreter (Layer 2)
+Interpretation bundle creation
+QA enforcement
+Repetition detection
+No sign meaning is allowed unless it exists here.
+
+2. High-level shape
+{
+  "version": "1.0",
+  "status": "locked",
+  "signs": {
+    "aries": { ... },
+    "taurus": { ... },
+    ...
+  }
+}
+
+
+3. Canonical sign schema
+Each sign uses the same schema for deterministic enforcement.
+{
+  "id": "capricorn",
+  "developmental_question": "...",
+  "environmental_theme": [],
+  "what_this_environment_teaches": [],
+  "growth_over_time": "...",
+  "early_expression": [],
+  "mature_expression": [],
+  "shadow_expression": [],
+  "modern_analogies": [],
+  "prohibited_framings": []
+}
+
+
+4. Full sign definitions (v1)
+♈ Aries
+"aries": {
+  "id": "aries",
+  "developmental_question": "What happens when action begins without precedent?",
+  "environmental_theme": ["initiation", "activation", "first movement"],
+  "what_this_environment_teaches": [
+    "self-initiation",
+    "acting without certainty",
+    "claiming momentum"
+  ],
+  "growth_over_time": "From impulsive reaction to intentional initiation.",
+  "early_expression": [
+    "reactivity",
+    "urgency without direction"
+  ],
+  "mature_expression": [
+    "decisive leadership",
+    "clean beginnings"
+  ],
+  "shadow_expression": [
+    "movement used to avoid vulnerability"
+  ],
+  "modern_analogies": [
+    "startup phase",
+    "first draft energy",
+    "boundary declaration"
+  ],
+  "prohibited_framings": [
+    "aggressive personality",
+    "hot-headed",
+    "born leader"
+  ]
+}
+
+
+♉ Taurus
+"taurus": {
+  "id": "taurus",
+  "developmental_question": "What is worth sustaining over time?",
+  "environmental_theme": ["stability", "embodiment", "continuity"],
+  "what_this_environment_teaches": [
+    "value discernment",
+    "sustainable pacing",
+    "embodied presence"
+  ],
+  "growth_over_time": "From resistance to change toward grounded continuity.",
+  "early_expression": [
+    "inertia",
+    "over-attachment to comfort"
+  ],
+  "mature_expression": [
+    "reliable stewardship",
+    "grounded consistency"
+  ],
+  "shadow_expression": [
+    "fear of loss masquerading as stability"
+  ],
+  "modern_analogies": [
+    "long-term investment",
+    "craftsmanship",
+    "nervous system grounding"
+  ],
+  "prohibited_framings": [
+    "lazy",
+    "materialistic",
+    "stubborn personality"
+  ]
+}
+
+
+♊ Gemini
+"gemini": {
+  "id": "gemini",
+  "developmental_question": "How does information move between us?",
+  "environmental_theme": ["exchange", "curiosity", "translation"],
+  "what_this_environment_teaches": [
+    "curiosity",
+    "communication",
+    "adaptive thinking"
+  ],
+  "growth_over_time": "From scattered input toward integrated understanding.",
+  "early_expression": [
+    "distraction",
+    "surface engagement"
+  ],
+  "mature_expression": [
+    "pattern synthesis",
+    "skilled translation"
+  ],
+  "shadow_expression": [
+    "motion used to avoid depth"
+  ],
+  "modern_analogies": [
+    "social networks",
+    "knowledge work",
+    "information flow"
+  ],
+  "prohibited_framings": [
+    "two-faced",
+    "flighty",
+    "talkative type"
+  ]
+}
+
+
+♋ Cancer
+"cancer": {
+  "id": "cancer",
+  "developmental_question": "What allows growth to feel safe?",
+  "environmental_theme": ["belonging", "security", "emotional containment"],
+  "what_this_environment_teaches": [
+    "emotional attunement",
+    "care dynamics",
+    "belonging"
+  ],
+  "growth_over_time": "From defensiveness toward responsive care.",
+  "early_expression": [
+    "emotional guarding",
+    "over-protection"
+  ],
+  "mature_expression": [
+    "secure attachment",
+    "emotional leadership"
+  ],
+  "shadow_expression": [
+    "control disguised as care"
+  ],
+  "modern_analogies": [
+    "psychological safety",
+    "team culture",
+    "home as regulation"
+  ],
+  "prohibited_framings": [
+    "overly sensitive",
+    "clingy",
+    "motherly"
+  ]
+}
+
+
+♌ Leo
+"leo": {
+  "id": "leo",
+  "developmental_question": "What wants to be seen through me?",
+  "environmental_theme": ["expression", "visibility", "recognition"],
+  "what_this_environment_teaches": [
+    "creative authorship",
+    "confidence",
+    "generous leadership"
+  ],
+  "growth_over_time": "From validation-seeking toward self-generated confidence.",
+  "early_expression": [
+    "attention hunger",
+    "performance anxiety"
+  ],
+  "mature_expression": [
+    "authentic expression",
+    "generous visibility"
+  ],
+  "shadow_expression": [
+    "identity collapse when unseen"
+  ],
+  "modern_analogies": [
+    "creative direction",
+    "public voice",
+    "authentic personal brand"
+  ],
+  "prohibited_framings": [
+    "dramatic",
+    "attention-seeking",
+    "performer personality"
+  ]
+}
+
+
+♍ Virgo
+"virgo": {
+  "id": "virgo",
+  "developmental_question": "How can this be made more functional?",
+  "environmental_theme": ["discernment", "refinement", "service"],
+  "what_this_environment_teaches": [
+    "skill development",
+    "precision",
+    "care through improvement"
+  ],
+  "growth_over_time": "From self-criticism toward intelligent refinement.",
+  "early_expression": [
+    "perfectionism",
+    "over-correction"
+  ],
+  "mature_expression": [
+    "practical mastery",
+    "quiet competence"
+  ],
+  "shadow_expression": [
+    "control through fixing"
+  ],
+  "modern_analogies": [
+    "quality assurance",
+    "craft",
+    "health routines (non-diagnostic)"
+  ],
+  "prohibited_framings": [
+    "nitpicky",
+    "critical personality",
+    "obsessive"
+  ]
+}
+
+
+♎ Libra
+"libra": {
+  "id": "libra",
+  "developmental_question": "How do we exist together fairly?",
+  "environmental_theme": ["balance", "mutuality", "perspective"],
+  "what_this_environment_teaches": [
+    "negotiation",
+    "relational ethics",
+    "fairness"
+  ],
+  "growth_over_time": "From avoidance of tension toward skilled negotiation.",
+  "early_expression": [
+    "indecision",
+    "people-pleasing"
+  ],
+  "mature_expression": [
+    "relational clarity",
+    "balanced judgment"
+  ],
+  "shadow_expression": [
+    "harmony used to suppress truth"
+  ],
+  "modern_analogies": [
+    "mediation",
+    "partnership agreements",
+    "social contracts"
+  ],
+  "prohibited_framings": [
+    "indecisive personality",
+    "charming type",
+    "peacekeeper"
+  ]
+}
+
+
+♏ Scorpio
+"scorpio": {
+  "id": "scorpio",
+  "developmental_question": "What happens when truth is no longer avoided?",
+  "environmental_theme": ["depth", "power awareness", "honesty"],
+  "what_this_environment_teaches": [
+    "emotional courage",
+    "power literacy",
+    "psychological truth"
+  ],
+  "growth_over_time": "From control toward transformation through honesty.",
+  "early_expression": [
+    "obsession",
+    "guarded intensity"
+  ],
+  "mature_expression": [
+    "depth awareness",
+    "regenerative change"
+  ],
+  "shadow_expression": [
+    "control used to avoid vulnerability"
+  ],
+  "modern_analogies": [
+    "therapy work",
+    "system audits",
+    "trust rebuilding"
+  ],
+  "prohibited_framings": [
+    "dark",
+    "secretive personality",
+    "intense type"
+  ]
+}
+
+
+♐ Sagittarius
+"sagittarius": {
+  "id": "sagittarius",
+  "developmental_question": "What larger story gives this meaning?",
+  "environmental_theme": ["expansion", "perspective", "exploration"],
+  "what_this_environment_teaches": [
+    "meaning-making",
+    "ethical growth",
+    "context awareness"
+  ],
+  "growth_over_time": "From restlessness toward purposeful expansion.",
+  "early_expression": [
+    "dogmatism",
+    "escapism"
+  ],
+  "mature_expression": [
+    "informed optimism",
+    "ethical vision"
+  ],
+  "shadow_expression": [
+    "avoidance of responsibility through abstraction"
+  ],
+  "modern_analogies": [
+    "education",
+    "belief systems",
+    "learning journeys"
+  ],
+  "prohibited_framings": [
+    "reckless",
+    "philosopher type",
+    "wanderer personality"
+  ]
+}
+
+
+♑ Capricorn
+"capricorn": {
+  "id": "capricorn",
+  "developmental_question": "What am I willing to build over time?",
+  "environmental_theme": ["time", "responsibility", "structure"],
+  "what_this_environment_teaches": [
+    "long-term thinking",
+    "earned authority",
+    "self-authorship"
+  ],
+  "growth_over_time": "From external pressure toward chosen responsibility.",
+  "early_expression": [
+    "overwork",
+    "fear of failure"
+  ],
+  "mature_expression": [
+    "sustainable leadership",
+    "structural integrity"
+  ],
+  "shadow_expression": [
+    "worth tied to productivity"
+  ],
+  "modern_analogies": [
+    "career architecture",
+    "institutional trust",
+    "long games"
+  ],
+  "prohibited_framings": [
+    "cold",
+    "workaholic personality",
+    "strict type"
+  ]
+}
+
+
+♒ Aquarius
+"aquarius": {
+  "id": "aquarius",
+  "developmental_question": "How can systems evolve beyond habit?",
+  "environmental_theme": ["systems", "innovation", "collective intelligence"],
+  "what_this_environment_teaches": [
+    "systems thinking",
+    "humane innovation",
+    "collective awareness"
+  ],
+  "growth_over_time": "From detachment toward engaged reform.",
+  "early_expression": [
+    "alienation",
+    "contrarianism"
+  ],
+  "mature_expression": [
+    "visionary contribution",
+    "constructive change"
+  ],
+  "shadow_expression": [
+    "intellectual distance used as protection"
+  ],
+  "modern_analogies": [
+    "network effects",
+    "social movements",
+    "technology ethics"
+  ],
+  "prohibited_framings": [
+    "eccentric",
+    "rebel personality",
+    "weird type"
+  ]
+}
+
+
+♓ Pisces
+"pisces": {
+  "id": "pisces",
+  "developmental_question": "What remains when separation softens?",
+  "environmental_theme": ["integration", "compassion", "dissolution"],
+  "what_this_environment_teaches": [
+    "empathy",
+    "creative synthesis",
+    "emotional attunement"
+  ],
+  "growth_over_time": "From confusion toward grounded empathy.",
+  "early_expression": [
+    "escapism",
+    "boundary loss"
+  ],
+  "mature_expression": [
+    "compassionate presence",
+    "creative integration"
+  ],
+  "shadow_expression": [
+    "avoidance of reality through transcendence"
+  ],
+  "modern_analogies": [
+    "creative immersion",
+    "collective emotion",
+    "end-of-cycle processing"
+  ],
+  "prohibited_framings": [
+    "dreamy",
+    "victim type",
+    "overly sensitive personality"
+  ]
+}
+
+
+5. Enforcement rules
+Interpreter must:
+Treat signs as context only
+Prohibit “you are a ___ sign” constructions
+Require planet + sign pairing before interpretation
+QA must:
+Flag any trait-based language
+Reject identity claims tied to signs
+
+6. Lock statement
+This file is locked.
+Any changes require:
+Update to human sign canon
+Version bump
+Bundle revalidation
+

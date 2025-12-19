@@ -1,0 +1,160 @@
+interpretation_bundle_schema.ts — Canonical Bundle Contract
+1. Purpose of this schema
+This schema defines the only allowed unit of meaning Cloudia may interpret from.
+If meaning is not present in a bundle that conforms to this schema:
+it cannot be spoken,
+it cannot be improvised,
+it cannot be inferred.
+This is the hallucination kill switch.
+Used by:
+Interpreter (Layer 2)
+Editorial planner (Layer 3)
+QA
+Continuity tracking
+
+2. Design principles (why this looks strict)
+Every bundle supports multiple valid frames
+Every bundle has guardrails
+Every bundle encodes rotation + freshness
+Every bundle is contextual, not predictive
+Every bundle is traceable back to canon
+No shortcuts.
+
+3. TypeScript schema (Zod)
+import { z } from "zod";
+
+/**
+ * Enumerations
+ */
+
+export const LensType = z.enum([
+  "psychological",
+  "relational",
+  "somatic",
+  "creative",
+  "systems",
+  "shadow",
+  "integrative",
+  "narrative"
+]);
+
+export const SalienceClass = z.enum([
+  "primary",
+  "secondary",
+  "background"
+]);
+
+export const FreshnessGroup = z.enum([
+  "A",
+  "B",
+  "C"
+]);
+
+/**
+ * Interpretive Frame
+ * One valid way of understanding a configuration
+ */
+export const InterpretiveFrameSchema = z.object({
+  lens_type: LensType,
+  core_dynamic: z.string().min(1),
+  experiential_markers: z.array(z.string()).min(1),
+  attention_pull: z.array(z.string()).min(1),
+  growth_vector: z.string().min(1),
+  language_examples: z.array(z.string()).min(1)
+});
+
+/**
+ * Guardrails
+ * Explicit boundaries for this configuration
+ */
+export const GuardrailsSchema = z.object({
+  prohibited_claims: z.array(z.string()).min(1),
+  language_to_avoid: z.array(z.string()).min(1),
+  common_misreads: z.array(z.string()).min(1)
+});
+
+/**
+ * Canonical Interpretation Bundle
+ */
+export const InterpretationBundleSchema = z.object({
+  bundle_id: z.string().min(1),
+
+  configuration_signature: z.string().min(1),
+  salience_class: SalienceClass,
+
+  planetary_functions: z.array(z.string()).min(1),
+  sign_environments: z.array(z.string()).optional(),
+  aspect_types: z.array(z.string()).optional(),
+
+  interpretive_frames: z.array(InterpretiveFrameSchema)
+    .min(3)
+    .max(7),
+
+  shadow_frame: InterpretiveFrameSchema,
+
+  guardrails: GuardrailsSchema,
+
+  freshness: z.object({
+    freshness_group: FreshnessGroup,
+    cooldown_days: z.number().int().min(1),
+    preferred_lenses: z.array(LensType).min(1),
+    disallowed_lenses: z.array(LensType).optional()
+  }),
+
+  source_notes: z.object({
+    canon_alignment: z.literal(true),
+    derived_from: z.array(z.string()).min(1),
+    last_reviewed: z.string().min(1),
+    review_owner: z.string().min(1)
+  })
+});
+
+
+4. Hard constraints enforced by this schema
+This schema guarantees:
+❌ No single-frame interpretations
+❌ No missing shadow expression
+❌ No freeform improvisation
+❌ No unguarded language
+❌ No repetition without cooldown metadata
+If a bundle fails validation → it cannot load.
+
+5. How the Interpreter must use this (important)
+Interpreter logic (conceptual):
+const bundle = loadBundle(configSignature);
+
+InterpretationBundleSchema.parse(bundle);
+
+const frame = selectFrame({
+  bundle,
+  lensRegistry,
+  recentUsage,
+  lunarPhase,
+  arcPosition
+});
+
+// Only now is prose allowed
+
+The interpreter never invents meaning.
+It selects meaning.
+
+6. How QA uses this
+QA can:
+Assert a lens was allowed
+Assert cooldown was respected
+Assert shadow framing exists
+Assert prohibited claims were avoided
+This enables explainable failure, not vibes.
+
+7. Where this file lives
+crew_cloudia/
+  canon/
+    machine/
+      bundles/
+        interpretation_bundle_schema.ts
+        bundles/
+          saturn_square_mercury.v1.json
+          ...
+
+Bundles themselves are JSON validated by this schema.
+

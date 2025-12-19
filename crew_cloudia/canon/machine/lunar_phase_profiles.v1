@@ -1,0 +1,292 @@
+lunar_phase_profiles.v1.json — Schema + Semantics
+1. Purpose of this file
+Defines, in code:
+Lunar phases as psychological tempo
+Cognitive and emotional phenomenology per phase
+Allowed and forbidden language per phase
+Editorial usage guidance (what to do / not do)
+Anti-prediction enforcement at the time layer
+Used by:
+Interpreter (Layer 2)
+Editorial planner (Layer 3)
+QA enforcement
+Arc logic
+No lunar language is allowed unless it conforms to this file.
+
+2. High-level shape
+{
+  "version": "1.0",
+  "status": "locked",
+  "defaults": { ... },
+  "phases": {
+    "new_moon": { ... },
+    "waxing_crescent": { ... },
+    ...
+  },
+  "global_language_rules": { ... },
+  "violation_classes": { ... }
+}
+
+
+3. Canonical phase schema
+Each phase uses the same schema to allow deterministic checks.
+{
+  "id": "full_moon",
+  "sequence_index": 4,
+  "core_experience": "...",
+  "psychological_tempo": [],
+  "cognitive_state": [],
+  "emotional_quality": [],
+  "appropriate_verbs": [],
+  "discouraged_verbs": [],
+  "allowed_phrasing": [],
+  "forbidden_phrasing": [],
+  "editorial_guidance": {
+    "do": [],
+    "avoid": []
+  }
+}
+
+
+4. Full JSON document (v1)
+4.1 Metadata + defaults
+{
+  "version": "1.0",
+  "status": "locked",
+  "last_updated": "2025-12-19",
+  "human_canon_reference": "canon/human/lunar_temporal_intelligence.v1.md",
+  "defaults": {
+    "phases_are_experiential": true,
+    "prediction_language_forbidden": true,
+    "phase_as_outcome_forbidden": true
+  }
+}
+
+
+🌑 New Moon
+"new_moon": {
+  "id": "new_moon",
+  "sequence_index": 0,
+  "core_experience": "Internal reorientation with reduced external clarity.",
+  "psychological_tempo": ["slow", "inward", "pre-verbal"],
+  "cognitive_state": ["fragmentary ideas", "intuition without structure"],
+  "emotional_quality": ["quiet", "uncertain", "gestational"],
+  "appropriate_verbs": ["notice", "sense", "allow", "sit_with"],
+  "discouraged_verbs": ["decide", "commit", "launch"],
+  "allowed_phrasing": [
+    "You may notice things feel less defined right now.",
+    "This can be a quieter moment for internal orientation."
+  ],
+  "forbidden_phrasing": [
+    "set intentions",
+    "new beginnings",
+    "plant seeds"
+  ],
+  "editorial_guidance": {
+    "do": ["name ambiguity", "reduce pressure"],
+    "avoid": ["goal-setting", "forward demands"]
+  }
+}
+
+
+🌒 Waxing Crescent
+"waxing_crescent": {
+  "id": "waxing_crescent",
+  "sequence_index": 1,
+  "core_experience": "Tentative engagement and early experimentation.",
+  "psychological_tempo": ["cautious", "exploratory"],
+  "cognitive_state": ["hypothesis testing", "provisional ideas"],
+  "emotional_quality": ["fragile optimism", "curiosity"],
+  "appropriate_verbs": ["try", "test", "explore"],
+  "discouraged_verbs": ["commit", "lock_in"],
+  "allowed_phrasing": [
+    "This can be a time for small experiments.",
+    "You might explore options without locking anything down."
+  ],
+  "forbidden_phrasing": [
+    "momentum is strong",
+    "now is the time"
+  ],
+  "editorial_guidance": {
+    "do": ["encourage small steps"],
+    "avoid": ["false urgency"]
+  }
+}
+
+
+🌓 First Quarter
+"first_quarter": {
+  "id": "first_quarter",
+  "sequence_index": 2,
+  "core_experience": "Friction that requires adjustment and response.",
+  "psychological_tempo": ["active", "demanding"],
+  "cognitive_state": ["problem-solving", "constraint awareness"],
+  "emotional_quality": ["irritation", "activation"],
+  "appropriate_verbs": ["adjust", "respond", "negotiate"],
+  "discouraged_verbs": ["force", "push_through"],
+  "allowed_phrasing": [
+    "This can surface friction that asks for adjustment.",
+    "Attention may turn to what isn’t aligning smoothly."
+  ],
+  "forbidden_phrasing": [
+    "overcome obstacles",
+    "push through resistance"
+  ],
+  "editorial_guidance": {
+    "do": ["name tension", "emphasize adaptation"],
+    "avoid": ["heroic struggle framing"]
+  }
+}
+
+
+🌔 Waxing Gibbous
+"waxing_gibbous": {
+  "id": "waxing_gibbous",
+  "sequence_index": 3,
+  "core_experience": "Refinement and calibration as clarity increases.",
+  "psychological_tempo": ["focused", "detail-oriented"],
+  "cognitive_state": ["editing", "optimization"],
+  "emotional_quality": ["anticipatory", "attentive"],
+  "appropriate_verbs": ["refine", "clarify", "prepare"],
+  "discouraged_verbs": ["perfect", "rush"],
+  "allowed_phrasing": [
+    "This phase supports refinement rather than acceleration.",
+    "Small adjustments can make a meaningful difference."
+  ],
+  "forbidden_phrasing": [
+    "almost there",
+    "final push"
+  ],
+  "editorial_guidance": {
+    "do": ["encourage discernment"],
+    "avoid": ["urgency inflation"]
+  }
+}
+
+
+🌕 Full Moon
+"full_moon": {
+  "id": "full_moon",
+  "sequence_index": 4,
+  "core_experience": "Heightened awareness and emotional visibility.",
+  "psychological_tempo": ["intense", "externally responsive"],
+  "cognitive_state": ["pattern recognition", "contrast awareness"],
+  "emotional_quality": ["amplified", "exposed"],
+  "appropriate_verbs": ["notice", "witness", "hold"],
+  "discouraged_verbs": ["react", "decide_finally"],
+  "allowed_phrasing": [
+    "Attention may sharpen around contrasts.",
+    "Feelings can be more visible than usual."
+  ],
+  "forbidden_phrasing": [
+    "culmination",
+    "things come to a head",
+    "climax"
+  ],
+  "editorial_guidance": {
+    "do": ["reflect", "name complexity"],
+    "avoid": ["dramatization", "forced conclusions"]
+  }
+}
+
+
+🌖 Waning Gibbous
+"waning_gibbous": {
+  "id": "waning_gibbous",
+  "sequence_index": 5,
+  "core_experience": "Integration and meaning-making after insight.",
+  "psychological_tempo": ["reflective", "articulative"],
+  "cognitive_state": ["sense-making", "contextualization"],
+  "emotional_quality": ["thoughtful", "digestive"],
+  "appropriate_verbs": ["integrate", "interpret", "understand"],
+  "discouraged_verbs": ["teach", "preach"],
+  "allowed_phrasing": [
+    "This can be a moment for integration.",
+    "Understanding may come from looking back."
+  ],
+  "forbidden_phrasing": [
+    "lessons learned",
+    "teaching moment"
+  ],
+  "editorial_guidance": {
+    "do": ["offer synthesis"],
+    "avoid": ["moral framing"]
+  }
+}
+
+
+🌗 Last Quarter
+"last_quarter": {
+  "id": "last_quarter",
+  "sequence_index": 6,
+  "core_experience": "Release and reassessment through simplification.",
+  "psychological_tempo": ["resolute", "paring_back"],
+  "cognitive_state": ["evaluation", "pruning"],
+  "emotional_quality": ["clear", "decisive"],
+  "appropriate_verbs": ["release", "reconsider", "let_go_of"],
+  "discouraged_verbs": ["cut_ties", "end_completely"],
+  "allowed_phrasing": [
+    "This phase can support letting go of what no longer fits.",
+    "Reassessment may feel clarifying."
+  ],
+  "forbidden_phrasing": [
+    "endings",
+    "burn bridges"
+  ],
+  "editorial_guidance": {
+    "do": ["support discernment"],
+    "avoid": ["severing language"]
+  }
+}
+
+
+🌘 Waning Crescent
+"waning_crescent": {
+  "id": "waning_crescent",
+  "sequence_index": 7,
+  "core_experience": "Closure, fatigue, and dissolution before renewal.",
+  "psychological_tempo": ["slow", "low_output"],
+  "cognitive_state": ["minimal processing", "quiet reflection"],
+  "emotional_quality": ["tired", "soft", "withdrawn"],
+  "appropriate_verbs": ["rest", "allow", "complete"],
+  "discouraged_verbs": ["prepare", "optimize"],
+  "allowed_phrasing": [
+    "This can be a quieter moment that favors rest.",
+    "Completion may happen without resolution."
+  ],
+  "forbidden_phrasing": [
+    "recharge for the next cycle",
+    "prepare for rebirth"
+  ],
+  "editorial_guidance": {
+    "do": ["normalize low energy"],
+    "avoid": ["future-oriented pressure"]
+  }
+}
+
+
+5. Global language rules
+"global_language_rules": {
+  "no_build_release_cliches": true,
+  "no_phase_as_outcome": true,
+  "verbs_must_match_phase": true
+}
+
+
+6. Violation classes
+"violation_classes": {
+  "PREDICTIVE_PHASE_LANGUAGE": {
+    "severity": "blocking",
+    "description": "Uses lunar phase to predict outcomes or events."
+  },
+  "PHASE_CLICHE": {
+    "severity": "blocking",
+    "description": "Uses banned or clichéd lunar metaphors."
+  },
+  "PHASE_MISALIGNMENT": {
+    "severity": "warning",
+    "description": "Language does not match psychological tempo of the phase."
+  }
+}
+
+

@@ -1,0 +1,103 @@
+{
+    "slug": "mercury_conjunct_mars",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Mercury conjunct Mars",
+    "summary": "A convergence of thought and action. Ideas move quickly into execution, supporting decisiveness, direct communication, and problem-solving. The risk is acting before fully considering consequences.",
+    "trigger": {
+      "signal_key": "mercury_conjunct_mars",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "Thoughts want to move immediately.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Mercury–Mars conjunctions energize the mind, making decisions feel urgent and actions feel mentally justified."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect supports decisive communication when clarity is present and restraint is practiced."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Mental focus sharpens when there’s a clear target or problem to solve."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Directness increases—both as a strength and a potential stressor."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This guarantees bold success or fearless action."
+        }
+      ],
+      "frictions": [
+        "Speaking before thinking through impact",
+        "Overconfidence in first conclusions",
+        "Mental tunnel vision",
+        "Impatience with slower processes or people",
+        "Conflating decisiveness with correctness"
+      ],
+      "opportunities": [
+        "Making clear, timely decisions",
+        "Addressing issues directly instead of circling them",
+        "Solving problems through focused action",
+        "Cutting through mental clutter",
+        "Advancing stalled conversations or plans"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Aim mental energy at a specific task or decision.",
+        "State intentions clearly and concisely.",
+        "Check assumptions before acting on them.",
+        "Use decisiveness to resolve lingering issues.",
+        "Pause briefly to consider downstream effects."
+      ],
+      "avoid": [
+        "Equating speed with certainty",
+        "Forcing decisions without sufficient information",
+        "Using bluntness as a substitute for clarity",
+        "Overriding others’ input prematurely",
+        "Ignoring the need for reflection"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Decisiveness works best when it’s aimed."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Move quickly—but not blindly."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Guarantees of success through bold action",
+        "Moralizing decisiveness or aggression",
+        "Predicting conflict or dominance"
+      ],
+      "allowed_framing": [
+        "Agency-based framing: 'you can choose to act…'",
+        "Process language: 'focus', 'aim', 'direct'",
+        "Contextual framing: 'if clarity is present…'"
+      ]
+    },
+    "tags": [
+      "decisiveness",
+      "focus",
+      "mental_drive",
+      "communication",
+      "action",
+      "clarity"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Mercury–Mars conjunction as thought/action fusion archetype"
+    ]
+  }
+  

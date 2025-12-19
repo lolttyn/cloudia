@@ -1,0 +1,103 @@
+{
+    "slug": "saturn_conjunct_mars",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Saturn conjunct Mars",
+    "summary": "A convergence of effort and structure. Action is slowed, concentrated, and disciplined, favoring persistence over speed. The opportunity is to apply force with precision and endurance rather than urgency.",
+    "trigger": {
+      "signal_key": "saturn_conjunct_mars",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "Power is most effective when it’s regulated.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Saturn–Mars conjunctions compress energy, favoring sustained effort over quick wins."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect supports disciplined action—progress made through consistency, not force."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Momentum may feel slower, but it’s more controllable and durable."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Strength shows up as restraint and follow-through."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This means suppression, blockage, or inevitable frustration."
+        }
+      ],
+      "frictions": [
+        "Feeling constrained or slowed by responsibility",
+        "Impatience with incremental progress",
+        "Over-controlling effort to avoid mistakes",
+        "Mistaking restraint for lack of power",
+        "Frustration when results aren’t immediate"
+      ],
+      "opportunities": [
+        "Building long-term strength through consistency",
+        "Applying effort where it actually compounds",
+        "Developing stamina and reliability",
+        "Turning discipline into a competitive advantage",
+        "Stabilizing projects that require endurance"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Commit to steady progress rather than rapid results.",
+        "Focus energy on one demanding task at a time.",
+        "Respect pacing as a form of intelligence.",
+        "Build routines that support sustained effort.",
+        "Measure success by reliability, not intensity."
+      ],
+      "avoid": [
+        "Forcing outcomes through sheer will",
+        "Abandoning effort because progress feels slow",
+        "Equating power with speed or aggression",
+        "Over-restricting yourself to prove discipline",
+        "Letting frustration erode consistency"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Endurance beats urgency under this influence."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Strength grows through consistent application."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting injury, exhaustion, or harm",
+        "Moralizing toughness or restraint",
+        "Deterministic success or failure outcomes"
+      ],
+      "allowed_framing": [
+        "Process-based language: 'discipline', 'endurance'",
+        "Agency-forward framing: 'you can apply effort…'",
+        "Contextual framing: 'if long-term effort is required…'"
+      ]
+    },
+    "tags": [
+      "discipline",
+      "endurance",
+      "strength",
+      "consistency",
+      "structure",
+      "long_term_effort"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Saturn–Mars conjunction as disciplined force archetype"
+    ]
+  }
+  

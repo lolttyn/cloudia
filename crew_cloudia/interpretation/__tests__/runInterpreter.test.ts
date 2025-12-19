@@ -34,6 +34,8 @@ describe("runInterpreter (production engine)", () => {
     expect(first.sky_anchors.map((a) => a.label)).toEqual(
       expect.arrayContaining(["Moon in Virgo", "Sun in Sagittarius"])
     );
+    expect(first.signals.length).toBeGreaterThanOrEqual(2);
+    expect(first.signals.every((s) => s.source === "sky_features")).toBe(true);
   });
 
   it("fails loudly when canon coverage is missing for a sky state", async () => {
@@ -69,6 +71,8 @@ describe("runInterpreter (production engine)", () => {
       timing: { state: "settling" },
       confidence_level: "medium",
       canon_compliance: { violations: [], notes: [] },
+      signals: [sampleSignal()],
+      interpretation_bundles: sampleBundles(),
     });
     expect(result.success).toBe(false);
   });
@@ -96,6 +100,8 @@ describe("runInterpreter (production engine)", () => {
       timing: { state: "settling" },
       confidence_level: "medium",
       canon_compliance: { violations: [], notes: [] },
+      signals: [sampleSignal()],
+      interpretation_bundles: sampleBundles(),
     });
     expect(result.success).toBe(false);
   });
@@ -127,6 +133,8 @@ describe("runInterpreter (production engine)", () => {
       timing: { state: "settling" },
       confidence_level: "medium",
       canon_compliance: { violations: [], notes: [] },
+      signals: [sampleSignal()],
+      interpretation_bundles: sampleBundles(),
     });
     expect(result.success).toBe(false);
   });
@@ -158,6 +166,8 @@ describe("runInterpreter (production engine)", () => {
       timing: { state: "settling" },
       confidence_level: "medium",
       canon_compliance: { violations: [], notes: [] },
+      signals: [sampleSignal()],
+      interpretation_bundles: sampleBundles(),
     });
     expect(result.success).toBe(false);
   });
@@ -189,6 +199,8 @@ describe("runInterpreter (production engine)", () => {
       timing: { state: "settling" },
       confidence_level: "medium",
       canon_compliance: { violations: [], notes: [] },
+      signals: [sampleSignal()],
+      interpretation_bundles: sampleBundles(),
     });
     expect(result.success).toBe(false);
   });
@@ -208,6 +220,8 @@ describe("runInterpreter (production engine)", () => {
       timing: { state: "settling" },
       confidence_level: "medium",
       canon_compliance: { violations: [], notes: [] },
+      signals: [sampleSignal()],
+      interpretation_bundles: sampleBundles(),
     });
     expect(result.success).toBe(false);
   });
@@ -228,7 +242,22 @@ describe("runInterpreter (production engine)", () => {
       timing: { state: "settling" },
       confidence_level: "medium",
       canon_compliance: { violations: [], notes: [] },
+      signals: [sampleSignal()],
+      interpretation_bundles: sampleBundles(),
     });
     expect(result.success).toBe(false);
   });
 });
+
+function sampleSignal() {
+  return {
+    signal_key: "sun_in_virgo",
+    kind: "planet_in_sign" as const,
+    salience: 0.35,
+    source: "sky_features" as const,
+  };
+}
+
+function sampleBundles() {
+  return { primary: [], secondary: [], suppressed: [] };
+}

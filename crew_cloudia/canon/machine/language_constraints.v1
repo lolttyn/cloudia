@@ -1,0 +1,218 @@
+language_constraints.v1.json — Schema + Semantics
+1. Purpose of this file
+Defines, in code:
+Allowed sentence patterns
+Forbidden sentence patterns
+Vocabulary bans and substitutions
+How uncertainty is expressed
+How difficulty is framed
+Tone and register limits
+Used by:
+Voice writer (Layer 4)
+QA enforcement
+Editorial gate (final pass)
+If violated → rewrite or suppress.
+
+2. High-level shape
+{
+  "version": "1.0",
+  "status": "locked",
+  "sentence_patterns": { ... },
+  "vocabulary": { ... },
+  "uncertainty_expression": { ... },
+  "difficulty_framing": { ... },
+  "tone_and_register": { ... },
+  "format_guidance": { ... },
+  "violation_classes": { ... }
+}
+
+
+3. Full JSON document (v1)
+3.1 Metadata
+{
+  "version": "1.0",
+  "status": "locked",
+  "last_updated": "2025-12-19",
+  "human_canon_reference": "canon/human/astrology_voice_guide.v1.md"
+}
+
+
+3.2 Sentence pattern governance
+"sentence_patterns": {
+  "allowed_starters": [
+    "you may notice",
+    "you might find",
+    "this can feel like",
+    "attention may turn toward",
+    "there is often a tension between",
+    "this period highlights"
+  ],
+  "allowed_structures": [
+    "observational",
+    "probabilistic",
+    "experiential",
+    "invitational"
+  ],
+  "forbidden_starters": [
+    "you will",
+    "this means that",
+    "this is a sign that",
+    "expect to",
+    "prepare for"
+  ],
+  "forbidden_structures": [
+    "deterministic",
+    "prescriptive",
+    "prophetic",
+    "commanding"
+  ]
+}
+
+
+3.3 Vocabulary constraints
+"vocabulary": {
+  "forbidden_terms": [
+    "fate",
+    "destiny",
+    "meant to be",
+    "karma",
+    "curse",
+    "blessing",
+    "good",
+    "bad"
+  ],
+  "contextual_bans": {
+    "good_bad": {
+      "allowed_only_if_non_astrological": false
+    }
+  },
+  "preferred_substitutions": {
+    "fate": "pattern",
+    "destiny": "directionality",
+    "lesson": "information",
+    "challenge": "friction",
+    "gift": "capacity"
+  }
+}
+
+
+3.4 Uncertainty expression rules
+"uncertainty_expression": {
+  "required_markers_allowed": [
+    "may",
+    "might",
+    "can",
+    "often",
+    "tends to"
+  ],
+  "false_certainty_banned": true,
+  "allowed_phrases": [
+    "this can land differently depending on context",
+    "there are multiple ways this can show up",
+    "you will know more by noticing how it feels"
+  ],
+  "forbidden_phrases": [
+    "this always means",
+    "this guarantees",
+    "without a doubt"
+  ]
+}
+
+
+3.5 Difficulty framing
+"difficulty_framing": {
+  "allowed_frames": [
+    "load",
+    "pressure",
+    "complexity",
+    "adaptation_required"
+  ],
+  "allowed_phrases": [
+    "this can feel demanding",
+    "there may be more pressure here",
+    "this asks for sustained attention"
+  ],
+  "forbidden_frames": [
+    "punishment",
+    "test",
+    "reckoning",
+    "karmic_debt"
+  ],
+  "forbidden_phrases": [
+    "hard time",
+    "you are being tested",
+    "this is a karmic reckoning"
+  ]
+}
+
+
+3.6 Tone & register limits
+"tone_and_register": {
+  "emotional_tone": {
+    "allowed": ["calm", "attuned", "non_judgmental"],
+    "forbidden": ["alarmist", "overly_reassuring", "mystical"]
+  },
+  "authority_style": {
+    "allowed": ["earned", "grounded"],
+    "forbidden": ["guru", "oracle", "omniscient"]
+  },
+  "listener_assumption": {
+    "assume_intelligent": true,
+    "forbid_infantilizing_language": true
+  }
+}
+
+
+3.7 Format guidance (light enforcement)
+"format_guidance": {
+  "short_form": {
+    "max_frames": 2,
+    "require_single_thread": true,
+    "avoid_over_explaining": true
+  },
+  "long_form": {
+    "max_frames": 3,
+    "allow_synthesis": true,
+    "require_pacing": true
+  }
+}
+
+
+3.8 Violation classes
+"violation_classes": {
+  "DETERMINISTIC_LANGUAGE": {
+    "severity": "blocking",
+    "description": "Uses certainty or prophecy framing."
+  },
+  "HOROSCOPE_CLICHE": {
+    "severity": "blocking",
+    "description": "Uses clichéd horoscope language."
+  },
+  "FEAR_BASED_TONE": {
+    "severity": "blocking",
+    "description": "Uses alarmist or threatening tone."
+  },
+  "PRESCRIPTIVE_COMMAND": {
+    "severity": "blocking",
+    "description": "Directs listener behavior."
+  }
+}
+
+
+4. Enforcement rules
+Voice writer must:
+Select sentence starters from allowlist
+Avoid forbidden vocabulary
+Preserve uncertainty markers
+QA must:
+Regex-scan for forbidden phrases
+Flag tone violations
+Reject outputs that exceed frame limits
+
+5. Lock statement
+This file is locked.
+Changes require:
+Update to human voice canon
+Version bump
+QA rule update
+

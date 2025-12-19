@@ -1,0 +1,103 @@
+{
+    "slug": "mercury_square_mars",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Mercury square Mars",
+    "summary": "A high-friction alignment between thinking and impulse. Thoughts accelerate faster than judgment, increasing the risk of reactive speech and rushed decisions. The task is to slow cognition enough to stay precise.",
+    "trigger": {
+      "signal_key": "mercury_square_mars",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "Speed without pause can turn insight into noise.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Mercury–Mars squares heighten mental urgency, making ideas feel immediate and action feel necessary—even when clarity isn’t complete."
+        },
+        {
+          "speakability": "must_say",
+          "text": "Reactivity increases when thoughts are acted on before they’re fully formed."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Conversations may feel sharper or more confrontational if pacing isn’t managed."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Quick problem-solving is possible, but it benefits from restraint."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This guarantees arguments or verbal conflict."
+        }
+      ],
+      "frictions": [
+        "Blurting thoughts before refining them",
+        "Interrupting or talking over others",
+        "Escalating disagreements unnecessarily",
+        "Mental agitation that blocks listening",
+        "Mistaking urgency for importance"
+      ],
+      "opportunities": [
+        "Identifying where impatience is driving decisions",
+        "Channeling sharp thinking into focused problem-solving",
+        "Practicing restraint under pressure",
+        "Improving communication through pacing",
+        "Turning agitation into decisive but measured action"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Pause before responding, especially in charged conversations.",
+        "Write or outline thoughts before acting on them.",
+        "Channel excess mental energy into structured tasks.",
+        "Ask questions instead of making assumptions.",
+        "Slow the conversation down if stakes are high."
+      ],
+      "avoid": [
+        "Reacting to every thought as if it needs action",
+        "Using sharp language to feel in control",
+        "Rushing decisions to relieve tension",
+        "Assuming others are obstacles",
+        "Ignoring signs of mental overload"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Speed is useful only when it’s controlled."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Pause sharpens the point."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting fights, hostility, or aggression",
+        "Moralizing anger or impatience",
+        "Attributing conflict to others’ intent"
+      ],
+      "allowed_framing": [
+        "Energy-management language: 'mental urgency', 'pacing'",
+        "Agency-based framing: 'you can slow this down…'",
+        "Contextual framing: 'if conversations feel heated…'"
+      ]
+    },
+    "tags": [
+      "mental_speed",
+      "reactivity",
+      "communication",
+      "impatience",
+      "pacing",
+      "cognitive_friction"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Mercury–Mars square as thought/impulse tension archetype"
+    ]
+  }
+  

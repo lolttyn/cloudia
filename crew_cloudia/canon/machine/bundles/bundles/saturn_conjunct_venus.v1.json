@@ -1,0 +1,103 @@
+{
+    "slug": "saturn_conjunct_venus",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Saturn conjunct Venus",
+    "summary": "A convergence of values and responsibility. What you care about seeks form, commitment, and durability. The opportunity is to invest in what matters with realism and restraint—without emotional shutdown.",
+    "trigger": {
+      "signal_key": "saturn_conjunct_venus",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "Value becomes real when it’s supported by commitment.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Saturn–Venus conjunctions ask for seriousness about what you value, turning preference into practice."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect supports durable bonds and choices made with long-term consequences in mind."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Affection, creativity, or resources may be expressed more quietly but more reliably."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Commitment can feel grounding when it’s chosen consciously."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This means emotional coldness or lack of love."
+        }
+      ],
+      "frictions": [
+        "Emotional restraint mistaken for lack of feeling",
+        "Fear of vulnerability disguised as maturity",
+        "Over-structuring relationships or creative work",
+        "Choosing safety over authenticity",
+        "Equating seriousness with distance"
+      ],
+      "opportunities": [
+        "Making commitments that actually last",
+        "Stabilizing relationships, finances, or creative projects",
+        "Building trust through consistency",
+        "Aligning values with realistic plans",
+        "Investing energy where returns compound over time"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Name what you’re willing to commit to long-term.",
+        "Express care through reliability and follow-through.",
+        "Create structures that support what you value.",
+        "Let restraint coexist with warmth.",
+        "Choose quality and durability over immediacy."
+      ],
+      "avoid": [
+        "Withholding affection to appear strong",
+        "Confusing commitment with obligation",
+        "Over-controlling outcomes in the name of stability",
+        "Settling for safety without resonance",
+        "Assuming seriousness requires emotional distance"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "What you commit to shapes what you value."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Durability is built through consistent care."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting permanent bonds or outcomes",
+        "Framing restraint as emotional superiority",
+        "Deterministic relationship or financial forecasts"
+      ],
+      "allowed_framing": [
+        "Commitment-based language: 'investment', 'durability'",
+        "Agency-forward framing: 'you can choose to commit…'",
+        "Contextual framing: 'if you’re focused on long-term stability…'"
+      ]
+    },
+    "tags": [
+      "commitment",
+      "values",
+      "stability",
+      "structure",
+      "long_term",
+      "investment"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Saturn–Venus conjunction as value/structure synthesis archetype"
+    ]
+  }
+  

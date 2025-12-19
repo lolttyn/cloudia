@@ -1,0 +1,103 @@
+{
+    "slug": "sun_conjunct_mercury",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Sun conjunct Mercury",
+    "summary": "A moment of alignment between identity and thought. Expression feels more direct, ideas are easier to articulate, and decisions benefit from coherence between intention and reasoning.",
+    "trigger": {
+      "signal_key": "sun_conjunct_mercury",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "What you think and what you mean are easier to line up.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Sun–Mercury conjunctions support clarity of expression: ideas move more cleanly from mind to voice or action."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This is a useful window for naming intentions, decisions, and perspectives that have been forming quietly."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Self-understanding improves when thoughts are spoken or written aloud."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Communication tends to feel more personal, because ideas are closely tied to identity."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This guarantees insight or intellectual success."
+        }
+      ],
+      "frictions": [
+        "Over-identifying with opinions",
+        "Talking faster than listening",
+        "Mistaking clarity for completeness",
+        "Becoming defensive when ideas are challenged",
+        "Assuming others share your context"
+      ],
+      "opportunities": [
+        "Clarifying goals through writing or conversation",
+        "Making decisions with fewer internal contradictions",
+        "Communicating priorities clearly",
+        "Advocating for yourself with coherence",
+        "Integrating new information into a stable self-concept"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Write or speak your thinking to refine it.",
+        "State decisions plainly, without overexplaining.",
+        "Ask clarifying questions to test your assumptions.",
+        "Use this alignment to resolve lingering indecision.",
+        "Separate ideas from identity when receiving feedback."
+      ],
+      "avoid": [
+        "Dominating conversations",
+        "Equating disagreement with misunderstanding",
+        "Rushing conclusions because things feel clear",
+        "Treating opinions as fixed truths",
+        "Neglecting nuance for the sake of speed"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Clarity improves when intention and thinking move together."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Say it simply and see what holds."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Claims of superior intelligence or correctness",
+        "Deterministic statements about decisions being ‘right’",
+        "Framing identity as fixed by thoughts"
+      ],
+      "allowed_framing": [
+        "Process-oriented framing: 'helps clarify', 'supports expression'",
+        "Agency-forward language: 'you can articulate…'",
+        "Contextual framing: 'if you’ve been sorting through ideas…'"
+      ]
+    },
+    "tags": [
+      "clarity",
+      "communication",
+      "thinking",
+      "identity",
+      "expression",
+      "decision_making"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Sun–Mercury conjunction as identity/thought alignment archetype"
+    ]
+  }
+  

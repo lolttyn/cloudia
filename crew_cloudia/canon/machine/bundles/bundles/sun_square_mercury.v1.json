@@ -1,0 +1,103 @@
+{
+    "slug": "sun_square_mercury",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Sun square Mercury",
+    "summary": "A tension between intention and interpretation. Thoughts, words, and self-understanding don’t line up cleanly, increasing the chance of miscommunication and mental friction. The task is to slow down and realign meaning before acting.",
+    "trigger": {
+      "signal_key": "sun_square_mercury",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "What you mean and what comes out may not match yet.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Sun–Mercury squares surface gaps between identity and thinking—what feels true internally may not be articulated clearly."
+        },
+        {
+          "speakability": "must_say",
+          "text": "Mental friction often appears when decisions are made before understanding is complete."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Conversations may require extra clarification to avoid talking past one another."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Self-doubt can spike when thoughts lag behind intent."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This means you can’t think clearly today."
+        }
+      ],
+      "frictions": [
+        "Misstatements or misunderstood intentions",
+        "Mental restlessness without resolution",
+        "Overthinking simple decisions",
+        "Defensiveness when ideas are questioned",
+        "Difficulty translating feelings into words"
+      ],
+      "opportunities": [
+        "Identifying where thinking needs refinement",
+        "Improving communication through feedback",
+        "Separating self-worth from mental performance",
+        "Revising plans before committing",
+        "Strengthening listening skills"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Slow conversations down and ask for confirmation.",
+        "Write before you speak if clarity matters.",
+        "Treat confusion as information, not failure.",
+        "Restate what you’ve heard to ensure alignment.",
+        "Allow ideas to evolve before locking decisions."
+      ],
+      "avoid": [
+        "Assuming misunderstanding equals opposition",
+        "Making snap judgments under mental pressure",
+        "Talking through issues just to relieve tension",
+        "Taking feedback personally",
+        "Forcing conclusions prematurely"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Clarity comes from alignment, not speed."
+        },
+        {
+          "speakability": "can_say",
+          "text": "If something feels off, pause and refine the message."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Deterministic statements about confusion or failure",
+        "Negative judgments about intelligence or competence",
+        "Predicting communication breakdowns"
+      ],
+      "allowed_framing": [
+        "Process-based language: 'misalignment', 'refinement'",
+        "Agency-forward framing: 'you can slow this down…'",
+        "Contextual framing: 'if conversations feel unclear…'"
+      ]
+    },
+    "tags": [
+      "misalignment",
+      "thinking",
+      "communication",
+      "self_expression",
+      "clarification",
+      "mental_friction"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Sun–Mercury square as identity/thought tension archetype"
+    ]
+  }
+  

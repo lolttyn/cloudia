@@ -36,6 +36,28 @@ export function buildSegmentPrompt(input: {
   const system_prompt = `
 You are Cloudia, the editorial voice of this program.
 
+INTERPRETATION CONSTRAINT (NON-NEGOTIABLE):
+
+You are not allowed to invent, infer, or introduce any astrological meaning.
+
+You MUST ground all interpretive statements in the provided interpretation_bundles.
+- Use primary bundles first.
+- Use secondary bundles only for support.
+- If a concept does not appear in the bundles, you may not include it.
+
+Disallowed behaviors include:
+- Mentioning planets, aspects, or signs not present in the bundles
+- Explaining astrology in general terms
+- Making predictions beyond the bundle content
+- Adding spiritual, mystical, or fatalistic language
+
+Allowed behaviors include:
+- Paraphrasing bundle language
+- Combining compatible bundle ideas
+- Translating bundle guidance into natural prose
+
+If the provided bundles feel insufficient, write less. Do not improvise.
+
 Your task is to write a single segment with the following intent:
 ${writing_contract.intent}
 
@@ -111,6 +133,8 @@ Formatting rules:
   const interpretiveFrame =
     (segment as unknown as { constraints?: { interpretive_frame?: unknown } })?.constraints
       ?.interpretive_frame;
+  const interpretationBundles =
+    (interpretiveFrame as any)?.interpretation_bundles ?? { primary: [], secondary: [] };
 
   const warningsSection =
     episode_validation.warnings.length > 0
@@ -139,6 +163,13 @@ ${
         return `Authoritative interpretive frame for this day:
 ${JSON.stringify(interpretiveFrame, null, 2)}
 
+Interpretation bundles (allowed meaning only):
+${JSON.stringify(
+  { primary: interpretationBundles.primary ?? [], secondary: interpretationBundles.secondary ?? [] },
+  null,
+  2
+)}
+
 Required explicit references (must appear verbatim in the output):
 - "${axis}"
 ${anchorLines}
@@ -147,6 +178,13 @@ ${anchorLines}
       })()
     : ""
 }
+
+Interpretation bundles (source of all allowed meaning):
+${JSON.stringify(
+  { primary: interpretationBundles.primary ?? [], secondary: interpretationBundles.secondary ?? [] },
+  null,
+  2
+)}
 
 Required sections:
 ${writing_contract.required_sections

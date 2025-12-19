@@ -1,0 +1,103 @@
+{
+    "slug": "saturn_square_mars",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Saturn square Mars",
+    "summary": "A tension between effort and constraint. Action meets resistance, forcing a confrontation with limits, pacing, and strategy. The task is to apply force intelligently rather than exhausting yourself against obstacles.",
+    "trigger": {
+      "signal_key": "saturn_square_mars",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "Pushing harder isn’t always the answer.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Saturn–Mars squares expose where raw effort collides with structural limits, making inefficiency impossible to ignore."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect asks for disciplined action—strength that’s applied with awareness of constraints."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Frustration often arises when momentum is blocked by rules, timing, or capacity."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Endurance is tested more than speed."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This means you’re stuck or destined to fail."
+        }
+      ],
+      "frictions": [
+        "Burnout from forcing progress",
+        "Anger toward limits or authority",
+        "Feeling slowed down or restrained",
+        "Misusing effort on immovable obstacles",
+        "Confusing persistence with self-punishment"
+      ],
+      "opportunities": [
+        "Refining strategy instead of increasing force",
+        "Building stamina through pacing",
+        "Learning when to push and when to pause",
+        "Strengthening discipline under pressure",
+        "Turning frustration into structural improvement"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Assess which obstacles are structural versus temporary.",
+        "Redirect effort toward what can actually move.",
+        "Pace physical and mental energy deliberately.",
+        "Build strength through consistency, not strain.",
+        "Respect limits without internalizing them as failure."
+      ],
+      "avoid": [
+        "Doubling effort without adjusting strategy",
+        "Taking resistance personally",
+        "Letting frustration drive reckless action",
+        "Ignoring signs of exhaustion or injury",
+        "Framing endurance as suffering"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Strength works best when it’s applied with awareness of limits."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Discipline is direction, not punishment."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting accidents, injury, or harm",
+        "Moralizing struggle or toughness",
+        "Deterministic outcomes around failure or success"
+      ],
+      "allowed_framing": [
+        "Effort-based language: 'pacing', 'strategy', 'endurance'",
+        "Agency-forward framing: 'you can redirect effort…'",
+        "Contextual framing: 'if resistance feels high…'"
+      ]
+    },
+    "tags": [
+      "effort",
+      "constraint",
+      "discipline",
+      "endurance",
+      "resistance",
+      "strategy"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Saturn–Mars square as effort/constraint tension archetype"
+    ]
+  }
+  

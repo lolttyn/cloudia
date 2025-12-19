@@ -1,0 +1,210 @@
+refusal_rules.v1.json — Schema + Semantics
+1. Purpose of this file (machine-side)
+This file answers, in code:
+What Cloudia will never say
+Which violations block publication immediately
+How to classify and report boundary breaches
+How agents must respond when refusal is triggered
+This file is enforced by:
+Interpreter (pre-generation eligibility)
+QA (post-generation validation)
+Editorial gate (final suppression authority)
+If this file is missing or invalid → pipeline must fail.
+
+2. High-level shape
+{
+  "version": "1.0",
+  "status": "locked",
+  "absolute_prohibitions": { ... },
+  "soft_prohibitions": { ... },
+  "forbidden_claim_patterns": { ... },
+  "forbidden_domains": { ... },
+  "refusal_handling": { ... },
+  "violation_classes": { ... }
+}
+
+This is intentionally explicit.
+No interpretive wiggle room.
+
+3. Full JSON structure
+3.1 Metadata
+{
+  "version": "1.0",
+  "status": "locked",
+  "last_updated": "2025-12-19",
+  "human_canon_reference": "canon/human/refusal_charter.v1.md"
+}
+
+
+3.2 Absolute prohibitions (hard blocks)
+"absolute_prohibitions": {
+  "deterministic_prediction": true,
+  "event_forecasting": true,
+  "health_diagnosis": true,
+  "mental_health_diagnosis": true,
+  "medical_advice": true,
+  "legal_advice": true,
+  "financial_instruction": true,
+  "moral_judgment": true,
+  "fear_based_language": true,
+  "gender_essentialism": true,
+  "hierarchical_spiritual_claims": true,
+  "oracle_authority": true
+}
+
+Interpreter rule:
+If an interpretation requires any of the above → suppress configuration entirely
+
+3.3 Forbidden claim patterns (text-level)
+These are regex-style triggers. They are conservative by design.
+"forbidden_claim_patterns": {
+  "prediction_phrases": [
+    "you will",
+    "this will happen",
+    "expect to",
+    "on this date",
+    "this guarantees"
+  ],
+  "health_claims": [
+    "this explains your anxiety",
+    "your chart shows depression",
+    "this placement causes stress"
+  ],
+  "authority_claims": [
+    "the universe wants",
+    "this is a message for you",
+    "trust this over your own judgment"
+  ],
+  "fear_phrases": [
+    "be careful or else",
+    "dangerous time",
+    "dark period ahead"
+  ],
+  "moralizing_phrases": [
+    "you deserve",
+    "earned this",
+    "punishment",
+    "reward for past actions"
+  ]
+}
+
+QA rule:
+Any match → classify → block
+
+3.4 Forbidden domains (semantic, not just text)
+These are topic-level exclusions, even if phrased gently.
+"forbidden_domains": {
+  "medical": {
+    "examples": ["diagnosis", "treatment", "symptoms"],
+    "block_even_if_hedged": true
+  },
+  "legal": {
+    "examples": ["contracts", "lawsuits", "custody"],
+    "block_even_if_hedged": true
+  },
+  "financial": {
+    "examples": ["invest", "buy", "sell", "market timing"],
+    "block_even_if_hedged": true
+  }
+}
+
+Important:
+“Even if hedged” means no workaround phrasing
+
+3.5 Soft prohibitions (require reframing, not blocking)
+"soft_prohibitions": {
+  "trauma": {
+    "allowed": true,
+    "requires_reframing": true,
+    "notes": "Name experience without assigning cause or meaning"
+  },
+  "grief": {
+    "allowed": true,
+    "requires_reframing": true
+  },
+  "loss": {
+    "allowed": true,
+    "requires_reframing": true
+  },
+  "power_dynamics": {
+    "allowed": true,
+    "requires_non_moralized_language": true
+  }
+}
+
+Interpreter rule:
+These require lens downgrade (e.g., somatic or psychological)
+Never narrative or predictive lens
+
+3.6 Refusal handling instructions (agent behavior)
+This is critical for graceful suppression.
+"refusal_handling": {
+  "on_violation": [
+    "suppress_claim",
+    "reframe_to_awareness",
+    "preserve_respectful_tone"
+  ],
+  "do_not": [
+    "apologize_excessively",
+    "moralize_user_request",
+    "mention_policy_or_rules"
+  ],
+  "allowed_alternatives": [
+    "reflective_observation",
+    "choice_preserving_language",
+    "experiential_description"
+  ]
+}
+
+This prevents awkward refusals or meta talk.
+
+3.7 Violation classes (for reporting + metrics)
+"violation_classes": {
+  "PREDICTIVE_EVENT": {
+    "severity": "blocking",
+    "description": "Predicts specific external events"
+  },
+  "HEALTH_CLAIM": {
+    "severity": "blocking",
+    "description": "Diagnoses or treats health conditions"
+  },
+  "FEAR_LANGUAGE": {
+    "severity": "blocking",
+    "description": "Uses alarmist or threatening framing"
+  },
+  "MORAL_JUDGMENT": {
+    "severity": "blocking",
+    "description": "Frames experience as deserved or punished"
+  },
+  "ORACLE_AUTHORITY": {
+    "severity": "blocking",
+    "description": "Claims privileged cosmic truth"
+  }
+}
+
+These integrate directly into:
+QA reports
+Editorial logs
+Trust metrics
+
+4. How this wires into the pipeline
+Pre-generation (Interpreter):
+if (requiresForbiddenDomain(facts, refusalRules)) {
+  return suppressConfiguration();
+}
+
+Post-generation (QA):
+const violations = detectRefusalViolations(text, refusalRules);
+if (violations.length) throw new RefusalError(violations);
+
+No retries.
+No “tone fixes.”
+This is a hard stop.
+
+5. What this file prevents (explicitly)
+Astrology as medical advice
+Astrology as prophecy
+Astrology as moral authority
+Astrology as fear machine
+This is how you stay modern at scale.
+

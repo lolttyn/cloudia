@@ -1,4 +1,7 @@
 import interpretiveCanon from "./canon/interpretiveCanon_v1.json" assert { type: "json" };
+import { loadInterpretationBundles } from "./bundles/loadInterpretationBundles.js";
+import { selectInterpretationBundles } from "./bundles/selectInterpretationBundles.js";
+import { deriveSignalsFromSkyFeatures } from "./signals/deriveSignalsFromSkyFeatures.js";
 import { extractSkyFeatures, SkyFeatures, SkyAspect } from "./sky/extractSkyFeatures.js";
 import { InterpretiveFrame, InterpretiveFrameSchema } from "./schema/InterpretiveFrame.js";
 
@@ -17,6 +20,8 @@ type InterpreterInput = {
 type CanonSunSign = InterpretiveCanon["sun_signs"][string];
 type CanonMoonSign = InterpretiveCanon["moon_signs"][string];
 type CanonPhase = InterpretiveCanon["moon_phases"][keyof InterpretiveCanon["moon_phases"]];
+
+const BUNDLE_INDEX = loadInterpretationBundles();
 
 function validateDate(date: string) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
@@ -238,6 +243,8 @@ export async function runInterpreter(input: InterpreterInput): Promise<Interpret
     input.date
   );
 
+  const signals = deriveSignalsFromSkyFeatures(features);
+
   const frame: InterpretiveFrame = {
     date: features.date,
     dominant_contrast_axis: axis,
@@ -252,6 +259,11 @@ export async function runInterpreter(input: InterpreterInput): Promise<Interpret
     continuity,
     temporal_arc: deriveTemporalArc(temporal_phase, intensity_modifier, features, windowFeatures),
     timing: { state: phaseEntry.timing_state, notes: timingNotes },
+    signals,
+    interpretation_bundles: selectInterpretationBundles({
+      signals,
+      bundleIndex: BUNDLE_INDEX,
+    }),
     confidence_level: confidenceFrom(aspect),
     canon_compliance: {
       violations: [],

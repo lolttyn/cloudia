@@ -1,0 +1,103 @@
+{
+    "slug": "venus_conjunct_mars",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Venus conjunct Mars",
+    "summary": "A convergence of attraction and initiative. Desire is easier to act on, and actions are more likely to reflect genuine preference. The opportunity is embodied momentum without overreach.",
+    "trigger": {
+      "signal_key": "venus_conjunct_mars",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "Desire and movement are aligned.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Venus–Mars conjunctions bring coherence between what you want and what you’re willing to do about it."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect supports direct engagement when intention and action are mutually reinforcing."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Creative and relational initiatives tend to feel more embodied and decisive."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Attraction is easier to express when there’s clarity about appetite and boundaries."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This guarantees passion, romance, or success."
+        }
+      ],
+      "frictions": [
+        "Moving too quickly because alignment feels good",
+        "Assuming mutual desire without confirmation",
+        "Overidentifying with momentum",
+        "Letting excitement override discernment",
+        "Burning energy without direction"
+      ],
+      "opportunities": [
+        "Acting on desire with clarity and consent",
+        "Advancing creative or relational goals",
+        "Strengthening confidence through embodied action",
+        "Making clean, timely moves",
+        "Aligning effort with genuine interest"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Act on what you want while staying attentive to response.",
+        "Check that momentum is mutual, not assumed.",
+        "Use embodied energy to initiate something meaningful.",
+        "Let enthusiasm inform action without rushing outcomes.",
+        "Stay present to feedback as you move forward."
+      ],
+      "avoid": [
+        "Equating intensity with depth",
+        "Forcing alignment where it doesn’t exist",
+        "Ignoring pacing because things feel good",
+        "Letting excitement bypass communication",
+        "Overcommitting in the heat of the moment"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "When desire and action align, momentum becomes usable."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Move with what wants to move—while staying responsive."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting sexual, romantic, or creative outcomes",
+        "Framing desire as entitlement",
+        "Guarantees of success or mutuality"
+      ],
+      "allowed_framing": [
+        "Agency-forward language: 'you can choose to act…'",
+        "Embodiment language: 'alignment', 'momentum'",
+        "Contextual framing: 'if desire and clarity are present…'"
+      ]
+    },
+    "tags": [
+      "alignment",
+      "desire",
+      "initiative",
+      "momentum",
+      "creativity",
+      "embodiment"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Venus–Mars conjunction as desire/action alignment archetype"
+    ]
+  }
+  

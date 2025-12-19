@@ -1,0 +1,285 @@
+aspect_dynamics.v1.json — Schema + Semantics
+1. Purpose of this file
+Defines, in code:
+What each major aspect does as a system interaction
+Constructive vs distorted expressions (non-moralized)
+Allowed language patterns
+Forbidden language patterns (benefic/malefic, alarmist)
+Intensity modifiers (orb, activation) framed as salience, not consequence
+Used by:
+Interpretation bundle creation
+Interpreter (Layer 2)
+QA enforcement
+Repetition control (metaphor rotation)
+No aspect meaning is allowed unless it exists here.
+
+2. High-level shape
+{
+  "version": "1.0",
+  "status": "locked",
+  "defaults": { ... },
+  "aspects": {
+    "conjunction": { ... },
+    "opposition": { ... },
+    "square": { ... },
+    "trine": { ... },
+    "sextile": { ... }
+  },
+  "global_forbidden_framings": [],
+  "violation_classes": { ... }
+}
+
+
+3. Canonical aspect schema
+Each aspect uses a consistent schema for determinism.
+{
+  "id": "square",
+  "symbol": "□",
+  "core_dynamic": "...",
+  "system_model": ["..."],
+  "experiential_qualities": [],
+  "constructive_expressions": [],
+  "distorted_expressions": [],
+  "interpretive_language": {
+    "preferred_verbs": [],
+    "preferred_phrases": [],
+    "avoid_phrases": []
+  },
+  "common_misreads": [],
+  "intensity_modifiers": { ... }
+}
+
+
+4. Full JSON document (v1)
+4.1 Metadata + defaults
+{
+  "version": "1.0",
+  "status": "locked",
+  "last_updated": "2025-12-19",
+  "human_canon_reference": "canon/human/aspect_tension_framework.v1.md",
+  "defaults": {
+    "intensity_is_salience_not_consequence": true,
+    "no_benefic_malefic_language": true
+  }
+}
+
+
+4.2 Global forbidden framings
+These are banned across all aspect interpretations.
+"global_forbidden_framings": [
+  "good aspect",
+  "bad aspect",
+  "lucky",
+  "unlucky",
+  "blessing",
+  "curse",
+  "doomed",
+  "dangerous",
+  "guaranteed outcome"
+]
+
+
+4.3 Aspect definitions
+☌ Conjunction
+"aspects": {
+  "conjunction": {
+    "id": "conjunction",
+    "symbol": "☌",
+    "core_dynamic": "Amplification and fusion of two functions in the same attentional space.",
+    "system_model": ["amplification", "concentration", "saturation"],
+    "experiential_qualities": ["focus", "heightened salience", "intensity"],
+    "constructive_expressions": [
+      "unified drive",
+      "deep focus",
+      "coherent activation"
+    ],
+    "distorted_expressions": [
+      "over-identification",
+      "blind spots from intensity",
+      "burnout through excess"
+    ],
+    "interpretive_language": {
+      "preferred_verbs": ["amplifies", "intensifies", "concentrates", "brings into focus"],
+      "preferred_phrases": [
+        "brings this theme into sharp focus",
+        "intensifies attention around"
+      ],
+      "avoid_phrases": ["overwhelming", "fated union", "too much energy"]
+    },
+    "common_misreads": [
+      "treating intensity as inevitability",
+      "calling the conjunction inherently good or bad"
+    ],
+    "intensity_modifiers": {
+      "orb_notes": "Tighter orbs increase salience and attention capture, not consequences.",
+      "activation_notes": "Activation increases felt immediacy; do not predict events."
+    }
+  },
+
+☍ Opposition
+ "opposition": {
+    "id": "opposition",
+    "symbol": "☍",
+    "core_dynamic": "Polarity that creates awareness through contrast and relational mirroring.",
+    "system_model": ["contrast", "polarity", "integration demand"],
+    "experiential_qualities": ["choice awareness", "tension through difference", "mirroring"],
+    "constructive_expressions": [
+      "perspective-taking",
+      "conscious negotiation",
+      "dynamic balance"
+    ],
+    "distorted_expressions": [
+      "projection",
+      "false either/or framing",
+      "externalizing responsibility"
+    ],
+    "interpretive_language": {
+      "preferred_verbs": ["highlights", "mirrors", "polarizes", "invites integration"],
+      "preferred_phrases": [
+        "highlights a contrast that asks for integration",
+        "invites perspective rather than certainty"
+      ],
+      "avoid_phrases": ["conflict", "us vs them", "inevitable showdown"]
+    },
+    "common_misreads": [
+      "treating opposition as purely conflict",
+      "assuming the 'other side' is the problem"
+    ],
+    "intensity_modifiers": {
+      "orb_notes": "Tighter orbs sharpen contrast and awareness; avoid escalation language.",
+      "activation_notes": "Activation can increase relational salience; do not imply outcomes."
+    }
+  },
+
+□ Square
+ "square": {
+    "id": "square",
+    "symbol": "□",
+    "core_dynamic": "Friction that requires adaptation as functions interfere or compete for resources.",
+    "system_model": ["friction", "constraint", "adaptation pressure"],
+    "experiential_qualities": ["pressure", "effort", "problem-solving demand"],
+    "constructive_expressions": [
+      "skill-building",
+      "adaptive capacity",
+      "resilient growth"
+    ],
+    "distorted_expressions": [
+      "reactivity",
+      "chronic frustration",
+      "self-criticism"
+    ],
+    "interpretive_language": {
+      "preferred_verbs": ["creates friction", "requires adjustment", "pressurizes", "calls for adaptation"],
+      "preferred_phrases": [
+        "requires ongoing adjustment",
+        "creates productive friction when engaged skillfully"
+      ],
+      "avoid_phrases": ["obstacle", "blockage", "bad aspect", "overcome at all costs"]
+    },
+    "common_misreads": [
+      "framing the square as punishment",
+      "pushing through instead of adapting"
+    ],
+    "intensity_modifiers": {
+      "orb_notes": "Tighter orbs increase felt pressure and immediacy; not 'worse' outcomes.",
+      "activation_notes": "Activation can amplify urgency; enforce pacing language."
+    }
+  },
+
+△ Trine
+ "trine": {
+    "id": "trine",
+    "symbol": "△",
+    "core_dynamic": "Ease and flow that reduces resistance between functions, increasing coherence.",
+    "system_model": ["flow", "compatibility", "low activation cost"],
+    "experiential_qualities": ["comfort", "familiarity", "smooth circulation"],
+    "constructive_expressions": [
+      "natural competence",
+      "sustainable rhythm",
+      "effortless collaboration"
+    ],
+    "distorted_expressions": [
+      "complacency",
+      "underdevelopment",
+      "avoidance of challenge"
+    ],
+    "interpretive_language": {
+      "preferred_verbs": ["supports", "flows", "stabilizes", "harmonizes"],
+      "preferred_phrases": [
+        "supports coherence without requiring strain",
+        "flows easily but may reduce urgency"
+      ],
+      "avoid_phrases": ["lucky", "guaranteed success", "always positive"]
+    },
+    "common_misreads": [
+      "assuming ease equals growth",
+      "treating trine as automatic reward"
+    ],
+    "intensity_modifiers": {
+      "orb_notes": "Tighter orbs increase coherence and ease; note inertia risk if relevant.",
+      "activation_notes": "Activation can make benefits more noticeable; do not promise outcomes."
+    }
+  },
+
+✶ Sextile
+ "sextile": {
+    "id": "sextile",
+    "symbol": "✶",
+    "core_dynamic": "Opportunity through compatibility that requires engagement to become real.",
+    "system_model": ["invitation", "optional activation", "responsive potential"],
+    "experiential_qualities": ["light stimulation", "possibility", "choiceful engagement"],
+    "constructive_expressions": [
+      "skillful collaboration",
+      "creative experimentation",
+      "responsive action"
+    ],
+    "distorted_expressions": [
+      "missed opportunity",
+      "passive waiting",
+      "underutilization"
+    ],
+    "interpretive_language": {
+      "preferred_verbs": ["offers", "invites", "supports engagement", "responds well to initiative"],
+      "preferred_phrases": [
+        "offers an opening if you engage it",
+        "supports experimentation without forcing it"
+      ],
+      "avoid_phrases": ["easy win", "guaranteed benefit", "automatic success"]
+    },
+    "common_misreads": [
+      "treating sextile as automatic",
+      "overpromising outcomes from possibility"
+    ],
+    "intensity_modifiers": {
+      "orb_notes": "Tighter orbs increase availability and responsiveness; keep language optional.",
+      "activation_notes": "Activation can make openings more visible; do not force action."
+    }
+  }
+}
+
+
+4.4 Violation classes (reporting)
+"violation_classes": {
+  "BENEFIC_MALEFIC_FRAMING": {
+    "severity": "blocking",
+    "description": "Uses good/bad or lucky/unlucky framing for aspects."
+  },
+  "ALARMIST_ASPECT_LANGUAGE": {
+    "severity": "blocking",
+    "description": "Uses fear-based or catastrophic language about an aspect."
+  },
+  "ASPECT_AS_FATE": {
+    "severity": "blocking",
+    "description": "Treats an aspect as determining outcomes rather than describing interaction."
+  }
+}
+
+
+5. Enforcement rules
+Interpreter must:
+Use core_dynamic + system_model as the basis for meaning
+Avoid any forbidden framing
+Allow multiple frames in bundles (not single “square = bad”)
+QA must:
+Scan for forbidden framings globally
+Flag any aspect language not aligned with this file

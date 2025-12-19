@@ -1,0 +1,103 @@
+{
+  "slug": "venus_trine_mars",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Venus trine Mars",
+  "summary": "A cooperative flow between desire and action. What you want and what you're willing to do about it are aligned, making initiative feel natural rather than forced. The opportunity is clean expression without overreach.",
+  "trigger": {
+    "signal_key": "venus_trine_mars",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Attraction and initiative are speaking the same language today.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "This aspect supports momentum that feels mutual: effort is met with responsiveness rather than resistance."
+      },
+      {
+        "speakability": "must_say",
+        "text": "It's easier to act on what you value without needing to justify or overexplain yourself."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Social and creative interactions tend to feel smoother because signals are clearer and timing is cleaner."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Confidence comes from congruence—your actions match your tastes, priorities, and boundaries."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Everything will fall into place effortlessly."
+      }
+    ],
+    "frictions": [
+      "Complacency: assuming harmony means no effort is required",
+      "Over-indulgence disguised as self-care",
+      "Mistaking chemistry for long-term compatibility",
+      "Skipping reflection because things feel easy",
+      "Letting charm replace clarity"
+    ],
+    "opportunities": [
+      "Making a direct move that feels well-timed",
+      "Collaborating without power struggles",
+      "Advocating for what you want without aggression",
+      "Strengthening relationships through follow-through",
+      "Advancing creative or relational goals with minimal friction"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Act while motivation and alignment are present—this is a good day for clean initiative.",
+      "Say what you want plainly, without hedging or pressure.",
+      "Channel momentum into something constructive rather than scattering it.",
+      "Notice where cooperation shows up and reinforce it with follow-through.",
+      "Let enjoyment be evidence, not an excuse."
+    ],
+    "avoid": [
+      "Assuming ease means permanence",
+      "Overcommitting socially or creatively just because you can",
+      "Using charm to bypass necessary conversations",
+      "Confusing desire with obligation",
+      "Letting momentum replace intention"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "When desire and action align, progress doesn't need to be forced."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Ease is a resource—use it deliberately."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of romantic or creative success",
+      "Assumptions about others' intentions or availability",
+      "Framing attraction as obligation or destiny"
+    ],
+    "allowed_framing": [
+      "Possibility-based language: supports or can help, not guarantees",
+      "Agency-based framing: you choose how to act on attraction and motivation",
+      "Context framing: depends on mutual willingness and timing"
+    ]
+  },
+  "tags": [
+    "cooperation",
+    "initiative",
+    "desire",
+    "relationships",
+    "creativity",
+    "momentum"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Relational dynamics of Venus trine Mars"
+  ]
+}
+

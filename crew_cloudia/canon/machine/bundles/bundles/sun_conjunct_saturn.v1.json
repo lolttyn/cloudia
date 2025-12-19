@@ -1,0 +1,103 @@
+{
+    "slug": "sun_conjunct_saturn",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Sun conjunct Saturn",
+    "summary": "A moment of consolidation and accountability. Attention turns toward duty, limits, and long-term integrity. The task is to take yourself seriously without collapsing into heaviness or self-denial.",
+    "trigger": {
+      "signal_key": "sun_conjunct_saturn",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "This is about ownership—of time, role, and consequence.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Sun–Saturn conjunctions concentrate identity around responsibility: what you commit to now defines your next phase more than what you imagine."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This isn’t a punishment transit—it’s a clarity transit. It shows where structure is required to support growth."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Energy may feel heavier or more serious, but that weight is usable if you apply it deliberately."
+        },
+        {
+          "speakability": "can_say",
+          "text": "External authority or internal standards may feel louder; the question is which ones you actually respect."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This means you’re blocked or destined to struggle."
+        }
+      ],
+      "frictions": [
+        "Self-criticism that confuses maturity with harshness",
+        "Feeling burdened by obligations you never consciously chose",
+        "Delay caused by fear of getting it wrong",
+        "Over-identification with work or duty",
+        "Interpreting limits as personal failure"
+      ],
+      "opportunities": [
+        "Clarifying priorities and cutting what doesn’t belong",
+        "Making a commitment that stabilizes future effort",
+        "Earning trust through consistency rather than performance",
+        "Building something durable instead of impressive",
+        "Redefining success in realistic, embodied terms"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Name the responsibility you are actually carrying—and the ones you’re not.",
+        "Choose one serious task and give it your full attention.",
+        "Define success in concrete, measurable terms.",
+        "Set boundaries around time and energy to protect what matters.",
+        "Act with integrity even if recognition is delayed."
+      ],
+      "avoid": [
+        "Taking on obligations out of guilt or fear",
+        "Interpreting seriousness as lack of joy",
+        "Comparing your pace to someone else’s timeline",
+        "Collapsing under expectations instead of renegotiating them",
+        "Waiting for permission to take yourself seriously"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "This is a moment to define yourself by what you’re willing to stand behind."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Integrity compounds—even when progress feels slow."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Claims of inevitable hardship or failure",
+        "Framing responsibility as moral superiority",
+        "Deterministic career or life-path predictions"
+      ],
+      "allowed_framing": [
+        "Agency-forward language: 'you can choose to commit…'",
+        "Temporal framing: 'this phase emphasizes…'",
+        "Contextual realism: 'depending on existing pressures…'"
+      ]
+    },
+    "tags": [
+      "responsibility",
+      "identity",
+      "structure",
+      "commitment",
+      "integrity",
+      "long_term"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Sun–Saturn conjunction as identity/structure synthesis archetype"
+    ]
+  }
+  

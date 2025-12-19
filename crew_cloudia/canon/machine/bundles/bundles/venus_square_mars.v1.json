@@ -1,0 +1,103 @@
+{
+    "slug": "venus_square_mars",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Venus square Mars",
+    "summary": "A frictional alignment between desire and action. Wants are clear, but timing, approach, or reciprocity may be misaligned. The task is to notice where pursuit and receptivity are out of sync.",
+    "trigger": {
+      "signal_key": "venus_square_mars",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "Desire has energy, but not perfect timing.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Venus–Mars squares surface tension between attraction and execution, often showing where effort and receptivity don’t match."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This aspect highlights friction around pacing—wanting something now versus creating the conditions for it to work."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Creative or relational chemistry may feel charged but harder to stabilize."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Irritation can arise when desire isn’t met with the expected response."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This guarantees conflict, rejection, or sexual tension."
+        }
+      ],
+      "frictions": [
+        "Pushing when patience is required",
+        "Attraction without coordination",
+        "Creative blocks caused by forcing outcomes",
+        "Resentment from mismatched effort",
+        "Confusing intensity with compatibility"
+      ],
+      "opportunities": [
+        "Clarifying what you actually want versus how you’re pursuing it",
+        "Adjusting timing or approach to reduce resistance",
+        "Using tension as creative fuel rather than conflict",
+        "Learning where assertiveness needs refinement",
+        "Strengthening self-awareness around desire"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Notice whether effort is being met or resisted.",
+        "Adjust approach before escalating intensity.",
+        "Channel desire into constructive or creative outlets.",
+        "Pause and ask what response you’re actually seeking.",
+        "Let timing inform action, not just appetite."
+      ],
+      "avoid": [
+        "Forcing attraction or outcomes",
+        "Interpreting resistance as personal rejection",
+        "Escalating effort to overcome friction",
+        "Acting on impulse without reading context",
+        "Letting frustration turn into blame"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Desire needs timing as much as it needs energy."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Tension is information—adjust before you push."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting sexual or relational outcomes",
+        "Framing desire as obligation or entitlement",
+        "Moralizing attraction or frustration"
+      ],
+      "allowed_framing": [
+        "Timing-based language: 'pacing', 'approach', 'coordination'",
+        "Agency-forward framing: 'you can adjust how you pursue…'",
+        "Contextual framing: 'if attraction or creativity feels tense…'"
+      ]
+    },
+    "tags": [
+      "desire",
+      "tension",
+      "attraction",
+      "creativity",
+      "pacing",
+      "friction"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Venus–Mars square as desire/action tension archetype"
+    ]
+  }
+  

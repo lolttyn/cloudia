@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { InterpretationBundleSchema } from "../../canon/machine/bundles/interpretation_bundle_schema.js";
+import { InterpretationSignalSchema } from "../signals/signals.schema.js";
 
 const DateStringSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 
@@ -146,6 +148,17 @@ export const InterpretiveFrameSchema = z
     timing: z.object({
       state: z.enum(["building", "peaking", "settling", "transitioning"]),
       notes: z.string().min(1).optional(),
+    }),
+    signals: z.array(InterpretationSignalSchema).min(1),
+    interpretation_bundles: z.object({
+      primary: z.array(InterpretationBundleSchema),
+      secondary: z.array(InterpretationBundleSchema),
+      suppressed: z.array(
+        z.object({
+          bundle_slug: z.string(),
+          reason: z.string(),
+        })
+      ),
     }),
     confidence_level: z.enum(["high", "medium", "low"]),
     canon_compliance: z.object({

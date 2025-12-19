@@ -1,0 +1,369 @@
+planetary_functions.v1.json — Schema + Semantics
+1. Purpose of this file
+This file defines, in code:
+What each planet does psychologically
+How it can express healthily, excessively, or insufficiently
+What metaphors are allowed
+What language is explicitly forbidden
+Used by:
+Interpretation bundle creation
+Interpreter (Layer 2)
+QA enforcement
+Repetition detection
+No planet meaning is allowed unless it appears here.
+
+2. High-level shape
+{
+  "version": "1.0",
+  "status": "locked",
+  "planets": {
+    "sun": { ... },
+    "moon": { ... },
+    "mercury": { ... },
+    ...
+  }
+}
+
+
+3. Canonical planet schema
+Each planet follows the same schema to enforce consistency.
+{
+  "id": "saturn",
+  "psychological_function": "...",
+  "core_themes": [],
+  "healthy_expression": [],
+  "overdeveloped_expression": [],
+  "underdeveloped_expression": [],
+  "nervous_system_correlates": [],
+  "modern_metaphors": [],
+  "allowed_descriptors": [],
+  "forbidden_descriptors": []
+}
+
+
+4. Full planetary definitions (v1)
+☉ Sun
+"sun": {
+  "id": "sun",
+  "psychological_function": "identity coherence and vitality",
+  "core_themes": ["selfhood", "purpose", "authorship"],
+  "healthy_expression": [
+    "stable sense of self",
+    "confidence without domination",
+    "values-aligned action"
+  ],
+  "overdeveloped_expression": [
+    "ego rigidity",
+    "over-identification with role",
+    "performative identity"
+  ],
+  "underdeveloped_expression": [
+    "diffuse self-concept",
+    "low vitality",
+    "difficulty asserting presence"
+  ],
+  "nervous_system_correlates": [],
+  "modern_metaphors": [
+    "personal authorship",
+    "creative leadership",
+    "authentic personal brand"
+  ],
+  "allowed_descriptors": ["coherent", "vital", "self-directed"],
+  "forbidden_descriptors": ["egotistical", "dominant", "main character"]
+}
+
+
+☽ Moon
+"moon": {
+  "id": "moon",
+  "psychological_function": "emotional processing and felt safety",
+  "core_themes": ["regulation", "attachment", "belonging"],
+  "healthy_expression": [
+    "emotional literacy",
+    "responsive care",
+    "self-soothing capacity"
+  ],
+  "overdeveloped_expression": [
+    "emotional enmeshment",
+    "reactivity",
+    "over-identification with mood"
+  ],
+  "underdeveloped_expression": [
+    "emotional suppression",
+    "difficulty receiving care",
+    "detachment from needs"
+  ],
+  "nervous_system_correlates": ["regulation cycles"],
+  "modern_metaphors": [
+    "emotional bandwidth",
+    "home base",
+    "inner operating system"
+  ],
+  "allowed_descriptors": ["attuned", "responsive", "protective"],
+  "forbidden_descriptors": ["moody", "needy", "maternal"]
+}
+
+
+☿ Mercury
+"mercury": {
+  "id": "mercury",
+  "psychological_function": "cognition, communication, and meaning exchange",
+  "core_themes": ["thinking", "learning", "translation"],
+  "healthy_expression": [
+    "clear thinking",
+    "adaptive communication",
+    "curiosity"
+  ],
+  "overdeveloped_expression": [
+    "overthinking",
+    "nervous chatter",
+    "intellectualization"
+  ],
+  "underdeveloped_expression": [
+    "mental fog",
+    "communication avoidance",
+    "difficulty articulating experience"
+  ],
+  "nervous_system_correlates": ["mental arousal"],
+  "modern_metaphors": [
+    "information flow",
+    "UX design",
+    "feedback loops"
+  ],
+  "allowed_descriptors": ["curious", "articulate", "adaptive"],
+  "forbidden_descriptors": ["trickster", "two-faced", "manipulative"]
+}
+
+
+♀ Venus
+"venus": {
+  "id": "venus",
+  "psychological_function": "value assignment, attraction, and relational gravity",
+  "core_themes": ["values", "connection", "pleasure"],
+  "healthy_expression": [
+    "clear values",
+    "mutuality",
+    "capacity for pleasure"
+  ],
+  "overdeveloped_expression": [
+    "people-pleasing",
+    "conflict avoidance",
+    "external validation dependence"
+  ],
+  "underdeveloped_expression": [
+    "difficulty receiving pleasure",
+    "scarcity mindset",
+    "relational withdrawal"
+  ],
+  "nervous_system_correlates": [],
+  "modern_metaphors": [
+    "taste and curation",
+    "social glue",
+    "value alignment"
+  ],
+  "allowed_descriptors": ["attuned", "relational", "valuing"],
+  "forbidden_descriptors": ["feminine", "romantic destiny", "beautiful"]
+}
+
+
+♂ Mars
+"mars": {
+  "id": "mars",
+  "psychological_function": "drive, boundary-setting, and mobilization",
+  "core_themes": ["action", "assertion", "initiation"],
+  "healthy_expression": [
+    "direct action",
+    "clean boundaries",
+    "courageous engagement"
+  ],
+  "overdeveloped_expression": [
+    "aggression",
+    "burnout",
+    "constant urgency"
+  ],
+  "underdeveloped_expression": [
+    "passivity",
+    "boundary collapse",
+    "difficulty initiating"
+  ],
+  "nervous_system_correlates": ["fight response"],
+  "modern_metaphors": [
+    "activation energy",
+    "project kickoff",
+    "conflict navigation"
+  ],
+  "allowed_descriptors": ["assertive", "activated", "decisive"],
+  "forbidden_descriptors": ["masculine", "violent", "warrior"]
+}
+
+
+♃ Jupiter
+"jupiter": {
+  "id": "jupiter",
+  "psychological_function": "meaning-making, expansion, and trust",
+  "core_themes": ["growth", "belief", "perspective"],
+  "healthy_expression": [
+    "ethical optimism",
+    "generosity",
+    "big-picture thinking"
+  ],
+  "overdeveloped_expression": [
+    "overconfidence",
+    "excess",
+    "ideological rigidity"
+  ],
+  "underdeveloped_expression": [
+    "cynicism",
+    "fear of growth",
+    "constricted worldview"
+  ],
+  "nervous_system_correlates": [],
+  "modern_metaphors": [
+    "scaling systems",
+    "belief frameworks",
+    "strategic vision"
+  ],
+  "allowed_descriptors": ["expansive", "perspectival", "trusting"],
+  "forbidden_descriptors": ["lucky", "blessed", "fortunate"]
+}
+
+
+♄ Saturn
+"saturn": {
+  "id": "saturn",
+  "psychological_function": "structure, time, and responsibility",
+  "core_themes": ["limits", "commitment", "self-authorship"],
+  "healthy_expression": [
+    "reliability",
+    "long-term thinking",
+    "earned trust"
+  ],
+  "overdeveloped_expression": [
+    "rigidity",
+    "control",
+    "fear of failure"
+  ],
+  "underdeveloped_expression": [
+    "avoidance of responsibility",
+    "weak boundaries",
+    "time blindness"
+  ],
+  "nervous_system_correlates": [],
+  "modern_metaphors": [
+    "project management",
+    "skill-building",
+    "institutional trust"
+  ],
+  "allowed_descriptors": ["structured", "committed", "disciplined"],
+  "forbidden_descriptors": ["harsh", "punishing", "karmic"]
+}
+
+
+♅ Uranus
+"uranus": {
+  "id": "uranus",
+  "psychological_function": "disruption, innovation, and individuation",
+  "core_themes": ["change", "originality", "liberation"],
+  "healthy_expression": [
+    "creative originality",
+    "adaptive change",
+    "authentic divergence"
+  ],
+  "overdeveloped_expression": [
+    "instability",
+    "reactionary rebellion",
+    "chronic disruption"
+  ],
+  "underdeveloped_expression": [
+    "conformity paralysis",
+    "fear of change",
+    "suppressed originality"
+  ],
+  "nervous_system_correlates": [],
+  "modern_metaphors": [
+    "system upgrades",
+    "breakthrough thinking",
+    "paradigm shifts"
+  ],
+  "allowed_descriptors": ["innovative", "individuating", "adaptive"],
+  "forbidden_descriptors": ["chaotic", "erratic", "unpredictable fate"]
+}
+
+
+♆ Neptune
+"neptune": {
+  "id": "neptune",
+  "psychological_function": "imagination, empathy, and boundary permeability",
+  "core_themes": ["meaning", "compassion", "dissolution"],
+  "healthy_expression": [
+    "creative flow",
+    "empathy",
+    "spiritual openness"
+  ],
+  "overdeveloped_expression": [
+    "escapism",
+    "confusion",
+    "boundary erosion"
+  ],
+  "underdeveloped_expression": [
+    "cynicism",
+    "imagination shutdown",
+    "meaning disconnection"
+  ],
+  "nervous_system_correlates": [],
+  "modern_metaphors": [
+    "creative immersion",
+    "collective mood",
+    "signal vs noise"
+  ],
+  "allowed_descriptors": ["imaginal", "empathetic", "permeable"],
+  "forbidden_descriptors": ["illusion", "deception", "psychic"]
+}
+
+
+♇ Pluto
+"pluto": {
+  "id": "pluto",
+  "psychological_function": "power awareness, depth, and transformation",
+  "core_themes": ["power", "truth", "regeneration"],
+  "healthy_expression": [
+    "psychological honesty",
+    "regenerative change",
+    "depth awareness"
+  ],
+  "overdeveloped_expression": [
+    "obsession",
+    "control fixation",
+    "crisis-seeking"
+  ],
+  "underdeveloped_expression": [
+    "avoidance of depth",
+    "fear of loss",
+    "surface-level engagement"
+  ],
+  "nervous_system_correlates": [],
+  "modern_metaphors": [
+    "systemic overhaul",
+    "deep audit",
+    "rebuilding after exposure"
+  ],
+  "allowed_descriptors": ["penetrating", "transformative", "truth-oriented"],
+  "forbidden_descriptors": ["destructive", "death", "fated"]
+}
+
+
+5. Enforcement rules
+Interpreter must:
+Reference this file for every planetary mention
+Reject descriptors not in allowed_descriptors
+Reject any use of forbidden_descriptors
+QA must:
+Flag any planetary language not mapped here
+Prevent myth/gender regression
+
+6. Lock statement
+This file is locked.
+Any change requires:
+Update to human planetary canon
+Version bump
+Bundle revalidation
