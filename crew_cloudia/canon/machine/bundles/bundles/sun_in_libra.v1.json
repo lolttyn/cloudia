@@ -1,0 +1,99 @@
+{
+    "slug": "sun_in_libra",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Sun in Libra",
+    "summary": "A period that highlights balance, collaboration, and relational clarity. Attention turns to agreements, aesthetics, and how to harmonize competing needs.",
+    "trigger": {
+      "signal_key": "sun_in_libra"
+    },
+    "meaning": {
+      "headline": "The environment rewards fairness, diplomacy, and shared decision-making.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Sun in Libra, the collective tone emphasizes partnership, mutuality, and design." 
+        },
+        {
+          "speakability": "must_say",
+          "text": "This season invites rebalancing agreements and refining how people work together." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Aesthetic coherence and clear terms help momentum." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Listening well becomes a strategic advantage." 
+        },
+        {
+          "speakability": "avoid",
+          "text": "Everything must be polite and conflict-free." 
+        }
+      ],
+      "frictions": [
+        "Indecision while weighing every angle",
+        "Avoiding necessary conflict",
+        "Agreeing too quickly to keep the peace",
+        "Overprioritizing appearance over function",
+        "Project drift when roles are unclear"
+      ],
+      "opportunities": [
+        "Renegotiating terms so they feel fair",
+        "Designing systems or spaces for balance and flow",
+        "Facilitating conversations that align expectations",
+        "Pairing up for shared accountability",
+        "Refining presentation to reflect intent"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Name trade-offs openly and invite input.",
+        "Use structured decision tools to move past stalemate.",
+        "Refresh agreements or social contracts as needed.",
+        "Balance aesthetics with usability in your work.",
+        "Seek win-win solutions without erasing honest tension."
+      ],
+      "avoid": [
+        "Deferring choices until everyone agrees perfectly",
+        "Smoothing over issues that need addressing",
+        "Performing harmony while resenting the terms",
+        "Letting form outrun function",
+        "Expecting others to read your needs without saying them"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "This is a season to recalibrate balance and agreements."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Fairness and thoughtful design move things forward now."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Guarantees about relationship outcomes",
+        "Identity claims about being a Libra",
+        "Deterministic promises of harmony or conflict"
+      ],
+      "allowed_framing": [
+        "Environmental focus on balance and partnership",
+        "Agency-based choices about negotiation and design",
+        "Contextual framing about decision-making"
+      ]
+    },
+    "tags": [
+      "balance",
+      "collaboration",
+      "negotiation",
+      "design",
+      "partnership",
+      "fairness"
+    ],
+    "sources": [
+      "Seasonal solar transit through Libra",
+      "Sun in Libra as collective focus on balance and agreements"
+    ]
+  }

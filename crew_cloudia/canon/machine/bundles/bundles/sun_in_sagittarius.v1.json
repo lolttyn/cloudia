@@ -1,0 +1,99 @@
+{
+    "slug": "sun_in_sagittarius",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Sun in Sagittarius",
+    "summary": "A period that expands horizons, purpose, and adventure. Attention moves toward meaning-making, travel of the mind or body, and commitments that feel aligned with belief.",
+    "trigger": {
+      "signal_key": "sun_in_sagittarius"
+    },
+    "meaning": {
+      "headline": "The environment rewards exploration, candor, and big-picture vision.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Sun in Sagittarius, the collective tone aims at growth, learning, and honest enthusiasm." 
+        },
+        {
+          "speakability": "must_say",
+          "text": "This season favors stretching beyond the familiar to test what you believe." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Openness to risk and novelty can create momentum." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Stories and perspective-sharing guide choices." 
+        },
+        {
+          "speakability": "avoid",
+          "text": "Optimism alone will solve everything." 
+        }
+      ],
+      "frictions": [
+        "Overpromising out of excitement",
+        "Skipping details or logistics",
+        "Speaking bluntly without care",
+        "Restlessness with constraints",
+        "Chasing novelty without integration"
+      ],
+      "opportunities": [
+        "Planning travel, study, or mentorship",
+        "Reconnecting with purpose and direction",
+        "Sharing knowledge generously",
+        "Expanding networks across cultures or disciplines",
+        "Testing assumptions through real-world experience"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Name the principle or value driving your next move.",
+        "Build flexibility into travel or learning plans.",
+        "Check scope and resources before saying yes.",
+        "Invite perspectives that widen your view.",
+        "Balance bold leaps with checkpoints."
+      ],
+      "avoid": [
+        "Inflating commitments beyond capacity",
+        "Tuning out details as unimportant",
+        "Using blunt honesty to avoid empathy",
+        "Assuming optimism replaces preparation",
+        "Dropping current responsibilities for the next thrill"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "This is a season for exploration, candor, and purpose-driven growth."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Aim wide, but check the map as you go."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Guarantees of travel or success",
+        "Identity claims about being a Sagittarius",
+        "Promises that optimism overrides reality"
+      ],
+      "allowed_framing": [
+        "Environmental focus on exploration and meaning",
+        "Agency-based choices about risk and preparation",
+        "Contextual framing about honest enthusiasm"
+      ]
+    },
+    "tags": [
+      "exploration",
+      "purpose",
+      "learning",
+      "travel",
+      "optimism",
+      "vision"
+    ],
+    "sources": [
+      "Seasonal solar transit through Sagittarius",
+      "Sun in Sagittarius as collective focus on exploration and purpose"
+    ]
+  }

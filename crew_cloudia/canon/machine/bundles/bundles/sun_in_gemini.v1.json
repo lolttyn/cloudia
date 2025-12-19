@@ -1,0 +1,99 @@
+{
+    "slug": "sun_in_gemini",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Sun in Gemini",
+    "summary": "A period that amplifies curiosity, conversation, and rapid information exchange. Attention splinters across topics, inviting variety and lightweight collaboration.",
+    "trigger": {
+      "signal_key": "sun_in_gemini"
+    },
+    "meaning": {
+      "headline": "The environment rewards flexible thinking and frequent communication.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Sun in Gemini, the collective tone perks up around ideas, questions, and fast feedback." 
+        },
+        {
+          "speakability": "must_say",
+          "text": "This is an atmosphere that supports exploration, learning, and short-cycle experiments." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Connections multiply; small exchanges can spark bigger pathways." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Attention hops—breadth leads before depth." 
+        },
+        {
+          "speakability": "avoid",
+          "text": "No one can focus or finish anything." 
+        }
+      ],
+      "frictions": [
+        "Information overload",
+        "Difficulty choosing a single direction",
+        "Surface-level agreements without follow-through",
+        "Restlessness with routine",
+        "Talking past each other"
+      ],
+      "opportunities": [
+        "Networking, outreach, and quick syncs",
+        "Testing multiple options before committing",
+        "Refreshing stagnant thinking through new inputs",
+        "Teaching or sharing what you just learned",
+        "Updating messaging to improve clarity"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Schedule short check-ins to keep information flowing.",
+        "Document ideas before they scatter.",
+        "Try two or three lightweight prototypes before choosing.",
+        "Ask clarifying questions to reduce assumptions.",
+        "Let curiosity drive but add small deadlines for follow-through."
+      ],
+      "avoid": [
+        "Overcommitting to every interesting option",
+        "Mistaking conversation for completion",
+        "Spreading news without verifying details",
+        "Skipping rest because the mind is busy",
+        "Assuming others inferred the same meaning"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "This is a season for questions, connections, and agile thinking."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Many small conversations move the work forward now."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Guarantees about social outcomes",
+        "Identity claims about being a Gemini",
+        "Deterministic statements about focus or distraction"
+      ],
+      "allowed_framing": [
+        "Environmental framing around curiosity and communication",
+        "Agency-based choices to prioritize and filter information",
+        "Contextual guidance about pacing and clarity"
+      ]
+    },
+    "tags": [
+      "curiosity",
+      "communication",
+      "learning",
+      "variety",
+      "flexibility",
+      "connection"
+    ],
+    "sources": [
+      "Seasonal solar transit through Gemini",
+      "Sun in Gemini as collective focus on exchange and learning"
+    ]
+  }

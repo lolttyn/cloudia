@@ -1,0 +1,99 @@
+{
+    "slug": "moon_in_libra",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Moon in Libra",
+    "summary": "A social emotional climate that seeks balance and mutual understanding. Feelings orient toward harmony, fairness, and aesthetically pleasing environments.",
+    "trigger": {
+      "signal_key": "moon_in_libra"
+    },
+    "meaning": {
+      "headline": "Emotions lean diplomatic, collaborative, and sensitive to imbalance.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Moon in Libra, moods prefer dialogue and shared decision-making." 
+        },
+        {
+          "speakability": "must_say",
+          "text": "There is a pull toward smoothing rough edges and restoring fairness." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Aesthetic touches can improve morale." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Listening becomes key to feeling connected." 
+        },
+        {
+          "speakability": "avoid",
+          "text": "Conflict is forbidden or dangerous." 
+        }
+      ],
+      "frictions": [
+        "Indecision while weighing every perspective",
+        "Avoiding necessary tension",
+        "Agreeing to keep the peace while feeling resentful",
+        "Overemphasis on appearances",
+        "Project drift when roles are unclear"
+      ],
+      "opportunities": [
+        "Mediating disagreements gently",
+        "Renegotiating agreements for fairness",
+        "Making spaces or documents more inviting",
+        "Pairing up for co-working or co-thinking",
+        "Checking balance between giving and receiving"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Name your needs and invite others to share theirs.",
+        "Use structured decisions when you feel stuck.",
+        "Add small beauty or order to your workspace.",
+        "Balance schedules to include shared time and solo time.",
+        "Acknowledge tension without rushing to erase it."
+      ],
+      "avoid": [
+        "Postponing choices until everyone agrees perfectly",
+        "Sacrificing your needs to appear easygoing",
+        "Assuming silence means consent",
+        "Letting form outweigh function",
+        "Using charm to dodge accountability"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "The mood seeks balance, fairness, and thoughtful collaboration today."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Gentle negotiation keeps things moving under this sky."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Guarantees about relationship outcomes",
+        "Identity statements about Libra Moons",
+        "Deterministic promises of harmony"
+      ],
+      "allowed_framing": [
+        "Environmental focus on balance and collaboration",
+        "Agency-based choices about negotiation and clarity",
+        "Contextual language about aesthetics and fairness"
+      ]
+    },
+    "tags": [
+      "balance",
+      "collaboration",
+      "harmony",
+      "fairness",
+      "aesthetics",
+      "communication"
+    ],
+    "sources": [
+      "Lunar transit through Libra",
+      "Moon in Libra as short-term climate of balance"
+    ]
+  }

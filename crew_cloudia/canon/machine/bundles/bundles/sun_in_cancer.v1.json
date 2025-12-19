@@ -1,0 +1,99 @@
+{
+    "slug": "sun_in_cancer",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Sun in Cancer",
+    "summary": "A period that centers care, belonging, and emotional attunement. Attention turns toward home base, memory, and the supports that help people feel safe enough to act.",
+    "trigger": {
+      "signal_key": "sun_in_cancer"
+    },
+    "meaning": {
+      "headline": "The environment favors nurturing what feels like home and protecting what matters.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Sun in Cancer, the collective tone softens toward protection, care, and consolidation." 
+        },
+        {
+          "speakability": "must_say",
+          "text": "This is a season for tending roots, memory, and the people or places that provide shelter." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Feelings inform decisions; intuition about safety runs louder." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Slower pacing supports emotional digestion and regrouping." 
+        },
+        {
+          "speakability": "avoid",
+          "text": "Everyone will withdraw or become overly sentimental." 
+        }
+      ],
+      "frictions": [
+        "Overprotectiveness or defensiveness",
+        "Taking things personally when stakes are practical",
+        "Avoiding necessary change to preserve comfort",
+        "Old stories overshadowing current facts",
+        "Expecting others to intuit needs without asking"
+      ],
+      "opportunities": [
+        "Strengthening support systems and boundaries",
+        "Repairing or tending to home spaces",
+        "Honoring traditions that replenish energy",
+        "Holding space for feelings before making moves",
+        "Building trust through consistent care"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Check in on the people and projects you steward.",
+        "Create or refresh routines that help you feel anchored.",
+        "Use quiet time to process emotions before choosing next steps.",
+        "Name needs directly instead of hinting.",
+        "Protect rest as much as output."
+      ],
+      "avoid": [
+        "Assuming closeness equals mind-reading",
+        "Holding onto grievances without airing them",
+        "Letting nostalgia override present possibilities",
+        "Avoiding decisions to keep everyone comfortable",
+        "Expecting constant availability from yourself or others"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "This is a season to nurture roots and reinforce safety."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Protective choices keep the work and the people steady now."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predictions about family outcomes",
+        "Identity claims about being a Cancer",
+        "Deterministic emotional states"
+      ],
+      "allowed_framing": [
+        "Environmental focus on care and protection",
+        "Agency-based choices for boundaries and support",
+        "Contextual framing about emotional pacing"
+      ]
+    },
+    "tags": [
+      "care",
+      "home",
+      "protection",
+      "nurture",
+      "roots",
+      "emotion"
+    ],
+    "sources": [
+      "Seasonal solar transit through Cancer",
+      "Sun in Cancer as collective focus on care and belonging"
+    ]
+  }

@@ -1,0 +1,99 @@
+{
+    "slug": "sun_in_scorpio",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Sun in Scorpio",
+    "summary": "A period that concentrates on depth, honesty, and transformation. Attention gravitates to hidden dynamics, loyalty, and the courage to face what is usually avoided.",
+    "trigger": {
+      "signal_key": "sun_in_scorpio"
+    },
+    "meaning": {
+      "headline": "The environment rewards candor, resilience, and strategic focus on what truly matters.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Sun in Scorpio, the collective tone sharpens around truth-telling and sustained commitment." 
+        },
+        {
+          "speakability": "must_say",
+          "text": "This season favors deep work, confidentiality, and confronting root causes." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Intuition about motives and power dynamics is louder." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Release and renewal often arrive together." 
+        },
+        {
+          "speakability": "avoid",
+          "text": "Expect betrayal or crisis by default." 
+        }
+      ],
+      "frictions": [
+        "Holding onto grievances or secrets",
+        "All-or-nothing thinking",
+        "Testing loyalty instead of asking for it",
+        "Digging so deep that momentum stalls",
+        "Fixating on control"
+      ],
+      "opportunities": [
+        "Addressing root issues with honesty",
+        "Strengthening trust through transparency",
+        "Focusing on essential priorities and cutting excess",
+        "Healing through release and boundary repair",
+        "Committing to long-haul transformations"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Name the real stakes and invite honest input.",
+        "Protect sensitive information responsibly.",
+        "Choose one or two core priorities to handle thoroughly.",
+        "Create space for processing before deciding.",
+        "Practice letting go of what no longer serves the mission."
+      ],
+      "avoid": [
+        "Using secrecy as leverage",
+        "Assuming worst-case motives without asking",
+        "Burning bridges to feel decisive",
+        "Demanding perfection to prove loyalty",
+        "Staying stuck in intensity without relief"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "This is a season for depth, honesty, and transformative focus."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Courageous transparency clears the path now."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predictions of crisis or betrayal",
+        "Identity claims about being a Scorpio",
+        "Deterministic statements about obsession or revenge"
+      ],
+      "allowed_framing": [
+        "Environmental focus on depth and renewal",
+        "Agency-based choices about transparency and boundaries",
+        "Contextual framing about handling intensity"
+      ]
+    },
+    "tags": [
+      "depth",
+      "honesty",
+      "transformation",
+      "loyalty",
+      "power",
+      "renewal"
+    ],
+    "sources": [
+      "Seasonal solar transit through Scorpio",
+      "Sun in Scorpio as collective focus on depth and renewal"
+    ]
+  }

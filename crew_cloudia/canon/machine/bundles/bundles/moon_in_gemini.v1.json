@@ -1,0 +1,99 @@
+{
+    "slug": "moon_in_gemini",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Moon in Gemini",
+    "summary": "A curious emotional climate that moves quickly between thoughts and connections. Feelings show up as questions, conversations, and a need to share or gather information.",
+    "trigger": {
+      "signal_key": "moon_in_gemini"
+    },
+    "meaning": {
+      "headline": "Emotions lean talkative, curious, and responsive to new input.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Moon in Gemini, moods prefer to think aloud and exchange ideas." 
+        },
+        {
+          "speakability": "must_say",
+          "text": "Variety and quick feedback help feelings move." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Short conversations can diffuse tension." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Curiosity may outrun patience for depth." 
+        },
+        {
+          "speakability": "avoid",
+          "text": "No one can take anything seriously." 
+        }
+      ],
+      "frictions": [
+        "Scattering energy across too many topics",
+        "Talking over feelings instead of feeling them",
+        "Rumor or misinformation spreading fast",
+        "Difficulty focusing on one task",
+        "Restlessness when routine feels dull"
+      ],
+      "opportunities": [
+        "Scheduling quick chats to clear the air",
+        "Journaling or note-taking to sort thoughts",
+        "Brainstorming options before deciding",
+        "Refreshing messaging or documentation",
+        "Learning something light to redirect busy minds"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Communicate in short, clear bursts.",
+        "Capture ideas in writing before they drift.",
+        "Set small time boxes for tasks to keep engagement high.",
+        "Verify information before sharing.",
+        "Balance talking with listening to avoid overlap."
+      ],
+      "avoid": [
+        "Signing up for commitments in a rush of interest",
+        "Using chatter to avoid honest emotion",
+        "Spreading half-formed news",
+        "Jumping between tasks without closure",
+        "Expecting others to match your pace of change"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "The mood is quick, curious, and eager to talk things through today."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Light, frequent check-ins help feelings keep flowing under this sky."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Guarantees about social outcomes",
+        "Identity statements about Gemini Moons",
+        "Deterministic statements about distraction"
+      ],
+      "allowed_framing": [
+        "Environmental focus on curiosity and conversation",
+        "Agency-based choices about filtering and pacing",
+        "Contextual language about lightness and variety"
+      ]
+    },
+    "tags": [
+      "communication",
+      "curiosity",
+      "flexibility",
+      "variety",
+      "connection",
+      "information"
+    ],
+    "sources": [
+      "Lunar transit through Gemini",
+      "Moon in Gemini as short-term climate of curiosity"
+    ]
+  }

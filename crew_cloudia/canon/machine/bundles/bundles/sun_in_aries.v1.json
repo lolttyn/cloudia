@@ -1,0 +1,99 @@
+{
+    "slug": "sun_in_aries",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Sun in Aries",
+    "summary": "A period that highlights initiative, courage, and first steps. Momentum builds through direct action, quick decisions, and willingness to start before everything feels perfect.",
+    "trigger": {
+      "signal_key": "sun_in_aries"
+    },
+    "meaning": {
+      "headline": "The environment favors decisive beginnings and visible effort.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Sun in Aries, the collective tone tilts toward boldness and fast starts." 
+        },
+        {
+          "speakability": "must_say",
+          "text": "This is an atmosphere that rewards courage, direct asks, and moving first."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Progress often comes from trial, feedback, and immediate course-correction rather than long deliberation." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Urgency is higher; focus arrives when there is something to push against." 
+        },
+        {
+          "speakability": "avoid",
+          "text": "Everyone will feel aggressive or reckless." 
+        }
+      ],
+      "frictions": [
+        "Impatience with planning or collaboration",
+        "Starting more than can be finished",
+        "Reacting impulsively to obstacles",
+        "Assuming others move at the same pace",
+        "Equating speed with effectiveness"
+      ],
+      "opportunities": [
+        "Launching a pilot or first draft",
+        "Making a clear ask or declaration",
+        "Taking the first step on a stalled goal",
+        "Testing courage through small, reversible risks",
+        "Using motion to find clarity"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Channel urgency into one priority at a time.",
+        "Ask for what you need plainly and early.",
+        "Use quick experiments to learn instead of waiting for certainty.",
+        "Move your body to discharge excess restlessness.",
+        "Celebrate starting rather than perfecting."
+      ],
+      "avoid": [
+        "Issuing ultimatums when patience would work",
+        "Overpromising because energy feels high",
+        "Ignoring safety checks in the rush to begin",
+        "Starting fights to create momentum",
+        "Assuming quick wins replace longer upkeep"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "This is a season for bold openings and clear action."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Motion creates the insight right now."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Promises of victory or conflict",
+        "Identity claims about being an Aries",
+        "Predicting accidents or injuries"
+      ],
+      "allowed_framing": [
+        "Environmental emphasis on initiative",
+        "Agency-based choices to channel urgency",
+        "Contextual guidance about pacing and safety"
+      ]
+    },
+    "tags": [
+      "initiative",
+      "courage",
+      "momentum",
+      "action",
+      "pioneering",
+      "pacing"
+    ],
+    "sources": [
+      "Seasonal solar transit through Aries",
+      "Sun in Aries as collective push toward action"
+    ]
+  }

@@ -1,0 +1,99 @@
+{
+    "slug": "sun_in_aquarius",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Sun in Aquarius",
+    "summary": "A period that highlights innovation, networks, and principled change. Attention turns toward systems, collective futures, and ideas that serve the many rather than the few.",
+    "trigger": {
+      "signal_key": "sun_in_aquarius"
+    },
+    "meaning": {
+      "headline": "The environment rewards experimentation, collaboration, and clear principles.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Sun in Aquarius, the collective tone orients toward progress, community, and rethinking norms." 
+        },
+        {
+          "speakability": "must_say",
+          "text": "This season supports building networks and systems that reflect shared values." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Objectivity and data help decisions land." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Unusual ideas can gain traction when tied to purpose." 
+        },
+        {
+          "speakability": "avoid",
+          "text": "Feelings do not matter right now." 
+        }
+      ],
+      "frictions": [
+        "Detaching from emotions to stay objective",
+        "Prioritizing ideals over people",
+        "Feeling distant in close relationships",
+        "Overidentifying with being different",
+        "Pushing change without consent"
+      ],
+      "opportunities": [
+        "Joining or strengthening communities of practice",
+        "Iterating on systems or technology for fairness",
+        "Designing experiments to test new approaches",
+        "Naming guiding principles for decisions",
+        "Leveraging networks to share resources"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Connect with groups aligned to your values.",
+        "Pilot a new workflow or tool with clear metrics.",
+        "Balance analysis with check-ins about impact on people.",
+        "Invite diverse voices into planning.",
+        "Explain the why behind changes to build trust."
+      ],
+      "avoid": [
+        "Treating relationships as purely transactional",
+        "Dismissing emotion as irrelevant data",
+        "Rebelling for its own sake",
+        "Forcing uniformity under the banner of progress",
+        "Assuming everyone shares the same pace for change"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "This is a season for principled innovation and collective thinking."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Networks and experiments carry ideas forward now."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Promises of technological success",
+        "Identity claims about being an Aquarius",
+        "Deterministic statements about detachment"
+      ],
+      "allowed_framing": [
+        "Environmental focus on innovation and community",
+        "Agency-based choices about experimentation",
+        "Contextual framing about balancing principle and care"
+      ]
+    },
+    "tags": [
+      "innovation",
+      "community",
+      "systems",
+      "principles",
+      "future",
+      "experimentation"
+    ],
+    "sources": [
+      "Seasonal solar transit through Aquarius",
+      "Sun in Aquarius as collective focus on networks and progress"
+    ]
+  }
