@@ -34,6 +34,14 @@ const containsBecause = (text: string): boolean => /\bbecause\b/i.test(text);
 const isGenericTheme = (text: string): boolean =>
   GENERIC_THEMES.includes(text.trim().toLowerCase());
 
+const isSingleSentence = (text: string): boolean => {
+  const sentences = text
+    .split(/[.!?]/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return sentences.length <= 1;
+};
+
 export const SkyAnchorSchema = z
   .object({
     type: z.enum(["sun_sign", "moon_sign", "major_aspect"]),
@@ -96,6 +104,45 @@ export const InterpretiveFrameSchema = z
     sky_anchors: z.array(SkyAnchorSchema).min(1).max(2),
     causal_logic: z.array(z.string().min(1)).min(1),
     why_today_clause: z.string().min(1),
+    temporal_phase: z.enum(["building", "peak", "releasing", "aftershock", "baseline"]),
+    intensity_modifier: z.enum(["emerging", "strengthening", "dominant", "softening"]),
+    continuity: z
+      .object({
+        references_yesterday: z.string().min(1).max(180).optional(),
+        references_tomorrow: z.string().min(1).max(180).optional(),
+      })
+      .refine(
+        (c) =>
+          (c.references_yesterday ? isSingleSentence(c.references_yesterday) : true) &&
+          (c.references_tomorrow ? isSingleSentence(c.references_tomorrow) : true),
+        {
+          message: "Continuity hooks must be at most one sentence each",
+        }
+    ),
+  temporal_arc: z
+    .object({
+      type: z.enum(["retrograde", "lunar_phase", "major_aspect", "solar_ingress", "none"]),
+      phase: z.string().min(1),
+      intensity: z.enum(["emerging", "strengthening", "dominant", "softening"]),
+      arc_day_index: z.number().int().min(1),
+      arc_total_days: z.number().int().min(1),
+    })
+    .superRefine((arc, ctx) => {
+      if (arc.arc_day_index > arc.arc_total_days) {
+        ctx.addIssue({
+          code: "custom",
+          message: "arc_day_index cannot exceed arc_total_days",
+          path: ["arc_day_index"],
+        });
+      }
+      if (arc.type === "none" && arc.phase.toLowerCase() !== "baseline") {
+        ctx.addIssue({
+          code: "custom",
+          message: "arc type 'none' must use phase 'baseline'",
+          path: ["phase"],
+        });
+      }
+    }),
     timing: z.object({
       state: z.enum(["building", "peaking", "settling", "transitioning"]),
       notes: z.string().min(1).optional(),

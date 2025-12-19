@@ -20,6 +20,7 @@ export function evaluateClosingWithFrame(params: {
 
   const axis = params.interpretive_frame.dominant_contrast_axis.statement;
   const timingNote = params.interpretive_frame.timing?.notes ?? params.interpretive_frame.timing?.state;
+  const temporalPhase = params.interpretive_frame.temporal_phase.toLowerCase();
   const { scaffold, signoff } = buildClosingScaffold({
     episode_date: params.episode_date,
     axis_statement: axis,
@@ -63,6 +64,22 @@ export function evaluateClosingWithFrame(params: {
     rewrite_instructions.push(msg);
   }
 
+  if (!middle.toLowerCase().includes(temporalPhase)) {
+    const msg = "Closing should acknowledge the temporal phase (e.g., building, releasing).";
+    notes.push(msg);
+    rewrite_instructions.push(msg);
+  }
+
+  if (
+    (params.interpretive_frame.temporal_phase === "releasing" ||
+      params.interpretive_frame.temporal_phase === "aftershock") &&
+    /\b(push|accelerate|escalate|charge ahead)\b/i.test(middle)
+  ) {
+    notes.push("Closing tone should not escalate when energy is releasing/aftershock.");
+    blocking_reasons.push("closing:tone_mismatch_phase");
+    rewrite_instructions.push("Soften the tone to match releasing/aftershock; avoid escalation verbs.");
+  }
+
   const hasAdvice = ADVICE_PATTERNS.some((re) => re.test(middle));
   if (hasAdvice) {
     notes.push("Avoid advice or directives; keep the tone observational.");
@@ -75,6 +92,17 @@ export function evaluateClosingWithFrame(params: {
     notes.push("Avoid predictions; keep the tone reflective of today only.");
     blocking_reasons.push("closing:prediction_language");
     rewrite_instructions.push("Remove predictive language (e.g., 'will', 'going to').");
+  }
+
+  if (params.interpretive_frame.temporal_arc.arc_day_index > 1) {
+    const cont = params.interpretive_frame.continuity;
+    const hasHook =
+      (cont.references_yesterday && middle.toLowerCase().includes(cont.references_yesterday.toLowerCase())) ||
+      (cont.references_tomorrow && middle.toLowerCase().includes(cont.references_tomorrow.toLowerCase()));
+    if (!hasHook) {
+      notes.push("Closing should reference provided continuity when in mid-arc (day > 1).");
+      rewrite_instructions.push("Include a provided continuity hook to tie back/forward in the arc.");
+    }
   }
 
   if (notes.length === 0) {

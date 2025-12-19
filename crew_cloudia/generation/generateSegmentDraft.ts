@@ -183,6 +183,9 @@ async function generateIntroDraft(params: {
     dominant_contrast_axis?: { statement?: string };
     why_today_clause?: string;
     sky_anchors?: { label?: string }[];
+    temporal_phase?: string;
+    intensity_modifier?: string;
+    continuity?: { references_yesterday?: string; references_tomorrow?: string };
   };
 }): Promise<{
   text: string;
@@ -211,12 +214,21 @@ async function generateIntroDraft(params: {
     throw new Error("Intro generation requires at least one sky anchor label");
   }
 
+  const temporalPhase = frame.temporal_phase;
+  const intensity = frame.intensity_modifier;
+  const continuityLines = [
+    frame.continuity?.references_yesterday,
+    frame.continuity?.references_tomorrow,
+  ].filter(Boolean);
+
   const user_prompt = `
 Write exactly two sentences.
 Each sentence must:
 - Reference at least one of these sky anchors by label: ${anchorLabels.join(", ")}.
 - Reinforce the dominant contrast axis: "${axis}".
 - Include causal language using the word "because".
+- Acknowledge today's temporal phase "${temporalPhase}" and intensity "${intensity}".
+${continuityLines.length ? "- Include at least one provided continuity hook." : ""}
 
 Additional constraints:
 - Do not greet.
@@ -255,6 +267,7 @@ async function generateClosingDraft(params: {
   interpretive_frame?: {
     dominant_contrast_axis?: { statement?: string };
     timing?: { state?: string; notes?: string };
+    temporal_phase?: string;
   };
 }): Promise<{
   text: string;
@@ -284,6 +297,7 @@ Each sentence must:
 - Be reflective and observational, not directive or advisory.
 - Reinforce (without restating verbatim) the dominant contrast axis: "${axis}".
 - Avoid predictions or moralizing.
+- Acknowledge the temporal phase "${frame.temporal_phase ?? ""}" in tone.
 
 Additional constraints:
 - No greeting.

@@ -54,6 +54,9 @@ export function evaluateIntroWithFrame(params: {
 
   // Hard gate: meaning coherence with dominant axis (verbatim)
   const axis = params.interpretive_frame.dominant_contrast_axis.statement.toLowerCase();
+  const temporalPhase = params.interpretive_frame.temporal_phase.toLowerCase();
+  const intensity = params.interpretive_frame.intensity_modifier.toLowerCase();
+  const continuity = params.interpretive_frame.continuity;
   if (!lower.includes(axis)) {
     notes.push("Intro must include the dominant contrast axis verbatim (no substitutions).");
     blocking_reasons.push("intro:axis_missing");
@@ -87,6 +90,43 @@ export function evaluateIntroWithFrame(params: {
     notes.push('Intro must include causal language using "because".');
     blocking_reasons.push("intro:causal_missing");
     rewrite_instructions.push('Add a causal sentence that includes the word "because".');
+  }
+
+  // Require temporal markers
+  if (!lower.includes(temporalPhase)) {
+    notes.push("Intro should acknowledge the temporal phase for today.");
+    rewrite_instructions.push(`Reference the temporal phase "${params.interpretive_frame.temporal_phase}".`);
+  }
+  if (!lower.includes(intensity)) {
+    notes.push("Intro should acknowledge intensity modulation for today.");
+    rewrite_instructions.push(
+      `Reference the intensity modifier "${params.interpretive_frame.intensity_modifier}".`
+    );
+  }
+
+  // Continuity hooks must appear if provided
+  if (continuity?.references_yesterday && !lower.includes(continuity.references_yesterday.toLowerCase())) {
+    notes.push("Intro continuity hook for yesterday is missing.");
+    blocking_reasons.push("intro:continuity_yesterday_missing");
+    rewrite_instructions.push(`Include: "${continuity.references_yesterday}".`);
+  }
+  if (continuity?.references_tomorrow && !lower.includes(continuity.references_tomorrow.toLowerCase())) {
+    notes.push("Intro continuity hook for tomorrow is missing.");
+    blocking_reasons.push("intro:continuity_tomorrow_missing");
+    rewrite_instructions.push(`Include: "${continuity.references_tomorrow}".`);
+  }
+
+  if (params.interpretive_frame.temporal_arc.arc_day_index > 1) {
+    const hasHook =
+      (continuity?.references_yesterday &&
+        lower.includes(continuity.references_yesterday.toLowerCase())) ||
+      (continuity?.references_tomorrow &&
+        lower.includes(continuity.references_tomorrow.toLowerCase()));
+    if (!hasHook) {
+      notes.push("Intro must include a continuity hook on arc day > 1.");
+      blocking_reasons.push("intro:continuity_missing_for_arc");
+      rewrite_instructions.push("Add the provided continuity hook to situate today in the arc.");
+    }
   }
 
   // Scaffold presence

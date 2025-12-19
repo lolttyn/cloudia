@@ -13,6 +13,46 @@ export function evaluateSegmentWithFrame(params: {
   const scriptLower = params.draft_script.toLowerCase();
   const frame = params.interpretive_frame;
 
+  // Temporal enforcement
+  if (!scriptLower.includes(frame.temporal_phase.toLowerCase())) {
+    const msg = `Temporal awareness: reference the temporal phase "${frame.temporal_phase}".`;
+    notes.push(msg);
+    rewrite_instructions.push(msg);
+  }
+  if (!scriptLower.includes(frame.intensity_modifier.toLowerCase())) {
+    const msg = `Temporal awareness: include the intensity modifier "${frame.intensity_modifier}".`;
+    notes.push(msg);
+    rewrite_instructions.push(msg);
+  }
+  if (frame.temporal_arc.arc_day_index > 1) {
+    const mustHook =
+      (frame.continuity.references_yesterday &&
+        scriptLower.includes(frame.continuity.references_yesterday.toLowerCase())) ||
+      (frame.continuity.references_tomorrow &&
+        scriptLower.includes(frame.continuity.references_tomorrow.toLowerCase()));
+    if (!mustHook) {
+      const msg = "Continuity: include at least one provided continuity hook for this arc day.";
+      notes.push(msg);
+      rewrite_instructions.push(msg);
+    }
+  }
+  if (frame.continuity.references_yesterday) {
+    const hook = frame.continuity.references_yesterday.toLowerCase();
+    if (!scriptLower.includes(hook)) {
+      const msg = "Continuity: include the yesterday hook from the frame.";
+      notes.push(msg);
+      rewrite_instructions.push(msg);
+    }
+  }
+  if (frame.continuity.references_tomorrow) {
+    const hook = frame.continuity.references_tomorrow.toLowerCase();
+    if (!scriptLower.includes(hook)) {
+      const msg = "Continuity: include the tomorrow hook from the frame.";
+      notes.push(msg);
+      rewrite_instructions.push(msg);
+    }
+  }
+
   // Hard gate: meaning fidelity (axis present, no substitution)
   if (!scriptLower.includes(frame.dominant_contrast_axis.statement.toLowerCase())) {
     notes.push(

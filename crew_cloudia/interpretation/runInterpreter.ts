@@ -6,6 +6,8 @@ type InterpretiveCanon = typeof interpretiveCanon;
 
 type InterpreterInput = {
   date: string; // YYYY-MM-DD
+  lookback_days?: number;
+  lookahead_days?: number;
   canon?: InterpretiveCanon;
   features?: SkyFeatures;
 };
@@ -146,7 +148,16 @@ export async function runInterpreter(input: InterpreterInput): Promise<Interpret
   validateDate(input.date);
 
   const canon = input.canon ?? interpretiveCanon;
+  const lookback = input.lookback_days ?? 3;
+  const lookahead = input.lookahead_days ?? 2;
+
   const features = input.features ?? (await extractSkyFeatures({ date: input.date }));
+  const windowDates = buildDateWindow(input.date, lookback, lookahead);
+  const windowFeatures = await Promise.all(
+    windowDates.map((d) =>
+      d === input.date && input.features ? Promise.resolve(input.features) : extractSkyFeatures({ date: d })
+    )
+  );
 
   if (features.date !== input.date) {
     throw new Error(`Sky feature snapshot date mismatch: expected ${input.date}, got ${features.date}`);
@@ -197,6 +208,21 @@ export async function runInterpreter(input: InterpreterInput): Promise<Interpret
     canon.why_today_templates
   );
 
+  const temporal_phase = deriveTemporalPhase(features, windowFeatures);
+  const intensity_modifier = deriveIntensityModifier(
+    axis.statement,
+    temporal_phase,
+    windowFeatures,
+    input.date
+  );
+  const continuity = buildContinuityHooks(
+    temporal_phase,
+    intensity_modifier,
+    windowFeatures,
+    axis.statement,
+    input.date
+  );
+
   const frame: InterpretiveFrame = {
     date: features.date,
     dominant_contrast_axis: axis,
@@ -206,6 +232,10 @@ export async function runInterpreter(input: InterpreterInput): Promise<Interpret
     sky_anchors: anchors,
     causal_logic,
     why_today_clause,
+    temporal_phase,
+    intensity_modifier,
+    continuity,
+    temporal_arc: deriveTemporalArc(temporal_phase, intensity_modifier, features, windowFeatures),
     timing: { state: phaseEntry.timing_state, notes: timingNotes },
     confidence_level: confidenceFrom(aspect),
     canon_compliance: {
@@ -215,5 +245,143 @@ export async function runInterpreter(input: InterpreterInput): Promise<Interpret
   };
 
   return InterpretiveFrameSchema.parse(frame);
+}
+
+function buildDateWindow(base: string, lookback: number, lookahead: number): string[] {
+  const baseDate = new Date(`${base}T00:00:00Z`);
+  if (Number.isNaN(baseDate.getTime())) throw new Error(`Invalid date ${base}`);
+  const dates: string[] = [];
+  for (let i = lookback; i >= 1; i--) {
+    const d = new Date(baseDate);
+    d.setUTCDate(d.getUTCDate() - i);
+    dates.push(d.toISOString().slice(0, 10));
+  }
+  dates.push(base);
+  for (let i = 1; i <= lookahead; i++) {
+    const d = new Date(baseDate);
+    d.setUTCDate(d.getUTCDate() + i);
+    dates.push(d.toISOString().slice(0, 10));
+  }
+  return dates;
+}
+
+function deriveTemporalPhase(today: SkyFeatures, window: SkyFeatures[]): InterpretiveFrame["temporal_phase"] {
+  // Map coarse lunar phase to temporal phase with simple trend detection.
+  const idx = window.findIndex((w) => w.date === today.date);
+  if (idx === -1) {
+    throw new Error("Temporal window missing today snapshot");
+  }
+  const phase = today.moon.phase;
+  const yesterday = window[idx - 1];
+
+  if (phase === "full") return "peak";
+  if (phase === "waning") return yesterday?.moon.phase === "full" ? "aftershock" : "releasing";
+  if (phase === "waxing") return "building";
+  if (phase === "new") return "baseline";
+  return "baseline";
+}
+
+function deriveTemporalArc(
+  temporal_phase: InterpretiveFrame["temporal_phase"],
+  intensity: InterpretiveFrame["intensity_modifier"],
+  today: SkyFeatures,
+  window: SkyFeatures[]
+): InterpretiveFrame["temporal_arc"] {
+  // Simple deterministic arc assignment based on available features.
+  // Priority: lunar_phase (from Moon phase) -> solar_ingress (sun sign change in window) -> none.
+
+  const idx = window.findIndex((w) => w.date === today.date);
+  const yesterday = window[idx - 1];
+  const tomorrow = window[idx + 1];
+
+  // Detect lunar phase arc (short arc ~7 days)
+  const phaseMap: Record<SkyFeatures["moon"]["phase"], { phase: string; arc_day_index: number }> =
+    {
+      new: { phase: "building", arc_day_index: 1 },
+      waxing: { phase: "building", arc_day_index: 2 },
+      full: { phase: "peak", arc_day_index: 4 },
+      waning: { phase: "releasing", arc_day_index: 5 },
+    };
+
+  const lunarPhase = phaseMap[today.moon.phase];
+  if (lunarPhase) {
+    return {
+      type: "lunar_phase",
+      phase: lunarPhase.phase,
+      intensity,
+      arc_day_index: lunarPhase.arc_day_index,
+      arc_total_days: 7,
+    };
+  }
+
+  // Detect solar ingress (micro arc 3 days)
+  const sunChange =
+    (yesterday && yesterday.sun.sign !== today.sun.sign) ||
+    (tomorrow && tomorrow.sun.sign !== today.sun.sign);
+  if (sunChange) {
+    return {
+      type: "solar_ingress",
+      phase: "ingress",
+      intensity,
+      arc_day_index: 1,
+      arc_total_days: 3,
+    };
+  }
+
+  return {
+    type: "none",
+    phase: "baseline",
+    intensity: "emerging",
+    arc_day_index: 1,
+    arc_total_days: 1,
+  };
+}
+
+function deriveIntensityModifier(
+  axisStatement: string,
+  temporal_phase: InterpretiveFrame["temporal_phase"],
+  window: SkyFeatures[],
+  baseDate: string
+): InterpretiveFrame["intensity_modifier"] {
+  const todayIdx = window.findIndex((w) => w.date === baseDate);
+  if (todayIdx === -1) throw new Error("Temporal window missing today snapshot");
+  const today = window[todayIdx];
+  const yesterday = window[todayIdx - 1];
+
+  const novelty =
+    !yesterday || yesterday.moon.sign.toLowerCase() !== today.moon.sign.toLowerCase();
+
+  if (novelty) {
+    return temporal_phase === "peak" ? "dominant" : "emerging";
+  }
+
+  if (temporal_phase === "peak") return "dominant";
+  if (temporal_phase === "building") return "strengthening";
+  if (temporal_phase === "releasing" || temporal_phase === "aftershock") return "softening";
+  return "emerging";
+}
+
+function buildContinuityHooks(
+  temporal_phase: InterpretiveFrame["temporal_phase"],
+  intensity: InterpretiveFrame["intensity_modifier"],
+  window: SkyFeatures[],
+  axisStatement: string,
+  baseDate: string
+): InterpretiveFrame["continuity"] {
+  const todayIdx = window.findIndex((w) => w.date === baseDate);
+  if (todayIdx === -1) throw new Error("Temporal window missing today snapshot");
+  const yesterday = window[todayIdx - 1];
+  const tomorrow = window[todayIdx + 1];
+  const hooks: InterpretiveFrame["continuity"] = {};
+
+  if (yesterday && temporal_phase !== "baseline") {
+    hooks.references_yesterday = `Yesterday signaled ${axisStatement.toLowerCase()}; today it is ${intensity}.`;
+  }
+
+  if (tomorrow && (temporal_phase === "building" || temporal_phase === "peak")) {
+    hooks.references_tomorrow = `Today sets the tone; tomorrow carries the echo of ${axisStatement.toLowerCase()}.`;
+  }
+
+  return hooks;
 }
 
