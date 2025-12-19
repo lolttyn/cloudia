@@ -139,6 +139,7 @@ export async function runIntroForDate(params: {
         episode_date: params.episode_date,
         axis: params.interpretive_frame.dominant_contrast_axis.statement,
         why_today_clause: params.interpretive_frame.why_today_clause,
+        sky_anchors: params.interpretive_frame.sky_anchors,
       });
 
       script = `${scaffold}\n\n${expressiveText}`;

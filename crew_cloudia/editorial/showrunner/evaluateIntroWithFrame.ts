@@ -80,7 +80,7 @@ export function evaluateIntroWithFrame(params: {
     rewrite_instructions.push(`Insert the why-today clause verbatim: "${whyTodayClause}".`);
   }
 
-  // Require static anchors for ingress-sensitive bodies present in the frame
+  // Require static anchors for ingress-sensitive bodies (may appear in scaffold)
   const missingIngressAnchors: string[] = [];
   for (const anchor of params.interpretive_frame.sky_anchors) {
     const lowerLabel = anchor.label.toLowerCase();
@@ -99,7 +99,7 @@ export function evaluateIntroWithFrame(params: {
     );
     blocking_reasons.push("intro:ingress_anchor_missing");
     for (const label of missingIngressAnchors) {
-      rewrite_instructions.push(`Include the exact anchor phrase: "${label}".`);
+      rewrite_instructions.push(`Ensure the scaffold contains the exact anchor phrase: "${label}".`);
     }
   }
 
