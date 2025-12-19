@@ -140,13 +140,6 @@ export function evaluateIntroWithFrame(params: {
     rewrite_instructions.push('Address the listener directly in the two expressive sentences (e.g., "you", "your", "today").');
   }
 
-  const intensityKey = params.interpretive_frame.intensity_modifier.toLowerCase();
-  const cues = INTENSITY_CUES[intensityKey] ?? [];
-  if (cues.length > 0 && !cues.some((cue) => remainder.toLowerCase().includes(cue))) {
-    notes.push("Intro expressive tone should reflect today's intensity modulation (use matching tone cues, not arc explanations).");
-    rewrite_instructions.push("Match the intensity tone (e.g., use cues that feel like the current intensity) without restating arc mechanics.");
-  }
-
   if (/\b(yesterday|tomorrow)\b/i.test(remainder)) {
     notes.push("Intro expressive lines should not mention yesterday or tomorrow; continuity is handled by the scaffold.");
     rewrite_instructions.push("Remove explicit mentions of yesterday or tomorrow from the expressive lines.");
