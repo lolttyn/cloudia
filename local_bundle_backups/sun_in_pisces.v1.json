@@ -1,0 +1,100 @@
+{
+    "slug": "sun_in_pisces",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Sun in Pisces",
+    "summary": "A season emphasizing permeability, endings, and integration. Attention turns to loose threads, emotional undercurrents, and what needs to be released or absorbed before the next cycle. The opportunity is to make space for transition rather than forcing new structure.",
+    "trigger": {
+      "signal_key": "sun_in_pisces"
+    },
+    "meaning": {
+      "headline": "Focus shifts toward endings, integration, and emotional undercurrents.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Sun in Pisces emphasizes transition, permeability, and the need to process what has accumulated over time."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This period favors reflection, release, and gentle adjustments over aggressive new beginnings."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Sensitivity may increase as boundaries feel more porous."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Loose ends and unresolved feelings are more noticeable and ready to be addressed."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This requires passivity, withdrawal, or chaos."
+        }
+      ],
+      "frictions": [
+        "Difficulty focusing on linear tasks",
+        "Blurry boundaries around time, energy, or emotion",
+        "Over-absorbing others' moods or expectations",
+        "Escaping into distraction instead of processing",
+        "Feeling directionless when structure loosens"
+      ],
+      "opportunities": [
+        "Letting go of commitments that no longer fit",
+        "Making space for rest and integration",
+        "Listening to subtle signals and intuition",
+        "Tending to emotional and energetic backlog",
+        "Preparing quietly for an upcoming new cycle"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Build in more room for rest and reflection.",
+        "Notice where you are carrying more than you need to.",
+        "Close loops gently instead of forcing conclusions.",
+        "Allow feelings and impressions to surface without immediate judgment.",
+        "Use softer structure to support transition."
+      ],
+      "avoid": [
+        "Overcommitting when energy is diffuse",
+        "Using busyness to avoid feeling",
+        "Taking on others' emotions as your own",
+        "Forcing clarity before it is ready",
+        "Treating sensitivity as a flaw"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "This is a time for integration and gentle release."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Rest can be part of the work of transition."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Pathologizing sensitivity or emotionality",
+        "Deterministic statements about confusion or suffering",
+        "Spiritualizing avoidance or self-neglect"
+      ],
+      "allowed_framing": [
+        "Process language: 'integration', 'transition', 'release'",
+        "Agency-forward framing: 'you can choose what to let go of…'",
+        "Contextual framing: 'if things feel softer or less defined…'"
+      ]
+    },
+    "tags": [
+      "transition",
+      "integration",
+      "sensitivity",
+      "release",
+      "rest",
+      "endings"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Seasonal solar sign interpretation"
+    ]
+  }
+  

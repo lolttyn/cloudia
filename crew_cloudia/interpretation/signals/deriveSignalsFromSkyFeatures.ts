@@ -47,7 +47,7 @@ export function deriveSignalsFromSkyFeatures(
     kind: "planet_in_sign",
     salience: 0.3,
     source: "sky_features",
-    meta: { sign: features.moon.sign.toLowerCase(), body: "moon" },
+    meta: { sign: features.moon.sign.toLowerCase(), body: "moon", phase: features.moon.phase },
   });
 
   // Moon phase

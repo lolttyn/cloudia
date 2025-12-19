@@ -27,6 +27,9 @@ describe("deriveSignalsFromSkyFeatures", () => {
     const moonSignal = signals.find((s) => s.signal_key === "moon_in_leo");
     expect(moonSignal).toBeDefined();
     expect(moonSignal?.salience).toBe(0.3);
+    expect(moonSignal?.kind).toBe("planet_in_sign");
+    expect(moonSignal?.source).toBe("sky_features");
+    expect((moonSignal as any)?.meta?.phase).toBe("full");
     // Sorting stability with sun + moon + aspect
     const orderedKeys = signals.map((s) => s.signal_key);
     expect(new Set(orderedKeys).size).toBe(orderedKeys.length);

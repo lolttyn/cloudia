@@ -1,0 +1,100 @@
+{
+  "slug": "moon_in_leo",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Moon in Leo",
+  "summary": "A temporary emotional climate that highlights visibility, expression, and recognition. Feelings are more likely to seek a stage, an audience, or acknowledgment. The opportunity is to show up sincerely without over-performing.",
+  "trigger": {
+    "signal_key": "moon_in_leo"
+  },
+  "meaning": {
+    "headline": "Emotions lean toward expression and recognition.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Moon in Leo emphasizes expressive, visible emotion and a desire to be seen or acknowledged."
+      },
+      {
+        "speakability": "must_say",
+        "text": "This transit highlights the emotional impact of attention, affirmation, and appreciation."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Feelings may show up more dramatically, making it easier to notice what matters."
+      },
+      {
+        "speakability": "can_say",
+        "text": "There is a stronger pull toward sharing, performing, or taking up space emotionally."
+      },
+      {
+        "speakability": "avoid",
+        "text": "This guarantees drama, ego, or conflict."
+      }
+    ],
+    "frictions": [
+      "Seeking validation instead of connection",
+      "Overreacting when attention feels uneven",
+      "Taking feedback personally",
+      "Performing feelings instead of naming them plainly",
+      "Inflating small situations for visibility"
+    ],
+    "opportunities": [
+      "Owning the desire to be seen without apology",
+      "Sharing feelings in a clear, grounded way",
+      "Celebrating wins—yours and others'",
+      "Bringing warmth and generosity into interactions",
+      "Letting emotional honesty have a small stage, not the whole show"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Notice where you want recognition and name it honestly.",
+      "Share feelings with some care for timing and audience.",
+      "Offer appreciation as freely as you seek it.",
+      "Channel expressive energy into creative or playful outlets.",
+      "Let visibility be a choice, not a reaction."
+    ],
+    "avoid": [
+      "Using attention to measure worth",
+      "Escalating emotion to be heard",
+      "Taking every response as a referendum on you",
+      "Demanding a spotlight when a lamp would do",
+      "Confusing being seen with being understood"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Emotional energy wants to be seen, not hidden."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Recognition lands best when it is shared, not demanded."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predicting conflict, ego issues, or dramatic events",
+      "Pathologizing emotional expressiveness",
+      "Deterministic statements about attention-seeking or arrogance"
+    ],
+    "allowed_framing": [
+      "Climate language: 'emotional tone', 'current mood'",
+      "Agency-forward framing: 'you can choose how to express…'",
+      "Contextual framing: 'if emotions feel louder or more visible…'"
+    ]
+  },
+  "tags": [
+    "emotional_expression",
+    "visibility",
+    "recognition",
+    "warmth",
+    "performance",
+    "mood"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Lunar sign transit interpretation"
+  ]
+}
+

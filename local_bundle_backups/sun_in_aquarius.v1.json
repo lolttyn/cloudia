@@ -1,0 +1,100 @@
+{
+    "slug": "sun_in_aquarius",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Sun in Aquarius",
+    "summary": "A season emphasizing perspective, systems, and collective dynamics. Attention shifts toward patterns, ideas, and structures that extend beyond personal concerns. The opportunity is to think differently about how things function and where change is possible.",
+    "trigger": {
+      "signal_key": "sun_in_aquarius"
+    },
+    "meaning": {
+      "headline": "Attention turns toward patterns, systems, and the bigger picture.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "Sun in Aquarius emphasizes perspective, systems thinking, and awareness of collective dynamics."
+        },
+        {
+          "speakability": "must_say",
+          "text": "This period favors objectivity, innovation, and questioning assumptions about how things are supposed to work."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Distance from emotional immediacy can clarify patterns and possibilities."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Change becomes easier when approached through structure rather than impulse."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This requires detachment, rebellion, or emotional distance."
+        }
+      ],
+      "frictions": [
+        "Over-intellectualizing situations",
+        "Disconnection from immediate needs",
+        "Prioritizing ideas over impact",
+        "Assuming perspective equals objectivity",
+        "Resisting structure in the name of change"
+      ],
+      "opportunities": [
+        "Seeing patterns that were previously obscured",
+        "Reframing problems at a systemic level",
+        "Exploring new approaches to existing structures",
+        "Separating assumptions from facts",
+        "Engaging with collective or long-term considerations"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Step back to observe how systems and patterns operate.",
+        "Question inherited assumptions thoughtfully.",
+        "Experiment with new approaches at a structural level.",
+        "Balance perspective with practical follow-through.",
+        "Engage ideas that consider the wider context."
+      ],
+      "avoid": [
+        "Detaching from consequences",
+        "Treating change as disruption for its own sake",
+        "Ignoring emotional or practical realities",
+        "Assuming novelty equals improvement",
+        "Staying abstract without implementation"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Perspective makes change possible."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Patterns become clearer with a little distance."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting social or technological outcomes",
+        "Framing detachment as superiority",
+        "Moralizing innovation or progress"
+      ],
+      "allowed_framing": [
+        "System-level language: 'patterns', 'structures', 'perspective'",
+        "Agency-forward framing: 'you can rethink how things work…'",
+        "Contextual framing: 'if you feel pulled toward new ideas…'"
+      ]
+    },
+    "tags": [
+      "perspective",
+      "systems",
+      "innovation",
+      "objectivity",
+      "collective_context",
+      "reframing"
+    ],
+    "sources": [
+      "Modern psychological astrology",
+      "Seasonal solar sign interpretation"
+    ]
+  }
+  
