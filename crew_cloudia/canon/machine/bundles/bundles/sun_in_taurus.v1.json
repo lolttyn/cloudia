@@ -1,0 +1,99 @@
+{
+    "slug": "sun_in_taurus",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Sun in Taurus",
+    "summary": "A period that centers steadiness, resources, and sensory grounding. Attention settles on what is sustainable, tangible, and nourishing over time.",
+    "trigger": {
+      "signal_key": "sun_in_taurus"
+    },
+    "meaning": {
+      "headline": "The environment favors slow building, reliability, and material care.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Sun in Taurus, the collective focus leans toward stability and deliberate effort." 
+        },
+        {
+          "speakability": "must_say",
+          "text": "This season rewards maintenance, resourcing, and grounded decisions." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Comfort and consistency help ideas take root." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Pace is slower but stickier; repetition builds strength." 
+        },
+        {
+          "speakability": "avoid",
+          "text": "Nothing will change or move." 
+        }
+      ],
+      "frictions": [
+        "Resistance to necessary change",
+        "Overemphasis on comfort over progress",
+        "Holding resources too tightly",
+        "Stalling because the pace feels safe",
+        "Equating stability with refusal to adapt"
+      ],
+      "opportunities": [
+        "Creating routines that fortify energy and budget",
+        "Investing in durable tools or skills",
+        "Using sensory cues to anchor focus",
+        "Consolidating gains instead of expanding too fast",
+        "Valuing quality over volume"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Choose one habit to reinforce daily.",
+        "Check budgets, supplies, and timelines for sustainability.",
+        "Make decisions after pausing to sense what feels solid.",
+        "Tend to food, rest, and space so the body feels supported.",
+        "Practice patience with repetition and upkeep."
+      ],
+      "avoid": [
+        "Digging in only because change feels uncomfortable",
+        "Overindulging as a substitute for rest",
+        "Ignoring feedback because the current plan feels pleasant",
+        "Treating slowness as lack of progress",
+        "Accumulating more than can be maintained"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "This is a season to build what can hold steady."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Simplicity and repetition are advantages right now."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Guarantees of financial outcomes",
+        "Identity claims about being a Taurus",
+        "Promises that nothing will shift"
+      ],
+      "allowed_framing": [
+        "Environmental emphasis on stability and resources",
+        "Agency-based choices about pacing and comfort",
+        "Contextual language about sustainability"
+      ]
+    },
+    "tags": [
+      "stability",
+      "resources",
+      "comfort",
+      "patience",
+      "sustainability",
+      "grounding"
+    ],
+    "sources": [
+      "Seasonal solar transit through Taurus",
+      "Sun in Taurus as collective focus on stability and material care"
+    ]
+  }

@@ -1,0 +1,99 @@
+{
+    "slug": "sun_in_pisces",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Sun in Pisces",
+    "summary": "A period that softens boundaries and highlights imagination, compassion, and closure. Attention drifts toward dreams, synthesis, and dissolving what no longer fits.",
+    "trigger": {
+      "signal_key": "sun_in_pisces"
+    },
+    "meaning": {
+      "headline": "The environment rewards empathy, creativity, and flexible timelines.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Sun in Pisces, the collective tone becomes more receptive, intuitive, and fluid." 
+        },
+        {
+          "speakability": "must_say",
+          "text": "This season supports imagining possibilities, resting, and tying up cycles." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Symbolic or artistic language lands more easily." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Boundaries feel softer, inviting compassion and discernment." 
+        },
+        {
+          "speakability": "avoid",
+          "text": "Practical work is impossible." 
+        }
+      ],
+      "frictions": [
+        "Foggy plans or shifting timelines",
+        "Absorbing others' emotions without filters",
+        "Escapism through fantasy or distraction",
+        "Difficulty saying no",
+        "Confusing intuition with assumption"
+      ],
+      "opportunities": [
+        "Resting and refilling creative wells",
+        "Finishing loose ends before the next cycle",
+        "Letting intuition inspire design and problem-solving",
+        "Offering compassion without self-erasure",
+        "Exploring spiritual or contemplative practices"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Schedule time for reflection and imagination.",
+        "Use gentle structure to keep projects on track.",
+        "Check feelings against facts before deciding.",
+        "Create boundaries that allow empathy without depletion.",
+        "Capture dreams or flashes of insight before they fade."
+      ],
+      "avoid": [
+        "Assuming inspiration replaces planning",
+        "Absorbing everyone else's mood",
+        "Avoiding commitments to keep options limitless",
+        "Using escapism when rest would help",
+        "Letting vague language hide clear needs"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "This is a season for imagination, compassion, and gentle closure."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Soft focus can reveal the next story to finish."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Promises of spiritual revelation",
+        "Identity claims about being a Pisces",
+        "Deterministic statements about confusion or escapism"
+      ],
+      "allowed_framing": [
+        "Environmental focus on empathy and imagination",
+        "Agency-based choices about boundaries and rest",
+        "Contextual framing about endings and renewal"
+      ]
+    },
+    "tags": [
+      "imagination",
+      "compassion",
+      "closure",
+      "intuition",
+      "rest",
+      "fluidity"
+    ],
+    "sources": [
+      "Seasonal solar transit through Pisces",
+      "Sun in Pisces as collective focus on imagination and closure"
+    ]
+  }

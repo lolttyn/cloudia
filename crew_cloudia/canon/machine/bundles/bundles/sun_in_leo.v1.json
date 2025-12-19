@@ -1,0 +1,99 @@
+{
+    "slug": "sun_in_leo",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Sun in Leo",
+    "summary": "A period that spotlights expression, celebration, and creative confidence. The atmosphere encourages visibility, play, and leading with heart.",
+    "trigger": {
+      "signal_key": "sun_in_leo"
+    },
+    "meaning": {
+      "headline": "The environment rewards authenticity, courage to be seen, and generous spirit.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Sun in Leo, the collective tone brightens toward creativity, performance, and recognition." 
+        },
+        {
+          "speakability": "must_say",
+          "text": "This season encourages showing what you care about and sharing it boldly." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Warmth and enthusiasm can rally people around a shared focus." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Playfulness helps restore energy and courage." 
+        },
+        {
+          "speakability": "avoid",
+          "text": "Everyone demands attention or praise." 
+        }
+      ],
+      "frictions": [
+        "Overperforming to seek validation",
+        "Taking feedback as a personal threat",
+        "Dominating the spotlight",
+        "Burnout from constant output",
+        "Confusing confidence with infallibility"
+      ],
+      "opportunities": [
+        "Launching or sharing creative work",
+        "Recognizing and celebrating others",
+        "Practicing visible leadership through encouragement",
+        "Refueling through joy and play",
+        "Aligning actions with core values"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Share a piece of work or progress publicly.",
+        "Give specific praise to collaborators.",
+        "Schedule play that energizes courage.",
+        "Lead with invitation rather than demand.",
+        "Express what you believe in clear, warm language."
+      ],
+      "avoid": [
+        "Centering yourself in every story",
+        "Ignoring rest because inspiration feels high",
+        "Deflecting feedback with theatrics",
+        "Comparing constantly for validation",
+        "Treating visibility as the only measure of worth"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "This is a season to shine with heart and invite others to shine too."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Joy and courage are persuasive right now."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Guarantees of fame or recognition",
+        "Identity claims about being a Leo",
+        "Deterministic statements about ego or pride"
+      ],
+      "allowed_framing": [
+        "Environmental focus on expression and warmth",
+        "Agency-based choices about visibility and generosity",
+        "Contextual framing about creative courage"
+      ]
+    },
+    "tags": [
+      "expression",
+      "confidence",
+      "visibility",
+      "creativity",
+      "joy",
+      "leadership"
+    ],
+    "sources": [
+      "Seasonal solar transit through Leo",
+      "Sun in Leo as collective focus on expression and celebration"
+    ]
+  }

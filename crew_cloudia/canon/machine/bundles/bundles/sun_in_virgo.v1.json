@@ -1,0 +1,99 @@
+{
+    "slug": "sun_in_virgo",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Sun in Virgo",
+    "summary": "A period that emphasizes refinement, service, and practical improvement. Attention narrows to details, workflows, and what keeps systems healthy.",
+    "trigger": {
+      "signal_key": "sun_in_virgo"
+    },
+    "meaning": {
+      "headline": "The environment rewards thoughtful edits, maintenance, and useful support.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Sun in Virgo, the collective tone sharpens around efficiency, skill, and care in execution." 
+        },
+        {
+          "speakability": "must_say",
+          "text": "This season favors organizing, troubleshooting, and making processes kinder to the people using them." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Small adjustments compound; precision matters more than speed." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Service-minded actions gain traction." 
+        },
+        {
+          "speakability": "avoid",
+          "text": "Everything must be perfect before moving forward." 
+        }
+      ],
+      "frictions": [
+        "Overanalyzing minor flaws",
+        "Paralysis from high standards",
+        "Micromanaging others",
+        "Neglecting rest while optimizing",
+        "Critique that lacks compassion"
+      ],
+      "opportunities": [
+        "Auditing systems and cleaning up clutter",
+        "Documenting processes for clarity",
+        "Offering practical help that lightens others' load",
+        "Scheduling health and maintenance tasks",
+        "Translating feedback into actionable tweaks"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Prioritize fixes that remove recurring friction.",
+        "Set up checklists or templates to reduce errors.",
+        "Balance critique with appreciation of progress.",
+        "Make time for body care alongside task care.",
+        "Share the why behind edits to build trust."
+      ],
+      "avoid": [
+        "Spending hours perfecting low-impact details",
+        "Offloading anxiety as nitpicking",
+        "Assuming others should intuit your standards",
+        "Skipping breaks to keep adjusting",
+        "Using self-criticism as motivation"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "This is a season for careful edits and thoughtful service."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Small, kind adjustments go far right now."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Deterministic statements about criticism or anxiety",
+        "Identity claims about being a Virgo",
+        "Guarantees of perfection or failure"
+      ],
+      "allowed_framing": [
+        "Environmental focus on refinement and service",
+        "Agency-based choices about pacing and standards",
+        "Contextual guidance about health and maintenance"
+      ]
+    },
+    "tags": [
+      "refinement",
+      "service",
+      "efficiency",
+      "health",
+      "maintenance",
+      "precision"
+    ],
+    "sources": [
+      "Seasonal solar transit through Virgo",
+      "Sun in Virgo as collective focus on refinement and service"
+    ]
+  }
