@@ -1,0 +1,99 @@
+{
+  "slug": "venus_in_virgo",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Venus in Virgo",
+  "summary": "Affection shows through care, helpfulness, and attention to detail. Preferences lean toward practicality and improvement. The opportunity is to offer support without sliding into perfectionism or critique.",
+  "trigger": {
+    "signal_key": "venus_in_virgo"
+  },
+  "meaning": {
+    "headline": "Love languages tilt toward service, refinement, and reliability.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Venus in Virgo values thoughtful acts, thoughtful feedback, and tidy environments."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Connection strengthens when care is practical and consistent."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Selectivity around commitments or purchases may increase."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Organizing spaces can feel like care for yourself and others."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Pointing out flaws automatically helps or shows love."
+      }
+    ],
+    "frictions": [
+      "Overanalyzing relationships",
+      "Criticism disguised as improvement",
+      "Withholding affection until tasks are complete",
+      "Taking on too much service work",
+      "Difficulty relaxing into pleasure"
+    ],
+    "opportunities": [
+      "Offering practical help to someone who wants it",
+      "Tidying or simplifying a shared space",
+      "Refreshing routines around health and wellbeing",
+      "Choosing quality over quantity in spending",
+      "Sharing feedback gently and specifically"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Ask before fixing or organizing for someone.",
+      "Notice and acknowledge what is already working.",
+      "Schedule rest alongside service.",
+      "Offer specifics when you appreciate someone.",
+      "Let good-enough be enough when perfection stalls connection."
+    ],
+    "avoid": [
+      "Nitpicking to manage anxiety",
+      "Keeping score of favors",
+      "Assuming practicality equals coldness",
+      "Apologizing for having needs",
+      "Turning intimacy into a checklist"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Care can look like thoughtful details—keep it kind, not critical."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Offer help that is wanted, and leave room for rest."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of relationship improvement",
+      "Health or medical promises",
+      "Moralizing neatness or productivity"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can highlight practical care and discernment",
+      "Agency-forward language: you choose how to balance service and rest",
+      "Contextual framing: refinement helps when it stays compassionate"
+    ]
+  },
+  "tags": [
+    "relationships",
+    "service",
+    "discernment",
+    "practicality",
+    "care",
+    "boundaries"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Venus as relating/values archetype in daily cycles"
+  ]
+}

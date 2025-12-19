@@ -1,0 +1,99 @@
+{
+  "slug": "venus_in_aquarius",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Venus in Aquarius",
+  "summary": "Affection is unconventional, intellectual, and future-oriented. Friendship, community, and shared causes shape connection. The opportunity is to honor individuality while staying present to feelings.",
+  "trigger": {
+    "signal_key": "venus_in_aquarius"
+  },
+  "meaning": {
+    "headline": "Relating values freedom, authenticity, and collaboration.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Venus in Aquarius emphasizes friendship energy, openness to difference, and innovative approaches to relating."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Shared ideals or projects can be bonding."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Detachment can help conversations stay objective."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Group activities or causes feel appealing."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Emotional needs should be sidelined in favor of logic."
+      }
+    ],
+    "frictions": [
+      "Appearing aloof or unavailable",
+      "Avoiding intimacy by staying in the friend zone",
+      "Prioritizing ideals over people",
+      "Over-relying on texts or online contact",
+      "Assuming everyone is comfortable with nontraditional dynamics"
+    ],
+    "opportunities": [
+      "Connecting through shared interests or activism",
+      "Discussing relationship agreements openly",
+      "Trying new social formats",
+      "Giving partners space without disengaging",
+      "Innovating how you show appreciation"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "State your boundaries and freedoms clearly.",
+      "Balance heady talk with moments of feeling.",
+      "Include quieter voices in group settings.",
+      "Share the reasoning behind unconventional choices.",
+      "Offer consistent check-ins even if tone stays cool."
+    ],
+    "avoid": [
+      "Using distance to avoid vulnerability",
+      "Treating people as experiments",
+      "Assuming logic replaces reassurance",
+      "Neglecting one-on-one time",
+      "Overlooking jealousy or hurt feelings"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Make space for individuality while keeping the connection human."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Ideas can spark closeness when paired with empathy."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees about unconventional relationship success",
+      "Promises of social outcomes",
+      "Claims that feelings are irrelevant"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can encourage authentic, innovative relating",
+      "Agency-forward language: you choose the agreements that fit",
+      "Contextual framing: objectivity helps when feelings are included"
+    ]
+  },
+  "tags": [
+    "relationships",
+    "authenticity",
+    "community",
+    "innovation",
+    "freedom",
+    "objectivity"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Venus as relating/values archetype in daily cycles"
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "slug": "venus_in_cancer",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Venus in Cancer",
+  "summary": "Affection centers on safety, care, and familiarity. Connection deepens through tenderness, memory, and creating a sense of home. The opportunity is to nurture bonds while honoring your own boundaries.",
+  "trigger": {
+    "signal_key": "venus_in_cancer"
+  },
+  "meaning": {
+    "headline": "Relating turns protective, soft, and emotionally attuned.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Venus in Cancer values emotional security, shared history, and gestures that feel personal."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Care-taking and creating cozy environments become expressions of love."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Private time may feel more nourishing than public plans."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Nostalgia and memory color preferences today."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Closeness requires self-sacrifice or emotional fusion."
+      }
+    ],
+    "frictions": [
+      "Overprotectiveness or clinging",
+      "Taking things personally",
+      "Using caretaking to avoid your own needs",
+      "Difficulty receiving support",
+      "Moodiness impacting plans"
+    ],
+    "opportunities": [
+      "Cooking or sharing comfort food",
+      "Refreshing home spaces",
+      "Checking in on loved ones",
+      "Setting family or household agreements",
+      "Offering empathetic listening"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Name what helps you feel safe before giving to others.",
+      "Create soft plans with room to opt out.",
+      "Share memories that reinforce connection.",
+      "Ask directly for the care you need.",
+      "Let tenderness include clear boundaries."
+    ],
+    "avoid": [
+      "Expecting others to intuit your needs",
+      "Holding grudges instead of speaking up",
+      "Using guilt to secure closeness",
+      "Assuming comfort means no change is needed",
+      "Carrying all the emotional labor"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Care can be warm and clear at the same time."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Nurture the bond, and name what you need too."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions of family or relationship outcomes",
+      "Implying obligation to give care",
+      "Pathologizing emotional expression"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can heighten tenderness and receptivity",
+      "Agency-forward language: you choose how to care and receive",
+      "Contextual framing: safety helps when paired with boundaries"
+    ]
+  },
+  "tags": [
+    "relationships",
+    "care",
+    "empathy",
+    "home",
+    "boundaries",
+    "nurturing"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Venus as relating/values archetype in daily cycles"
+  ]
+}

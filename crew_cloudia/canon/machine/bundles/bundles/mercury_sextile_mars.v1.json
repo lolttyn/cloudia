@@ -1,0 +1,102 @@
+{
+  "slug": "mercury_sextile_mars",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Mercury sextile Mars",
+  "summary": "Mental energy and action cooperate. Decisions can be made efficiently, and direct speech is easier without tipping into aggression. The opportunity is to aim quick thinking toward constructive tasks.",
+  "trigger": {
+    "signal_key": "mercury_sextile_mars",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Thought and drive support each other, enabling decisive communication.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mercury–Mars sextiles provide accessible focus for solving problems or initiating conversations."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Words can move faster today, making it easier to state intentions plainly."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Mental stamina improves when tasks have clear targets."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Debates can stay productive if aimed at action instead of ego."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Everyone will welcome bluntness or speed."
+      }
+    ],
+    "frictions": [
+      "Talking over others",
+      "Finishing other people’s sentences",
+      "Rushing decisions without enough data",
+      "Irritability when slowed down",
+      "Assuming your urgency is shared"
+    ],
+    "opportunities": [
+      "Sending direct messages or requests",
+      "Tackling tasks that need quick thinking",
+      "Making swift but informed choices",
+      "Using short sprints to clear clutter",
+      "Advancing conversations that were stuck"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Aim mental energy at one priority at a time.",
+      "Speak concisely and check for consent to move fast.",
+      "Use brief pauses to keep tone steady.",
+      "Document decisions so speed does not erase details.",
+      "Channel restlessness into movement or hands-on tasks."
+    ],
+    "avoid": [
+      "Pressuring others to decide immediately",
+      "Assuming fast equals right",
+      "Letting sarcasm creep into directness",
+      "Skipping context when delivering feedback",
+      "Taking questions as challenges"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Quick thinking works best when it is aimed, not sprayed."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Direct words land better when they include consent to go fast."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of victory or flawless decisions",
+      "Predictions of conflict or arguments",
+      "Claims that bluntness will be rewarded"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can energize clear thinking and action",
+      "Agency-forward language: you choose pacing and tone",
+      "Contextual framing: speed helps when aligned with clarity"
+    ]
+  },
+  "tags": [
+    "communication",
+    "initiative",
+    "clarity",
+    "focus",
+    "momentum",
+    "decisiveness"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mercury–Mars sextile as actionable clarity"
+  ]
+}

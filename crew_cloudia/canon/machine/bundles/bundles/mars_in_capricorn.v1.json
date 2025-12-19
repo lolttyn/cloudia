@@ -1,0 +1,99 @@
+{
+  "slug": "mars_in_capricorn",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mars in Capricorn",
+  "summary": "Drive turns disciplined, strategic, and results-focused. Effort goes toward structure, responsibility, and goals that endure. The opportunity is to work steadily without becoming rigid or overburdened.",
+  "trigger": {
+    "signal_key": "mars_in_capricorn"
+  },
+  "meaning": {
+    "headline": "Action prioritizes competence, planning, and sustainable output.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mars in Capricorn supports perseverance, ambition, and taking responsibility for outcomes."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Energy is best spent on tasks with clear purpose and payoff."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Boundaries and timelines sharpen focus."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Physical discipline—like training or structured movement—feels productive."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Work is the only measure of worth."
+      }
+    ],
+    "frictions": [
+      "Overworking or ignoring rest",
+      "Using control to manage anxiety",
+      "Impatience with less organized collaborators",
+      "Pessimism when results are slow",
+      "Difficulty delegating"
+    ],
+    "opportunities": [
+      "Setting milestones and accountability",
+      "Handling long-term planning",
+      "Completing structural tasks",
+      "Taking ownership in leadership roles",
+      "Improving physical stamina"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Clarify the goal and the resources available.",
+      "Schedule work and rest deliberately.",
+      "Communicate expectations early.",
+      "Share responsibilities instead of carrying everything.",
+      "Measure progress realistically."
+    ],
+    "avoid": [
+      "Equating productivity with value",
+      "Assuming authority makes you infallible",
+      "Cutting corners to stay on schedule",
+      "Resisting help that could lighten the load",
+      "Letting cynicism erode motivation"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Discipline can carry you far today—pair it with rest."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Aim for durable progress, not just speed."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Career or financial guarantees",
+      "Moralizing productivity",
+      "Assuming authority over others’ paths"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can strengthen perseverance and structure",
+      "Agency-forward language: you choose pacing and responsibility",
+      "Contextual framing: discipline helps when balanced with care"
+    ]
+  },
+  "tags": [
+    "action",
+    "discipline",
+    "planning",
+    "responsibility",
+    "ambition",
+    "structure"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mars as drive/assertion archetype in daily cycles"
+  ]
+}

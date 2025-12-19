@@ -1,0 +1,99 @@
+{
+  "slug": "venus_in_sagittarius",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Venus in Sagittarius",
+  "summary": "Affection is adventurous, candid, and future-facing. Connection thrives through exploration, humor, and shared philosophy. The opportunity is to enjoy freedom together while staying truthful about expectations.",
+  "trigger": {
+    "signal_key": "venus_in_sagittarius"
+  },
+  "meaning": {
+    "headline": "Relating seeks openness, discovery, and honest enthusiasm.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Venus in Sagittarius favors spontaneity, travel, and conversations about meaning."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Humor and bluntness can bring people closer when paired with care."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Variety and learning together feel attractive."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Shared adventures strengthen bonds."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Freedom means commitments do not matter."
+      }
+    ],
+    "frictions": [
+      "Overpromising in enthusiasm",
+      "Foot-in-mouth honesty",
+      "Neglecting details like timing or budget",
+      "Restlessness with routine",
+      "Avoiding emotional depth by staying upbeat"
+    ],
+    "opportunities": [
+      "Planning an outing or learning experience",
+      "Sharing a big idea with someone you trust",
+      "Bringing humor to lighten tension",
+      "Discussing beliefs with openness",
+      "Refreshing relationship goals together"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "State what freedom and commitment mean to you.",
+      "Confirm logistics before leaping into plans.",
+      "Use honesty kindly, not as a weapon.",
+      "Invite others on adventures rather than assuming.",
+      "Let optimism be paired with backup plans."
+    ],
+    "avoid": [
+      "Assuming jokes land for everyone",
+      "Overextending budgets or energy",
+      "Changing plans without communication",
+      "Dodging hard feelings with humor",
+      "Treating openness as lack of responsibility"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Share the adventure—and the expectations that come with it."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Candid warmth goes further when paired with follow-through."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of travel or relationship success",
+      "Moral judgments about belief systems",
+      "Encouraging risk without consent"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can inspire exploration and honesty",
+      "Agency-forward language: you choose how to mix freedom and commitment",
+      "Contextual framing: enthusiasm helps when grounded"
+    ]
+  },
+  "tags": [
+    "relationships",
+    "adventure",
+    "honesty",
+    "freedom",
+    "exploration",
+    "optimism"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Venus as relating/values archetype in daily cycles"
+  ]
+}

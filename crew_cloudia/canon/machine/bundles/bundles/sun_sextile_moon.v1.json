@@ -1,0 +1,102 @@
+{
+  "slug": "sun_sextile_moon",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Sun sextile Moon",
+  "summary": "A cooperative tone between outer roles and inner mood. It becomes easier to match what you do with how you feel without needing perfect conditions. The opportunity is gentle alignment that supports steady follow-through.",
+  "trigger": {
+    "signal_key": "sun_sextile_moon",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Outer expression and inner state collaborate instead of competing.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Sun–Moon sextiles offer a supportive link between feelings and actions, making practical tasks feel less emotionally costly."
+      },
+      {
+        "speakability": "must_say",
+        "text": "It’s a helpful day for integrating needs into plans without losing momentum."
+      },
+      {
+        "speakability": "can_say",
+        "text": "You may notice more willingness to adjust schedules to fit energy levels."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Small gestures of care toward yourself or others go a long way."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Everything will feel easy or emotionally resolved."
+      }
+    ],
+    "frictions": [
+      "Letting mild comfort turn into procrastination",
+      "Assuming harmony means no need to check in",
+      "Skipping boundaries because mood is good",
+      "Treating alignment as a reason to multitask excessively",
+      "Ignoring subtle signals of fatigue"
+    ],
+    "opportunities": [
+      "Scheduling tasks to match energy",
+      "Having calm conversations about needs",
+      "Starting routines that support emotional steadiness",
+      "Offering practical help where you feel connected",
+      "Using intuitive timing for outreach or planning"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Blend practical tasks with small comforts.",
+      "Check in with your body before saying yes.",
+      "Share feelings briefly to keep teamwork smooth.",
+      "Use this flow to start sustainable habits.",
+      "Let gentleness, not urgency, set the pace."
+    ],
+    "avoid": [
+      "Assuming good mood replaces preparation",
+      "Taking on extra emotional labor by default",
+      "Overcommitting because you feel up for it now",
+      "Ignoring signs that rest is needed",
+      "Using ease as an excuse to delay decisions"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Inner weather and outer plans can cooperate today."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Match tasks to your current energy for smoother progress."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of emotional harmony or success",
+      "Predictions of conflict-free interactions",
+      "Claims that feelings dictate outcomes"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can ease coordination between mood and action",
+      "Agency-based language: you can choose how to use the flow",
+      "Contextual framing: cooperative tone helps if you engage with it"
+    ]
+  },
+  "tags": [
+    "harmony",
+    "emotional_regulation",
+    "planning",
+    "cooperation",
+    "self_care",
+    "follow_through"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Sun–Moon sextile as supportive alignment"
+  ]
+}

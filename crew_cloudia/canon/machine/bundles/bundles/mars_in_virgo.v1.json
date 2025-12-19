@@ -1,0 +1,99 @@
+{
+  "slug": "mars_in_virgo",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mars in Virgo",
+  "summary": "Drive focuses on precision, problem-solving, and useful service. Effort goes toward improving systems and details. The opportunity is to channel energy into meaningful fixes without overworking or nitpicking.",
+  "trigger": {
+    "signal_key": "mars_in_virgo"
+  },
+  "meaning": {
+    "headline": "Action is meticulous, organized, and oriented toward usefulness.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mars in Virgo supports thorough work, maintenance, and practical solutions."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Energy flows toward tasks that improve efficiency or wellbeing."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Lists and routines help convert motivation into progress."
+      },
+      {
+        "speakability": "can_say",
+        "text": "The urge to perfect can be helpful if scoped."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Everything must be flawless before moving forward."
+      }
+    ],
+    "frictions": [
+      "Overworking small details",
+      "Criticism toward self or others",
+      "Paralysis from wanting the ideal plan",
+      "Taking on tasks to control outcomes",
+      "Burnout from constant fixing"
+    ],
+    "opportunities": [
+      "Cleaning, organizing, or repairing",
+      "Improving workflows",
+      "Offering service where it is requested",
+      "Health routines and mindful movement",
+      "Documenting processes"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Triage tasks by impact before diving in.",
+      "Set time boxes for detailed work.",
+      "Balance critique with acknowledgment.",
+      "Hydrate and stretch while you work.",
+      "Stop when good-enough meets the goal."
+    ],
+    "avoid": [
+      "Fixing what is not yours to fix",
+      "Using efficiency to avoid feelings",
+      "Endless tweaking instead of delivering",
+      "Taking over others’ tasks without consent",
+      "Skipping rest because there is always more to do"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Aim your effort where a precise fix makes a real difference."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Progress counts even when it is not perfect."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Health or medical guarantees",
+      "Moralizing productivity",
+      "Promises of perfection"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can sharpen focus and improvement",
+      "Agency-forward language: you choose what to refine",
+      "Contextual framing: precision helps when balanced with rest"
+    ]
+  },
+  "tags": [
+    "action",
+    "precision",
+    "organization",
+    "service",
+    "efficiency",
+    "health"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mars as drive/assertion archetype in daily cycles"
+  ]
+}

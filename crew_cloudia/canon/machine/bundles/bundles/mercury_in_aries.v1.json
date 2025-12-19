@@ -1,0 +1,99 @@
+{
+  "slug": "mercury_in_aries",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mercury in Aries",
+  "summary": "A mental climate that favors speed and directness. Ideas arrive quickly and the urge to decide follows fast. The opportunity is crisp action supported by clear words, without sacrificing listening.",
+  "trigger": {
+    "signal_key": "mercury_in_aries"
+  },
+  "meaning": {
+    "headline": "Thinking moves fast and wants a target.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mercury in Aries emphasizes rapid decisions, blunt speech, and initiative in conversation."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Directness can clear the air, especially when paired with a willingness to adjust if new information appears."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Momentum builds when a clear challenge or problem is identified."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Short bursts of focus work better than slow, meandering discussion."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Speed guarantees accuracy or gives permission to ignore others."
+      }
+    ],
+    "frictions": [
+      "Interrupting or finishing others’ sentences",
+      "Assuming agreement because you spoke first",
+      "Impatience with details or nuance",
+      "Arguments sparked by tone rather than content",
+      "Burnout from sprinting through mental tasks"
+    ],
+    "opportunities": [
+      "Kick-starting stalled conversations",
+      "Making a decision that has lingered",
+      "Pitching ideas concisely",
+      "Starting a project that needs courage to begin",
+      "Practicing clean requests without overexplaining"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Lead with a headline, then invite response.",
+      "Use timers or sprints for focused work.",
+      "Check consent before accelerating a conversation.",
+      "Write decisions down to avoid rehashing them.",
+      "Move your body to discharge mental restlessness."
+    ],
+    "avoid": [
+      "Treating disagreement as disrespect",
+      "Speaking louder instead of clearer",
+      "Jumping to conclusions without verifying",
+      "Taking on too many urgent tasks at once",
+      "Forgetting to loop in slower processors"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Quick thinking is available—aim it before you fire."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Direct words land best when paired with a moment to listen."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of success from bold speech",
+      "Predictions of conflict or arguments",
+      "Claims that fast thinking is superior"
+    ],
+    "allowed_framing": [
+      "Process language: can energize decisions and candid dialogue",
+      "Agency-forward framing: you choose when to speed up or pause",
+      "Contextual framing: clarity improves when tempo matches the task"
+    ]
+  },
+  "tags": [
+    "communication",
+    "initiative",
+    "clarity",
+    "decision_making",
+    "courage",
+    "momentum"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mercury as mind/communication archetype in daily cycles"
+  ]
+}

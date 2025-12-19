@@ -1,0 +1,99 @@
+{
+  "slug": "mars_in_gemini",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mars in Gemini",
+  "summary": "Action disperses into conversations, multitasking, and quick pivots. Mental energy fuels movement, but focus can scatter. The opportunity is to aim versatility toward a few clear objectives.",
+  "trigger": {
+    "signal_key": "mars_in_gemini"
+  },
+  "meaning": {
+    "headline": "Drive is agile, verbal, and curious—and needs direction.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mars in Gemini energizes communication, errands, and short bursts of effort."
+      },
+      {
+        "speakability": "must_say",
+        "text": "It thrives on variety and quick wins."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Debate and brainstorming can feel charged."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Movement between topics is easier than sticking with one."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Busyness equals productivity."
+      }
+    ],
+    "frictions": [
+      "Scattered effort and half-finished tasks",
+      "Sharp words spoken too fast",
+      "Restlessness leading to distraction",
+      "Overcommitment to multiple options",
+      "Decision fatigue"
+    ],
+    "opportunities": [
+      "Knocking out quick tasks or messages",
+      "Handling logistics and coordination",
+      "Using sprints of effort with breaks",
+      "Learning something new through action",
+      "Turning dialogue into actionable steps"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Limit priorities to two or three.",
+      "Use checklists to track moving pieces.",
+      "Take breathing breaks before responding in conflict.",
+      "Batch similar tasks to stay efficient.",
+      "Channel curiosity into research that informs action."
+    ],
+    "avoid": [
+      "Saying yes to every invite",
+      "Multitasking through sensitive conversations",
+      "Jumping topics mid-agreement",
+      "Letting sarcasm replace clarity",
+      "Skimming details that matter"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Use quick moves—then tie them off."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Curiosity fuels action when you keep it aimed."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of productivity",
+      "Predictions of conflict or gossip",
+      "Claims that multitasking is required"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can boost versatility and communication",
+      "Agency-forward language: you choose which threads to pull",
+      "Contextual framing: speed helps when paired with closure"
+    ]
+  },
+  "tags": [
+    "action",
+    "communication",
+    "versatility",
+    "focus",
+    "coordination",
+    "momentum"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mars as drive/assertion archetype in daily cycles"
+  ]
+}

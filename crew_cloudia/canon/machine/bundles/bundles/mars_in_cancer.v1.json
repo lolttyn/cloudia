@@ -1,0 +1,99 @@
+{
+  "slug": "mars_in_cancer",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mars in Cancer",
+  "summary": "Action funnels through protection, care, and home matters. Motivation is tied to feelings and the wellbeing of close people. The opportunity is to act from empathy without letting moodiness steer every move.",
+  "trigger": {
+    "signal_key": "mars_in_cancer"
+  },
+  "meaning": {
+    "headline": "Drive is defensive, nurturing, and responsive to emotion.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mars in Cancer channels energy into caring for loved ones, domestic tasks, and emotional safety."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Action rises when someone or something feels worth protecting."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Motivation fluctuates with mood and environment."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Indirect approaches may feel safer than confrontation."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Emotions should dictate all decisions or justify avoidance."
+      }
+    ],
+    "frictions": [
+      "Passive-aggressive responses",
+      "Holding resentment instead of speaking up",
+      "Protecting others at personal cost",
+      "Retreating when challenged",
+      "Acting on assumptions about others’ feelings"
+    ],
+    "opportunities": [
+      "Addressing home or family tasks",
+      "Having a boundary-setting conversation",
+      "Channeling energy into cooking or caretaking",
+      "Offering practical support to someone struggling",
+      "Using movement to process feelings"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Name what you are protecting before acting.",
+      "Ask how support is wanted instead of guessing.",
+      "Take breaks if emotions run hot.",
+      "Use direct language even when softening the tone.",
+      "Secure your own needs alongside others’."
+    ],
+    "avoid": [
+      "Letting guilt drive every choice",
+      "Expecting others to read your mood",
+      "Burying conflict until it erupts",
+      "Overcommitting to care work",
+      "Using silence to punish"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Protect what matters with clarity, not guessing."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Care-driven action is strongest when you name your needs too."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions of family conflict",
+      "Assumptions about someone’s emotional state",
+      "Pathologizing moods"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can motivate protective, caring action",
+      "Agency-forward language: you choose how to respond to feelings",
+      "Contextual framing: emotional tone helps when paired with communication"
+    ]
+  },
+  "tags": [
+    "action",
+    "protection",
+    "care",
+    "home",
+    "boundaries",
+    "emotion"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mars as drive/assertion archetype in daily cycles"
+  ]
+}

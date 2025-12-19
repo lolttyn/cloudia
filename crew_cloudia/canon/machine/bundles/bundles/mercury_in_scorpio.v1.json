@@ -1,0 +1,99 @@
+{
+  "slug": "mercury_in_scorpio",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mercury in Scorpio",
+  "summary": "A penetrating, investigative mindset. Conversations seek depth, motives, and hidden information. The opportunity is to use discernment and honesty without tipping into suspicion or intensity that others cannot hold.",
+  "trigger": {
+    "signal_key": "mercury_in_scorpio"
+  },
+  "meaning": {
+    "headline": "Thinking digs beneath the surface for truth and strategy.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mercury in Scorpio sharpens focus on underlying motives, patterns, and power dynamics."
+      },
+      {
+        "speakability": "must_say",
+        "text": "It favors confidentiality and targeted conversations over casual chatter."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Research, analysis, and problem-solving benefit from persistence."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Emotional honesty can deepen trust when delivered with care."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Intensity means you will uncover every secret or control outcomes."
+      }
+    ],
+    "frictions": [
+      "Fixating on worst-case scenarios",
+      "Reading between the lines until stories become distorted",
+      "Holding back information to maintain control",
+      "Interrogative tone that feels invasive",
+      "All-or-nothing thinking"
+    ],
+    "opportunities": [
+      "Investigative tasks or audits",
+      "Therapeutic or truth-seeking conversations",
+      "Strategic planning",
+      "Setting stronger privacy boundaries",
+      "Transforming a lingering issue through honest dialogue"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Ask direct but respectful questions.",
+      "Share only what you are willing to stand behind.",
+      "Use your insight to protect, not to corner.",
+      "Take breaks if rumination builds.",
+      "Offer solutions alongside critiques."
+    ],
+    "avoid": [
+      "Assuming hidden agendas without evidence",
+      "Using secrets as leverage",
+      "Letting curiosity override consent",
+      "Speaking in absolutes",
+      "Digging for information you do not need"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Look beneath the surface, but let facts lead the way."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Depth works best when trust and consent stay intact."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of uncovering truth or deception",
+      "Predictions of betrayal or crisis",
+      "Psychological or trauma diagnoses"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can aid deep research and honest dialogue",
+      "Agency-forward language: you choose what to investigate and share",
+      "Contextual framing: intensity helps when anchored in consent"
+    ]
+  },
+  "tags": [
+    "communication",
+    "investigation",
+    "depth",
+    "strategy",
+    "privacy",
+    "clarity"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mercury as mind/communication archetype in daily cycles"
+  ]
+}

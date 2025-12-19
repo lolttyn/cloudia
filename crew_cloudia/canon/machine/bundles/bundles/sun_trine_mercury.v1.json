@@ -1,0 +1,102 @@
+{
+  "slug": "sun_trine_mercury",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Sun trine Mercury",
+  "summary": "A clear channel between sense of self and thinking. Ideas articulate easily, and communication can flow with confidence and warmth. The opportunity is to translate insight into decisions without skipping due diligence.",
+  "trigger": {
+    "signal_key": "sun_trine_mercury",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Voice and mind are synchronized, easing expression and learning.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Sun–Mercury trines favor articulate communication and coherent decision-making."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Self-expression feels natural, making it easier to share perspective or teach."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Conversations can reveal solutions because listening and speaking feel balanced."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Learning or writing projects benefit from focus."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Everything you say will be understood exactly as intended."
+      }
+    ],
+    "frictions": [
+      "Gliding past details because confidence is high",
+      "Talking more than acting",
+      "Assuming shared understanding without confirming",
+      "Overcommitting verbally",
+      "Letting charisma replace substance"
+    ],
+    "opportunities": [
+      "Making announcements or presentations",
+      "Documenting plans clearly",
+      "Refreshing agreements with straightforward language",
+      "Synthesizing information for others",
+      "Using clarity to resolve minor misunderstandings"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Speak plainly and check for alignment.",
+      "Capture ideas in writing while flow is strong.",
+      "Use clarity to close open loops.",
+      "Invite feedback to refine plans.",
+      "Balance talking with concrete steps."
+    ],
+    "avoid": [
+      "Assuming charisma equals consent",
+      "Skipping research because answers seem obvious",
+      "Interrupting slower thinkers",
+      "Overpromising because confidence is high",
+      "Treating your perspective as the only one"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Clear thinking pairs with clear voice today—use it to move things forward."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Confidence plus listening keeps conversations productive."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of persuasion or success",
+      "Claims of superior intelligence",
+      "Promises that communication will solve everything"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can ease expression and planning",
+      "Agency-forward language: you choose how to use the clarity",
+      "Contextual framing: good flow helps if paired with follow-through"
+    ]
+  },
+  "tags": [
+    "communication",
+    "clarity",
+    "planning",
+    "learning",
+    "confidence",
+    "expression"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Sun–Mercury trine as expressive clarity"
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "slug": "sun_sextile_mars",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Sun sextile Mars",
+  "summary": "A supportive current between purpose and action. Effort feels more natural, making it easier to take practical steps without force. The opportunity is to use steady motivation instead of sprinting or stalling.",
+  "trigger": {
+    "signal_key": "sun_sextile_mars",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Initiative can move smoothly when aligned with clear intent.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Sun–Mars sextiles provide accessible drive that responds well to focus."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Action feels less pressured, encouraging measured follow-through."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Confidence rises when tasks match your personal priorities."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Physical movement can help translate ideas into momentum."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Everything will happen effortlessly without effort."
+      }
+    ],
+    "frictions": [
+      "Starting too many tasks because energy feels available",
+      "Underestimating effort needed for completion",
+      "Impatience with slower collaborators",
+      "Skipping warm-ups or preparation",
+      "Letting excitement override pacing"
+    ],
+    "opportunities": [
+      "Taking initiative on manageable goals",
+      "Pairing planning with immediate small actions",
+      "Addressing conflicts directly but calmly",
+      "Using exercise or movement to release tension",
+      "Building confidence through consistent steps"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Pick one or two targets and act on them early.",
+      "Break big tasks into doable actions.",
+      "Use short bursts of effort with breaks to maintain quality.",
+      "Coordinate expectations with teammates.",
+      "Channel energy into constructive physical outlets."
+    ],
+    "avoid": [
+      "Jumping into every opportunity at once",
+      "Using speed to bypass consent or alignment",
+      "Treating adrenaline as a plan",
+      "Dismissing feedback that slows you down",
+      "Ignoring rest because things feel easy"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Steady motivation is available—aim it where it matters."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Action can flow without force when intent is clear."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of success or victory",
+      "Predictions of conflict or accidents",
+      "Assumptions that motivation will last indefinitely"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can make action feel smoother",
+      "Agency-forward language: you choose how to use the energy",
+      "Contextual framing: good momentum helps if directed"
+    ]
+  },
+  "tags": [
+    "initiative",
+    "drive",
+    "momentum",
+    "focus",
+    "confidence",
+    "action"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Sun–Mars sextile as accessible drive"
+  ]
+}

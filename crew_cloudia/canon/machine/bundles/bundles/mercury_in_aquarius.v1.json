@@ -1,0 +1,99 @@
+{
+  "slug": "mercury_in_aquarius",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mercury in Aquarius",
+  "summary": "A mental atmosphere favoring innovation, objectivity, and systems thinking. Ideas can be unconventional and future-focused. The opportunity is to share insights with clarity while staying open to other viewpoints.",
+  "trigger": {
+    "signal_key": "mercury_in_aquarius"
+  },
+  "meaning": {
+    "headline": "Thinking gets inventive and looks at the bigger system.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mercury in Aquarius highlights originality, technology, and collaborative problem-solving."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Detachment can help assess information objectively."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Networks and communities become key channels for ideas."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Brainstorming favors unconventional angles."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Being different automatically makes an idea better."
+      }
+    ],
+    "frictions": [
+      "Coming across as detached or contrarian",
+      "Overemphasizing theory over implementation",
+      "Information overload from constant updates",
+      "Ignoring emotional context",
+      "Digging in on an idea just because it is unique"
+    ],
+    "opportunities": [
+      "Testing new tools or workflows",
+      "Crowdsourcing ideas",
+      "Designing equitable systems",
+      "Sharing insights in community spaces",
+      "Thinking ahead about long-term impacts"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Explain the why behind unconventional ideas.",
+      "Blend data with empathy when communicating.",
+      "Invite diverse voices into brainstorming.",
+      "Prototype before committing fully.",
+      "Notice when you are speaking in jargon and simplify."
+    ],
+    "avoid": [
+      "Dismissing traditions without understanding them",
+      "Arguing for novelty alone",
+      "Ignoring how people feel about change",
+      "Assuming online consensus equals real buy-in",
+      "Letting ideas stay theoretical"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Innovate with context—let the idea serve the people involved."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Share the experiment and gather feedback before scaling."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of technological success",
+      "Predictions about social movements",
+      "Claims that logic overrides emotion"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can inspire inventive thinking and collaboration",
+      "Agency-forward language: you choose which ideas to test",
+      "Contextual framing: objectivity helps when paired with empathy"
+    ]
+  },
+  "tags": [
+    "communication",
+    "innovation",
+    "systems",
+    "collaboration",
+    "objectivity",
+    "future_focus"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mercury as mind/communication archetype in daily cycles"
+  ]
+}

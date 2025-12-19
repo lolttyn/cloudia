@@ -1,0 +1,99 @@
+{
+  "slug": "venus_in_leo",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Venus in Leo",
+  "summary": "Affection wants to be seen and celebrated. Generosity, play, and creative flair color relationships. The opportunity is to share warmth boldly while keeping humility and reciprocity in view.",
+  "trigger": {
+    "signal_key": "venus_in_leo"
+  },
+  "meaning": {
+    "headline": "Connection is expressive, proud, and eager to brighten the room.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Venus in Leo highlights grand gestures, loyalty, and the joy of being admired."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Creativity and playfulness become avenues for affection."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Confidence in love grows when appreciation is mutual."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Dramatic flair is fun when grounded in sincerity."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Attention guarantees devotion or gives license to overpromise."
+      }
+    ],
+    "frictions": [
+      "Performing affection for applause",
+      "Jealousy when attention shifts",
+      "Taking feedback as criticism of worth",
+      "Overspending to impress",
+      "Centering self over the relationship"
+    ],
+    "opportunities": [
+      "Planning a fun outing",
+      "Offering heartfelt compliments",
+      "Showcasing a creative gift",
+      "Being generous with time or resources",
+      "Celebrating someone else’s win"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Give praise that is specific and real.",
+      "Invite others into the spotlight with you.",
+      "Balance generosity with agreed limits.",
+      "Use play to diffuse minor tension.",
+      "Express needs without theatrics."
+    ],
+    "avoid": [
+      "Treating attention as a competition",
+      "Ignoring practical details while chasing fun",
+      "Using charm to avoid accountability",
+      "Assuming affection must be flashy",
+      "Making promises in the heat of excitement"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Let your warmth shine, and let others shine too."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Bold affection works best when it’s grounded in truth."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of popularity or romantic success",
+      "Guarantees of loyalty",
+      "Assumptions that visibility equals value"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can boost generosity and self-expression",
+      "Agency-forward language: you choose how to give and receive attention",
+      "Contextual framing: playfulness helps when paired with sincerity"
+    ]
+  },
+  "tags": [
+    "relationships",
+    "creativity",
+    "confidence",
+    "celebration",
+    "generosity",
+    "warmth"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Venus as relating/values archetype in daily cycles"
+  ]
+}

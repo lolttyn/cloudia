@@ -1,0 +1,99 @@
+{
+  "slug": "mercury_in_pisces",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mercury in Pisces",
+  "summary": "Communication becomes intuitive and imaginative. Metaphor, music, and feeling may convey more than direct analysis. The opportunity is to let sensitivity guide insight without losing boundaries or facts.",
+  "trigger": {
+    "signal_key": "mercury_in_pisces"
+  },
+  "meaning": {
+    "headline": "Mind drifts toward empathy, symbolism, and porous listening.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mercury in Pisces amplifies imagination and emotional attunement in communication."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Nonlinear thinking can connect disparate ideas creatively."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Art, music, or spiritual topics may feel especially resonant."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Silence and reflection can be as communicative as speech."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Boundaries should dissolve or facts no longer matter."
+      }
+    ],
+    "frictions": [
+      "Confusion from vague language",
+      "Absorbing others’ moods and losing focus",
+      "Escapism instead of problem-solving",
+      "Over-idealizing people or plans",
+      "Difficulty with precise details"
+    ],
+    "opportunities": [
+      "Creative writing, music, or visualization",
+      "Compassionate listening",
+      "Dream work or journaling",
+      "Imagining new possibilities without judgment",
+      "Offering reassurance in sensitive moments"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Translate imagery into clear steps before acting.",
+      "Set time limits for daydreaming and planning.",
+      "Clarify what is yours versus what you are picking up from others.",
+      "Use grounding tools—lists, timers, or collaborators.",
+      "Speak gently while still naming specifics."
+    ],
+    "avoid": [
+      "Making promises based on inspiration alone",
+      "Withholding boundaries to seem kind",
+      "Assuming others understand your metaphors",
+      "Ignoring data that contradicts a dream",
+      "Taking on emotional labor without support"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Let intuition inspire you, then translate it into something concrete."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Softness can communicate plenty—just pair it with clarity."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Psychic or prophetic guarantees",
+      "Promises of healing or spiritual outcomes",
+      "Encouraging boundaryless behavior"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can heighten empathy and imagination",
+      "Agency-forward language: you choose how to ground inspiration",
+      "Contextual framing: sensitivity helps when paired with boundaries"
+    ]
+  },
+  "tags": [
+    "communication",
+    "intuition",
+    "creativity",
+    "empathy",
+    "boundaries",
+    "imagination"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mercury as mind/communication archetype in daily cycles"
+  ]
+}

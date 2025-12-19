@@ -1,11 +1,11 @@
 {
-    "slug": "sun_conjunct_venus",
+    "slug": "sun_conjunction_venus",
     "version": 1,
     "kind": "aspect",
-    "title": "Sun conjunct Venus",
+    "title": "Sun conjunction Venus",
     "summary": "A convergence of identity and values. Expression softens, relationships and aesthetics come into focus, and choices are guided by what feels worth sustaining. The opportunity is coherence without complacency.",
     "trigger": {
-      "signal_key": "sun_conjunct_venus",
+      "signal_key": "sun_conjunction_venus",
       "constraints": {
         "orb_max_degrees": 3
       }

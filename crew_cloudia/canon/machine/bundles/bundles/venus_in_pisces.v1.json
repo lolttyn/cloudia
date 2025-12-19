@@ -1,0 +1,99 @@
+{
+  "slug": "venus_in_pisces",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Venus in Pisces",
+  "summary": "Affection is compassionate, dreamy, and imaginative. Boundaries can blur as empathy heightens. The opportunity is to extend kindness while keeping clarity about needs and limits.",
+  "trigger": {
+    "signal_key": "venus_in_pisces"
+  },
+  "meaning": {
+    "headline": "Connection leans toward empathy, idealism, and creative bonding.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Venus in Pisces amplifies sensitivity, romance, and willingness to see the best in others."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Art, music, and spiritual connection can feel nourishing."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Compassionate gestures and forgiveness come more easily."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Daydreaming about possibilities may increase."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Love should ignore boundaries or practical realities."
+      }
+    ],
+    "frictions": [
+      "Idealizing others and missing red flags",
+      "Overextending to help",
+      "Confusing hope with agreement",
+      "Avoiding direct communication",
+      "Escaping into fantasy or substances"
+    ],
+    "opportunities": [
+      "Offering heartfelt support",
+      "Creating or enjoying art together",
+      "Practicing forgiveness with discernment",
+      "Engaging in spiritual or reflective activities",
+      "Holding space for emotions without fixing"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Name your needs even while being generous.",
+      "Check reality before making promises.",
+      "Use creative outlets to express affection.",
+      "Set gentle boundaries around time and energy.",
+      "Clarify what support you can actually provide."
+    ],
+    "avoid": [
+      "Assuming others understand unspoken expectations",
+      "Taking on savior roles",
+      "Letting guilt dictate generosity",
+      "Overlooking practical next steps",
+      "Merging identities to keep peace"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Kindness lands best when it keeps everyone’s boundaries intact."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Let the dream inspire you, and let clarity keep it real."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of soulmate encounters",
+      "Spiritual or medical guarantees",
+      "Encouraging boundaryless behavior"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can heighten compassion and imagination",
+      "Agency-forward language: you choose how to offer care",
+      "Contextual framing: softness helps when paired with honesty"
+    ]
+  },
+  "tags": [
+    "relationships",
+    "empathy",
+    "creativity",
+    "boundaries",
+    "idealism",
+    "compassion"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Venus as relating/values archetype in daily cycles"
+  ]
+}

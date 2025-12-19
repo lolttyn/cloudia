@@ -1,11 +1,11 @@
 {
-    "slug": "mercury_conjunct_mars",
+    "slug": "mercury_conjunction_mars",
     "version": 1,
     "kind": "aspect",
-    "title": "Mercury conjunct Mars",
+    "title": "Mercury conjunction Mars",
     "summary": "A convergence of thought and action. Ideas move quickly into execution, supporting decisiveness, direct communication, and problem-solving. The risk is acting before fully considering consequences.",
     "trigger": {
-      "signal_key": "mercury_conjunct_mars",
+      "signal_key": "mercury_conjunction_mars",
       "constraints": {
         "orb_max_degrees": 3
       }

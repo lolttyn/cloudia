@@ -1,0 +1,102 @@
+{
+  "slug": "sun_trine_venus",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Sun trine Venus",
+  "summary": "A flowing connection between personal expression and values. It becomes easier to enjoy social or creative efforts and to align choices with what feels affirming. The opportunity is to let ease support meaningful connection rather than complacency.",
+  "trigger": {
+    "signal_key": "sun_trine_venus",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Self and connection resonate, making warmth more effortless.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Sun–Venus trines foster charm and receptivity that reflect genuine preference."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Creative or relational efforts can flow because what you like and what you project line up."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Gratitude and affection may be easier to express."
+      },
+      {
+        "speakability": "can_say",
+        "text": "It’s a good moment to refresh style, art, or environments to match current tastes."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Everything will be pleasing or conflict-free."
+      }
+    ],
+    "frictions": [
+      "Overindulging because things feel nice",
+      "Avoiding necessary tension to keep harmony",
+      "Taking rapport for granted",
+      "Spending impulsively",
+      "Letting surface charm replace sincerity"
+    ],
+    "opportunities": [
+      "Connecting with people you appreciate",
+      "Starting or finishing creative work",
+      "Making value-aligned purchases",
+      "Beautifying a shared or personal space",
+      "Offering sincere compliments"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Choose engagements that feel reciprocal.",
+      "Let appreciation be specific and grounded.",
+      "Use the pleasant tone to handle a mild negotiation.",
+      "Invest in small upgrades that bring joy.",
+      "Notice when ease invites authenticity."
+    ],
+    "avoid": [
+      "Saying yes just to stay liked",
+      "Skipping boundaries because the vibe is good",
+      "Overpromising in the moment",
+      "Using charm to dodge accountability",
+      "Assuming everyone wants what you want"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Warmth and self-expression are in sync—use it to build real rapport."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Enjoy the flow, but keep choices aligned with your values."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of attraction, love, or financial gain",
+      "Deterministic social outcomes",
+      "Promises that charm will fix conflicts"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can ease connection and creativity",
+      "Agency-forward language: you choose where to invest warmth",
+      "Contextual framing: pleasant tone helps if paired with honesty"
+    ]
+  },
+  "tags": [
+    "relationships",
+    "values",
+    "creativity",
+    "ease",
+    "connection",
+    "authenticity"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Sun–Venus trine as relational ease"
+  ]
+}

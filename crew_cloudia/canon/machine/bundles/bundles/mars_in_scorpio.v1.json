@@ -1,0 +1,99 @@
+{
+  "slug": "mars_in_scorpio",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mars in Scorpio",
+  "summary": "Drive becomes focused, strategic, and resilient. Efforts aim beneath the surface, persisting until results appear. The opportunity is to use intensity for transformation without sliding into control battles.",
+  "trigger": {
+    "signal_key": "mars_in_scorpio"
+  },
+  "meaning": {
+    "headline": "Action is deep, determined, and tuned to underlying dynamics.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mars in Scorpio supports concentrated effort, research, and solving complex problems."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Motivation strengthens when stakes feel meaningful."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Privacy and discretion guide how energy is deployed."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Emotional stamina can help face difficult tasks."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Intensity grants permission to coerce or assume hidden enemies."
+      }
+    ],
+    "frictions": [
+      "Holding grudges",
+      "Working in secret to maintain control",
+      "Suspicion that drains energy",
+      "All-or-nothing approaches",
+      "Difficulty delegating"
+    ],
+    "opportunities": [
+      "Investigative work or audits",
+      "Deep cleaning or elimination tasks",
+      "Healing or restorative practices",
+      "Strengthening boundaries around sensitive topics",
+      "Transforming a persistent issue"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Choose one significant target to pour effort into.",
+      "Share only what supports the goal while respecting privacy.",
+      "Use intensity to finish lingering tasks.",
+      "Check that persistence is strategic, not obsessive.",
+      "Ground yourself after heavy conversations or work."
+    ],
+    "avoid": [
+      "Testing people to prove loyalty",
+      "Acting on unverified suspicions",
+      "Withholding information to maintain power",
+      "Assuming worst-case scenarios",
+      "Burning out by refusing to rest"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Direct your intensity toward a purpose that welcomes it."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Depth is an asset when paired with trust and pacing."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions of crisis or betrayal",
+      "Guarantees of uncovering secrets",
+      "Psychological diagnoses"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can enhance focus and resilience",
+      "Agency-forward language: you choose how to wield intensity",
+      "Contextual framing: deep work helps when consent and rest are present"
+    ]
+  },
+  "tags": [
+    "action",
+    "focus",
+    "strategy",
+    "resilience",
+    "boundaries",
+    "transformation"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mars as drive/assertion archetype in daily cycles"
+  ]
+}
