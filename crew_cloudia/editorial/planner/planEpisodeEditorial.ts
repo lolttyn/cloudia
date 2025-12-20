@@ -134,6 +134,8 @@ export function planEpisodeEditorial(input: {
     reflection: [],
     closing: [],
   };
+  const lunation = input.interpretation.lunation;
+  const lunationTagId = lunation?.signal_key;
 
   const continuityNotes = {
     callbacks: [] as string[],
@@ -176,10 +178,19 @@ export function planEpisodeEditorial(input: {
     pool.push({ ...tag, repeated: false });
   });
 
-  pool.sort(compareTagsDeterministically);
+  pool.sort((a, b) => {
+    if (lunationTagId) {
+      const aL = a.tag === lunationTagId ? 1 : 0;
+      const bL = b.tag === lunationTagId ? 1 : 0;
+      if (aL !== bL) return aL ? -1 : 1;
+    }
+    return compareTagsDeterministically(a, b);
+  });
 
   const segments: SegmentEditorialPlan[] = [];
   const lowConfidence = input.interpretation.confidence_level === "low";
+  const isLunationCandidate = (candidate: TagCandidate) =>
+    lunationTagId !== undefined && candidate.tag === lunationTagId;
 
   for (const segment_key of SEGMENT_ORDER) {
     const baseIntent = SEGMENT_INTENTS_V1[segment_key] || [];
@@ -187,7 +198,9 @@ export function planEpisodeEditorial(input: {
     const suppressedTags: string[] = [];
     const rationale = new Set<string>([ED_RULE_SEGMENT_IDEA_BUDGETS]);
     let themePicked = false;
-    const budget = SEGMENT_IDEA_BUDGETS[segment_key];
+    const budget = lunation
+      ? Math.min(SEGMENT_IDEA_BUDGETS[segment_key], 1)
+      : SEGMENT_IDEA_BUDGETS[segment_key];
 
     if (segment_key === "intro") {
       rationale.add(ED_RULE_INTRO_MAX_NEW_IDEAS_1);
@@ -215,17 +228,23 @@ export function planEpisodeEditorial(input: {
 
     const picks: TagCandidate[] = [];
 
+    const primeLunation = lunationTagId
+      ? pool.find((candidate) => candidate.tag === lunationTagId && candidate.speakability !== "avoid")
+      : undefined;
+
     if (segment_key === "intro") {
-      const candidate = selectFirstCandidate(pool, {
-        forbidBackground: nonBackgroundExists,
-        requirePrimary: false,
-        themePicked,
-        suppressedByRule,
-        suppressedTags,
-      });
-      if (candidate) {
-        picks.push(candidate);
-        if (candidate.field === "theme") {
+      const starter =
+        primeLunation ??
+        selectFirstCandidate(pool, {
+          forbidBackground: nonBackgroundExists,
+          requirePrimary: false,
+          themePicked,
+          suppressedByRule,
+          suppressedTags,
+        });
+      if (starter) {
+        picks.push(starter);
+        if (starter.field === "theme") {
           themePicked = true;
         }
       }
@@ -233,13 +252,15 @@ export function planEpisodeEditorial(input: {
       const primaryExists = pool.some(
         (candidate) => candidate.salience === "primary"
       );
-      const firstCandidate = selectFirstCandidate(pool, {
-        forbidBackground: nonBackgroundExists,
-        requirePrimary: primaryExists,
-        themePicked,
-        suppressedByRule,
-        suppressedTags,
-      });
+      const firstCandidate =
+        primeLunation ??
+        selectFirstCandidate(pool, {
+          forbidBackground: nonBackgroundExists,
+          requirePrimary: primaryExists,
+          themePicked,
+          suppressedByRule,
+          suppressedTags,
+        });
       if (firstCandidate) {
         picks.push(firstCandidate);
         if (firstCandidate.field === "theme") {
@@ -286,6 +307,9 @@ export function planEpisodeEditorial(input: {
     selectedBySegment[segment_key] = includedTags;
 
     picks.forEach((pick) => {
+      if (lunation && isLunationCandidate(pick)) {
+        return;
+      }
       const matchIndex = pool.findIndex((p) => p.tag === pick.tag);
       if (matchIndex >= 0) {
         pool.splice(matchIndex, 1);

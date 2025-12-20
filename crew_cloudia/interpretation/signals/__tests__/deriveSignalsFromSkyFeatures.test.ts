@@ -5,8 +5,8 @@ import { SkyFeatures } from "../../sky/extractSkyFeatures.js";
 function baseFeatures(): SkyFeatures {
   return {
     date: "2025-12-19",
-    sun: { sign: "Capricorn" },
-    moon: { sign: "Leo", phase: "full" },
+    sun: { sign: "Capricorn", longitude: 270 },
+    moon: { sign: "Leo", phase: "full", longitude: 120 },
     highlights: [],
   };
 }
@@ -40,6 +40,30 @@ describe("deriveSignalsFromSkyFeatures", () => {
     const phase = signals.find((s) => s.signal_key === "moon_phase_full");
     expect(phase).toBeDefined();
     expect(phase?.salience).toBe(0.45);
+  });
+
+  it("emits lunation signal for new moon in same sign", () => {
+    const signals = deriveSignalsFromSkyFeatures({
+      date: "2025-12-19",
+      sun: { sign: "Sagittarius", longitude: 268.5 },
+      moon: { sign: "Sagittarius", phase: "new", longitude: 268.9 },
+      highlights: [],
+    });
+    const lunation = signals.find((s) => s.kind === "lunation");
+    expect(lunation?.signal_key).toBe("new_moon_in_sagittarius");
+    expect(lunation?.salience).toBeCloseTo(0.95);
+  });
+
+  it("emits lunation signal for full moon in opposite sign", () => {
+    const signals = deriveSignalsFromSkyFeatures({
+      date: "2025-05-23",
+      sun: { sign: "Gemini", longitude: 62 },
+      moon: { sign: "Sagittarius", phase: "full", longitude: 242 },
+      highlights: [],
+    });
+    const lunation = signals.find((s) => s.kind === "lunation");
+    expect(lunation?.signal_key).toBe("full_moon_in_sagittarius");
+    expect(lunation?.salience).toBeCloseTo(0.95);
   });
 
   it("emits sun-moon aspect with orb-based salience", () => {

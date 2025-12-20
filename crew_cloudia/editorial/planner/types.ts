@@ -9,6 +9,11 @@ export type Speakability = "must_say" | "can_say" | "avoid";
 export type DailyInterpretation = {
   episode_date: string; // YYYY-MM-DD
   confidence_level: ConfidenceLevel;
+  lunation?: {
+    kind: "new" | "full";
+    sign: string;
+    signal_key: string;
+  };
 
   // Output of Phase 5 meaning compiler
   // Tags are flat strings (already compiled + deduped + suppressed at interpretation-layer)

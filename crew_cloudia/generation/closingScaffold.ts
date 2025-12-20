@@ -35,11 +35,11 @@ export function buildClosingScaffold(params: {
   temporal_phase: "building" | "peak" | "releasing" | "aftershock" | "baseline";
 }): { scaffold: string; signoff: string } {
   const dateStr = formatBroadcastDate(params.episode_date);
-  const framing = "As the day winds down, take a moment to notice how this energy has shown up for you.";
+  const framing = "As the day winds down, just notice how this vibe actually showed up for you.";
   const bridge = params.timing_note
-    ? `This was a day shaped by ${params.axis_statement} (${params.timing_note}).`
-    : `Today revolved around ${params.axis_statement}.`;
-  const phaseLine = `Today’s energy is in a ${params.temporal_phase} phase.`;
+    ? `All day was colored by ${params.axis_statement} (${params.timing_note}).`
+    : `Today really revolved around ${params.axis_statement}.`;
+  const phaseLine = `Energy is ${params.temporal_phase} right now—tune to that, don’t force it.`;
   const signoff = `The Cosmic Forecast for ${dateStr} is brought to you by the Intergalactic Public Broadcasting Network.\nWe’ll be back tomorrow, skygazer.`;
 
   return {

@@ -11,6 +11,7 @@ import {
 import {
   interpretation_high_confidence_basic,
   interpretation_low_confidence_with_repeats,
+  interpretation_lunation_special,
   memory_with_recent_theme_repetition,
 } from "./fixtures.js";
 
@@ -144,6 +145,26 @@ describe("planEpisodeEditorial", () => {
     });
 
     expect(plan1).toStrictEqual(plan2);
+  });
+
+  it("collapses around lunation days with the lunation tag headlining", () => {
+    const plan = planEpisodeEditorial({
+      interpretation: interpretation_lunation_special,
+      memory: { recent_tags: [] },
+    });
+
+    const intro = plan.segments.find((s) => s.segment_key === "intro");
+    const main = plan.segments.find((s) => s.segment_key === "main_themes");
+    const reflection = plan.segments.find((s) => s.segment_key === "reflection");
+    const closing = plan.segments.find((s) => s.segment_key === "closing");
+
+    expect(intro?.included_tags).toContain("new_moon_in_sagittarius");
+    expect(main?.included_tags).toContain("new_moon_in_sagittarius");
+    expect(reflection?.included_tags.length).toBeLessThanOrEqual(1);
+    expect(closing?.included_tags.length).toBeLessThanOrEqual(1);
+    expect(plan.segments.flatMap((s) => s.included_tags)).toContain(
+      "new_moon_in_sagittarius"
+    );
   });
 });
 

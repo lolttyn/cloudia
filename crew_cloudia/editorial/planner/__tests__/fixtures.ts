@@ -70,6 +70,35 @@ export const interpretation_low_confidence_with_repeats: DailyInterpretation = {
   ],
 };
 
+export const interpretation_lunation_special: DailyInterpretation = {
+  episode_date: "2025-12-19",
+  confidence_level: "high",
+  lunation: { kind: "new", sign: "sagittarius", signal_key: "new_moon_in_sagittarius" },
+  tags: [
+    {
+      tag: "new_moon_in_sagittarius",
+      field: "theme",
+      salience: "primary",
+      speakability: "must_say",
+      rule_ids: ["rule.lunation.primary"],
+    },
+    {
+      tag: "supporting-note",
+      field: "advice",
+      salience: "secondary",
+      speakability: "can_say",
+      rule_ids: ["rule.supporting.note"],
+    },
+    {
+      tag: "background-thread",
+      field: "theme",
+      salience: "background",
+      speakability: "can_say",
+      rule_ids: ["rule.background.thread"],
+    }
+  ],
+};
+
 export const memory_with_recent_theme_repetition: RecentEditorialMemory = {
   recent_tags: [
     { tag: "repeat-must", last_seen_date: "2025-02-10", segment_key: "intro" },

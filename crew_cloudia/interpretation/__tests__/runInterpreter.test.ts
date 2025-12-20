@@ -5,8 +5,8 @@ import { InterpretiveFrameSchema } from "../schema/InterpretiveFrame.js";
 
 const stubFeatures = {
   date: "2025-12-18",
-  sun: { sign: "Sagittarius" },
-  moon: { sign: "Virgo", phase: "waning" as const },
+  sun: { sign: "Sagittarius", longitude: 255 },
+  moon: { sign: "Virgo", phase: "waning" as const, longitude: 182 },
   highlights: [
     {
       type: "aspect" as const,
@@ -246,6 +246,25 @@ describe("runInterpreter (production engine)", () => {
       interpretation_bundles: sampleBundles(),
     });
     expect(result.success).toBe(false);
+  });
+
+  it("emits lunation metadata and selects lunation bundle when present", async () => {
+    const frame = await runInterpreter({
+      date: "2025-12-19",
+      features: {
+        date: "2025-12-19",
+        sun: { sign: "Sagittarius", longitude: 268.5 },
+        moon: { sign: "Sagittarius", phase: "new", longitude: 268.9 },
+        highlights: [],
+      },
+    });
+
+    expect(frame.lunation?.kind).toBe("new");
+    expect(frame.lunation?.sign).toBe("sagittarius");
+    expect(frame.lunation?.signal_key).toBe("new_moon_in_sagittarius");
+    expect(frame.interpretation_bundles.primary[0]?.slug).toBe(
+      "new_moon_in_sagittarius"
+    );
   });
 });
 

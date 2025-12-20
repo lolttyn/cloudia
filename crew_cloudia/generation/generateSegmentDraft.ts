@@ -92,7 +92,14 @@ export async function generateSegmentDraft(input: {
     if (!section.required) continue;
 
     if (section.enforcement === "structural") {
-      if (!normalized_draft.includes(section.key)) {
+      if (
+        !sectionSatisfied({
+          segment_key: segment.segment_key,
+          draft: draft_script,
+          normalized: normalized_draft,
+          key: section.key,
+        })
+      ) {
         contract_violations.push(`missing_required_section:${section.key}`);
       }
     }
@@ -252,7 +259,8 @@ Return only the two sentences, nothing else.`.trim();
 
   const llm_result = await invokeLLM(
     {
-      system_prompt: "You are Cloudia’s concise intro micro-expression writer.",
+      system_prompt:
+        "You are Cloudia, a queer astrology-fluent bestie writing two warm, conversational sentences—no jargon, no formality.",
       user_prompt,
     },
     { ...CLOUDIA_LLM_CONFIG, max_tokens: 160 }
@@ -340,7 +348,8 @@ Return only the two sentences, nothing else.`.trim();
 
   const llm_result = await invokeLLM(
     {
-      system_prompt: "You are Cloudia’s concise closing micro-reflection writer.",
+      system_prompt:
+        "You are Cloudia, a queer astrology-fluent bestie writing two warm, grounded closing sentences—no jargon, no predictions.",
       user_prompt,
     },
     { ...CLOUDIA_LLM_CONFIG, max_tokens: 160 }
@@ -376,5 +385,56 @@ function normalizeForSectionMatch(text: string): string {
     .toLowerCase()
     .replace(/[^\w\s]/g, "")
     .replace(/\s+/g, "_");
+}
+
+function sectionSatisfied(params: {
+  segment_key: string;
+  draft: string;
+  normalized: string;
+  key: string;
+}): boolean {
+  const { segment_key, draft, normalized, key } = params;
+  // Default: legacy structural match by key token.
+  if (normalized.includes(key)) return true;
+
+  const lower = draft.toLowerCase();
+
+  if (segment_key === "main_themes") {
+    if (key === "primary_meanings") {
+      return /what\s+today[’']?s\s+really\s+about/.test(lower) || /main\s+thing/.test(lower);
+    }
+    if (key === "relevance") {
+      return /why\s+this\s+is\s+showing\s+up\s+now/.test(lower) || /why\s+today/.test(lower);
+    }
+    if (key === "concrete_example") {
+      return /how\s+this\s+might\s+show\s+up/.test(lower) || /for\s+example/.test(lower);
+    }
+    if (key === "confidence_alignment") {
+      return /how\s+seriously\s+to\s+take\s+this/.test(lower) || /pretty\s+solid|grain\s+of\s+salt/.test(lower);
+    }
+  }
+
+  if (segment_key === "reflection") {
+    if (key === "integration") {
+      return /tie\s+this\s+together|pull\s+this\s+together|one\s+takeaway/.test(lower);
+    }
+    if (key === "uncertainty") {
+      return /uncertain|not\s+sure|wiggle\s+room/.test(lower);
+    }
+    if (key === "lived_perspective") {
+      return /in\s+real\s+life|in\s+your\s+day|how\s+this\s+could\s+feel/.test(lower);
+    }
+  }
+
+  if (segment_key === "closing") {
+    if (key === "emotional_resolution") {
+      return /settle|land|close\s+out/.test(lower);
+    }
+    if (key === "reaffirmation") {
+      return /sticking\s+with|stayed\s+with|remember/.test(lower);
+    }
+  }
+
+  return false;
 }
 

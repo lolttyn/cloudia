@@ -31,6 +31,13 @@ const episode_plan: EpisodeEditorialPlan = {
       suppressed_tags: [],
       rationale: ["rule:intro"],
     },
+    {
+      segment_key: "main_themes",
+      intent: ["headline_primary"],
+      included_tags: ["theme:primary"],
+      suppressed_tags: [],
+      rationale: ["rule:main"],
+    },
   ],
   continuity_notes: {
     callbacks: [],
@@ -146,6 +153,58 @@ describe("generateSegmentDraft", () => {
     expect(result.metadata.model_id).toBe("mock-model");
     expect(result.self_check.contract_violations).toContain(
       "forbidden_phrase:deep interpretation"
+    );
+  });
+
+  it("accepts main_themes beat-style output without old headings and with contractions", async () => {
+    const writing_contract = getWritingContract("main_themes");
+    const segmentMain: SegmentPromptInput = {
+      ...segment,
+      segment_key: "main_themes",
+      intent: ["headline_primary"],
+      included_tags: ["theme:primary"],
+      suppressed_tags: [],
+      confidence_level: "medium",
+      constraints: {
+        ...segment.constraints,
+        interpretive_frame: {
+          ...segment.constraints.interpretive_frame,
+          dominant_contrast_axis: {
+            statement: "honesty over smoothing things over",
+            primary: "honesty",
+            counter: "smooth_over",
+          },
+          why_today_clause: "Because the Moon and Sun are in a tight team-up today.",
+          sky_anchors: [{ type: "moon_sign", label: "Moon in Sagittarius", meaning: "candor" }],
+          interpretation_bundles: { primary: [], secondary: [] },
+        },
+      },
+    };
+
+    const casualDraft =
+      "What today’s really about: saying what you actually feel instead of sanding off the edges. " +
+      "Why this is showing up now: the Moon in Sagittarius is teaming with the Sun, so candor is front and center. " +
+      "How this might show up in real life: you might blurt the truth in a meeting or text a friend what you actually mean. " +
+      "How seriously to take this: I feel pretty solid about this vibe—treat it like weather, not destiny.";
+
+    mockInvokeLLM.mockResolvedValueOnce({
+      status: "ok",
+      text: casualDraft,
+      model: "mock-model",
+    });
+
+    const result = await generateSegmentDraft({
+      episode_plan,
+      segment: segmentMain,
+      writing_contract,
+      episode_validation: passing_validation,
+    });
+
+    expect(result.draft_script).not.toMatch(/Primary Meanings|Relevance|Confidence Alignment/i);
+    expect(result.draft_script).not.toMatch(/interpretation aligns with/i);
+    expect(result.draft_script).toMatch(/doesn’t|don't|you'll|you might/i);
+    expect(result.self_check.contract_violations).not.toContain(
+      expect.stringContaining("missing_required_section")
     );
   });
 });

@@ -7,7 +7,7 @@ export const InterpretationSignalSchema = z.object({
     .string()
     .min(1)
     .regex(SIGNAL_KEY_REGEX, "signal_key must be lowercase snake_case"),
-  kind: z.enum(["planet_in_sign", "aspect", "lunar_phase", "ingress"]),
+  kind: z.enum(["planet_in_sign", "aspect", "lunar_phase", "ingress", "lunation"]),
   salience: z
     .number()
     .min(0, "salience must be >= 0")

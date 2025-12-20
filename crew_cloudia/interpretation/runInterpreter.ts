@@ -244,6 +244,16 @@ export async function runInterpreter(input: InterpreterInput): Promise<Interpret
   );
 
   const signals = deriveSignalsFromSkyFeatures(features);
+  const lunationSignal = signals.find((s) => s.kind === "lunation");
+  const lunation =
+    lunationSignal && lunationSignal.meta && typeof lunationSignal.meta === "object"
+      ? {
+          kind:
+            (lunationSignal.meta as any).phase === "full" ? ("full" as const) : ("new" as const),
+          sign: String((lunationSignal.meta as any).sign ?? features.moon.sign).toLowerCase(),
+          signal_key: lunationSignal.signal_key,
+        }
+      : undefined;
 
   const frame: InterpretiveFrame = {
     date: features.date,
@@ -269,6 +279,7 @@ export async function runInterpreter(input: InterpreterInput): Promise<Interpret
       violations: [],
       notes: [`canon:v${canon.version}`],
     },
+    ...(lunation ? { lunation } : {}),
   };
 
   return InterpretiveFrameSchema.parse(frame);

@@ -149,6 +149,13 @@ export const InterpretiveFrameSchema = z
       state: z.enum(["building", "peaking", "settling", "transitioning"]),
       notes: z.string().min(1).optional(),
     }),
+    lunation: z
+      .object({
+        kind: z.enum(["new", "full"]),
+        sign: z.string().min(1),
+        signal_key: z.string().min(1),
+      })
+      .optional(),
     signals: z.array(InterpretationSignalSchema).min(1),
     interpretation_bundles: z.object({
       primary: z.array(InterpretationBundleSchema),

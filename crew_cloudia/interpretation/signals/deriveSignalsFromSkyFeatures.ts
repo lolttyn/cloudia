@@ -5,12 +5,28 @@ import {
   sunInSignKey,
   sunMoonAspectKey,
   moonInSignKey,
+  newMoonKey,
+  fullMoonKey,
 } from "./signalKeys.js";
 import {
   InterpretationSignal,
 } from "./signals.schema.js";
 
 const ORB_MAX = 6;
+const SIGNS = [
+  "aries",
+  "taurus",
+  "gemini",
+  "cancer",
+  "leo",
+  "virgo",
+  "libra",
+  "scorpio",
+  "sagittarius",
+  "capricorn",
+  "aquarius",
+  "pisces",
+];
 
 function clamp01(value: number): number {
   if (value < 0) return 0;
@@ -25,6 +41,24 @@ function aspectSalience(orbDeg: number): number {
 function moonPhaseSalience(phase: SkyFeatures["moon"]["phase"]): number {
   if (phase === "new" || phase === "full") return 0.45;
   return 0.25;
+}
+
+function normalizeDeg(value: number) {
+  let v = value % 360;
+  if (v < 0) v += 360;
+  return v;
+}
+
+function angularSeparation(a: number, b: number) {
+  const diff = Math.abs(normalizeDeg(a) - normalizeDeg(b));
+  return Math.min(diff, 360 - diff);
+}
+
+function isOppositeSign(a: string, b: string): boolean {
+  const ai = SIGNS.indexOf(a.toLowerCase());
+  const bi = SIGNS.indexOf(b.toLowerCase());
+  if (ai === -1 || bi === -1) return false;
+  return (ai + 6) % 12 === bi;
 }
 
 export function deriveSignalsFromSkyFeatures(
@@ -58,6 +92,26 @@ export function deriveSignalsFromSkyFeatures(
     source: "sky_features",
     meta: { phase: features.moon.phase },
   });
+
+  // Lunation detection: high-salience, single-dominant triggers.
+  const elongation = angularSeparation(features.sun.longitude, features.moon.longitude);
+  if (features.moon.phase === "new" && features.sun.sign === features.moon.sign) {
+    signals.push({
+      signal_key: newMoonKey(features.sun.sign),
+      kind: "lunation",
+      salience: 0.95,
+      source: "sky_features",
+      meta: { sign: features.sun.sign.toLowerCase(), phase: "new", elongation_deg: Number(elongation.toFixed(2)) },
+    });
+  } else if (features.moon.phase === "full" && isOppositeSign(features.sun.sign, features.moon.sign)) {
+    signals.push({
+      signal_key: fullMoonKey(features.moon.sign),
+      kind: "lunation",
+      salience: 0.95,
+      source: "sky_features",
+      meta: { sign: features.moon.sign.toLowerCase(), phase: "full", elongation_deg: Number(elongation.toFixed(2)) },
+    });
+  }
 
   for (const highlight of features.highlights) {
     if (highlight.type === "aspect") {

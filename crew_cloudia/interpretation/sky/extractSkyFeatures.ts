@@ -17,8 +17,12 @@ export type SkyAspect =
 
 export type SkyFeatures = {
   date: string; // YYYY-MM-DD
-  sun: { sign: string };
-  moon: { sign: string; phase: "new" | "waxing" | "full" | "waning" };
+  sun: { sign: string; longitude: number };
+  moon: {
+    sign: string;
+    phase: "new" | "waxing" | "full" | "waning";
+    longitude: number;
+  };
   highlights: SkyAspect[];
 };
 
@@ -147,8 +151,12 @@ export async function extractSkyFeatures(input: { date: string }): Promise<SkyFe
 
   return {
     date: input.date,
-    sun: { sign: sunSign },
-    moon: { sign: moonSign, phase: moonPhase },
+    sun: { sign: sunSign, longitude: today.bodies.sun.longitude },
+    moon: {
+      sign: moonSign,
+      phase: moonPhase,
+      longitude: today.bodies.moon.longitude,
+    },
     highlights,
   };
 }

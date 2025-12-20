@@ -1,0 +1,82 @@
+{
+  "slug": "new_moon_in_sagittarius",
+  "version": 1,
+  "kind": "lunar_overlay",
+  "title": "New Moon in Sagittarius",
+  "summary": "A reset point that seeds fresh vision in the Sagittarius realm: meaning, direction, and honest exploration. Intentions want to be named, not assumed.",
+  "trigger": {
+    "signal_key": "new_moon_in_sagittarius"
+  },
+  "meaning": {
+    "headline": "A clean slate to aim higher and clarify purpose under the Sagittarius New Moon.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Today’s New Moon in Sagittarius invites a fresh aim toward meaning and honest growth."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Intentions land best when they’re grounded in your values, not borrowed narratives."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Curiosity, learning, or travel planning can anchor this reset."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Naming one next step keeps the optimism from drifting."
+      },
+      {
+        "speakability": "avoid",
+        "text": "This guarantees a breakthrough or destiny shift."
+      }
+    ],
+    "frictions": [
+      "Overpromising out of excitement",
+      "Skipping details or timelines",
+      "Blunt honesty that ignores impact",
+      "Drifting into vague inspiration without action"
+    ],
+    "opportunities": [
+      "State one intention tied to a core value",
+      "Design a simple learning or travel plan",
+      "Share a vision with someone you trust for grounding",
+      "Balance optimism with a realistic checkpoint"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Name the value behind your intention.",
+      "Outline one concrete action within 48 hours.",
+      "Invite a perspective that widens your aim.",
+      "Keep honesty kind; clarity doesn’t need to be cutting."
+    ],
+    "avoid": [
+      "Assuming momentum without a plan",
+      "Saying yes to everything that sounds expansive",
+      "Turning optimism into pressure on others",
+      "Making fate claims about this lunation"
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictive statements about outcomes of the New Moon",
+      "Identity claims about Sagittarius placements",
+      "Deterministic promises of success or travel"
+    ],
+    "allowed_framing": [
+      "Agency-based choices tied to a new lunar cycle",
+      "Contextual language about exploration and purpose",
+      "Emphasis on planning and grounded optimism"
+    ]
+  },
+  "tags": [
+    "lunation",
+    "new_moon",
+    "sagittarius",
+    "intentions",
+    "purpose",
+    "exploration"
+  ]
+}
+
