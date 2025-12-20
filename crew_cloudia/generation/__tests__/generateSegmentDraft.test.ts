@@ -207,5 +207,56 @@ describe("generateSegmentDraft", () => {
       expect.stringContaining("missing_required_section")
     );
   });
+
+  it("enforces conversational flow and rejects rubric/list artifacts", async () => {
+    const writing_contract = getWritingContract("main_themes");
+    const segmentMain: SegmentPromptInput = {
+      ...segment,
+      segment_key: "main_themes",
+      intent: ["headline_primary"],
+      included_tags: ["theme:primary"],
+      suppressed_tags: [],
+      confidence_level: "medium",
+      constraints: {
+        ...segment.constraints,
+        interpretive_frame: {
+          ...segment.constraints.interpretive_frame,
+          dominant_contrast_axis: {
+            statement: "candor over smoothing things over",
+            primary: "candor",
+            counter: "smooth_over",
+          },
+          why_today_clause: "Because the Moon in Sagittarius teams with the Sun today.",
+          sky_anchors: [{ type: "moon_sign", label: "Moon in Sagittarius", meaning: "candor" }],
+          interpretation_bundles: { primary: [], secondary: [] },
+        },
+      },
+    };
+
+    const flowingDraft =
+      "Hey, it’s me—today is really about candor over smoothing things over, because the Moon in Sagittarius is teaming with the Sun. You might notice yourself saying what you actually feel; it’s more like weather than destiny, so take it lightly.";
+
+    mockInvokeLLM.mockResolvedValueOnce({
+      status: "ok",
+      text: flowingDraft,
+      model: "mock-model",
+    });
+
+    const result = await generateSegmentDraft({
+      episode_plan,
+      segment: segmentMain,
+      writing_contract,
+      episode_validation: passing_validation,
+    });
+
+    const script = result.draft_script;
+
+    expect(script).not.toMatch(/Primary Meanings|Relevance|Confidence Alignment/i);
+    expect(script).not.toMatch(/interpretation aligns with|based on the data|confidence level/i);
+    expect(script).not.toMatch(/^\s*#|^\s*##/m); // headings
+    expect(script).not.toMatch(/^\s*\d+\./m); // numbered lists
+    expect(script).not.toMatch(/^\s*[-•]\s/m); // bullets
+    expect(script).toMatch(/(it’s|it's|don't|you might|you’ll|you'll)/i);
+  });
 });
 
