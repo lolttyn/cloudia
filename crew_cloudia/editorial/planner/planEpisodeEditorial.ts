@@ -15,6 +15,7 @@ import {
   ED_RULE_SEGMENT_IDEA_BUDGETS,
   ED_RULE_SPEAKABILITY_AVOID_NEVER,
   ED_RULE_SPEAKABILITY_MUST_SAY_WINS,
+  ED_RULE_LUNATION_ONLY,
   SEGMENT_IDEA_BUDGETS,
   SEGMENT_INTENTS_V1,
   compareTagsDeterministically,
@@ -29,6 +30,13 @@ const SEGMENT_ORDER: SegmentKeyV1[] = [
   "reflection",
   "closing",
 ];
+
+const LUNATION_SEGMENT_INTENTS: Record<SegmentKeyV1, string[]> = {
+  intro: ["introduce_lunation_day"],
+  main_themes: ["explore_lunation_core_meaning"],
+  reflection: ["work_with_lunation_today"],
+  closing: ["close_with_lunation_feel"],
+};
 
 const ensureRecordArray = (map: Record<string, string[]>, key: string) => {
   if (!map[key]) {
@@ -194,7 +202,9 @@ export function planEpisodeEditorial(input: {
 
   for (const segment_key of SEGMENT_ORDER) {
     const baseIntent = SEGMENT_INTENTS_V1[segment_key] || [];
-    const intent = [...baseIntent];
+    const intent = lunation
+      ? [...(LUNATION_SEGMENT_INTENTS[segment_key] || baseIntent)]
+      : [...baseIntent];
     const suppressedTags: string[] = [];
     const rationale = new Set<string>([ED_RULE_SEGMENT_IDEA_BUDGETS]);
     let themePicked = false;
@@ -215,88 +225,108 @@ export function planEpisodeEditorial(input: {
       (candidate) => candidate.salience !== "background"
     );
 
-    if (pool.length === 0 || budget === 0) {
-      segments.push({
-        segment_key,
-        intent,
-        included_tags: [],
-        suppressed_tags: suppressedTags,
-        rationale: Array.from(rationale),
-      });
-      continue;
-    }
-
     const picks: TagCandidate[] = [];
 
     const primeLunation = lunationTagId
-      ? pool.find((candidate) => candidate.tag === lunationTagId && candidate.speakability !== "avoid")
+      ? pool.find(
+          (candidate) => candidate.tag === lunationTagId && candidate.speakability !== "avoid"
+        )
       : undefined;
 
-    if (segment_key === "intro") {
-      const starter =
-        primeLunation ??
-        selectFirstCandidate(pool, {
-          forbidBackground: nonBackgroundExists,
-          requirePrimary: false,
-          themePicked,
-          suppressedByRule,
-          suppressedTags,
-        });
-      if (starter) {
-        picks.push(starter);
-        if (starter.field === "theme") {
-          themePicked = true;
-        }
-      }
-    } else if (segment_key === "main_themes") {
-      const primaryExists = pool.some(
-        (candidate) => candidate.salience === "primary"
-      );
-      const firstCandidate =
-        primeLunation ??
-        selectFirstCandidate(pool, {
-          forbidBackground: nonBackgroundExists,
-          requirePrimary: primaryExists,
-          themePicked,
-          suppressedByRule,
-          suppressedTags,
-        });
-      if (firstCandidate) {
-        picks.push(firstCandidate);
-        if (firstCandidate.field === "theme") {
+    if (lunation) {
+      rationale.add(ED_RULE_LUNATION_ONLY);
+      if (primeLunation && budget > 0) {
+        picks.push(primeLunation);
+        if (primeLunation.field === "theme") {
           themePicked = true;
         }
       }
 
-      if (primaryExists && firstCandidate && firstCandidate.salience === "background") {
-        rationale.add(ED_RULE_BACKGROUND_NEVER_HEADLINES);
+      // Suppress all non-lunation candidates explicitly for traceability.
+      pool.forEach((candidate) => {
+        if (!isLunationCandidate(candidate)) {
+          recordSuppressed(suppressedByRule, ED_RULE_LUNATION_ONLY, candidate.tag);
+          suppressedTags.push(candidate.tag);
+        }
+      });
+    } else {
+      if (pool.length === 0 || budget === 0) {
+        segments.push({
+          segment_key,
+          intent,
+          included_tags: [],
+          suppressed_tags: suppressedTags,
+          rationale: Array.from(rationale),
+        });
+        continue;
       }
 
-      const remainingBudget = Math.max(budget - picks.length, 0);
-      if (remainingBudget > 0) {
-        const poolWithoutFirst = pool.filter(
-          (candidate) => !picks.some((p) => p.tag === candidate.tag)
-        );
-        const { picks: rest, themeUsed } = fillRemaining(
-          poolWithoutFirst,
-          remainingBudget,
-          {
+      if (segment_key === "intro") {
+        const starter =
+          primeLunation ??
+          selectFirstCandidate(pool, {
+            forbidBackground: nonBackgroundExists,
+            requirePrimary: false,
             themePicked,
             suppressedByRule,
             suppressedTags,
+          });
+        if (starter) {
+          picks.push(starter);
+          if (starter.field === "theme") {
+            themePicked = true;
           }
+        }
+      } else if (segment_key === "main_themes") {
+        const primaryExists = pool.some(
+          (candidate) => candidate.salience === "primary"
         );
-        picks.push(...rest);
+        const firstCandidate =
+          primeLunation ??
+          selectFirstCandidate(pool, {
+            forbidBackground: nonBackgroundExists,
+            requirePrimary: primaryExists,
+            themePicked,
+            suppressedByRule,
+            suppressedTags,
+          });
+        if (firstCandidate) {
+          picks.push(firstCandidate);
+          if (firstCandidate.field === "theme") {
+            themePicked = true;
+          }
+        }
+
+        if (primaryExists && firstCandidate && firstCandidate.salience === "background") {
+          rationale.add(ED_RULE_BACKGROUND_NEVER_HEADLINES);
+        }
+
+        const remainingBudget = Math.max(budget - picks.length, 0);
+        if (remainingBudget > 0) {
+          const poolWithoutFirst = pool.filter(
+            (candidate) => !picks.some((p) => p.tag === candidate.tag)
+          );
+          const { picks: rest, themeUsed } = fillRemaining(
+            poolWithoutFirst,
+            remainingBudget,
+            {
+              themePicked,
+              suppressedByRule,
+              suppressedTags,
+            }
+          );
+          picks.push(...rest);
+          themePicked = themeUsed;
+        }
+      } else {
+        const { picks: chosen, themeUsed } = fillRemaining(pool, budget, {
+          themePicked,
+          suppressedByRule,
+          suppressedTags,
+        });
+        picks.push(...chosen);
         themePicked = themeUsed;
       }
-    } else {
-      const { picks: chosen, themeUsed } = fillRemaining(pool, budget, {
-        themePicked,
-        suppressedByRule,
-        suppressedTags,
-      });
-      picks.push(...chosen);
-      themePicked = themeUsed;
     }
 
     if (picks.some((p) => p.speakability === "must_say")) {

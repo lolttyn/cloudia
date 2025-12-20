@@ -4,6 +4,8 @@ import { selectInterpretationBundles } from "./bundles/selectInterpretationBundl
 import { deriveSignalsFromSkyFeatures } from "./signals/deriveSignalsFromSkyFeatures.js";
 import { extractSkyFeatures, SkyFeatures, SkyAspect } from "./sky/extractSkyFeatures.js";
 import { InterpretiveFrame, InterpretiveFrameSchema } from "./schema/InterpretiveFrame.js";
+import { normalizeSign } from "./signals/signalKeys.js";
+import { InterpretationSignal } from "./signals/signals.schema.js";
 
 const INGRESS_SENSITIVE_BODIES = ["Moon", "Sun"] as const;
 
@@ -164,6 +166,60 @@ function confidenceFrom(aspect: SkyAspect | undefined): InterpretiveFrame["confi
   return "medium";
 }
 
+function resolveLunation(
+  signals: InterpretationSignal[],
+  primaryBundles: { trigger: { signal_key: string } }[]
+): InterpretiveFrame["lunation"] | undefined {
+  const lunationSignals = signals
+    .filter((s) => s.kind === "lunation")
+    .sort((a, b) => {
+      if (b.salience !== a.salience) return b.salience - a.salience;
+      return a.signal_key.localeCompare(b.signal_key);
+    });
+
+  if (lunationSignals.length === 0) return undefined;
+
+  const chosenSignal = lunationSignals[0];
+  const primary = primaryBundles[0];
+  if (!primary || primary.trigger.signal_key !== chosenSignal.signal_key) {
+    return undefined;
+  }
+
+  const meta = chosenSignal.meta && typeof chosenSignal.meta === "object" ? (chosenSignal.meta as any) : null;
+
+  const fromSignalKey = () => {
+    if (chosenSignal.signal_key.startsWith("new_moon_in_")) {
+      return {
+        kind: "new" as const,
+        sign: normalizeSign(chosenSignal.signal_key.replace("new_moon_in_", "")),
+      };
+    }
+    if (chosenSignal.signal_key.startsWith("full_moon_in_")) {
+      return {
+        kind: "full" as const,
+        sign: normalizeSign(chosenSignal.signal_key.replace("full_moon_in_", "")),
+      };
+    }
+    return null;
+  };
+
+  const derived =
+    meta && (meta.phase || meta.sign)
+      ? {
+          kind: String(meta.phase).toLowerCase() === "full" ? ("full" as const) : ("new" as const),
+          sign: normalizeSign(String(meta.sign ?? "")),
+        }
+      : fromSignalKey();
+
+  if (!derived || !derived.sign) return undefined;
+
+  return {
+    kind: derived.kind,
+    sign: derived.sign,
+    signal_key: chosenSignal.signal_key,
+  };
+}
+
 export async function runInterpreter(input: InterpreterInput): Promise<InterpretiveFrame> {
   validateDate(input.date);
 
@@ -244,16 +300,11 @@ export async function runInterpreter(input: InterpreterInput): Promise<Interpret
   );
 
   const signals = deriveSignalsFromSkyFeatures(features);
-  const lunationSignal = signals.find((s) => s.kind === "lunation");
-  const lunation =
-    lunationSignal && lunationSignal.meta && typeof lunationSignal.meta === "object"
-      ? {
-          kind:
-            (lunationSignal.meta as any).phase === "full" ? ("full" as const) : ("new" as const),
-          sign: String((lunationSignal.meta as any).sign ?? features.moon.sign).toLowerCase(),
-          signal_key: lunationSignal.signal_key,
-        }
-      : undefined;
+  const interpretation_bundles = selectInterpretationBundles({
+    signals,
+    bundleIndex: BUNDLE_INDEX,
+  });
+  const lunation = resolveLunation(signals, interpretation_bundles.primary);
 
   const frame: InterpretiveFrame = {
     date: features.date,
@@ -270,10 +321,7 @@ export async function runInterpreter(input: InterpreterInput): Promise<Interpret
     temporal_arc: deriveTemporalArc(temporal_phase, intensity_modifier, features, windowFeatures),
     timing: { state: phaseEntry.timing_state, notes: timingNotes },
     signals,
-    interpretation_bundles: selectInterpretationBundles({
-      signals,
-      bundleIndex: BUNDLE_INDEX,
-    }),
+    interpretation_bundles,
     confidence_level: confidenceFrom(aspect),
     canon_compliance: {
       violations: [],
