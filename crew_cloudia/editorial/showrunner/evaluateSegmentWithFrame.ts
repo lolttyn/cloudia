@@ -11,6 +11,7 @@ export function evaluateSegmentWithFrame(params: {
   const notes: string[] = [];
   const rewrite_instructions: string[] = [];
   const blocking_reasons: string[] = [];
+  const warnings: string[] = [];
   const scriptLower = params.draft_script.toLowerCase();
   const frame = params.interpretive_frame;
   const ingressSensitiveBodies = ["moon", "sun"];
@@ -62,6 +63,30 @@ export function evaluateSegmentWithFrame(params: {
     "aquarius",
     "pisces",
   ];
+
+  const normalize = (value: unknown) =>
+    typeof value === "string" ? value.toLowerCase() : String(value ?? "").toLowerCase();
+
+  const entityPresentInSignalsOrSky = (entity: string): boolean => {
+    const entityLower = entity.toLowerCase();
+    const fromSignals = frame.signals.some((signal) => {
+      if (normalize(signal.signal_key).includes(entityLower)) return true;
+      if (signal.meta && typeof signal.meta === "object") {
+        return normalize(JSON.stringify(signal.meta)).includes(entityLower);
+      }
+      return false;
+    });
+
+    const fromAnchors = frame.sky_anchors.some((anchor) =>
+      normalize(anchor.label).includes(entityLower)
+    );
+
+    const fromWhyToday =
+      frame.why_today.some((w) => normalize(w).includes(entityLower)) ||
+      normalize(frame.why_today_clause).includes(entityLower);
+
+    return fromSignals || fromAnchors || fromWhyToday;
+  };
 
   // Temporal enforcement
   if (!scriptLower.includes(frame.temporal_phase.toLowerCase())) {
@@ -146,18 +171,40 @@ export function evaluateSegmentWithFrame(params: {
   }
 
   // Interpretation grounding: no astrological entities outside selected bundles
-  const ungroundedEntities = astroEntities.filter(
-    (entity) =>
-      scriptLower.includes(entity) &&
-      !Array.from(allowedAstroTokens).some((token) => token.includes(entity))
-  );
-  if (ungroundedEntities.length > 0) {
-    const msg = `Interpretation constraint: references (${ungroundedEntities.join(
-      ", "
-    )}) are not present in selected bundles.`;
-    notes.push(msg);
-    rewrite_instructions.push(msg);
-    blocking_reasons.push("UNGROUNDED_INTERPRETATION");
+  for (const entity of astroEntities) {
+    if (!scriptLower.includes(entity)) continue;
+
+    const inBundles = Array.from(allowedAstroTokens).some((token) =>
+      token.includes(entity)
+    );
+    const inSignalsOrSky = entityPresentInSignalsOrSky(entity);
+
+    if (!inBundles && !inSignalsOrSky) {
+      const msg = `Interpretation constraint: reference "${entity}" is not present in bundles, signals, or sky features.`;
+      notes.push(msg);
+      rewrite_instructions.push(msg);
+      blocking_reasons.push("UNGROUNDED_INTERPRETATION");
+    } else if (!inBundles && inSignalsOrSky) {
+      const msg = `Warning: reference "${entity}" is grounded in signals/sky but not in selected bundles.`;
+      warnings.push(msg);
+    }
+  }
+
+  // Scaffold leakage guard: planner/interpreter artifacts should not ship.
+  const scaffoldingPatterns = [
+    { pattern: /\bsky anchor:/i, reason: "SCaffold:sky_anchor_label" },
+    {
+      pattern: /peaks today; exposure and decision points surface/i,
+      reason: "SCaffold:planning_artifact",
+    },
+  ];
+  for (const scaffold of scaffoldingPatterns) {
+    if (scaffold.pattern.test(scriptLower)) {
+      const msg = "Remove planner scaffolding; do not surface internal labels or templates.";
+      notes.push(msg);
+      rewrite_instructions.push(msg);
+      blocking_reasons.push(scaffold.reason);
+    }
   }
 
   // Hard gate: section contract compliance — headings present and tied
@@ -194,16 +241,21 @@ export function evaluateSegmentWithFrame(params: {
     rewrite_instructions.push(msg);
   }
 
-  if (notes.length === 0) {
-    return { decision: "APPROVE", notes, blocking_reasons: [], rewrite_instructions: [] };
+  if (rewrite_instructions.length === 0 && blocking_reasons.length === 0) {
+    return {
+      decision: "APPROVE",
+      notes: [...warnings],
+      blocking_reasons: [],
+      rewrite_instructions: [],
+    };
   }
 
   const nextDecision = params.attempt + 1 >= params.max_attempts ? "FAIL_EPISODE" : "REVISE";
 
   return {
     decision: nextDecision,
-    notes,
-    blocking_reasons: blocking_reasons.length > 0 ? blocking_reasons : [...notes],
+    notes: [...rewrite_instructions, ...warnings],
+    blocking_reasons: blocking_reasons.length > 0 ? blocking_reasons : [...rewrite_instructions],
     rewrite_instructions,
   };
 }

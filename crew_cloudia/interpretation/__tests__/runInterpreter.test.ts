@@ -248,7 +248,7 @@ describe("runInterpreter (production engine)", () => {
     expect(result.success).toBe(false);
   });
 
-  it("emits lunation metadata and selects lunation bundle when present", async () => {
+  it("emits lunation signal, selects lunation bundle, and surfaces lunation on frame", async () => {
     const frame = await runInterpreter({
       date: "2025-12-19",
       features: {
@@ -259,12 +259,17 @@ describe("runInterpreter (production engine)", () => {
       },
     });
 
+    const lunationSignal = frame.signals.find((s) => s.signal_key === "new_moon_in_sagittarius");
+    expect(lunationSignal).toBeDefined();
+    expect(lunationSignal?.kind).toBe("lunation");
+
     expect(frame.lunation?.kind).toBe("new");
     expect(frame.lunation?.sign).toBe("sagittarius");
     expect(frame.lunation?.signal_key).toBe("new_moon_in_sagittarius");
     expect(frame.interpretation_bundles.primary[0]?.slug).toBe(
       "new_moon_in_sagittarius"
     );
+    expect(frame.interpretation_bundles.primary).toHaveLength(1);
   });
 });
 

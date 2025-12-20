@@ -7,6 +7,7 @@ import {
   ED_RULE_LOW_CONF_REFLECTION_ACK_UNCERTAINTY,
   ED_RULE_RECENT_THEME_SUPPRESS_OR_CALLBACK,
   ED_RULE_SPEAKABILITY_AVOID_NEVER,
+  ED_RULE_LUNATION_ONLY,
 } from "../rules.js";
 import {
   interpretation_high_confidence_basic,
@@ -165,6 +166,51 @@ describe("planEpisodeEditorial", () => {
     expect(plan.segments.flatMap((s) => s.included_tags)).toContain(
       "new_moon_in_sagittarius"
     );
+  });
+
+  it("uses lunation-only intents and rationale on lunation day", () => {
+    const plan = planEpisodeEditorial({
+      interpretation: interpretation_lunation_special,
+      memory: { recent_tags: [] },
+    });
+
+    expect(plan.segments.map((s) => s.intent)).toEqual([
+      ["introduce_lunation_day"],
+      ["explore_lunation_core_meaning"],
+      ["work_with_lunation_today"],
+      ["close_with_lunation_feel"],
+    ]);
+
+    const main = plan.segments.find((s) => s.segment_key === "main_themes");
+    expect(main?.included_tags).toEqual(["new_moon_in_sagittarius"]);
+    expect(main?.rationale).toContain(ED_RULE_LUNATION_ONLY);
+
+    // All segments should include only the lunation tag when present.
+    plan.segments.forEach((segment) => {
+      expect(segment.included_tags).toEqual(["new_moon_in_sagittarius"]);
+      expect(segment.rationale).toContain(ED_RULE_LUNATION_ONLY);
+    });
+  });
+
+  it("keeps non-lunation planning unchanged on non-lunation days", () => {
+    const plan = planEpisodeEditorial({
+      interpretation: interpretation_high_confidence_basic,
+      memory: { recent_tags: [] },
+    });
+
+    // No lunation rule present.
+    plan.segments.forEach((segment) => {
+      expect(segment.rationale).not.toContain(ED_RULE_LUNATION_ONLY);
+    });
+
+    const main = plan.segments.find((s) => s.segment_key === "main_themes");
+    expect(main?.included_tags.length).toBeGreaterThanOrEqual(1);
+    expect(plan.segments.map((s) => s.intent)).toEqual([
+      ["introduce_one_theme"],
+      ["headline_primary"],
+      ["integrate_and_reflect"],
+      ["close_with_action"],
+    ]);
   });
 });
 
