@@ -135,7 +135,7 @@ export function evaluateIntroWithFrame(params: {
     .filter((s) => s.length > 0);
   
   // Count sentences after greeting (greeting is always first)
-  const greeting = expectedIntroGreeting(params.episode_date);
+  // Note: greeting is already declared above (line 58), reuse it
   const afterGreeting = script.replace(greeting, "").trim();
   const expressiveSentences = afterGreeting
     .split(/[.!?]+/)
