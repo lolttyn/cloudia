@@ -23,6 +23,8 @@ import {
 } from "./crew_cloudia/editorial/showrunner/evaluateIntroWithFrame.js";
 import { evaluateAdherenceRubric } from "./crew_cloudia/quality/adherence/adherence_rubric.js";
 import { PERMISSION_BLOCK } from "./crew_cloudia/editorial/prompts/permissionBlock.js";
+import { generateEditInstructions } from "./crew_cloudia/editorial/editor/generateEditInstructions.js";
+import { createHash } from "crypto";
 import { buildIntroScaffold } from "./crew_cloudia/generation/introScaffold.js";
 import { invokeLLM, CLOUDIA_LLM_CONFIG } from "./crew_cloudia/generation/invokeLLM.js";
 
@@ -99,8 +101,8 @@ export async function runIntroForDate(params: {
   const writing_contract = getWritingContract("intro");
 
   let script = "";
+  let previousScript = "";
   let rewriteInstructions: string[] = [];
-  let previousBlockingReasons: string[] = [];
   let approved = false;
   let lastDecision: EditorFeedback["decision"] | null = null;
 
@@ -114,15 +116,23 @@ export async function runIntroForDate(params: {
         episode_validation,
       });
       script = draft.draft_script;
+      previousScript = script; // Store for comparison in next iteration
     } else {
+      // CRITICAL: Extract the expressive portion from the CURRENT script (which is the previous attempt)
+      const previousExpressive = extractExpressiveFromScript(script, params.episode_date);
+      
+      console.log(`[intro] Rewriting attempt ${attemptNumber}. Previous expressive: "${previousExpressive}"`);
+      
       const rewritePromptPayload = {
-        system_prompt: "You are a precise editorial rewrite assistant for the intro.",
+        system_prompt: "You are revising an existing draft based on editor feedback. Your job is to apply the requested changes to the two expressive sentences, not to write a new draft from scratch.",
         user_prompt: buildIntroExpressiveRewritePrompt({
           interpretive_frame: params.interpretive_frame,
-          editor_notes: rewriteInstructions,
+          previous_expressive: previousExpressive,
+          editor_instructions: rewriteInstructions,
           episode_date: params.episode_date,
         }),
       };
+      
       const rewriteResult = await invokeLLM(rewritePromptPayload, CLOUDIA_LLM_CONFIG);
       if (rewriteResult.status !== "ok") {
         throw new Error(
@@ -131,6 +141,8 @@ export async function runIntroForDate(params: {
       }
 
       const expressiveText = rewriteResult.text.trim();
+      console.log(`[intro] Rewrite returned: "${expressiveText}"`);
+      
       const sentenceCount = countSentences(expressiveText);
       if (sentenceCount !== 2) {
         rewriteInstructions = [
@@ -146,7 +158,18 @@ export async function runIntroForDate(params: {
         sky_anchors: params.interpretive_frame.sky_anchors,
       });
 
-      script = `${scaffold}\n\n${expressiveText}`;
+      const revisedScript = `${scaffold}\n\n${expressiveText}`;
+
+      // Hard check: ensure revision actually differs from previous attempt
+      if (revisedScript.trim() === previousScript.trim()) {
+        console.warn(
+          `[intro] Attempt ${attemptNumber}: Revision identical to previous attempt. Forcing change.`
+        );
+        // We'll add NO_REVISION_MADE after evaluation
+      }
+
+      script = revisedScript;
+      console.log(`[intro] Updated script. New hash: ${createHash("md5").update(script).digest("hex").substring(0, 8)}`);
     }
 
     // Frame evaluator provides diagnostics (structural/grounding checks)
@@ -185,10 +208,19 @@ export async function runIntroForDate(params: {
       batch_id: params.batch_id,
     });
 
+    // Hard check: if revision is identical, add blocking reason
+    if (attempt > 0 && script.trim() === previousScript.trim()) {
+      allBlockingReasons.push("NO_REVISION_MADE");
+    }
+
+    // CRITICAL DIAGNOSTIC: Hash the script to verify it's changing
+    const scriptHash = createHash("md5").update(script).digest("hex").substring(0, 8);
+    
     // Log attempt evolution for debugging
     console.log(
       `[intro] Attempt ${attemptNumber}/${MAX_SEGMENT_RETRIES}: ` +
       `blocking=${allBlockingReasons.length}, ` +
+      `hash=${scriptHash}, ` +
       `preview="${script.substring(0, 120).replace(/\n/g, " ")}..."`
     );
     if (allBlockingReasons.length > 0) {
@@ -218,21 +250,30 @@ export async function runIntroForDate(params: {
 
     lastDecision = "REVISE";
 
-    // Store blocking reasons for next rewrite attempt
-    previousBlockingReasons = allBlockingReasons;
+    // CRITICAL: Convert blocking reasons into actionable editor instructions
+    const editorInstructions = generateEditInstructions(
+      allBlockingReasons,
+      "intro"
+    );
 
-    // Combine rewrite instructions from both evaluators
+    // Log editor instructions for observability
+    if (editorInstructions.length > 0) {
+      console.log(`  Editor instructions: ${editorInstructions.join(" | ")}`);
+    }
+
+    // Combine frame evaluator notes with editor instructions
     rewriteInstructions = [
       ...frameEval.rewrite_instructions,
-      ...(rubricEval.blocking_reasons.length > 0
-        ? [`Phase D rubric violations: ${rubricEval.blocking_reasons.join(", ")}`]
-        : []),
+      ...editorInstructions,
     ];
 
     // If no specific rewrite instructions, use notes
     if (rewriteInstructions.length === 0) {
       rewriteInstructions = [...frameEval.notes, ...Array.from(rubricEval.warnings)];
     }
+
+    // Store current script for next iteration's comparison
+    previousScript = script;
   }
 
   if (!approved || lastDecision !== "APPROVE") {
@@ -300,15 +341,35 @@ export async function runIntroForDate(params: {
   };
 }
 
+function extractExpressiveFromScript(script: string, episode_date: string): string {
+  // The intro structure is: greeting + scaffold (axis + why_today + anchors) + expressive (2 sentences)
+  // The expressive portion is always the last two sentences
+  
+  // Split by sentence boundaries (period, exclamation, question mark)
+  const sentences = script
+    .split(/(?<=[.!?])\s+/)
+    .map(s => s.trim())
+    .filter(s => s.length > 0);
+  
+  // The expressive sentences are the last two
+  if (sentences.length >= 2) {
+    return sentences.slice(-2).join(" ");
+  }
+  
+  // Fallback: return last sentence or empty
+  return sentences.length > 0 ? sentences[sentences.length - 1] : "";
+}
+
 function buildIntroExpressiveRewritePrompt(params: {
   interpretive_frame: InterpretiveFrame;
-  editor_notes: string[];
+  previous_expressive: string;
+  editor_instructions: string[];
   episode_date: string;
 }) {
-  const notes =
-    params.editor_notes.length > 0
-      ? params.editor_notes.map((n, i) => `${i + 1}. ${n}`).join("\n")
-      : "No notes provided.";
+  const instructions =
+    params.editor_instructions.length > 0
+      ? params.editor_instructions.map((i, idx) => `${idx + 1}. ${i}`).join("\n")
+      : "No specific instructions provided.";
 
   const intensity = params.interpretive_frame.intensity_modifier.toLowerCase();
   const intensityCues: Record<string, string[]> = {
@@ -322,7 +383,15 @@ function buildIntroExpressiveRewritePrompt(params: {
   return `
 ${PERMISSION_BLOCK}
 
-You are rewriting ONLY the two expressive sentences of the intro. The scaffold (greeting + axis line + why-today clause) is locked and will be inserted by the system. You must NOT include the greeting, scaffold lines, or sign-off. Return EXACTLY TWO sentences, plain text only.
+You are REVISING the two expressive sentences of the intro based on editor feedback. The scaffold (greeting + axis line + why-today clause) is locked and will be inserted by the system. You must NOT include the greeting, scaffold lines, or sign-off. Return EXACTLY TWO sentences, plain text only.
+
+Here are the previous two expressive sentences:
+---
+${params.previous_expressive}
+---
+
+Your editor has requested the following changes:
+${instructions}
 
 Begin with an experiential entry point:
 how the day meets someone emotionally, physically, or situationally.
@@ -348,10 +417,11 @@ Tone and intensity:
 - Use tone/word choice to convey this; do NOT explain intensity, arcs, or phases.
 ${cues.length > 0 ? `- Helpful tone cues: ${cues.join(", ")}.` : ""}
 
-Write in a conversational, grounded voice.
-
-Rewrite instructions to address:
-${notes}
+Revision requirements:
+- Apply ALL editor instructions above.
+- Do not repeat language from the previous version.
+- Preserve what works; fix what doesn't.
+- Write in a conversational, grounded voice.
 `.trim();
 }
 

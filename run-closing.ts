@@ -21,6 +21,7 @@ import {
 import { evaluateClosingWithFrame } from "./crew_cloudia/editorial/showrunner/evaluateClosingWithFrame.js";
 import { evaluateAdherenceRubric } from "./crew_cloudia/quality/adherence/adherence_rubric.js";
 import { PERMISSION_BLOCK } from "./crew_cloudia/editorial/prompts/permissionBlock.js";
+import { generateEditInstructions } from "./crew_cloudia/editorial/editor/generateEditInstructions.js";
 import { buildClosingScaffold } from "./crew_cloudia/generation/closingScaffold.js";
 
 declare const process: {
@@ -96,8 +97,8 @@ export async function runClosingForDate(params: {
   const writing_contract = getWritingContract("closing");
 
   let script = "";
+  let previousScript = "";
   let rewriteInstructions: string[] = [];
-  let previousBlockingReasons: string[] = [];
   let approved = false;
   let lastDecision: EditorFeedback["decision"] | null = null;
 
@@ -126,13 +127,14 @@ export async function runClosingForDate(params: {
       });
       const micro = extractMicroReflection(draft.draft_script, scaffold, signoff);
       script = assembleClosingScript(scaffold, micro, signoff);
+      previousScript = script; // Store for comparison in next iteration
     } else {
       const rewritePromptPayload = {
-        system_prompt: "You are a precise editorial rewrite assistant for the closing.",
+        system_prompt: "You are revising an existing draft based on editor feedback. Your job is to apply the requested changes to the micro-reflection, not to write a new draft from scratch.",
         user_prompt: buildClosingMicroRewritePrompt({
           interpretive_frame: params.interpretive_frame,
           previous_micro: extractMicroReflection(script, scaffold, signoff),
-          editor_notes: rewriteInstructions,
+          editor_instructions: rewriteInstructions,
         }),
       };
       const rewriteResult = await invokeLLM(rewritePromptPayload, CLOUDIA_LLM_CONFIG);
@@ -142,7 +144,17 @@ export async function runClosingForDate(params: {
         );
       }
       const micro = rewriteResult.text.trim();
-      script = assembleClosingScript(scaffold, micro, signoff);
+      const revisedScript = assembleClosingScript(scaffold, micro, signoff);
+
+      // Hard check: ensure revision actually differs from previous attempt
+      if (revisedScript.trim() === previousScript.trim()) {
+        console.warn(
+          `[closing] Attempt ${attemptNumber}: Revision identical to previous attempt. Forcing change.`
+        );
+        // We'll add NO_REVISION_MADE after evaluation
+      }
+
+      script = revisedScript;
     }
 
     // Frame evaluator provides diagnostics (structural/grounding checks)
@@ -198,6 +210,11 @@ export async function runClosingForDate(params: {
       batch_id: params.batch_id,
     });
 
+    // Hard check: if revision is identical, add blocking reason
+    if (attempt > 0 && script.trim() === previousScript.trim()) {
+      allBlockingReasons.push("NO_REVISION_MADE");
+    }
+
     // Log attempt evolution for debugging
     console.log(
       `[closing] Attempt ${attemptNumber}/${MAX_SEGMENT_RETRIES}: ` +
@@ -231,21 +248,30 @@ export async function runClosingForDate(params: {
 
     lastDecision = "REVISE";
 
-    // Store blocking reasons for next rewrite attempt
-    previousBlockingReasons = allBlockingReasons;
+    // CRITICAL: Convert blocking reasons into actionable editor instructions
+    const editorInstructions = generateEditInstructions(
+      allBlockingReasons,
+      "closing"
+    );
 
-    // Combine rewrite instructions from both evaluators
+    // Log editor instructions for observability
+    if (editorInstructions.length > 0) {
+      console.log(`  Editor instructions: ${editorInstructions.join(" | ")}`);
+    }
+
+    // Combine frame evaluator notes with editor instructions
     rewriteInstructions = [
       ...frameEval.rewrite_instructions,
-      ...(rubricEval.blocking_reasons.length > 0
-        ? [`Phase D rubric violations: ${rubricEval.blocking_reasons.join(", ")}`]
-        : []),
+      ...editorInstructions,
     ];
 
     // If no specific rewrite instructions, use notes
     if (rewriteInstructions.length === 0) {
       rewriteInstructions = [...frameEval.notes, ...Array.from(rubricEval.warnings)];
     }
+
+    // Store current script for next iteration's comparison
+    previousScript = script;
   }
 
   if (!approved || lastDecision !== "APPROVE") {
@@ -319,17 +345,25 @@ export async function runClosingForDate(params: {
 function buildClosingMicroRewritePrompt(params: {
   interpretive_frame: InterpretiveFrame;
   previous_micro: string;
-  editor_notes: string[];
+  editor_instructions: string[];
 }) {
-  const notes =
-    params.editor_notes.length > 0
-      ? params.editor_notes.map((n, i) => `${i + 1}. ${n}`).join("\n")
-      : "No notes provided.";
+  const instructions =
+    params.editor_instructions.length > 0
+      ? params.editor_instructions.map((i, idx) => `${idx + 1}. ${i}`).join("\n")
+      : "No specific instructions provided.";
 
   return `
 ${PERMISSION_BLOCK}
 
-Rewrite the closing micro-reflection (two sentences only). Do not change the scaffold or sign-off; they are fixed outside this prompt.
+You are REVISING the closing micro-reflection (two sentences only) based on editor feedback. Do not change the scaffold or sign-off; they are fixed outside this prompt.
+
+Here is the previous micro-reflection:
+---
+${params.previous_micro}
+---
+
+Your editor has requested the following changes:
+${instructions}
 
 End with integration, not summary.
 
@@ -343,18 +377,15 @@ Do not restate earlier language.
 Authoritative interpretive frame:
 ${JSON.stringify(params.interpretive_frame, null, 2)}
 
-Requirements:
+Revision requirements:
+- Apply ALL editor instructions above.
 - Produce exactly two sentences.
+- Do not repeat language from the previous version.
+- Preserve what works; fix what doesn't.
 - Reflective and observational; no advice, no directives, no "you should".
 - Reinforce (without restating verbatim) the dominant contrast axis: "${params.interpretive_frame.dominant_contrast_axis.statement}".
 - No predictions; stay with today.
 - No greeting, no sign-off language.
-
-Editor notes to address:
-${notes}
-
-Previous micro-reflection (for reference only, do not copy):
-${params.previous_micro}
 `.trim();
 }
 

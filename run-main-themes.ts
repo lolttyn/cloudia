@@ -21,6 +21,7 @@ import {
 import { evaluateSegmentWithFrame } from "./crew_cloudia/editorial/showrunner/evaluateSegmentWithFrame.js";
 import { evaluateAdherenceRubric } from "./crew_cloudia/quality/adherence/adherence_rubric.js";
 import { PERMISSION_BLOCK } from "./crew_cloudia/editorial/prompts/permissionBlock.js";
+import { generateEditInstructions } from "./crew_cloudia/editorial/editor/generateEditInstructions.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -103,8 +104,8 @@ export async function runMainThemesForDate(params: {
   const writing_contract = getWritingContract("main_themes");
 
   let script = "";
+  let previousScript = "";
   let rewriteInstructions: string[] = [];
-  let previousBlockingReasons: string[] = [];
   let approved = false;
   let lastDecision: EditorFeedback["decision"] | null = null;
 
@@ -119,14 +120,16 @@ export async function runMainThemesForDate(params: {
         episode_validation,
       });
       script = draft.draft_script;
+      previousScript = script; // Store for comparison in next iteration
     } else {
+      // CRITICAL: This is a REVISION, not a retry
+      // The writer must apply editor instructions to the previous draft
       const rewritePromptPayload = {
-        system_prompt: "You are a precise editorial rewrite assistant.",
+        system_prompt: "You are revising an existing draft based on editor feedback. Your job is to apply the requested changes, not to write a new draft from scratch.",
         user_prompt: buildShowrunnerRewritePrompt({
           interpretive_frame: params.interpretive_frame,
           previous_script: script,
-          editor_notes: rewriteInstructions,
-          blocking_reasons: previousBlockingReasons,
+          editor_instructions: rewriteInstructions,
         }),
       };
 
@@ -136,7 +139,18 @@ export async function runMainThemesForDate(params: {
           `LLM rewrite failed (${rewriteResult.error_type}): ${rewriteResult.message}`
         );
       }
-      script = rewriteResult.text;
+
+      const revisedScript = rewriteResult.text.trim();
+
+      // Hard check: ensure revision actually differs from previous attempt
+      if (revisedScript.trim() === previousScript.trim()) {
+        console.warn(
+          `[main_themes] Attempt ${attemptNumber}: Revision identical to previous attempt. Forcing change.`
+        );
+        // We'll add NO_REVISION_MADE after evaluation
+      }
+
+      script = revisedScript;
     }
 
     // Phase D authority inversion: frame evaluator provides diagnostics only
@@ -176,6 +190,11 @@ export async function runMainThemesForDate(params: {
       batch_id: params.batch_id,
     });
 
+    // Hard check: if revision is identical, add blocking reason
+    if (attempt > 0 && script.trim() === previousScript.trim()) {
+      allBlockingReasons.push("NO_REVISION_MADE");
+    }
+
     // Log attempt evolution for debugging
     console.log(
       `[main_themes] Attempt ${attemptNumber}/${MAX_SEGMENT_RETRIES}: ` +
@@ -209,21 +228,31 @@ export async function runMainThemesForDate(params: {
 
     lastDecision = "REVISE";
 
-    // Store blocking reasons for next rewrite attempt
-    previousBlockingReasons = allBlockingReasons;
+    // CRITICAL: Convert blocking reasons into actionable editor instructions
+    // This is the missing translation layer between evaluation and revision
+    const editorInstructions = generateEditInstructions(
+      allBlockingReasons,
+      "main_themes"
+    );
 
-    // Combine rewrite instructions from both evaluators
+    // Log editor instructions for observability
+    if (editorInstructions.length > 0) {
+      console.log(`  Editor instructions: ${editorInstructions.join(" | ")}`);
+    }
+
+    // Combine frame evaluator notes with editor instructions
     rewriteInstructions = [
       ...frameEval.rewrite_instructions,
-      ...(rubricEval.blocking_reasons.length > 0
-        ? [`Phase D rubric violations: ${rubricEval.blocking_reasons.join(", ")}`]
-        : []),
+      ...editorInstructions,
     ];
 
     // If no specific rewrite instructions, use notes
     if (rewriteInstructions.length === 0) {
       rewriteInstructions = [...frameEval.notes, ...Array.from(rubricEval.warnings)];
     }
+
+    // Store current script for next iteration's comparison
+    previousScript = script;
   }
 
   if (!approved || lastDecision !== "APPROVE") {
@@ -343,23 +372,25 @@ function performSelfCheck(
 function buildShowrunnerRewritePrompt(params: {
   interpretive_frame: InterpretiveFrame;
   previous_script: string;
-  editor_notes: string[];
-  blocking_reasons: string[];
+  editor_instructions: string[];
 }): string {
-  const notes =
-    params.editor_notes.length > 0
-      ? params.editor_notes.map((n, i) => `${i + 1}. ${n}`).join("\n")
-      : "No notes provided.";
-
-  const blockingReasonsText =
-    params.blocking_reasons.length > 0
-      ? params.blocking_reasons.map((r, i) => `${i + 1}. ${r}`).join("\n")
-      : "No blocking reasons.";
+  const instructions =
+    params.editor_instructions.length > 0
+      ? params.editor_instructions.map((i, idx) => `${idx + 1}. ${i}`).join("\n")
+      : "No specific instructions provided.";
 
   return `
 ${PERMISSION_BLOCK}
 
-You are rewriting a main_themes segment. The previous attempt failed with blocking reasons listed below.
+You are REVISING an existing draft based on editor feedback. This is not a new draft—you must actively change the previous version.
+
+Here is the previous draft:
+---
+${params.previous_script}
+---
+
+Your editor has requested the following changes:
+${instructions}
 
 Focus on translation, not explanation.
 
@@ -377,22 +408,15 @@ Required explicit references (must appear verbatim in the output):
 ${params.interpretive_frame.sky_anchors.map((a) => `- "${a.label}"`).join("\n")}
 - "${params.interpretive_frame.why_today_clause}"
 
-BLOCKING REASONS FROM PREVIOUS ATTEMPT (you must fix these):
-${blockingReasonsText}
-
-Editor notes to address:
-${notes}
-
-Previous draft (that failed):
-${params.previous_script}
-
-Requirements:
+Revision requirements:
+- Apply ALL editor instructions above.
+- Do not repeat language from the previous version.
+- Preserve what works; fix what doesn't.
 - Preserve the dominant_contrast_axis meaning, but translate it into human experience.
 - Include the specified sky anchors and causal logic using "because".
 - Write in natural, conversational prose.
 - Match the frame's confidence_level in tone; do not increase certainty.
-- Fix the blocking reasons listed above.
-- Do not add new themes; fix only the listed issues.
+- Do not add new themes; fix only the issues identified by the editor.
 `.trim();
 }
 
