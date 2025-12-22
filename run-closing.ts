@@ -92,6 +92,7 @@ export async function runClosingForDate(params: {
     episode_date: params.episode_date,
     is_valid: true,
     segment_results: [],
+    lexical_fatigue: [],
     blocking_segments: [],
     warnings: [],
   };
@@ -478,4 +479,3 @@ if (process.argv[1]) {
     });
   }
 }
-
