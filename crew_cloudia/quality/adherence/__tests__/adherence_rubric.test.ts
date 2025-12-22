@@ -123,5 +123,110 @@ describe("Editorial Rubric v2.1 adherence", () => {
     });
     expect(result.blocking_reasons).toHaveLength(0);
   });
+
+  describe("Phase D regression tests: scaffold language must fail", () => {
+    it("fails when rubric scaffolding appears (primary meanings)", () => {
+      const result = evaluateAdherenceRubric({
+        script: "Primary Meanings\nToday's focus is on integration over momentum.",
+        segment_key: "main_themes",
+        interpretive_frame: buildFrame(),
+      });
+      expect(result.blocking_reasons).toContain("HARD_BANNED_LANGUAGE:primary meanings");
+    });
+
+    it("fails when rubric scaffolding appears (relevance)", () => {
+      const result = evaluateAdherenceRubric({
+        script: "Relevance\nThis matters because the Moon is in Virgo.",
+        segment_key: "main_themes",
+        interpretive_frame: buildFrame(),
+      });
+      expect(result.blocking_reasons).toContain("HARD_BANNED_LANGUAGE:relevance");
+    });
+
+    it("fails when rubric scaffolding appears (concrete example)", () => {
+      const result = evaluateAdherenceRubric({
+        script: "Concrete Example\nYou notice the tension in your body.",
+        segment_key: "main_themes",
+        interpretive_frame: buildFrame(),
+      });
+      expect(result.blocking_reasons).toContain("HARD_BANNED_LANGUAGE:concrete example");
+    });
+
+    it("fails when rubric scaffolding appears (confidence alignment)", () => {
+      const result = evaluateAdherenceRubric({
+        script: "Confidence Alignment\nThis reflects a high confidence level.",
+        segment_key: "main_themes",
+        interpretive_frame: buildFrame(),
+      });
+      expect(result.blocking_reasons).toContain("HARD_BANNED_LANGUAGE:confidence alignment");
+    });
+
+    it("fails when meaning over minutiae appears", () => {
+      const result = evaluateAdherenceRubric({
+        script: "The focus is meaning over minutiae today. You feel the shift.",
+        segment_key: "main_themes",
+        interpretive_frame: buildFrame(),
+      });
+      expect(result.blocking_reasons).toContain("HARD_BANNED_LANGUAGE:meaning over minutiae");
+    });
+
+    it("fails when dominant contrast appears", () => {
+      const result = evaluateAdherenceRubric({
+        script: "The dominant contrast axis is integration over momentum.",
+        segment_key: "main_themes",
+        interpretive_frame: buildFrame(),
+      });
+      expect(result.blocking_reasons).toContain("HARD_BANNED_LANGUAGE:dominant contrast");
+    });
+
+    it("fails when contrast axis appears", () => {
+      const result = evaluateAdherenceRubric({
+        script: "The contrast axis shows integration over momentum.",
+        segment_key: "main_themes",
+        interpretive_frame: buildFrame(),
+      });
+      expect(result.blocking_reasons).toContain("HARD_BANNED_LANGUAGE:contrast axis");
+    });
+  });
+
+  describe("Phase D regression tests: system-level explanation must fail", () => {
+    it("fails on system-level astrology explanation", () => {
+      const result = evaluateAdherenceRubric({
+        script: "Astrologically speaking, Sagittarius represents the idea of expansion and meaning.",
+        segment_key: "main_themes",
+        interpretive_frame: buildFrame(),
+      });
+      expect(result.blocking_reasons).toContain("SYSTEM_LEVEL_EXPLANATION");
+    });
+
+    it("fails when focus is firmly on appears", () => {
+      const result = evaluateAdherenceRubric({
+        script: "Focus is firmly on integration today. You notice the shift.",
+        segment_key: "main_themes",
+        interpretive_frame: buildFrame(),
+      });
+      expect(result.blocking_reasons).toContain("HARD_BANNED_LANGUAGE:focus is firmly on");
+    });
+  });
+
+  describe("Phase D regression tests: no headings + strong prose passes", () => {
+    it("passes human, unstructured prose without headings", () => {
+      const result = evaluateAdherenceRubric({
+        script: "If today feels different, trust that. You don't have to act yet. The energy sits in your chest.",
+        segment_key: "intro",
+        interpretive_frame: buildFrame({ lunation: { kind: "new", sign: "Virgo", signal_key: "moon_phase_new" } }),
+      });
+      expect(result.blocking_reasons.length).toBe(0);
+    });
+
+    it("passes main_themes without headings but with relational translation", () => {
+      const result = evaluateAdherenceRubric({
+        script: "You text a friend to say you're done. Take the space. The energy sits in your body.",
+        segment_key: "main_themes",
+        interpretive_frame: buildFrame(),
+      });
+      expect(result.blocking_reasons.length).toBe(0);
+    });
+  });
 });
 

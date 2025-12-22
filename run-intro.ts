@@ -21,6 +21,8 @@ import {
   evaluateIntroWithFrame,
   expectedIntroGreeting,
 } from "./crew_cloudia/editorial/showrunner/evaluateIntroWithFrame.js";
+import { evaluateAdherenceRubric } from "./crew_cloudia/quality/adherence/adherence_rubric.js";
+import { PERMISSION_BLOCK } from "./crew_cloudia/editorial/prompts/permissionBlock.js";
 import { buildIntroScaffold } from "./crew_cloudia/generation/introScaffold.js";
 import { invokeLLM, CLOUDIA_LLM_CONFIG } from "./crew_cloudia/generation/invokeLLM.js";
 
@@ -98,10 +100,12 @@ export async function runIntroForDate(params: {
 
   let script = "";
   let rewriteInstructions: string[] = [];
+  let previousBlockingReasons: string[] = [];
   let approved = false;
   let lastDecision: EditorFeedback["decision"] | null = null;
 
   for (let attempt = 0; attempt < MAX_SEGMENT_RETRIES; attempt++) {
+    const attemptNumber = attempt + 1;
     if (attempt === 0) {
       const draft = await generateSegmentDraft({
         episode_plan,
@@ -145,7 +149,8 @@ export async function runIntroForDate(params: {
       script = `${scaffold}\n\n${expressiveText}`;
     }
 
-    const introEvaluation = evaluateIntroWithFrame({
+    // Frame evaluator provides diagnostics (structural/grounding checks)
+    const frameEval = evaluateIntroWithFrame({
       interpretive_frame: params.interpretive_frame,
       episode_date: params.episode_date,
       draft_script: script,
@@ -153,25 +158,81 @@ export async function runIntroForDate(params: {
       max_attempts: MAX_SEGMENT_RETRIES,
     });
 
-    lastDecision = introEvaluation.decision;
+    // Phase D rubric is final authority on editorial quality
+    const rubricEval = evaluateAdherenceRubric({
+      script: script,
+      segment_key: "intro",
+      interpretive_frame: params.interpretive_frame,
+    });
 
-    if (introEvaluation.decision === "APPROVE") {
+    // Combine blocking reasons: frame (structural) + rubric (editorial quality)
+    const allBlockingReasons = [
+      ...frameEval.blocking_reasons,
+      ...rubricEval.blocking_reasons,
+    ];
+
+    // CRITICAL: Persist EVERY attempt before checking pass/fail
+    const gateDecisionForAttempt = allBlockingReasons.length === 0 ? "approve" : "rewrite";
+    await persistSegmentVersion({
+      episode_id: params.episode_id,
+      episode_date: params.episode_date,
+      segment_key: "intro",
+      attempt_number: attemptNumber,
+      script_text: script,
+      gate_decision: gateDecisionForAttempt,
+      blocking_reasons: allBlockingReasons,
+      gate_policy_version: "v0.1",
+      batch_id: params.batch_id,
+    });
+
+    // Log attempt evolution for debugging
+    console.log(
+      `[intro] Attempt ${attemptNumber}/${MAX_SEGMENT_RETRIES}: ` +
+      `blocking=${allBlockingReasons.length}, ` +
+      `preview="${script.substring(0, 120).replace(/\n/g, " ")}..."`
+    );
+    if (allBlockingReasons.length > 0) {
+      console.log(`  Blocking reasons: ${allBlockingReasons.join(", ")}`);
+    }
+
+    // Final decision: only approve if BOTH evaluators have zero blocking reasons
+    const hasBlockingReasons = allBlockingReasons.length > 0;
+
+    if (!hasBlockingReasons) {
+      // Both evaluators pass - approve
       approved = true;
+      lastDecision = "APPROVE";
       break;
     }
 
-    if (introEvaluation.decision === "FAIL_EPISODE" || attempt === MAX_SEGMENT_RETRIES - 1) {
+    // Has blocking reasons - determine if we should fail or revise
+    if (attempt + 1 >= MAX_SEGMENT_RETRIES) {
+      lastDecision = "FAIL_EPISODE";
       throw new Error(
-        `Episode failed: intro did not satisfy meaning requirements after ${attempt + 1} attempts. Notes: ${introEvaluation.notes.join(
-          " | "
-        )}`
+        `Episode failed: intro did not meet editor rubric after ${attempt + 1} attempts. ` +
+        `Frame blocking: ${frameEval.blocking_reasons.join(", ")}. ` +
+        `Rubric blocking: ${rubricEval.blocking_reasons.join(", ")}. ` +
+        `Notes: ${[...frameEval.notes, ...Array.from(rubricEval.warnings)].join(" | ")}`
       );
     }
 
-    rewriteInstructions =
-      introEvaluation.rewrite_instructions.length > 0
-        ? introEvaluation.rewrite_instructions
-        : introEvaluation.notes;
+    lastDecision = "REVISE";
+
+    // Store blocking reasons for next rewrite attempt
+    previousBlockingReasons = allBlockingReasons;
+
+    // Combine rewrite instructions from both evaluators
+    rewriteInstructions = [
+      ...frameEval.rewrite_instructions,
+      ...(rubricEval.blocking_reasons.length > 0
+        ? [`Phase D rubric violations: ${rubricEval.blocking_reasons.join(", ")}`]
+        : []),
+    ];
+
+    // If no specific rewrite instructions, use notes
+    if (rewriteInstructions.length === 0) {
+      rewriteInstructions = [...frameEval.notes, ...Array.from(rubricEval.warnings)];
+    }
   }
 
   if (!approved || lastDecision !== "APPROVE") {
@@ -184,11 +245,6 @@ export async function runIntroForDate(params: {
   const mappedDiagnostics = mapDiagnosticsToEditorialViolations(
     performSelfCheck(script, writing_contract)
   );
-
-  const attemptNumber = await getNextAttemptNumber({
-    episode_id: params.episode_id,
-    segment_key: "intro",
-  });
 
   const gateResult = evaluateEditorialGate({
     episode_id: params.episode_id,
@@ -204,25 +260,24 @@ export async function runIntroForDate(params: {
     max_attempts_remaining: 0,
   });
 
-  await persistSegmentVersion({
-    episode_id: params.episode_id,
-    episode_date: params.episode_date,
-    segment_key: "intro",
-    attempt_number: attemptNumber,
-    script_text: script,
-    gate_decision: gateResult.decision,
-    blocking_reasons: gateResult.blocking_reasons,
-    gate_policy_version: gateResult.policy_version,
-    batch_id: params.batch_id,
-  });
+  // NOTE: persistSegmentVersion is now called INSIDE the loop for every attempt.
+  // We only upsert the snapshot here on final success.
 
   if (gateResult.decision === "approve") {
+    // Get the final attempt number (should match what was persisted in the loop)
+    const finalAttemptNumber = await getNextAttemptNumber({
+      episode_id: params.episode_id,
+      segment_key: "intro",
+    });
+    // Subtract 1 because getNextAttemptNumber returns the NEXT number
+    const actualFinalAttempt = finalAttemptNumber - 1;
+
     await upsertCurrentSegment({
       episode_id: params.episode_id,
       episode_date: params.episode_date,
       segment_key: "intro",
       script_text: script,
-      script_version: attemptNumber,
+      script_version: actualFinalAttempt,
       gate_policy_version: gateResult.policy_version,
     });
 
@@ -265,7 +320,21 @@ function buildIntroExpressiveRewritePrompt(params: {
   const cues = intensityCues[intensity] ?? [];
 
   return `
+${PERMISSION_BLOCK}
+
 You are rewriting ONLY the two expressive sentences of the intro. The scaffold (greeting + axis line + why-today clause) is locked and will be inserted by the system. You must NOT include the greeting, scaffold lines, or sign-off. Return EXACTLY TWO sentences, plain text only.
+
+Begin with an experiential entry point:
+how the day meets someone emotionally, physically, or situationally.
+
+Safeguard A — Entry Vector Assertion:
+If your opening sentence could describe any day, rewrite it.
+
+Safeguard B — One-Sentence Cap on "Aboutness":
+You may include at most one sentence that describes what the day is about. Everything else should show how it shows up.
+
+If a lunation is present, lead with how it feels or what is opening/closing,
+not with astronomical sequencing.
 
 Authoritative interpretive frame (context only, do not restate as scaffold):
 ${JSON.stringify(params.interpretive_frame, null, 2)}
@@ -275,16 +344,11 @@ Required explicit references (must appear verbatim in your two sentences):
 - Include a causal sentence that uses the word "because".
 
 Tone and intensity:
-- Today’s intensity: ${intensity}.
-- Use tone/word choice only; do NOT explain intensity, arcs, or phases.
+- Today's intensity: ${intensity}.
+- Use tone/word choice to convey this; do NOT explain intensity, arcs, or phases.
 ${cues.length > 0 ? `- Helpful tone cues: ${cues.join(", ")}.` : ""}
 
-Other rules:
-- Address the listener (e.g., "you", "your", "today", "this moment").
-- No greeting, no sign-off, no scaffold text.
-- No meta narration or episode-structure commentary.
-- No predictions, no advice/directives.
-- Exactly two sentences; nothing more, nothing less.
+Write in a conversational, grounded voice.
 
 Rewrite instructions to address:
 ${notes}

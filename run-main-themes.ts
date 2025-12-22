@@ -19,6 +19,8 @@ import {
   MAX_SEGMENT_RETRIES,
 } from "./crew_cloudia/editorial/showrunner/editorContracts.js";
 import { evaluateSegmentWithFrame } from "./crew_cloudia/editorial/showrunner/evaluateSegmentWithFrame.js";
+import { evaluateAdherenceRubric } from "./crew_cloudia/quality/adherence/adherence_rubric.js";
+import { PERMISSION_BLOCK } from "./crew_cloudia/editorial/prompts/permissionBlock.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -102,10 +104,13 @@ export async function runMainThemesForDate(params: {
 
   let script = "";
   let rewriteInstructions: string[] = [];
+  let previousBlockingReasons: string[] = [];
   let approved = false;
   let lastDecision: EditorFeedback["decision"] | null = null;
 
   for (let attempt = 0; attempt < MAX_SEGMENT_RETRIES; attempt++) {
+    const attemptNumber = attempt + 1;
+
     if (attempt === 0) {
       const draft = await generateSegmentDraft({
         episode_plan,
@@ -121,6 +126,7 @@ export async function runMainThemesForDate(params: {
           interpretive_frame: params.interpretive_frame,
           previous_script: script,
           editor_notes: rewriteInstructions,
+          blocking_reasons: previousBlockingReasons,
         }),
       };
 
@@ -133,7 +139,8 @@ export async function runMainThemesForDate(params: {
       script = rewriteResult.text;
     }
 
-    const evaluation = evaluateSegmentWithFrame({
+    // Phase D authority inversion: frame evaluator provides diagnostics only
+    const frameEval = evaluateSegmentWithFrame({
       interpretive_frame: params.interpretive_frame,
       segment_key: "main_themes",
       draft_script: script,
@@ -141,23 +148,82 @@ export async function runMainThemesForDate(params: {
       max_attempts: MAX_SEGMENT_RETRIES,
     });
 
-    lastDecision = evaluation.decision;
-    if (evaluation.decision === "APPROVE") {
+    // Phase D rubric is final authority on editorial quality
+    const rubricEval = evaluateAdherenceRubric({
+      script: script,
+      segment_key: "main_themes",
+      interpretive_frame: params.interpretive_frame,
+    });
+
+    // Combine blocking reasons: frame (grounding/structural) + rubric (editorial quality)
+    const allBlockingReasons = [
+      ...frameEval.blocking_reasons,
+      ...rubricEval.blocking_reasons,
+    ];
+
+    // CRITICAL: Persist EVERY attempt before checking pass/fail
+    // This ensures we can see evolution even if later attempts fail
+    const gateDecisionForAttempt = allBlockingReasons.length === 0 ? "approve" : "rewrite";
+    await persistSegmentVersion({
+      episode_id: params.episode_id,
+      episode_date: params.episode_date,
+      segment_key: "main_themes",
+      attempt_number: attemptNumber,
+      script_text: script,
+      gate_decision: gateDecisionForAttempt,
+      blocking_reasons: allBlockingReasons,
+      gate_policy_version: "v0.1",
+      batch_id: params.batch_id,
+    });
+
+    // Log attempt evolution for debugging
+    console.log(
+      `[main_themes] Attempt ${attemptNumber}/${MAX_SEGMENT_RETRIES}: ` +
+      `blocking=${allBlockingReasons.length}, ` +
+      `preview="${script.substring(0, 120).replace(/\n/g, " ")}..."`
+    );
+    if (allBlockingReasons.length > 0) {
+      console.log(`  Blocking reasons: ${allBlockingReasons.join(", ")}`);
+    }
+
+    // Final decision: only approve if BOTH evaluators have zero blocking reasons
+    const hasBlockingReasons = allBlockingReasons.length > 0;
+
+    if (!hasBlockingReasons) {
+      // Both evaluators pass - approve
       approved = true;
+      lastDecision = "APPROVE";
       break;
     }
 
-    if (evaluation.decision === "FAIL_EPISODE" || attempt === MAX_SEGMENT_RETRIES - 1) {
+    // Has blocking reasons - determine if we should fail or revise
+    if (attempt + 1 >= MAX_SEGMENT_RETRIES) {
+      lastDecision = "FAIL_EPISODE";
       throw new Error(
-        `Episode failed: main_themes could not meet editor rubric after ${attempt + 1} attempts. Notes: ${evaluation.notes.join(
-          " | "
-        )}`
+        `Episode failed: main_themes could not meet editor rubric after ${attempt + 1} attempts. ` +
+        `Frame blocking: ${frameEval.blocking_reasons.join(", ")}. ` +
+        `Rubric blocking: ${rubricEval.blocking_reasons.join(", ")}. ` +
+        `Notes: ${[...frameEval.notes, ...rubricEval.warnings].join(" | ")}`
       );
     }
 
-    rewriteInstructions = evaluation.rewrite_instructions.length
-      ? evaluation.rewrite_instructions
-      : evaluation.notes;
+    lastDecision = "REVISE";
+
+    // Store blocking reasons for next rewrite attempt
+    previousBlockingReasons = allBlockingReasons;
+
+    // Combine rewrite instructions from both evaluators
+    rewriteInstructions = [
+      ...frameEval.rewrite_instructions,
+      ...(rubricEval.blocking_reasons.length > 0
+        ? [`Phase D rubric violations: ${rubricEval.blocking_reasons.join(", ")}`]
+        : []),
+    ];
+
+    // If no specific rewrite instructions, use notes
+    if (rewriteInstructions.length === 0) {
+      rewriteInstructions = [...frameEval.notes, ...Array.from(rubricEval.warnings)];
+    }
   }
 
   if (!approved || lastDecision !== "APPROVE") {
@@ -184,30 +250,25 @@ export async function runMainThemesForDate(params: {
     max_attempts_remaining: 0,
   });
 
-  const attemptNumber = await getNextAttemptNumber({
-    episode_id: params.episode_id,
-    segment_key: "main_themes",
-  });
-
-  await persistSegmentVersion({
-    episode_id: params.episode_id,
-    episode_date: params.episode_date,
-    segment_key: "main_themes",
-    attempt_number: attemptNumber,
-    script_text: script,
-    gate_decision: gateResult.decision,
-    blocking_reasons: gateResult.blocking_reasons,
-    gate_policy_version: gateResult.policy_version,
-    batch_id: params.batch_id,
-  });
+  // NOTE: persistSegmentVersion is now called INSIDE the loop for every attempt.
+  // We only upsert the snapshot here on final success.
+  // The attempt number is the loop index + 1, which was already persisted.
 
   if (gateResult.decision === "approve") {
+    // Get the final attempt number (should match what was persisted in the loop)
+    const finalAttemptNumber = await getNextAttemptNumber({
+      episode_id: params.episode_id,
+      segment_key: "main_themes",
+    });
+    // Subtract 1 because getNextAttemptNumber returns the NEXT number
+    const actualFinalAttempt = finalAttemptNumber - 1;
+
     await upsertCurrentSegment({
       episode_id: params.episode_id,
       episode_date: params.episode_date,
       segment_key: "main_themes",
       script_text: script,
-      script_version: attemptNumber,
+      script_version: actualFinalAttempt,
       gate_policy_version: gateResult.policy_version,
     });
 
@@ -283,14 +344,30 @@ function buildShowrunnerRewritePrompt(params: {
   interpretive_frame: InterpretiveFrame;
   previous_script: string;
   editor_notes: string[];
+  blocking_reasons: string[];
 }): string {
   const notes =
     params.editor_notes.length > 0
       ? params.editor_notes.map((n, i) => `${i + 1}. ${n}`).join("\n")
       : "No notes provided.";
 
+  const blockingReasonsText =
+    params.blocking_reasons.length > 0
+      ? params.blocking_reasons.map((r, i) => `${i + 1}. ${r}`).join("\n")
+      : "No blocking reasons.";
+
   return `
-You are rewriting a main_themes segment to satisfy the editor rubric. Fix only the cited issues.
+${PERMISSION_BLOCK}
+
+You are rewriting a main_themes segment. The previous attempt failed with blocking reasons listed below.
+
+Focus on translation, not explanation.
+
+For each idea:
+- show how it might show up in a real person's day
+- offer one usable stance (act, wait, name, rest, adjust)
+
+Avoid summarizing the day as a concept.
 
 Authoritative interpretive frame:
 ${JSON.stringify(params.interpretive_frame, null, 2)}
@@ -300,31 +377,21 @@ Required explicit references (must appear verbatim in the output):
 ${params.interpretive_frame.sky_anchors.map((a) => `- "${a.label}"`).join("\n")}
 - "${params.interpretive_frame.why_today_clause}"
 
-You must output the following structure exactly, filling in content beneath each heading. Do not remove, rename, or reorder these headings:
-
-**Primary Meanings**
-(write here)
-
-**Relevance**
-(write here)
-
-**Concrete Example**
-(write here)
-
-**Confidence Alignment**
-(write here)
+BLOCKING REASONS FROM PREVIOUS ATTEMPT (you must fix these):
+${blockingReasonsText}
 
 Editor notes to address:
 ${notes}
 
-Previous draft:
+Previous draft (that failed):
 ${params.previous_script}
 
 Requirements:
-- Preserve the dominant_contrast_axis and meaning from the interpretive frame.
+- Preserve the dominant_contrast_axis meaning, but translate it into human experience.
 - Include the specified sky anchors and causal logic using "because".
-- Keep required sections and headings intact.
-- Match the frame's confidence_level; do not increase certainty.
+- Write in natural, conversational prose.
+- Match the frame's confidence_level in tone; do not increase certainty.
+- Fix the blocking reasons listed above.
 - Do not add new themes; fix only the listed issues.
 `.trim();
 }

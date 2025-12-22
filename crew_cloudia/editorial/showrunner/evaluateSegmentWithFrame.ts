@@ -207,55 +207,39 @@ export function evaluateSegmentWithFrame(params: {
     }
   }
 
-  // Hard gate: section contract compliance — headings present and tied
-  const requiredHeadings = [
-    { key: "primary meanings", requirement: "state the dominant_contrast_axis explicitly" },
-    { key: "relevance", requirement: "explain causal_logic and why_today" },
-    { key: "concrete example", requirement: "make the experiential pressure tangible" },
-    { key: "confidence alignment", requirement: "mirror the frame confidence_level" },
-  ];
+  // NOTE: Required headings removed per Phase D authority inversion.
+  // These headings are now explicitly banned by the Phase D rubric.
+  // Structural completeness is no longer enforced here; rubric is final authority.
 
-  for (const heading of requiredHeadings) {
-    if (!scriptLower.includes(heading.key)) {
-      notes.push(`Section: missing required heading "${heading.key}".`);
-      rewrite_instructions.push(
-        `Add the required heading "${heading.key}" and fulfill its ${heading.requirement}.`
-      );
-    }
-  }
+  // NOTE: why_today and confidence_level checks removed per Phase D.
+  // These were structural requirements that led to rubric scaffolding.
+  // Rubric now enforces experiential quality, not structural completeness.
 
-  // Soft/hard: tie why_today and causal_logic presence
-  const hasWhyTodayMarker =
-    frame.why_today.some((w) => scriptLower.includes(w.toLowerCase())) ||
-    scriptLower.includes(frame.why_today_clause.toLowerCase());
-  if (!hasWhyTodayMarker) {
-    const msg = "Relevance: explain why today using the frame's why_today / clause.";
-    notes.push(msg);
-    rewrite_instructions.push(msg);
-  }
-
-  // Confidence alignment: ensure frame confidence_level is mirrored
-  if (!scriptLower.includes(frame.confidence_level.toLowerCase())) {
-    const msg = `Confidence alignment: reflect the frame confidence_level "${frame.confidence_level}".`;
-    notes.push(msg);
-    rewrite_instructions.push(msg);
-  }
-
-  if (rewrite_instructions.length === 0 && blocking_reasons.length === 0) {
-    return {
-      decision: "APPROVE",
-      notes: [...warnings],
-      blocking_reasons: [],
-      rewrite_instructions: [],
-    };
-  }
+  // NOTE: This function is demoted to diagnostics-only per Phase D authority inversion.
+  // It no longer makes final approval decisions. It only flags grounding/structural issues.
+  // Final approval authority belongs to evaluateAdherenceRubric.
+  //
+  // Return diagnostics: if there are blocking reasons, signal REVISE/FAIL.
+  // If no blocking reasons, return REVISE (not APPROVE) to defer to rubric.
+  // The caller must check rubric blocking_reasons for final approval.
 
   const nextDecision = params.attempt + 1 >= params.max_attempts ? "FAIL_EPISODE" : "REVISE";
 
+  // If we have blocking reasons, return them; otherwise return REVISE to defer to rubric
+  if (blocking_reasons.length > 0) {
+    return {
+      decision: nextDecision,
+      notes: [...rewrite_instructions, ...warnings],
+      blocking_reasons,
+      rewrite_instructions,
+    };
+  }
+
+  // No blocking reasons from this evaluator, but don't approve - defer to rubric
   return {
-    decision: nextDecision,
-    notes: [...rewrite_instructions, ...warnings],
-    blocking_reasons: blocking_reasons.length > 0 ? blocking_reasons : [...rewrite_instructions],
-    rewrite_instructions,
+    decision: "REVISE", // Defer final approval to rubric
+    notes: [...warnings],
+    blocking_reasons: [],
+    rewrite_instructions: [],
   };
 }

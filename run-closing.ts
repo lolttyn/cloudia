@@ -19,6 +19,8 @@ import {
   MAX_SEGMENT_RETRIES,
 } from "./crew_cloudia/editorial/showrunner/editorContracts.js";
 import { evaluateClosingWithFrame } from "./crew_cloudia/editorial/showrunner/evaluateClosingWithFrame.js";
+import { evaluateAdherenceRubric } from "./crew_cloudia/quality/adherence/adherence_rubric.js";
+import { PERMISSION_BLOCK } from "./crew_cloudia/editorial/prompts/permissionBlock.js";
 import { buildClosingScaffold } from "./crew_cloudia/generation/closingScaffold.js";
 
 declare const process: {
@@ -95,12 +97,14 @@ export async function runClosingForDate(params: {
 
   let script = "";
   let rewriteInstructions: string[] = [];
+  let previousBlockingReasons: string[] = [];
   let approved = false;
   let lastDecision: EditorFeedback["decision"] | null = null;
 
   let scaffold = "";
   let signoff = "";
   for (let attempt = 0; attempt < MAX_SEGMENT_RETRIES; attempt++) {
+    const attemptNumber = attempt + 1;
     const axis = params.interpretive_frame.dominant_contrast_axis.statement;
     const timingNote =
       params.interpretive_frame.timing?.notes ?? params.interpretive_frame.timing?.state;
@@ -141,7 +145,8 @@ export async function runClosingForDate(params: {
       script = assembleClosingScript(scaffold, micro, signoff);
     }
 
-    const evaluation = evaluateClosingWithFrame({
+    // Frame evaluator provides diagnostics (structural/grounding checks)
+    const frameEval = evaluateClosingWithFrame({
       interpretive_frame: params.interpretive_frame,
       episode_date: params.episode_date,
       draft_script: script,
@@ -151,36 +156,96 @@ export async function runClosingForDate(params: {
       signoff,
     });
 
-    lastDecision = evaluation.decision;
-    if (evaluation.decision === "APPROVE") {
-      approved = true;
-      break;
-    }
-
+    // Check for scaffold bugs first (these are code bugs, not rewrite issues)
     const hasScaffoldBug =
-      evaluation.blocking_reasons.includes("closing:scaffold_missing") ||
-      evaluation.blocking_reasons.includes("closing:signoff_missing");
+      frameEval.blocking_reasons.includes("closing:scaffold_missing") ||
+      frameEval.blocking_reasons.includes("closing:signoff_missing");
 
     if (hasScaffoldBug) {
       throw new Error(
-        `Closing scaffold/sign-off missing or altered; this is a code bug, not a rewrite issue. Notes: ${evaluation.notes.join(
+        `Closing scaffold/sign-off missing or altered; this is a code bug, not a rewrite issue. Notes: ${frameEval.notes.join(
           " | "
         )}`
       );
     }
 
-    if (evaluation.decision === "FAIL_EPISODE" || attempt === MAX_SEGMENT_RETRIES - 1) {
+    // Phase D rubric is final authority on editorial quality
+    // NOTE: previous_closings not yet available in this context; repetition check will be skipped
+    const rubricEval = evaluateAdherenceRubric({
+      script: script,
+      segment_key: "closing",
+      interpretive_frame: params.interpretive_frame,
+      previous_closings: undefined, // TODO: fetch previous closings for repetition check
+    });
+
+    // Combine blocking reasons: frame (structural) + rubric (editorial quality)
+    const allBlockingReasons = [
+      ...frameEval.blocking_reasons,
+      ...rubricEval.blocking_reasons,
+    ];
+
+    // CRITICAL: Persist EVERY attempt before checking pass/fail
+    const gateDecisionForAttempt = allBlockingReasons.length === 0 ? "approve" : "rewrite";
+    await persistSegmentVersion({
+      episode_id: params.episode_id,
+      episode_date: params.episode_date,
+      segment_key: "closing",
+      attempt_number: attemptNumber,
+      script_text: script,
+      gate_decision: gateDecisionForAttempt,
+      blocking_reasons: allBlockingReasons,
+      gate_policy_version: "v0.1",
+      batch_id: params.batch_id,
+    });
+
+    // Log attempt evolution for debugging
+    console.log(
+      `[closing] Attempt ${attemptNumber}/${MAX_SEGMENT_RETRIES}: ` +
+      `blocking=${allBlockingReasons.length}, ` +
+      `preview="${script.substring(0, 120).replace(/\n/g, " ")}..."`
+    );
+    if (allBlockingReasons.length > 0) {
+      console.log(`  Blocking reasons: ${allBlockingReasons.join(", ")}`);
+    }
+
+    // Final decision: only approve if BOTH evaluators have zero blocking reasons
+    const hasBlockingReasons = allBlockingReasons.length > 0;
+
+    if (!hasBlockingReasons) {
+      // Both evaluators pass - approve
+      approved = true;
+      lastDecision = "APPROVE";
+      break;
+    }
+
+    // Has blocking reasons - determine if we should fail or revise
+    if (attempt + 1 >= MAX_SEGMENT_RETRIES) {
+      lastDecision = "FAIL_EPISODE";
       throw new Error(
-        `Episode failed: closing could not meet editor rubric after ${attempt + 1} attempts. Notes: ${evaluation.notes.join(
-          " | "
-        )}`
+        `Episode failed: closing could not meet editor rubric after ${attempt + 1} attempts. ` +
+        `Frame blocking: ${frameEval.blocking_reasons.join(", ")}. ` +
+        `Rubric blocking: ${rubricEval.blocking_reasons.join(", ")}. ` +
+        `Notes: ${[...frameEval.notes, ...Array.from(rubricEval.warnings)].join(" | ")}`
       );
     }
 
-    rewriteInstructions =
-      evaluation.rewrite_instructions.length > 0
-        ? evaluation.rewrite_instructions
-        : evaluation.notes;
+    lastDecision = "REVISE";
+
+    // Store blocking reasons for next rewrite attempt
+    previousBlockingReasons = allBlockingReasons;
+
+    // Combine rewrite instructions from both evaluators
+    rewriteInstructions = [
+      ...frameEval.rewrite_instructions,
+      ...(rubricEval.blocking_reasons.length > 0
+        ? [`Phase D rubric violations: ${rubricEval.blocking_reasons.join(", ")}`]
+        : []),
+    ];
+
+    // If no specific rewrite instructions, use notes
+    if (rewriteInstructions.length === 0) {
+      rewriteInstructions = [...frameEval.notes, ...Array.from(rubricEval.warnings)];
+    }
   }
 
   if (!approved || lastDecision !== "APPROVE") {
@@ -211,30 +276,24 @@ export async function runClosingForDate(params: {
     max_attempts_remaining: 0,
   });
 
-  const attemptNumber = await getNextAttemptNumber({
-    episode_id: params.episode_id,
-    segment_key: "closing",
-  });
-
-  await persistSegmentVersion({
-    episode_id: params.episode_id,
-    episode_date: params.episode_date,
-    segment_key: "closing",
-    attempt_number: attemptNumber,
-    script_text: script,
-    gate_decision: gateResult.decision,
-    blocking_reasons: gateResult.blocking_reasons,
-    gate_policy_version: gateResult.policy_version,
-    batch_id: params.batch_id,
-  });
+  // NOTE: persistSegmentVersion is now called INSIDE the loop for every attempt.
+  // We only upsert the snapshot here on final success.
 
   if (gateResult.decision === "approve") {
+    // Get the final attempt number (should match what was persisted in the loop)
+    const finalAttemptNumber = await getNextAttemptNumber({
+      episode_id: params.episode_id,
+      segment_key: "closing",
+    });
+    // Subtract 1 because getNextAttemptNumber returns the NEXT number
+    const actualFinalAttempt = finalAttemptNumber - 1;
+
     await upsertCurrentSegment({
       episode_id: params.episode_id,
       episode_date: params.episode_date,
       segment_key: "closing",
       script_text: script,
-      script_version: attemptNumber,
+      script_version: actualFinalAttempt,
       gate_policy_version: gateResult.policy_version,
     });
 
@@ -268,7 +327,18 @@ function buildClosingMicroRewritePrompt(params: {
       : "No notes provided.";
 
   return `
+${PERMISSION_BLOCK}
+
 Rewrite the closing micro-reflection (two sentences only). Do not change the scaffold or sign-off; they are fixed outside this prompt.
+
+End with integration, not summary.
+
+You may:
+- reflect the day back in human terms
+- offer permission to stop, rest, or notice
+- leave something unresolved
+
+Do not restate earlier language.
 
 Authoritative interpretive frame:
 ${JSON.stringify(params.interpretive_frame, null, 2)}

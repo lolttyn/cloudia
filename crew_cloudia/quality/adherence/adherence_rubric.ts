@@ -12,6 +12,10 @@ export const HARD_BANNED_PHRASES = [
   "temporal phase",
   "intensity modifier",
   "confidence level",
+  "meaning over minutiae",
+  "dominant contrast",
+  "contrast axis",
+  "focus is firmly on",
 ];
 
 const SYSTEM_LEVEL_EXPLANATION_PATTERNS = [
