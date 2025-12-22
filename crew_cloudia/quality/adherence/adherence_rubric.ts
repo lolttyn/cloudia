@@ -216,12 +216,51 @@ function enforceLunationFrontLoad(
   const lunationKeywords = ["new moon", "full moon", "moon", "lunation"];
   
   // Phase D: Semantic check - lunation must feel special, not necessarily be first
-  // Check if lunation feeling markers appear in the first ~40% of the intro
   const sentences = splitSentences(script);
+  
+  // For closings: softer rule - emotional settling/integration counts
+  if (segment_key === "closing") {
+    const firstSentence = sentences[0]?.toLowerCase() || "";
+    const emotionalSettlingMarkers = [
+      "settles", "settling", "softens", "softening", "winds down", "winding down",
+      "integrates", "integrating", "releases", "releasing", "eases", "easing",
+      "quiet", "quietly", "calm", "calms", "still", "stillness"
+    ];
+    
+    // Check if first sentence has emotional settling OR lunation feeling markers
+    const hasSettling = emotionalSettlingMarkers.some((m) => firstSentence.includes(m));
+    const hasFeelingMarker = LUNATION_FEELING_MARKERS.some((m) => firstSentence.includes(m));
+    const hasLunationMention = lunationKeywords.some((k) => firstSentence.includes(k));
+    
+    // For closing: emotional settling OR lunation feeling in first sentence satisfies the rule
+    if (hasSettling || hasFeelingMarker || hasLunationMention) {
+      return; // Pass
+    }
+    
+    // If none of the above, check if lunation is mentioned anywhere with feeling
+    const hasLunationAnywhere = lunationKeywords.some((k) => lower.includes(k));
+    if (hasLunationAnywhere) {
+      const firstMentionSentence = sentences.find((s) =>
+        lunationKeywords.some((k) => s.toLowerCase().includes(k))
+      );
+      if (firstMentionSentence) {
+        const lowerSentence = firstMentionSentence.toLowerCase();
+        const hasFeelingInMention = LUNATION_FEELING_MARKERS.some((m) => lowerSentence.includes(m));
+        if (hasFeelingInMention) {
+          return; // Pass - lunation mentioned with feeling
+        }
+      }
+    }
+    
+    // No settling, no feeling markers, no lunation with feeling = fail
+    blocking.add("LUNATION_NOT_FRONT_LOADED");
+    return;
+  }
+  
+  // For intro/main_themes: check first ~40% for feeling markers or lunation mention
   const firstFortyPercent = Math.ceil(sentences.length * 0.4);
   const earlySentences = sentences.slice(0, firstFortyPercent).join(" ").toLowerCase();
   
-  // Check for feeling markers OR explicit lunation mention in early portion
   const hasFeelingMarker = LUNATION_FEELING_MARKERS.some((m) =>
     earlySentences.includes(m)
   );
@@ -279,9 +318,47 @@ function enforceBehavioralAffordance(
   blocking: Set<string>
 ): void {
   if (!["main_themes", "closing"].includes(segment_key)) return;
-  if (!containsAny(lower, AFFORDANCE_MARKERS)) {
-    blocking.add("NO_BEHAVIORAL_AFFORDANCE");
+  
+  // Phase D: For closing, recognize soft permission patterns as valid affordances
+  // Soft permissions satisfy the requirement without triggering advice/prediction blocks
+  if (segment_key === "closing") {
+    const SOFT_PERMISSION_PATTERNS = [
+      /you might let/i,
+      /you might notice/i,
+      /it'?s okay to/i,
+      /it is okay to/i,
+      /you don'?t have to/i,
+      /there'?s room to/i,
+      /nothing needs to/i,
+      /you can leave/i,
+      /you can let/i,
+      /you can notice/i,
+      /you can pause/i,
+      /you can rest/i,
+      /you can stop/i,
+      /it'?s fine to/i,
+      /it is fine to/i,
+      /not today/i,
+      /this isn'?t urgent/i,
+      /take the space/i,
+    ];
+    
+    const hasSoftPermission = SOFT_PERMISSION_PATTERNS.some((re) => re.test(lower));
+    const hasStandardAffordance = containsAny(lower, AFFORDANCE_MARKERS);
+    
+    if (hasSoftPermission || hasStandardAffordance) {
+      return; // Either soft permission or standard affordance satisfies requirement
+    }
+  } else {
+    // For main_themes: use standard affordance markers
+    if (!containsAny(lower, AFFORDANCE_MARKERS)) {
+      blocking.add("NO_BEHAVIORAL_AFFORDANCE");
+    }
+    return;
   }
+  
+  // Closing: no affordance found
+  blocking.add("NO_BEHAVIORAL_AFFORDANCE");
 }
 
 function applyAuthorialCompression(sentences: string[]): ScoreAdjustment[] {

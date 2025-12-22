@@ -64,10 +64,13 @@ export function evaluateClosingWithFrame(params: {
   // Phase D: Relax expressive window length (1-3 sentences allowed)
   if (sentences.length < 1 || sentences.length > 3) {
     notes.push(`Closing should contain 1-3 reflective sentences (found ${sentences.length}).`);
-    // Only block if completely missing (0 sentences)
+    // Block if too long (compression needed) or completely missing
     if (sentences.length === 0) {
       blocking_reasons.push("closing:expressive_window_length");
       rewrite_instructions.push("Add at least one reflective sentence between scaffold and sign-off.");
+    } else if (sentences.length > 3) {
+      blocking_reasons.push("closing:expressive_window_length");
+      rewrite_instructions.push(`Reduce this closing to no more than 3 sentences total. Preserve tone; remove excess elaboration. Current: ${sentences.length} sentences.`);
     }
   }
 
@@ -120,18 +123,41 @@ export function evaluateClosingWithFrame(params: {
     rewrite_instructions.push(msg);
   }
 
-  const hasAdvice = ADVICE_PATTERNS.some((re) => re.test(middle));
-  if (hasAdvice) {
-    notes.push("Avoid advice or directives; keep the tone observational.");
+  // Phase D: Narrow advice detection to only explicit imperatives/directives
+  // Soft permission patterns ("you might let", "it's okay to") must pass
+  // Observational language ("you might notice", "it can feel like") must pass
+  const explicitAdvicePatterns = [
+    /\byou should\b/i,
+    /\btry to\b/i,
+    /\bmake sure to\b/i,
+    /\bremember to\b/i,
+    /\btake this as\b/i,
+    /\bdo this now\b/i,
+  ];
+  
+  const hasExplicitAdvice = explicitAdvicePatterns.some((re) => re.test(middle));
+  if (hasExplicitAdvice) {
+    notes.push("Avoid explicit advice or directives; keep the tone observational.");
     blocking_reasons.push("closing:advice_language");
-    rewrite_instructions.push("Remove advice language (e.g., 'should', 'need to', directives).");
+    rewrite_instructions.push("Remove directive language (e.g., 'you should', 'try to', 'make sure to'). Use soft permission or observational reflection instead.");
   }
 
-  const hasPrediction = PREDICTION_PATTERNS.some((re) => re.test(middle));
-  if (hasPrediction) {
+  // Phase D: Narrow prediction detection to only future certainty
+  // Do not flag "might", "can", "today holds", "this moment allows"
+  const futureCertaintyPatterns = [
+    /\bwill\b/i,
+    /\bgoing to\b/i,
+    /\bsoon\b/i,
+    /\bin the coming days\b/i,
+    /\btomorrow\b/i,
+    /\bnext\b/i,
+  ];
+  
+  const hasFutureCertainty = futureCertaintyPatterns.some((re) => re.test(middle));
+  if (hasFutureCertainty) {
     notes.push("Avoid predictions; keep the tone reflective of today only.");
     blocking_reasons.push("closing:prediction_language");
-    rewrite_instructions.push("Remove predictive language (e.g., 'will', 'going to').");
+    rewrite_instructions.push("Remove predictive language (e.g., 'will', 'going to', 'soon', 'tomorrow').");
   }
 
   if (params.interpretive_frame.temporal_arc.arc_day_index > 1) {

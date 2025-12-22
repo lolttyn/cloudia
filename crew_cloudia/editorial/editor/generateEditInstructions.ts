@@ -63,9 +63,15 @@ export function generateEditInstructions(
         break;
 
       case reason === "NO_BEHAVIORAL_AFFORDANCE":
-        instructions.push(
-          "Offer a clear permission, timing cue, or usable stance (act, wait, rest, name, avoid). Use direct language like 'you don't have to', 'take the space', 'stop', 'skip'."
-        );
+        if (segmentKey === "closing") {
+          instructions.push(
+            "Add a soft behavioral permission (not advice). Use optional language like 'you might let…', 'it's okay to…', or 'you don't have to…'. Avoid commands or future predictions."
+          );
+        } else {
+          instructions.push(
+            "Offer a clear permission, timing cue, or usable stance (act, wait, rest, name, avoid). Use direct language like 'you don't have to', 'take the space', 'stop', 'skip'."
+          );
+        }
         break;
 
       case reason === "ABSTRACT_WITHOUT_TRANSLATION":
@@ -80,6 +86,12 @@ export function generateEditInstructions(
         );
         break;
 
+      case reason.startsWith("closing:expressive_window_length"):
+        instructions.push(
+          "Reduce this closing to no more than 3 sentences total. Preserve tone; remove excess elaboration."
+        );
+        break;
+        
       case reason.startsWith("closing:tone_mismatch_phase"):
         instructions.push(
           "The tone doesn't match the temporal phase. Soften escalation language to match releasing/aftershock energy."

@@ -1,5 +1,7 @@
 import "dotenv/config";
 
+import { createHash } from "crypto";
+
 import { generateSegmentDraft } from "./crew_cloudia/generation/generateSegmentDraft.js";
 import { getWritingContract } from "./crew_cloudia/editorial/contracts/segmentWritingContracts.js";
 import { mapDiagnosticsToEditorialViolations } from "./crew_cloudia/editorial/diagnostics/mapDiagnosticsToEditorialViolations.js";
@@ -151,6 +153,13 @@ export async function runClosingForDate(params: {
       const revisedScript = rewriteResult.text.trim();
       console.log(`[closing] Rewrite returned full script (${revisedScript.length} chars). New hash: ${createHash("md5").update(revisedScript).digest("hex").substring(0, 8)}`);
 
+      // Post-rewrite guard: enforce sentence count compression
+      const sentenceCount = revisedScript.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+      if (sentenceCount > 3) {
+        console.warn(`[closing] Attempt ${attemptNumber}: Closing too long (${sentenceCount} sentences). Will be flagged in evaluation.`);
+        // The evaluation will catch this and add blocking reason for next attempt
+      }
+
       script = revisedScript;
 
       // Hard check: ensure revision actually differs from previous attempt
@@ -287,7 +296,9 @@ export async function runClosingForDate(params: {
     );
   }
 
-  assertClosingAssemblyInvariant(script, scaffold, signoff);
+  // Phase D: Removed legacy assembly invariant - rubric approval is authoritative
+  // The closing structure is now flexible and validated semantically, not structurally
+  // assertClosingAssemblyInvariant(script, scaffold, signoff);
 
   const today = new Date().toISOString().slice(0, 10);
   const mappedDiagnostics = mapDiagnosticsToEditorialViolations({
@@ -386,6 +397,8 @@ CRITICAL: You must include (express naturally, not verbatim):
 
 End with integration, not summary.
 
+The closing must include one gentle permission or release, expressed as optional and present-tense (not advice, not prediction).
+
 You may:
 - reflect the day back in human terms
 - offer permission to stop, rest, or notice
@@ -397,6 +410,16 @@ Do not restate earlier language.
 Authoritative interpretive frame:
 ${JSON.stringify(params.interpretive_frame, null, 2)}
 
+CLOSING SHAPE CONSTRAINTS (NON-NEGOTIABLE):
+
+- Write a SHORT closing: exactly 1–3 sentences total.
+- Do NOT give advice, instructions, or guidance.
+- Do NOT tell the listener what to do.
+- This is an observational reflection, not a takeaway.
+- Begin with how the day is *settling or integrating* emotionally.
+- If a lunation is referenced, it must appear in the first sentence or be felt implicitly.
+- End with a natural sense of closure or release (no calls to action).
+
 Revision requirements:
 - Apply ALL editor instructions above.
 - You may rewrite the opening, middle, or ending - whatever needs fixing.
@@ -407,6 +430,7 @@ Revision requirements:
 - Express the core tension (${axis.primary} vs ${axis.counter}) through lived experience, not as a named contrast.
 - No predictions; stay with today.
 - Return the COMPLETE revised closing, not just a portion.
+- CRITICAL: Keep it to 1-3 sentences total. If you wrote more, cut it down.
 `.trim();
 }
 
