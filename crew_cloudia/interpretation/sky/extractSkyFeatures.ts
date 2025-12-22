@@ -9,7 +9,7 @@ export type SkyAspect =
     }
   | {
       type: "ingress";
-      body: "Moon";
+      body: "Moon" | "Sun";
       from_sign: string;
       to_sign: string;
       window: "past_24h" | "next_24h";
@@ -131,20 +131,42 @@ export async function extractSkyFeatures(input: { date: string }): Promise<SkyFe
     computeSkyState({ date: nextDate, timezone: "UTC" }),
   ]);
 
-  if (titleCase(prev.bodies.moon.sign) !== moonSign) {
+  const prevMoonSign = titleCase(prev.bodies.moon.sign);
+  const nextMoonSign = titleCase(next.bodies.moon.sign);
+  if (prevMoonSign !== moonSign) {
     highlights.push({
       type: "ingress",
       body: "Moon",
-      from_sign: titleCase(prev.bodies.moon.sign),
+      from_sign: prevMoonSign,
       to_sign: moonSign,
       window: "past_24h",
     });
-  } else if (titleCase(next.bodies.moon.sign) !== moonSign) {
+  } else if (nextMoonSign !== moonSign) {
     highlights.push({
       type: "ingress",
       body: "Moon",
       from_sign: moonSign,
-      to_sign: titleCase(next.bodies.moon.sign),
+      to_sign: nextMoonSign,
+      window: "next_24h",
+    });
+  }
+
+  const prevSunSign = titleCase(prev.bodies.sun.sign);
+  const nextSunSign = titleCase(next.bodies.sun.sign);
+  if (prevSunSign !== sunSign) {
+    highlights.push({
+      type: "ingress",
+      body: "Sun",
+      from_sign: prevSunSign,
+      to_sign: sunSign,
+      window: "past_24h",
+    });
+  } else if (nextSunSign !== sunSign) {
+    highlights.push({
+      type: "ingress",
+      body: "Sun",
+      from_sign: sunSign,
+      to_sign: nextSunSign,
       window: "next_24h",
     });
   }
@@ -160,4 +182,3 @@ export async function extractSkyFeatures(input: { date: string }): Promise<SkyFe
     highlights,
   };
 }
-

@@ -1,0 +1,77 @@
+{
+  "slug": "moon_phase_full",
+  "version": 1,
+  "kind": "cycle",
+  "title": "Full Moon",
+  "summary": "A point of visibility and culmination that highlights what has surfaced, inviting integration or release without forcing outcomes.",
+  "trigger": {
+    "signal_key": "moon_phase_full"
+  },
+  "meaning": {
+    "headline": "What was seeded is now visible—notice, integrate, and choose what to release.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "The Full Moon brings things into view so you can acknowledge results and feelings."
+      },
+      {
+        "speakability": "can_say",
+        "text": "It’s a good time to notice what’s peaked and decide what to keep or let go."
+      },
+      {
+        "speakability": "avoid",
+        "text": "This guarantees dramatic events or conflict."
+      }
+    ],
+    "frictions": [
+      "Overreacting to heightened emotion or spotlight",
+      "Treating visibility as pressure to decide everything",
+      "Holding onto what has run its course"
+    ],
+    "opportunities": [
+      "Name what has come to fruition",
+      "Release what no longer needs your energy",
+      "Integrate feedback or realizations"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Acknowledge what’s now obvious—even small wins or lessons.",
+      "Choose one thing to release or simplify.",
+      "Share feelings or outcomes plainly rather than escalating."
+    ],
+    "avoid": [
+      "Making sweeping declarations out of urgency",
+      "Ignoring what is clearly asking for closure",
+      "Assuming visibility means permanence"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "What’s surfaced is ready to be seen and integrated."
+      },
+      {
+        "speakability": "can_say",
+        "text": "You can let go of what’s peaked and refocus your energy."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predicting dramatic outcomes or events",
+      "Implying guaranteed conflict or breakthroughs",
+      "Making identity claims based on the Full Moon"
+    ],
+    "allowed_framing": [
+      "Observational: “more is visible; you can respond to what’s in the light.”",
+      "Agency-forward: “choose what to keep and what to release.”",
+      "Non-deterministic: “heightened feelings can inform your next move.”"
+    ]
+  },
+  "tags": [
+    "visibility",
+    "culmination",
+    "integration",
+    "release"
+  ]
+}

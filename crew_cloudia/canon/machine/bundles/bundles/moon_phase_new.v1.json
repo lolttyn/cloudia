@@ -1,0 +1,77 @@
+{
+  "slug": "moon_phase_new",
+  "version": 1,
+  "kind": "cycle",
+  "title": "New Moon",
+  "summary": "A reset point that favors planting small, intentional seeds and noticing the subtler tone of the day rather than forcing clarity.",
+  "trigger": {
+    "signal_key": "moon_phase_new"
+  },
+  "meaning": {
+    "headline": "A quiet reset that invites small, intentional beginnings.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "The New Moon marks a fresh start and is better for setting intentions than demanding immediate clarity."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Energy is subtle today—move with permission and keep new moves light."
+      },
+      {
+        "speakability": "avoid",
+        "text": "This guarantees success for any new plan."
+      }
+    ],
+    "frictions": [
+      "Pushing for instant answers or definition",
+      "Overloading the day with commitments",
+      "Mistaking quiet for lack of progress"
+    ],
+    "opportunities": [
+      "Name one or two intentions to nurture",
+      "Start small actions instead of forcing completion",
+      "Listen for the tone shift rather than demanding signals"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Begin gently: outline one or two priorities instead of many.",
+      "Create space for reflection before deciding.",
+      "Track what feels promising without locking it in."
+    ],
+    "avoid": [
+      "Forcing definitive answers today",
+      "Overpromising or overextending",
+      "Treating quiet momentum as a problem"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "It’s a reset day—start small and let intentions breathe."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Move by invitation, not pressure."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predicting outcomes for any intention set today",
+      "Guaranteeing success for new ventures",
+      "Assigning fixed identities based on the lunation"
+    ],
+    "allowed_framing": [
+      "Observational: “energy is subtler; it’s a good day to seed ideas.”",
+      "Agency-forward: “you can choose small, intentional starts.”",
+      "Non-deterministic: “notice what wants to emerge without forcing it.”"
+    ]
+  },
+  "tags": [
+    "reset",
+    "intentions",
+    "fresh_start",
+    "subtle_energy"
+  ]
+}

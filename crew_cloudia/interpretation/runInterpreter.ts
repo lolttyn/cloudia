@@ -167,8 +167,7 @@ function confidenceFrom(aspect: SkyAspect | undefined): InterpretiveFrame["confi
 }
 
 function resolveLunation(
-  signals: InterpretationSignal[],
-  primaryBundles: { trigger: { signal_key: string } }[]
+  signals: InterpretationSignal[]
 ): InterpretiveFrame["lunation"] | undefined {
   const lunationSignals = signals
     .filter((s) => s.kind === "lunation")
@@ -180,11 +179,6 @@ function resolveLunation(
   if (lunationSignals.length === 0) return undefined;
 
   const chosenSignal = lunationSignals[0];
-  const primary = primaryBundles[0];
-  if (!primary || primary.trigger.signal_key !== chosenSignal.signal_key) {
-    return undefined;
-  }
-
   const meta = chosenSignal.meta && typeof chosenSignal.meta === "object" ? (chosenSignal.meta as any) : null;
 
   const fromSignalKey = () => {
@@ -304,7 +298,7 @@ export async function runInterpreter(input: InterpreterInput): Promise<Interpret
     signals,
     bundleIndex: BUNDLE_INDEX,
   });
-  const lunation = resolveLunation(signals, interpretation_bundles.primary);
+  const lunation = resolveLunation(signals);
 
   const frame: InterpretiveFrame = {
     date: features.date,
@@ -470,4 +464,3 @@ function buildContinuityHooks(
 
   return hooks;
 }
-
