@@ -129,12 +129,17 @@ export async function runClosingForDate(params: {
       script = assembleClosingScript(scaffold, micro, signoff);
       previousScript = script; // Store for comparison in next iteration
     } else {
+      // CRITICAL: Pass the FULL closing script to the writer, not just the micro-reflection
+      // The rubric evaluates the entire closing, so we must revise the entire closing
+      console.log(`[closing] Rewriting attempt ${attemptNumber}. Previous full script length: ${script.length} chars`);
+      
       const rewritePromptPayload = {
-        system_prompt: "You are revising an existing draft based on editor feedback. Your job is to apply the requested changes to the micro-reflection, not to write a new draft from scratch.",
-        user_prompt: buildClosingMicroRewritePrompt({
+        system_prompt: "You are revising an existing draft based on editor feedback. You may rewrite, remove, or replace any part of the previous closing, including the opening. Your job is to apply the requested changes to the entire closing, not to preserve any specific structure.",
+        user_prompt: buildClosingFullRewritePrompt({
           interpretive_frame: params.interpretive_frame,
-          previous_micro: extractMicroReflection(script, scaffold, signoff),
+          previous_script: script,
           editor_instructions: rewriteInstructions,
+          episode_date: params.episode_date,
         }),
       };
       const rewriteResult = await invokeLLM(rewritePromptPayload, CLOUDIA_LLM_CONFIG);
@@ -143,8 +148,10 @@ export async function runClosingForDate(params: {
           `LLM rewrite failed (${rewriteResult.error_type}): ${rewriteResult.message}`
         );
       }
-      const micro = rewriteResult.text.trim();
-      const revisedScript = assembleClosingScript(scaffold, micro, signoff);
+      const revisedScript = rewriteResult.text.trim();
+      console.log(`[closing] Rewrite returned full script (${revisedScript.length} chars). New hash: ${createHash("md5").update(revisedScript).digest("hex").substring(0, 8)}`);
+
+      script = revisedScript;
 
       // Hard check: ensure revision actually differs from previous attempt
       if (revisedScript.trim() === previousScript.trim()) {
@@ -342,28 +349,40 @@ export async function runClosingForDate(params: {
   };
 }
 
-function buildClosingMicroRewritePrompt(params: {
+function buildClosingFullRewritePrompt(params: {
   interpretive_frame: InterpretiveFrame;
-  previous_micro: string;
+  previous_script: string;
   editor_instructions: string[];
+  episode_date: string;
 }) {
   const instructions =
     params.editor_instructions.length > 0
       ? params.editor_instructions.map((i, idx) => `${idx + 1}. ${i}`).join("\n")
       : "No specific instructions provided.";
 
+  const axis = params.interpretive_frame.dominant_contrast_axis;
+  const timingNote =
+    params.interpretive_frame.timing?.notes ?? params.interpretive_frame.timing?.state;
+
   return `
 ${PERMISSION_BLOCK}
 
-You are REVISING the closing micro-reflection (two sentences only) based on editor feedback. Do not change the scaffold or sign-off; they are fixed outside this prompt.
+You are REVISING the entire closing based on editor feedback. You may rewrite, remove, or replace any part of the previous closing, including the opening.
 
-Here is the previous micro-reflection:
+Here is the previous full closing:
 ---
-${params.previous_micro}
+${params.previous_script}
 ---
 
 Your editor has requested the following changes:
 ${instructions}
+
+CRITICAL: You must include (express naturally, not verbatim):
+- The day's core tension: ${axis.primary} vs ${axis.counter} (express through lived experience, not as a named contrast like "meaning over minutiae")
+- A timing note if provided: ${timingNote || "none"} (express naturally)
+- The temporal phase: ${params.interpretive_frame.temporal_phase} (express through tone, not by naming it)
+- A natural sign-off that feels human
+- At least 1-3 reflective sentences that invite integration or permission
 
 End with integration, not summary.
 
@@ -371,6 +390,7 @@ You may:
 - reflect the day back in human terms
 - offer permission to stop, rest, or notice
 - leave something unresolved
+- invite reflection on where the day's energy showed up
 
 Do not restate earlier language.
 
@@ -379,13 +399,14 @@ ${JSON.stringify(params.interpretive_frame, null, 2)}
 
 Revision requirements:
 - Apply ALL editor instructions above.
-- Produce exactly two sentences.
+- You may rewrite the opening, middle, or ending - whatever needs fixing.
+- Remove any banned phrases or abstract scaffolding entirely.
 - Do not repeat language from the previous version.
 - Preserve what works; fix what doesn't.
 - Reflective and observational; no advice, no directives, no "you should".
-- Reinforce (without restating verbatim) the dominant contrast axis: "${params.interpretive_frame.dominant_contrast_axis.statement}".
+- Express the core tension (${axis.primary} vs ${axis.counter}) through lived experience, not as a named contrast.
 - No predictions; stay with today.
-- No greeting, no sign-off language.
+- Return the COMPLETE revised closing, not just a portion.
 `.trim();
 }
 

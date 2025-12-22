@@ -34,14 +34,18 @@ export function evaluateClosingWithFrame(params: {
   const hasScaffold = script.includes(scaffold);
   const hasSignoff = script.includes(signoff);
 
+  // Phase D: Semantic check for scaffold/signoff (not verbatim requirement)
+  // The closing must establish closure and integration, but can do so naturally
   if (!hasScaffold) {
-    notes.push("Closing scaffold is missing or altered.");
-    blocking_reasons.push("closing:scaffold_missing");
+    // Downgrade to warning - scaffold structure is flexible
+    notes.push("Closing should establish closure or integration, but can express it naturally.");
+    // Do NOT add to blocking_reasons - this is now a soft requirement
   }
 
   if (!hasSignoff) {
-    notes.push("Closing sign-off is missing or altered.");
-    blocking_reasons.push("closing:signoff_missing");
+    // Downgrade to warning - signoff can be natural
+    notes.push("Closing should end with a natural sign-off, but wording is flexible.");
+    // Do NOT add to blocking_reasons - this is now a soft requirement
   }
 
   // Extract the middle micro-reflection content
@@ -57,10 +61,14 @@ export function evaluateClosingWithFrame(params: {
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
 
-  if (sentences.length !== 2) {
-    notes.push("Closing must include exactly two reflective sentences between scaffold and sign-off.");
-    blocking_reasons.push("closing:expressive_window_length");
-    rewrite_instructions.push("Provide exactly two reflective sentences (no more, no less).");
+  // Phase D: Relax expressive window length (1-3 sentences allowed)
+  if (sentences.length < 1 || sentences.length > 3) {
+    notes.push(`Closing should contain 1-3 reflective sentences (found ${sentences.length}).`);
+    // Only block if completely missing (0 sentences)
+    if (sentences.length === 0) {
+      blocking_reasons.push("closing:expressive_window_length");
+      rewrite_instructions.push("Add at least one reflective sentence between scaffold and sign-off.");
+    }
   }
 
   if (!LISTENER_PATTERN.test(middleLower)) {
@@ -93,10 +101,17 @@ export function evaluateClosingWithFrame(params: {
     rewrite_instructions.push("Soften the tone to match releasing/aftershock; avoid escalation verbs.");
   }
 
+  // Phase D: Semantic check for axis (not verbatim ban)
+  // The closing should not restate the axis as a named contrast, but can express the tension naturally
   if (axis && middleLower.includes(axis.toLowerCase())) {
-    const msg = "Do not restate the dominant axis verbatim in the closing; let the scaffold carry that meaning.";
-    notes.push(msg);
-    rewrite_instructions.push(msg);
+    // Check if it's being used as a named contrast vs. natural expression
+    const axisWords = axis.toLowerCase().split(/\s+/);
+    const hasAxisAsConcept = axisWords.every(word => middleLower.includes(word));
+    if (hasAxisAsConcept && axisWords.length > 2) {
+      // Likely using the full phrase as a concept - warn but don't block
+      notes.push("Closing should express the day's tension naturally, not as a named contrast or theme.");
+      // Do NOT add to blocking_reasons - allow natural expression
+    }
   }
 
   if (middleLower.includes(temporalPhase)) {

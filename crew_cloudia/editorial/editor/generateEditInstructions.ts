@@ -31,6 +31,12 @@ export function generateEditInstructions(
             `For example: "step back from details" or "zoom out to what matters" or "slow down and notice what's actually important" ` +
             `instead of naming it as a contrast or theme.`
           );
+        } else if (segmentKey === "closing") {
+          instructions.push(
+            `Delete the banned phrase "${bannedPhrase}" entirely. ` +
+            `Replace it with a concrete moment of reflection or permission (e.g., pause, rest, release, name what mattered, or let something go). ` +
+            `The closing needs emotional action, not explanation or abstract framing.`
+          );
         } else {
           instructions.push(
             `Remove "${bannedPhrase}" and any similar abstract framing. Replace it with how the day feels or shows up in real life.`
