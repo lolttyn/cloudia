@@ -1,0 +1,77 @@
+{
+  "slug": "moon_phase_waxing",
+  "version": 1,
+  "kind": "cycle",
+  "title": "Waxing Moon",
+  "summary": "A build phase favoring steady momentum, gathering information, and making small course corrections.",
+  "trigger": {
+    "signal_key": "moon_phase_waxing"
+  },
+  "meaning": {
+    "headline": "Momentum is growing—take measured steps and gather what you need.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "The waxing Moon supports building gradually rather than leaping ahead."
+      },
+      {
+        "speakability": "can_say",
+        "text": "It’s a good time to collect information and test the next step."
+      },
+      {
+        "speakability": "avoid",
+        "text": "This guarantees rapid progress if you push hard."
+      }
+    ],
+    "frictions": [
+      "Rushing growth faster than it can hold",
+      "Skipping checkpoints or feedback",
+      "Ignoring signals to adjust"
+    ],
+    "opportunities": [
+      "Pilot small moves and iterate",
+      "Refine plans with new input",
+      "Let momentum build through consistency"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Take the next small, testable action.",
+      "Check for new information before scaling up.",
+      "Adjust pacing to keep growth steady."
+    ],
+    "avoid": [
+      "Overextending because energy feels higher",
+      "Skipping rest or feedback loops",
+      "Treating this as an all-or-nothing push"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Build steadily—small moves compound here."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Gather input and refine before you accelerate."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promising rapid or guaranteed success",
+      "Linking progress to destiny or identity",
+      "Predicting specific outcomes from taking action now"
+    ],
+    "allowed_framing": [
+      "Process-focused: “momentum builds through steady steps.”",
+      "Agency-forward: “you can choose to test and adjust.”",
+      "Non-deterministic: “growing energy can support small expansions.”"
+    ]
+  },
+  "tags": [
+    "momentum",
+    "iteration",
+    "steady_growth",
+    "information_gathering"
+  ]
+}

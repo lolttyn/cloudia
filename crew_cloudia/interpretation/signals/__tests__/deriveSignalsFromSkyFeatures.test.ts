@@ -100,6 +100,9 @@ describe("deriveSignalsFromSkyFeatures", () => {
     const ingress = signals.find((s) => s.signal_key === "moon_ingress_leo_next_24h");
     expect(ingress).toBeDefined();
     expect(ingress?.salience).toBe(0.2);
+    expect((ingress as any)?.meta?.temporal_label).toBe("exiting");
+    const moonPlacement = signals.find((s) => s.signal_key === "moon_in_leo");
+    expect((moonPlacement as any)?.meta?.temporal_label).toBe("exiting");
   });
 
   it("sorts deterministically by salience then signal_key", () => {
@@ -151,5 +154,25 @@ describe("deriveSignalsFromSkyFeatures", () => {
       }
     }
   });
-});
 
+  it("emits sun ingress signals with temporal metadata", () => {
+    const signals = deriveSignalsFromSkyFeatures({
+      ...baseFeatures(),
+      sun: { sign: "Capricorn", longitude: 270 },
+      highlights: [
+        {
+          type: "ingress" as const,
+          body: "Sun" as const,
+          from_sign: "Sagittarius",
+          to_sign: "Capricorn",
+          window: "past_24h" as const,
+        },
+      ],
+    });
+    const ingress = signals.find((s) => s.signal_key === "sun_ingress_capricorn_past_24h");
+    expect(ingress).toBeDefined();
+    expect((ingress as any)?.meta?.temporal_label).toBe("entering");
+    const placement = signals.find((s) => s.signal_key === "sun_in_capricorn");
+    expect((placement as any)?.meta?.temporal_label).toBe("entering");
+  });
+});

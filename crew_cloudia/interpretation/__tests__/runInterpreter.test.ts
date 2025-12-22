@@ -266,10 +266,12 @@ describe("runInterpreter (production engine)", () => {
     expect(frame.lunation?.kind).toBe("new");
     expect(frame.lunation?.sign).toBe("sagittarius");
     expect(frame.lunation?.signal_key).toBe("new_moon_in_sagittarius");
-    expect(frame.interpretation_bundles.primary[0]?.slug).toBe(
-      "new_moon_in_sagittarius"
+    expect(frame.interpretation_bundles.primary[0]?.trigger.signal_key).toBe(
+      "moon_phase_new"
     );
-    expect(frame.interpretation_bundles.primary).toHaveLength(1);
+    expect(
+      frame.interpretation_bundles.primary.map((b) => b.trigger.signal_key)
+    ).toContain("sun_in_sagittarius");
   });
 });
 

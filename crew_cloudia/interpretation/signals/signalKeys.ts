@@ -18,6 +18,10 @@ export function moonIngressKey(toSign: string, window: string): string {
   return `moon_ingress_${normalizeSign(toSign)}_${window.toLowerCase()}`;
 }
 
+export function sunIngressKey(toSign: string, window: string): string {
+  return `sun_ingress_${normalizeSign(toSign)}_${window.toLowerCase()}`;
+}
+
 export function newMoonKey(sign: string): string {
   return `new_moon_in_${normalizeSign(sign)}`;
 }
@@ -31,4 +35,3 @@ export { normalizeSign };
 export function moonInSignKey(sign: string): string {
   return `moon_in_${normalizeSign(sign)}`;
 }
-

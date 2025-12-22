@@ -1,0 +1,77 @@
+{
+  "slug": "moon_phase_waning",
+  "version": 1,
+  "kind": "cycle",
+  "title": "Waning Moon",
+  "summary": "A simplifying stretch that favors completion, editing, and gentle release over expansion.",
+  "trigger": {
+    "signal_key": "moon_phase_waning"
+  },
+  "meaning": {
+    "headline": "Simplify and finish—this phase favors editing and release over expansion.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "The waning Moon emphasizes wrapping up and lightening the load."
+      },
+      {
+        "speakability": "can_say",
+        "text": "It’s a good time to edit, tidy processes, and clear what’s complete."
+      },
+      {
+        "speakability": "avoid",
+        "text": "This forces endings or guarantees closure."
+      }
+    ],
+    "frictions": [
+      "Clinging to tasks or ideas that are finished",
+      "Adding new commitments instead of closing loops",
+      "Mistaking slowing momentum for failure"
+    ],
+    "opportunities": [
+      "Complete lingering tasks",
+      "Streamline systems and priorities",
+      "Release what no longer needs attention"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Close out one or two open loops.",
+      "Edit or declutter before adding more.",
+      "Rest when momentum dips instead of forcing expansion."
+    ],
+    "avoid": [
+      "Starting heavy new projects",
+      "Holding onto work that’s ready to end",
+      "Treating slowing pace as a problem to fix immediately"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Clear space by finishing and releasing what’s complete."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Edit and simplify rather than adding more."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predicting unavoidable endings or losses",
+      "Implying failure if projects pause",
+      "Making fate claims about closure"
+    ],
+    "allowed_framing": [
+      "Process-focused: “this phase helps you tidy and release.”",
+      "Agency-forward: “you can decide what to finish and what to drop.”",
+      "Non-deterministic: “a softer pace can make room to clear clutter.”"
+    ]
+  },
+  "tags": [
+    "completion",
+    "editing",
+    "release",
+    "simplify"
+  ]
+}

@@ -14,7 +14,6 @@ export const ED_RULE_SPEAKABILITY_MUST_SAY_WINS =
 export const ED_RULE_SPEAKABILITY_AVOID_NEVER =
   "ED_RULE_SPEAKABILITY_AVOID_NEVER";
 export const ED_RULE_SEGMENT_IDEA_BUDGETS = "ED_RULE_SEGMENT_IDEA_BUDGETS";
-export const ED_RULE_LUNATION_ONLY = "ED_RULE_LUNATION_ONLY";
 
 export const SEGMENT_IDEA_BUDGETS: Record<SegmentKeyV1, number> = {
   intro: 1,
@@ -68,4 +67,3 @@ export const isRecentTag = (
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
   return diffDays <= windowDays;
 };
-

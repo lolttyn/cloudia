@@ -7,6 +7,7 @@ import {
   moonInSignKey,
   newMoonKey,
   fullMoonKey,
+  sunIngressKey,
 } from "./signalKeys.js";
 import {
   InterpretationSignal,
@@ -61,10 +62,25 @@ function isOppositeSign(a: string, b: string): boolean {
   return (ai + 6) % 12 === bi;
 }
 
+const isIngressFor =
+  (body: "Moon" | "Sun") =>
+  (highlight: SkyFeatures["highlights"][number]): highlight is Extract<
+    SkyFeatures["highlights"][number],
+    { type: "ingress"; body: typeof body }
+  > =>
+    highlight.type === "ingress" && highlight.body === body;
+
+function temporalLabelFromWindow(window: "past_24h" | "next_24h") {
+  return window === "past_24h" ? "entering" : "exiting";
+}
+
 export function deriveSignalsFromSkyFeatures(
   features: SkyFeatures
 ): InterpretationSignal[] {
   const signals: InterpretationSignal[] = [];
+
+  const moonIngressHighlight = features.highlights.find(isIngressFor("Moon"));
+  const sunIngressHighlight = features.highlights.find(isIngressFor("Sun"));
 
   // Sun in sign
   signals.push({
@@ -72,7 +88,12 @@ export function deriveSignalsFromSkyFeatures(
     kind: "planet_in_sign",
     salience: 0.35,
     source: "sky_features",
-    meta: { sign: features.sun.sign.toLowerCase(), body: "sun" },
+    meta: {
+      sign: features.sun.sign.toLowerCase(),
+      body: "sun",
+      temporal_window: sunIngressHighlight?.window,
+      temporal_label: sunIngressHighlight ? temporalLabelFromWindow(sunIngressHighlight.window) : undefined,
+    },
   });
 
   // Moon in sign
@@ -81,7 +102,13 @@ export function deriveSignalsFromSkyFeatures(
     kind: "planet_in_sign",
     salience: 0.3,
     source: "sky_features",
-    meta: { sign: features.moon.sign.toLowerCase(), body: "moon", phase: features.moon.phase },
+    meta: {
+      sign: features.moon.sign.toLowerCase(),
+      body: "moon",
+      phase: features.moon.phase,
+      temporal_window: moonIngressHighlight?.window,
+      temporal_label: moonIngressHighlight ? temporalLabelFromWindow(moonIngressHighlight.window) : undefined,
+    },
   });
 
   // Moon phase
@@ -125,7 +152,10 @@ export function deriveSignalsFromSkyFeatures(
       });
     } else if (highlight.type === "ingress") {
       signals.push({
-        signal_key: moonIngressKey(highlight.to_sign, highlight.window),
+        signal_key:
+          highlight.body === "Sun"
+            ? sunIngressKey(highlight.to_sign, highlight.window)
+            : moonIngressKey(highlight.to_sign, highlight.window),
         kind: "ingress",
         salience: 0.2,
         source: "sky_features",
@@ -134,6 +164,8 @@ export function deriveSignalsFromSkyFeatures(
           from_sign: highlight.from_sign,
           to_sign: highlight.to_sign,
           window: highlight.window,
+          temporal_window: highlight.window,
+          temporal_label: temporalLabelFromWindow(highlight.window),
         },
       });
     }
@@ -146,4 +178,3 @@ export function deriveSignalsFromSkyFeatures(
     return a.signal_key.localeCompare(b.signal_key);
   });
 }
-
