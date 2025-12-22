@@ -153,7 +153,9 @@ async function runForDate(program_slug: string, episode_date: string): Promise<v
     gate_result: episodeGate,
   });
 
-  if (time_context === "day_of" && episodeGate.decision === "fail") {
+  // Quality thresholds are uniform across all episode dates.
+  // All episodes must meet the same quality standards regardless of date.
+  if (episodeGate.decision === "fail") {
     throw new Error(
       `Episode ${episode_date} failed editorial gate: ${episodeGate.failed_segments
         .map((s) => s.segment_key)

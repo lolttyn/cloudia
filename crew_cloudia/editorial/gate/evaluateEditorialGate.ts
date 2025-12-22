@@ -1,9 +1,14 @@
+// Quality thresholds are uniform across all episode dates.
+// No date-based branching remains in quality logic.
+export const EPISODE_QUALITY_THRESHOLD = 0.9;
+
 export type TimeContext = "day_of" | "future";
 
 export interface EditorialGateInput {
   episode_id: string;
   episode_date: string;
   segment_key: string;
+  // NOTE: time_context kept for backwards compatibility but no longer used for quality decisions
   time_context: TimeContext;
 
   generated_script: string;
@@ -50,6 +55,11 @@ export function evaluateEditorialGate(
   const blockingViolations = [...input.diagnostics.blocking_violations];
   const warnings = [...input.diagnostics.warnings];
 
+  // Quality thresholds are uniform across all episode dates.
+  // No date-based branching remains in quality logic.
+  // 
+  // ASSERTION: No logic in this function should branch on input.time_context or input.episode_date.
+  // All episodes must meet the same quality standards regardless of date.
   if (blockingViolations.length > 0) {
     return {
       decision: "block",
@@ -61,24 +71,13 @@ export function evaluateEditorialGate(
     };
   }
 
-  if (input.time_context === "day_of") {
-    return {
-      decision: "approve",
-      is_approved: true,
-      blocking_reasons: [],
-      warnings,
-      policy_version: input.policy_version,
-      evaluated_at: evaluatedAt
-    };
-  }
-
+  // Handle rewrite eligibility uniformly across all dates
   const rewriteEligibleViolations = [
     ...input.diagnostics.rewrite_eligible_violations
   ];
   const maxAttemptsRemaining = input.max_attempts_remaining ?? 0;
 
   if (
-    input.time_context === "future" &&
     input.segment_contract.allows_rewrites === true &&
     rewriteEligibleViolations.length > 0 &&
     maxAttemptsRemaining > 0
