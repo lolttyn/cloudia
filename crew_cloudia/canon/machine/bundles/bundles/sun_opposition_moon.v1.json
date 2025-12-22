@@ -1,0 +1,102 @@
+{
+  "slug": "sun_opposition_moon",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Sun opposition Moon",
+  "summary": "Tension between outward goals and inner feelings. External demands can rub against mood, pushing a choice between performing and honoring what you need. The opportunity is to integrate both instead of swinging between them.",
+  "trigger": {
+    "signal_key": "sun_opposition_moon",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Outer expression and inner needs face each other directly.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Sun-Moon oppositions highlight a split between public-facing duties and private feelings that requires conscious balancing."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Awareness of emotional undercurrents can sharpen decisions if neither side is ignored."
+      },
+      {
+        "speakability": "can_say",
+        "text": "You may notice projections-assuming others are carrying what you'd rather not acknowledge."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Naming the tension reduces reactive swings between doing and feeling."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Conflict between needs and obligations is inevitable or catastrophic."
+      }
+    ],
+    "frictions": [
+      "Moodiness that derails plans",
+      "Performing steadiness while feeling vulnerable",
+      "Overexposure of feelings in professional settings",
+      "Projecting discomfort onto partners or colleagues",
+      "Swinging between overdoing and withdrawing"
+    ],
+    "opportunities": [
+      "Re-evaluating priorities with emotional honesty",
+      "Letting feelings inform pacing and boundaries",
+      "Sharing context so others understand your bandwidth",
+      "Practicing self-soothing before responding",
+      "Aligning actions with what actually feels sustainable"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Pause to check what you feel before committing.",
+      "State both the task and the need it bumps against.",
+      "Schedule breaks so obligations do not steamroll you.",
+      "Ask for context instead of assuming expectations.",
+      "Let honesty guide tone, not dramatics."
+    ],
+    "avoid": [
+      "Pretending everything is fine to keep moving",
+      "Using mood as the only compass",
+      "Dumping emotions on someone who cannot act on them",
+      "Assuming people should already know what you need",
+      "Swinging from overpromising to canceling last minute"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Balance the task and the feeling-both matter today."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Name the tension so it guides you instead of driving you."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions of emotional crises or breakups",
+      "Deterministic claims about failure or success",
+      "Pathologizing mood swings"
+    ],
+    "allowed_framing": [
+      "Process framing: this aspect highlights tension to work with",
+      "Agency-based language: you can respond intentionally",
+      "Contextual framing: plans may need adjustment if feelings are strong"
+    ]
+  },
+  "tags": [
+    "emotional_balance",
+    "awareness",
+    "boundaries",
+    "integration",
+    "self_regulation",
+    "priorities"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Sun-Moon opposition as integration practice"
+  ]
+}

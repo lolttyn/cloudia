@@ -1,11 +1,11 @@
 {
-    "slug": "sun_conjunct_mercury",
+    "slug": "sun_conjunction_mercury",
     "version": 1,
     "kind": "aspect",
-    "title": "Sun conjunct Mercury",
+    "title": "Sun conjunction Mercury",
     "summary": "A moment of alignment between identity and thought. Expression feels more direct, ideas are easier to articulate, and decisions benefit from coherence between intention and reasoning.",
     "trigger": {
-      "signal_key": "sun_conjunct_mercury",
+      "signal_key": "sun_conjunction_mercury",
       "constraints": {
         "orb_max_degrees": 3
       }

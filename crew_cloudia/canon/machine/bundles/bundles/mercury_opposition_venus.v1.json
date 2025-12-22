@@ -1,0 +1,102 @@
+{
+  "slug": "mercury_opposition_venus",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Mercury opposition Venus",
+  "summary": "Thought and taste face each other. Conversations about preferences, money, or relationships may reveal gaps between logic and desire. The opportunity is to communicate values clearly without forcing agreement.",
+  "trigger": {
+    "signal_key": "mercury_opposition_venus",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Ideas and values sit across the table, asking to be reconciled.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mercury-Venus oppositions highlight tension between what makes sense and what feels appealing."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Negotiations may surface where communication style differs from relational expectations."
+      },
+      {
+        "speakability": "can_say",
+        "text": "You might notice a split between practical choices and aesthetic or emotional preferences."
+      },
+      {
+        "speakability": "can_say",
+        "text": "This can be a productive moment to clarify budgets, timelines, or social plans."
+      },
+      {
+        "speakability": "avoid",
+        "text": "This aspect forces conflict or proves someone is selfish."
+      }
+    ],
+    "frictions": [
+      "Overanalyzing affection or social cues",
+      "Downplaying facts to keep harmony",
+      "Using charm to bypass clear agreements",
+      "Taking feedback about money or taste personally",
+      "Indecision when logic and preference clash"
+    ],
+    "opportunities": [
+      "Aligning spending with stated priorities",
+      "Naming what you like and why",
+      "Balancing polite tone with honesty",
+      "Drafting agreements that respect both fairness and feeling",
+      "Learning someone else's preferences without judgment"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "State your preferences and the reasons behind them.",
+      "Ask what matters most to the other side.",
+      "Check assumptions about tone-clarify if unsure.",
+      "Use numbers or examples to ground a conversation about value.",
+      "Separate disagreement about taste from judgments of worth."
+    ],
+    "avoid": [
+      "Pleasing others by hiding real needs",
+      "Assuming niceness equals agreement",
+      "Critiquing style when the issue is structure",
+      "Talking over softer voices",
+      "Making promises to avoid temporary discomfort"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Let logic and preference both speak so decisions stay honest."
+      },
+      {
+        "speakability": "can_say",
+        "text": "You can stay kind without skipping clarity."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of successful negotiations",
+      "Predictions of relationship outcomes",
+      "Moral judgments about taste or spending"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can highlight differences to work with",
+      "Agency-forward language: you choose how to communicate values",
+      "Contextual framing: conversations about preference may feel louder today"
+    ]
+  },
+  "tags": [
+    "communication",
+    "values",
+    "negotiation",
+    "relationships",
+    "decision_making",
+    "clarity"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mercury-Venus opposition as values dialogue"
+  ]
+}

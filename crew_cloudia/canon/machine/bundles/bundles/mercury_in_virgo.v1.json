@@ -1,0 +1,99 @@
+{
+  "slug": "mercury_in_virgo",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mercury in Virgo",
+  "summary": "A precise, analytical mental climate. Attention gravitates toward details, systems, and useful improvements. The opportunity is to refine plans and communications with clarity and care.",
+  "trigger": {
+    "signal_key": "mercury_in_virgo"
+  },
+  "meaning": {
+    "headline": "Thinking is meticulous and oriented toward service.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mercury in Virgo sharpens discernment, editing, and the urge to make processes cleaner."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Communication benefits from specificity and actionable detail."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Practical tasks and research feel satisfying when they lead to tangible improvements."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Organizing information reduces anxiety."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Perfection is required or guaranteed."
+      }
+    ],
+    "frictions": [
+      "Overcritical tone toward self or others",
+      "Paralysis from over-editing",
+      "Fixating on flaws instead of progress",
+      "Micro-managing conversations",
+      "Difficulty delegating"
+    ],
+    "opportunities": [
+      "Proofreading, auditing, or quality checks",
+      "Building checklists or templates",
+      "Clarifying instructions",
+      "Refining health or daily routines",
+      "Offering practical help where it's welcome"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Prioritize the most impactful fixes first.",
+      "Share constructive feedback with examples.",
+      "Use lists to capture tasks and reduce mental load.",
+      "Balance critique with acknowledgment of what works.",
+      "Schedule breaks to avoid burnout."
+    ],
+    "avoid": [
+      "Nitpicking to manage anxiety",
+      "Assuming others know your standards",
+      "Taking on all the work to ensure it's done right",
+      "Using precision to delay decisions",
+      "Confusing usefulness with worth"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Precision helps today-focus on what improves the whole."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Small, clean tweaks can make a big difference now."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Medical or health promises",
+      "Guarantees of perfection or correctness",
+      "Pathologizing mistakes"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can sharpen analysis and organization",
+      "Agency-forward language: you choose how to apply the detail orientation",
+      "Contextual framing: precision helps if paired with rest and perspective"
+    ]
+  },
+  "tags": [
+    "communication",
+    "analysis",
+    "organization",
+    "refinement",
+    "service",
+    "precision"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mercury as mind/communication archetype in daily cycles"
+  ]
+}

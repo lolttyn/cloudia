@@ -1,11 +1,11 @@
 {
-    "slug": "venus_conjunct_mars",
+    "slug": "venus_conjunction_mars",
     "version": 1,
     "kind": "aspect",
-    "title": "Venus conjunct Mars",
+    "title": "Venus conjunction Mars",
     "summary": "A convergence of attraction and initiative. Desire is easier to act on, and actions are more likely to reflect genuine preference. The opportunity is embodied momentum without overreach.",
     "trigger": {
-      "signal_key": "venus_conjunct_mars",
+      "signal_key": "venus_conjunction_mars",
       "constraints": {
         "orb_max_degrees": 3
       }

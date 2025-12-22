@@ -1,0 +1,102 @@
+{
+  "slug": "venus_sextile_mars",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Venus sextile Mars",
+  "summary": "Desire and action cooperate with a light touch. It's easier to take initiative in relationships, creative work, or pleasure without feeling forced. The opportunity is to use this accessible spark to build real momentum.",
+  "trigger": {
+    "signal_key": "venus_sextile_mars",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Attraction and effort can meet halfway, encouraging easy engagement.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Venus-Mars sextiles support approachable chemistry that invites action."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Motivation responds well to what feels enjoyable or mutual."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Low-stakes invitations and collaborations can thrive."
+      },
+      {
+        "speakability": "can_say",
+        "text": "It's a good time to test a creative or relational idea with light effort."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Ease means everything will work out romantically or financially."
+      }
+    ],
+    "frictions": [
+      "Taking consent for granted because the vibe is good",
+      "Half-starting projects without finishing",
+      "Mixing signals by being too casual",
+      "Chasing novelty over substance",
+      "Overextending socially"
+    ],
+    "opportunities": [
+      "Making a friendly ask or proposal",
+      "Starting creative tasks that need a gentle push",
+      "Showing appreciation through simple actions",
+      "Aligning efforts with genuine desire",
+      "Experimenting with style or approaches in low-risk ways"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Initiate where enthusiasm feels mutual.",
+      "Take small steps that can scale if response is positive.",
+      "Be explicit about boundaries even when relaxed.",
+      "Use charm to open doors, then add substance.",
+      "Track follow-through so easy momentum becomes real progress."
+    ],
+    "avoid": [
+      "Assuming attraction equals agreement",
+      "Overcommitting socially because energy feels light",
+      "Using flirtation to dodge honesty",
+      "Spending impulsively for quick pleasure",
+      "Letting comfort delay decisions that matter"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "When wanting and doing line up, small moves can have impact."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Let the spark guide you, but keep consent and clarity close."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of romantic success",
+      "Guarantees of financial or creative payoff",
+      "Claims that attraction will override consent or boundaries"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can ease collaboration and chemistry",
+      "Agency-forward language: you choose how to act on desire",
+      "Contextual framing: ease helps if paired with intention"
+    ]
+  },
+  "tags": [
+    "relationships",
+    "initiative",
+    "creativity",
+    "desire",
+    "momentum",
+    "collaboration"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Venus-Mars sextile as approachable drive"
+  ]
+}

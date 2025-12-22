@@ -1,0 +1,99 @@
+{
+  "slug": "mars_in_sagittarius",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mars in Sagittarius",
+  "summary": "Energy aims for expansion, truth-seeking, and adventure. Actions favor exploration and learning by doing. The opportunity is to move boldly while respecting limits and facts.",
+  "trigger": {
+    "signal_key": "mars_in_sagittarius"
+  },
+  "meaning": {
+    "headline": "Drive is enthusiastic, exploratory, and future-focused.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mars in Sagittarius fuels action toward travel, education, and big-picture goals."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Courage increases when action aligns with belief or purpose."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Humor and optimism help push through obstacles."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Movement outdoors or in new environments is invigorating."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Confidence replaces the need for preparation or consent."
+      }
+    ],
+    "frictions": [
+      "Overestimating capacity",
+      "Neglecting details or timing",
+      "Speaking bluntly without care",
+      "Restlessness with routine",
+      "Pushing beliefs as universal"
+    ],
+    "opportunities": [
+      "Planning or taking a meaningful trip",
+      "Pursuing training or study",
+      "Sharing a vision with a group",
+      "Bringing humor to a tense situation",
+      "Expanding a project beyond comfort zone"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Check maps, budgets, and timelines before leaping.",
+      "Speak your enthusiasm and invite collaboration.",
+      "Use clear consent around adventures.",
+      "Ground big ideas in a first step.",
+      "Allow others to question assumptions."
+    ],
+    "avoid": [
+      "Overscheduling your day",
+      "Assuming everyone shares your risk tolerance",
+      "Tuning out feedback that slows you",
+      "Letting jokes cross into dismissiveness",
+      "Skipping recovery between pushes"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Aim high, and make sure the landing path is clear."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Optimism moves farther when paired with a plan."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of success or travel",
+      "Moralizing belief systems",
+      "Guarantees that risk will pay off"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can energize exploration and purpose-driven action",
+      "Agency-forward language: you choose which adventures to take",
+      "Contextual framing: enthusiasm helps when supported by prep"
+    ]
+  },
+  "tags": [
+    "action",
+    "exploration",
+    "optimism",
+    "learning",
+    "vision",
+    "adventure"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mars as drive/assertion archetype in daily cycles"
+  ]
+}

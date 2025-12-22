@@ -1,0 +1,102 @@
+{
+  "slug": "sun_opposition_venus",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Sun opposition Venus",
+  "summary": "Identity and connection pull against each other. Personal goals or visibility may compete with the desire to keep harmony. The opportunity is to negotiate values rather than choosing between self and relationship.",
+  "trigger": {
+    "signal_key": "sun_opposition_venus",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Self-expression and relating stand across the table, asking for balance.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Sun-Venus oppositions surface tension between pursuing personal aims and maintaining ease with others."
+      },
+      {
+        "speakability": "must_say",
+        "text": "It highlights where pleasing people might conflict with staying true to priorities."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Attention may swing between showcasing yourself and making space for someone else."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Negotiation becomes easier when values-not approval-lead the conversation."
+      },
+      {
+        "speakability": "avoid",
+        "text": "This guarantees relationship drama or rejection."
+      }
+    ],
+    "frictions": [
+      "Overcommitting to stay liked",
+      "Feeling unseen when others get attention",
+      "Resentment from suppressing preferences",
+      "Avoiding necessary boundaries",
+      "Projecting insecurity onto partners or friends"
+    ],
+    "opportunities": [
+      "Clarifying shared values before making plans",
+      "Practicing honest requests without apology",
+      "Balancing generosity with self-respect",
+      "Spotting which compromises are healthy",
+      "Refreshing aesthetics or routines to reflect current priorities"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "State what matters to you before negotiating.",
+      "Listen for the value beneath someone's ask.",
+      "Offer collaboration instead of over-functioning.",
+      "Acknowledge any envy or insecurity without acting from it.",
+      "Let appreciation be specific and grounded."
+    ],
+    "avoid": [
+      "Performing agreement to dodge discomfort",
+      "Assuming affection requires self-erasure",
+      "Competing for spotlight without naming why",
+      "Treating compromise as failure",
+      "Promising more than you can maintain"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Balance what you value with what you share-both deserve airtime."
+      },
+      {
+        "speakability": "can_say",
+        "text": "You can stay warm without giving yourself away."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions of relationship outcomes",
+      "Guarantees of attraction or rejection",
+      "Moralizing choices around pleasure or affection"
+    ],
+    "allowed_framing": [
+      "Possibility language: can highlight trade-offs, can clarify desires",
+      "Agency-forward framing: you choose how to negotiate needs",
+      "Contextual framing: conversations about values may feel louder today"
+    ]
+  },
+  "tags": [
+    "relationships",
+    "values",
+    "boundaries",
+    "negotiation",
+    "self_expression",
+    "balance"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Sun-Venus opposition as alignment check"
+  ]
+}

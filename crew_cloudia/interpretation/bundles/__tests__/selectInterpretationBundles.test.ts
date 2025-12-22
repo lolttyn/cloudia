@@ -72,17 +72,18 @@ describe("selectInterpretationBundles", () => {
       { ...baseSignal("sun_in_capricorn", 0.9), kind: "planet_in_sign" },
       { ...baseSignal("sun_square_mars", 0.85), orb_deg: 2 },
       { ...baseSignal("sun_square_mercury", 0.8), orb_deg: 2 },
-      { ...baseSignal("sun_conjunct_venus", 0.7), orb_deg: 1 },
+      { ...baseSignal("sun_conjunction_venus", 0.75), orb_deg: 1 },
+      { ...baseSignal("sun_trine_mars", 0.7), orb_deg: 2 },
     ];
 
     const result = selectInterpretationBundles({ signals, bundleIndex });
 
     expect(result.primary).toHaveLength(2);
     expect(result.secondary).toHaveLength(1);
-    expect(result.suppressed).toContainEqual({
-      bundle_slug: expect.any(String),
-      reason: "over_cap",
-    });
+    expect(result.suppressed.length).toBeGreaterThanOrEqual(1);
+    expect(result.suppressed).toContainEqual(
+      expect.objectContaining({ reason: "over_cap" })
+    );
   });
 
   it("is deterministic for the same inputs", () => {

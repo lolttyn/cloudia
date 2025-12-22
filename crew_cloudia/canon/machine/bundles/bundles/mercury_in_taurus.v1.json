@@ -1,0 +1,99 @@
+{
+  "slug": "mercury_in_taurus",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mercury in Taurus",
+  "summary": "Thinking slows to stabilize. Focus leans toward practical choices, tangible evidence, and plans that can hold up over time. The opportunity is to build clarity through patience rather than speed.",
+  "trigger": {
+    "signal_key": "mercury_in_taurus"
+  },
+  "meaning": {
+    "headline": "Deliberate, grounded thought takes the lead.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mercury in Taurus favors steady processing, concrete examples, and decisions that respect resources."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Conversations benefit from clear structure and time to absorb information."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Retention improves when ideas are tied to sensory or financial realities."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Consistency of message matters more than novelty right now."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Careful pacing equals stubbornness or lack of intelligence."
+      }
+    ],
+    "frictions": [
+      "Resistance to changing course",
+      "Overemphasis on cost at the expense of possibility",
+      "Slow responses frustrating faster collaborators",
+      "Getting stuck in known methods",
+      "Difficulty pivoting when conditions shift"
+    ],
+    "opportunities": [
+      "Refining budgets or timelines",
+      "Documenting processes for reliability",
+      "Making decisions that prioritize durability",
+      "Practicing clear, simple messaging",
+      "Grounding ideas in evidence or prototypes"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Take time to verify numbers and facts.",
+      "Break complex ideas into concrete steps.",
+      "Use examples people can see or touch.",
+      "Set realistic deadlines and stick to them.",
+      "Name when you need more time instead of ghosting."
+    ],
+    "avoid": [
+      "Dismissing new input because change feels uncomfortable",
+      "Overexplaining to defend a position",
+      "Letting conversations drag without decisions",
+      "Spending simply to preserve comfort",
+      "Assuming slow pace means lack of progress"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Steady thinking helps build choices that last."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Ground ideas in something tangible to make them real."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions of financial outcomes",
+      "Moral judgments about pace or caution",
+      "Guarantees that patience will fix problems"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can steady focus and decision-making",
+      "Agency-forward language: you can choose where to apply patience",
+      "Contextual framing: slower pace helps if matched to the task"
+    ]
+  },
+  "tags": [
+    "communication",
+    "stability",
+    "patience",
+    "planning",
+    "resources",
+    "clarity"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mercury as mind/communication archetype in daily cycles"
+  ]
+}

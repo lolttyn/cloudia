@@ -1,0 +1,102 @@
+{
+  "slug": "mercury_sextile_venus",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Mercury sextile Venus",
+  "summary": "Communication and connection support each other. It's easier to phrase ideas with warmth, negotiate politely, or share appreciation. The opportunity is to use this soft focus to create clarity and cooperation.",
+  "trigger": {
+    "signal_key": "mercury_sextile_venus",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Words carry ease and consideration without losing substance.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mercury-Venus sextiles smooth communication, making it easier to express preferences kindly."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Diplomacy improves when language reflects genuine values."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Creative writing, invitations, or outreach can land well."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Listening for what matters to others is easier when tone is gentle."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Charm alone will solve conflicts or guarantee agreement."
+      }
+    ],
+    "frictions": [
+      "Smoothing over issues instead of addressing them",
+      "Overexplaining to stay polite",
+      "Avoiding direct requests",
+      "Assuming friendliness equals commitment",
+      "Indecision from weighing too many options"
+    ],
+    "opportunities": [
+      "Negotiating small agreements",
+      "Writing messages that balance clarity and care",
+      "Planning social or creative collaborations",
+      "Giving or receiving compliments sincerely",
+      "Clarifying values in conversations without heat"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Pair kind tone with specific asks.",
+      "Name your preferences before compromise.",
+      "Respond to messages you had delayed.",
+      "Use friendly wording to keep conversations open.",
+      "Express gratitude for help or partnership."
+    ],
+    "avoid": [
+      "Agreeing just to keep peace",
+      "Letting niceness hide boundaries",
+      "Waiting for others to read between the lines",
+      "Using flattery to dodge accountability",
+      "Getting stuck in brainstorming without action"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Clear, kind language can make agreements easier today."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Warmth helps messages land, but clarity seals them."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of persuasion or popularity",
+      "Predictions of romantic success",
+      "Guarantees that conversations will avoid conflict"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can ease dialogue and collaboration",
+      "Agency-forward language: you choose how to use the ease",
+      "Contextual framing: gentle tone helps if paired with honesty"
+    ]
+  },
+  "tags": [
+    "communication",
+    "relationships",
+    "negotiation",
+    "values",
+    "diplomacy",
+    "clarity"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mercury-Venus sextile as relational clarity"
+  ]
+}

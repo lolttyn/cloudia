@@ -1,0 +1,99 @@
+{
+  "slug": "venus_in_aries",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Venus in Aries",
+  "summary": "Relational energy is bold and straightforward. Desire expresses quickly, and appreciation shows up through action more than words. The opportunity is to initiate with clarity while respecting boundaries.",
+  "trigger": {
+    "signal_key": "venus_in_aries"
+  },
+  "meaning": {
+    "headline": "Connection seeks immediacy, honesty, and movement.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Venus in Aries favors direct signals of interest, quick decisions, and spontaneous pleasure."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Affection can look like taking initiative or making the first move."
+      },
+      {
+        "speakability": "can_say",
+        "text": "People may prefer clear yes/no invitations over hints."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Passion rises when there is challenge or novelty."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Impulsiveness guarantees chemistry or success."
+      }
+    ],
+    "frictions": [
+      "Acting before consent is confirmed",
+      "Impatience with slower pacing",
+      "Losing interest once novelty fades",
+      "Competition within relationships",
+      "Interpreting hesitation as rejection"
+    ],
+    "opportunities": [
+      "Making a clear ask or plan",
+      "Trying a new activity together",
+      "Expressing appreciation through action",
+      "Stating boundaries plainly",
+      "Rekindling motivation in shared projects"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Lead with a simple invitation.",
+      "Check for mutual interest before accelerating.",
+      "Channel passion into constructive outlets.",
+      "Be honest about what you can commit to.",
+      "Celebrate initiative from others too."
+    ],
+    "avoid": [
+      "Pushing past a soft no",
+      "Assuming speed equals sincerity",
+      "Overpromising in the heat of the moment",
+      "Turning everything into a contest",
+      "Dropping follow-through after the initial spark"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Show interest clearly and check that it is welcome."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Energy rises when desire meets mutual consent."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of romantic success",
+      "Assumptions that boldness overrides consent",
+      "Predictions of conflict or breakups"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can energize connection and initiative",
+      "Agency-forward language: you choose how to engage",
+      "Contextual framing: immediacy helps when paired with respect"
+    ]
+  },
+  "tags": [
+    "relationships",
+    "desire",
+    "initiative",
+    "honesty",
+    "boundaries",
+    "passion"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Venus as relating/values archetype in daily cycles"
+  ]
+}

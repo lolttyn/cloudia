@@ -1,0 +1,99 @@
+{
+  "slug": "mars_in_aquarius",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mars in Aquarius",
+  "summary": "Drive is inventive, principled, and group-oriented. Action favors collaboration, technology, and unconventional methods. The opportunity is to direct innovation toward shared goals while staying attuned to people.",
+  "trigger": {
+    "signal_key": "mars_in_aquarius"
+  },
+  "meaning": {
+    "headline": "Energy wants to disrupt, improve systems, and act with ideals in mind.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mars in Aquarius energizes teamwork, activism, and experimenting with new approaches."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Detachment can help focus on strategy over ego."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Group efforts and networks can amplify impact."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Technical or analytical tasks benefit from extra drive."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Being contrarian for its own sake equals progress."
+      }
+    ],
+    "frictions": [
+      "Stubbornness about unconventional plans",
+      "Impatience with tradition",
+      "Disconnection from emotional tone",
+      "Overreliance on online consensus",
+      "Scattering effort across too many causes"
+    ],
+    "opportunities": [
+      "Collaborative projects or hackathons",
+      "Advocacy or community action",
+      "Testing new tools or systems",
+      "Designing fair processes",
+      "Sharing expertise with a group"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Explain the why behind innovative moves.",
+      "Check how changes affect people, not just systems.",
+      "Prioritize one experiment at a time.",
+      "Include diverse voices in decisions.",
+      "Use data and empathy together."
+    ],
+    "avoid": [
+      "Changing things only to be different",
+      "Skipping consent in the name of efficiency",
+      "Detaching from feedback",
+      "Treating emotions as distractions",
+      "Overcommitting to too many projects"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Innovate with people in mind, not just the idea."
+      },
+      {
+        "speakability": "can_say",
+        "text": "One good experiment beats ten half-starts."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of social or technological success",
+      "Predictions about movements or groups",
+      "Claims that logic overrides consent"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can energize collaborative, innovative action",
+      "Agency-forward language: you choose which changes to pursue",
+      "Contextual framing: objectivity helps when paired with empathy"
+    ]
+  },
+  "tags": [
+    "action",
+    "innovation",
+    "collaboration",
+    "systems",
+    "objectivity",
+    "community"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mars as drive/assertion archetype in daily cycles"
+  ]
+}

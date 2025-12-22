@@ -1,11 +1,11 @@
 {
-    "slug": "mercury_conjunct_venus",
+    "slug": "mercury_conjunction_venus",
     "version": 1,
     "kind": "aspect",
-    "title": "Mercury conjunct Venus",
+    "title": "Mercury conjunction Venus",
     "summary": "A convergence of thinking and values. Communication becomes more attuned to tone, preference, and relational context. The opportunity is to express ideas in ways that reflect what you actually value.",
     "trigger": {
-      "signal_key": "mercury_venus_conjunction",
+      "signal_key": "mercury_conjunction_venus",
       "constraints": {
         "orb_max_degrees": 3
       }

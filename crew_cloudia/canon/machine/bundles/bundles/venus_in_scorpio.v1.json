@@ -1,0 +1,99 @@
+{
+  "slug": "venus_in_scorpio",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Venus in Scorpio",
+  "summary": "Affection turns intense, loyal, and investigative. Desire seeks depth and honesty, with little patience for superficiality. The opportunity is to cultivate trust through transparency and respect for boundaries.",
+  "trigger": {
+    "signal_key": "venus_in_scorpio"
+  },
+  "meaning": {
+    "headline": "Connection wants depth, truth, and emotional courage.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Venus in Scorpio values loyalty, candor, and bonds that can handle vulnerability."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Surface-level interactions feel less satisfying; substance matters."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Curiosity about motives and power dynamics rises."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Intimacy deepens when both parties share willingly."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Intensity justifies possessiveness or control."
+      }
+    ],
+    "frictions": [
+      "Jealousy or suspicion",
+      "Testing loyalty through ultimatums",
+      "Reading between the lines excessively",
+      "Keeping score of vulnerabilities shared",
+      "All-or-nothing attitudes"
+    ],
+    "opportunities": [
+      "Honest conversations about needs and boundaries",
+      "Shared research or investigative projects",
+      "Transforming a stuck relational pattern",
+      "Setting privacy agreements",
+      "Connecting through purposeful collaboration"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "State what depth looks like for you.",
+      "Ask for consent before diving into heavy topics.",
+      "Offer reassurance without demanding disclosure.",
+      "Channel intensity into problem-solving.",
+      "Honor secrets you are trusted with."
+    ],
+    "avoid": [
+      "Using fear or scarcity to keep closeness",
+      "Probing for information without permission",
+      "Assuming hidden agendas everywhere",
+      "Withholding affection to test loyalty",
+      "Treating vulnerability as leverage"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Depth grows through consented honesty, not pressure."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Intensity can heal when it is paired with respect."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions of betrayal or crisis",
+      "Guarantees of loyalty",
+      "Psychological diagnoses"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can highlight desire for depth and honesty",
+      "Agency-forward language: you choose what to reveal and protect",
+      "Contextual framing: intensity helps when consent and care are present"
+    ]
+  },
+  "tags": [
+    "relationships",
+    "intimacy",
+    "trust",
+    "boundaries",
+    "honesty",
+    "depth"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Venus as relating/values archetype in daily cycles"
+  ]
+}

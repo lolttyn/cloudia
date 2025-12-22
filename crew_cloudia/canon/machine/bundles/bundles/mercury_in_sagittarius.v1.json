@@ -1,0 +1,99 @@
+{
+  "slug": "mercury_in_sagittarius",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mercury in Sagittarius",
+  "summary": "Thinking stretches toward big ideas, principles, and possibilities. Curiosity roams wide and prefers meaning over minutiae. The opportunity is to explore boldly while staying tethered to facts.",
+  "trigger": {
+    "signal_key": "mercury_in_sagittarius"
+  },
+  "meaning": {
+    "headline": "Mind seeks broad horizons and honest debate.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mercury in Sagittarius favors big-picture thinking, storytelling, and candid opinions."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Ideas spread quickly, and enthusiasm grows when they align with a sense of purpose."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Humor and blunt honesty may show up more readily."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Learning through travel, philosophy, or cross-cultural exchange is highlighted."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Being outspoken proves you are right or grants a free pass on accuracy."
+      }
+    ],
+    "frictions": [
+      "Overgeneralizing or exaggerating",
+      "Skipping details and logistics",
+      "Preaching rather than conversing",
+      "Foot-in-mouth moments from bluntness",
+      "Chasing novelty without commitment"
+    ],
+    "opportunities": [
+      "Sharing a vision or mission",
+      "Studying a topic that expands perspective",
+      "Publishing or broadcasting messages",
+      "Teaching or mentoring",
+      "Reframing problems with a bigger lens"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Check facts before amplifying an idea.",
+      "Translate big concepts into next steps.",
+      "Invite debate and be willing to adjust.",
+      "Use stories to connect people to purpose.",
+      "Notice when humor needs a softer edge."
+    ],
+    "avoid": [
+      "Dominating conversations with sermons",
+      "Dismissive jokes that land as insults",
+      "Ignoring constraints that make ideas workable",
+      "Assuming everyone shares your enthusiasm",
+      "Overpromising based on optimism"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Think big and stay honest about the details."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Curiosity travels farther when accuracy rides along."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions of success for grand plans",
+      "Moralizing belief systems",
+      "Guarantees that bold statements will persuade"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can widen perspective and spark exploration",
+      "Agency-forward language: you choose which paths to follow",
+      "Contextual framing: optimism helps when grounded"
+    ]
+  },
+  "tags": [
+    "communication",
+    "vision",
+    "learning",
+    "exploration",
+    "truth_telling",
+    "optimism"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mercury as mind/communication archetype in daily cycles"
+  ]
+}

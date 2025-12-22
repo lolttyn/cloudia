@@ -1,0 +1,99 @@
+{
+  "slug": "mercury_in_capricorn",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mercury in Capricorn",
+  "summary": "Thinking turns strategic and disciplined. Communication favors organization, timelines, and accountable commitments. The opportunity is to make plans that stand up to scrutiny without turning rigid.",
+  "trigger": {
+    "signal_key": "mercury_in_capricorn"
+  },
+  "meaning": {
+    "headline": "Mind focuses on structure, responsibility, and practical outcomes.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mercury in Capricorn supports clear planning, prioritization, and measured speech."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Decisions lean on evidence and long-term viability."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Boundaries and roles become clearer in conversation."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Tone may be concise or serious, valuing efficiency."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Pragmatism means creativity or empathy are irrelevant."
+      }
+    ],
+    "frictions": [
+      "Overcritical or hierarchical tone",
+      "Pessimism that shuts down ideas",
+      "Rigidity around process",
+      "Withholding feedback until it is too late",
+      "Overcommitting out of duty"
+    ],
+    "opportunities": [
+      "Setting milestones and ownership",
+      "Drafting budgets or project plans",
+      "Clarifying expectations with stakeholders",
+      "Simplifying complex tasks",
+      "Taking responsibility for timelines"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Map tasks with clear deadlines and owners.",
+      "Communicate constraints early.",
+      "Use concise summaries followed by action items.",
+      "Check assumptions with data before deciding.",
+      "Make space for feedback from the team."
+    ],
+    "avoid": [
+      "Using authority to shut down dialogue",
+      "Assuming seriousness equals effectiveness",
+      "Ignoring morale while chasing efficiency",
+      "Micromanaging instead of delegating",
+      "Delaying communication until everything is perfect"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Plan clearly, then execute steadily."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Structure is helpful when it leaves room for people."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of career success",
+      "Deterministic statements about authority",
+      "Moralizing productivity"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can strengthen planning and accountability",
+      "Agency-forward language: you choose how to set boundaries and goals",
+      "Contextual framing: efficiency helps when aligned with capacity"
+    ]
+  },
+  "tags": [
+    "communication",
+    "planning",
+    "responsibility",
+    "structure",
+    "boundaries",
+    "strategy"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mercury as mind/communication archetype in daily cycles"
+  ]
+}

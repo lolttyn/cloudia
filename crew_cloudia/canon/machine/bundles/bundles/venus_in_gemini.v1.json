@@ -1,0 +1,99 @@
+{
+  "slug": "venus_in_gemini",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Venus in Gemini",
+  "summary": "Connection thrives through conversation, curiosity, and variety. Social energy is light, witty, and eager to sample options. The opportunity is to enjoy the play without losing sincerity or follow-through.",
+  "trigger": {
+    "signal_key": "venus_in_gemini"
+  },
+  "meaning": {
+    "headline": "Relating prefers dialogue, flexibility, and mental stimulation.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Venus in Gemini values humor, lively exchanges, and learning through people."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Affection often shows up as sharing ideas, media, or invitations."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Multiple connections or interests may feel appealing."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Lightness can make it easier to approach sensitive topics."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Playfulness means promises do not matter."
+      }
+    ],
+    "frictions": [
+      "Restlessness or boredom",
+      "Flirtation without clarity",
+      "Overcommitting socially",
+      "Mixed signals from keeping options open",
+      "Talking around feelings instead of naming them"
+    ],
+    "opportunities": [
+      "Hosting casual gatherings",
+      "Trying new hobbies with friends",
+      "Sharing thoughtful messages",
+      "Learning alongside a partner",
+      "Lightening tense conversations with curiosity"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Offer clear invitations and endings to plans.",
+      "Follow up on what you start.",
+      "Mix fun with honest disclosures.",
+      "Give people space to answer before moving on.",
+      "Use humor to connect, not deflect."
+    ],
+    "avoid": [
+      "Ghosting when interest shifts",
+      "Overlapping commitments that strain trust",
+      "Using charm to dodge responsibility",
+      "Sharing gossip as connection",
+      "Assuming everyone likes the same pace"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Curiosity is attractive-keep it paired with clarity."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Play, talk, and ask-but close the loop when you decide."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of romantic outcomes",
+      "Encouraging infidelity or deception",
+      "Assumptions that variety suits everyone"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can enliven social connection and curiosity",
+      "Agency-forward language: you choose what to share and with whom",
+      "Contextual framing: lightness helps when balanced with honesty"
+    ]
+  },
+  "tags": [
+    "relationships",
+    "conversation",
+    "curiosity",
+    "flexibility",
+    "playfulness",
+    "clarity"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Venus as relating/values archetype in daily cycles"
+  ]
+}

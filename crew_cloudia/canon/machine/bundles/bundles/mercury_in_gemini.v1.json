@@ -1,0 +1,99 @@
+{
+  "slug": "mercury_in_gemini",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mercury in Gemini",
+  "summary": "A quick, curious mental weather. Information moves fast, conversations multiply, and connections between topics appear easily. The opportunity is to channel curiosity into useful links instead of scattering attention.",
+  "trigger": {
+    "signal_key": "mercury_in_gemini"
+  },
+  "meaning": {
+    "headline": "Thinking is agile, playful, and eager to explore options.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mercury in Gemini boosts curiosity, adaptability, and appetite for dialogue."
+      },
+      {
+        "speakability": "must_say",
+        "text": "It favors learning through variety and exchanging information across networks."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Short-form communication and rapid pivots are easier than deep dives."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Humor and lightness help ideas land."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Every idea needs to be pursued or shared immediately." 
+      }
+    ],
+    "frictions": [
+      "Information overload",
+      "Jumping between tasks without finishing",
+      "Talking over others in excitement",
+      "Shallow processing that misses key details",
+      "Inconsistency in follow-up"
+    ],
+    "opportunities": [
+      "Brainstorming multiple approaches",
+      "Networking or outreach",
+      "Summarizing complex topics into digestible bits",
+      "Experimenting with new tools or shortcuts",
+      "Asking questions that reveal useful data"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Keep notes to track ideas before moving on.",
+      "Use short check-ins instead of long meetings.",
+      "Build small prototypes to test concepts.",
+      "Rotate tasks to stay engaged without losing priorities.",
+      "Practice active listening to balance the talk."
+    ],
+    "avoid": [
+      "Spreading rumors or unverified info",
+      "Overcommitting because everything sounds interesting",
+      "Dropping commitments when a new topic appears",
+      "Letting sarcasm replace clarity",
+      "Treating multitasking as the only option"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Curiosity is high-capture ideas so they do not vanish."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Short, clear exchanges beat long speeches today."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Assurances of success through multitasking",
+      "Predictions about gossip or social outcomes",
+      "Claims that speed replaces accuracy"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can spark learning and connection",
+      "Agency-forward language: you choose which threads to follow",
+      "Contextual framing: variety helps when paired with focus tools"
+    ]
+  },
+  "tags": [
+    "communication",
+    "curiosity",
+    "learning",
+    "networking",
+    "adaptability",
+    "ideas"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mercury as mind/communication archetype in daily cycles"
+  ]
+}

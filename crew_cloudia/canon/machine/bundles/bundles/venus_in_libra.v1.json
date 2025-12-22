@@ -1,0 +1,99 @@
+{
+  "slug": "venus_in_libra",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Venus in Libra",
+  "summary": "Relationships emphasize balance, reciprocity, and social grace. Beauty, fairness, and shared decision-making take priority. The opportunity is to create harmony without losing your own stance.",
+  "trigger": {
+    "signal_key": "venus_in_libra"
+  },
+  "meaning": {
+    "headline": "Connection values cooperation, elegance, and clear agreements.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Venus in Libra highlights diplomacy, partnership, and aesthetic attunement."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Charm and fairness support negotiations and social ease." 
+      },
+      {
+        "speakability": "can_say",
+        "text": "Shared experiences and collaborative art feel appealing." 
+      },
+      {
+        "speakability": "can_say",
+        "text": "Decisions are weighed for mutual benefit." 
+      },
+      {
+        "speakability": "avoid",
+        "text": "Harmony requires self-erasure or constant agreement." 
+      }
+    ],
+    "frictions": [
+      "People-pleasing",
+      "Avoiding hard conversations",
+      "Overemphasis on appearances",
+      "Indecision about preferences",
+      "Withholding boundaries to stay likable"
+    ],
+    "opportunities": [
+      "Mediating or reconciling",
+      "Planning shared outings",
+      "Refreshing style or decor",
+      "Renegotiating agreements kindly",
+      "Expressing appreciation and gratitude"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Name your needs before asking others for theirs.",
+      "Use clear language even when aiming for harmony.",
+      "Give compliments that are specific.",
+      "Schedule time to decide instead of deferring endlessly.",
+      "Let aesthetics support honesty, not hide it."
+    ],
+    "avoid": [
+      "Saying yes to avoid awkwardness",
+      "Letting others choose everything to keep peace",
+      "Using politeness to dodge conflict",
+      "Spending beyond means to impress",
+      "Equating criticism with rejection"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Balance works best when your own preferences are in the mix."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Grace and clarity can travel together today."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of partnership outcomes",
+      "Guarantees of popularity or approval",
+      "Claims that harmony demands self-sacrifice"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can ease collaboration and social charm",
+      "Agency-forward language: you choose how to balance needs",
+      "Contextual framing: politeness helps when matched with truth"
+    ]
+  },
+  "tags": [
+    "relationships",
+    "diplomacy",
+    "balance",
+    "aesthetics",
+    "agreements",
+    "harmony"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Venus as relating/values archetype in daily cycles"
+  ]
+}

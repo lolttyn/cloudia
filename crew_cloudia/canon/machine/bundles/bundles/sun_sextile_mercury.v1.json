@@ -1,0 +1,102 @@
+{
+  "slug": "sun_sextile_mercury",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Sun sextile Mercury",
+  "summary": "A cooperative flow between identity and thinking. Expressing ideas feels straightforward, and learning or negotiating benefits from a flexible, curious tone. The opportunity is to use clarity for steady, practical progress.",
+  "trigger": {
+    "signal_key": "sun_sextile_mercury",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Self-expression and thought move easily together today.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Sun-Mercury sextiles support smooth communication where personal voice and reasoning reinforce each other."
+      },
+      {
+        "speakability": "must_say",
+        "text": "It is a good moment for sharing plans, writing, or decisions that need buy-in."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Curiosity rises, making it easier to ask questions without ego."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Light debate can lead to better ideas when approached playfully."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Everything communicated will land perfectly."
+      }
+    ],
+    "frictions": [
+      "Talking instead of acting",
+      "Overexplaining simple points",
+      "Skipping deeper research because things feel easy",
+      "Assuming shared context",
+      "Multitasking conversations and missing details"
+    ],
+    "opportunities": [
+      "Drafting plans or proposals",
+      "Scheduling important conversations",
+      "Sharing updates with clarity and warmth",
+      "Learning or teaching in digestible chunks",
+      "Adjusting a message based on quick feedback"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Write or record ideas while flow is strong.",
+      "Ask follow-up questions to keep clarity mutual.",
+      "Use concise language before adding detail.",
+      "Translate complex points into plain terms.",
+      "Close loops on decisions that were pending."
+    ],
+    "avoid": [
+      "Assuming tone will be inferred correctly",
+      "Overloading meetings with too many topics",
+      "Talking over quieter voices",
+      "Using ease as a reason to skip verification",
+      "Letting conversation replace commitment"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Clear words come easier today-use them to move plans forward."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Curiosity keeps communication collaborative."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of perfect understanding",
+      "Claims of intellectual superiority",
+      "Guarantees that conversations will solve everything"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can ease communication and decision-making",
+      "Agency-forward language: you choose how to use the clarity",
+      "Contextual framing: good conditions help but do not replace effort"
+    ]
+  },
+  "tags": [
+    "communication",
+    "clarity",
+    "learning",
+    "planning",
+    "collaboration",
+    "momentum"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Sun-Mercury sextile as communication support"
+  ]
+}

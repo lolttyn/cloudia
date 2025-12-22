@@ -1,0 +1,99 @@
+{
+  "slug": "mercury_in_libra",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mercury in Libra",
+  "summary": "Conversation turns toward balance, fairness, and shared understanding. Decisions weigh multiple perspectives and aesthetics influence preferences. The opportunity is collaborative dialogue that stays honest.",
+  "trigger": {
+    "signal_key": "mercury_in_libra"
+  },
+  "meaning": {
+    "headline": "Thinking seeks harmony without losing perspective.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mercury in Libra emphasizes diplomacy, negotiation, and consideration of multiple sides."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Tone matters: messages land best when they feel respectful and balanced."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Design, aesthetics, and presentation influence choices."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Partnerships and agreements are front of mind."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Seeking balance means avoiding clear stances."
+      }
+    ],
+    "frictions": [
+      "Indecision from weighing every option",
+      "Smoothing over conflict instead of resolving it",
+      "Saying what others want to hear",
+      "Overvaluing appearances",
+      "Delays from needing consensus"
+    ],
+    "opportunities": [
+      "Drafting agreements or ground rules",
+      "Mediating disagreements",
+      "Designing presentations or pitches",
+      "Clarifying expectations in partnerships",
+      "Balancing logic with social awareness"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Name your position before negotiating.",
+      "Ask for the other side's priorities.",
+      "Use reflective listening to confirm understanding.",
+      "Keep conversations structured so they finish.",
+      "Let aesthetics support clarity, not replace it."
+    ],
+    "avoid": [
+      "Agreeing to avoid discomfort",
+      "Assuming politeness equals agreement",
+      "Delaying decisions indefinitely",
+      "Downplaying your needs to stay liked",
+      "Relying on charm instead of substance"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Balance the conversation: state your view and invite theirs."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Diplomacy works best when it keeps the core truth intact."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of agreement or harmony",
+      "Predictions of relationship outcomes",
+      "Claims that avoiding conflict is the safest choice"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can aid negotiation and mutual understanding",
+      "Agency-forward language: you choose what balance looks like",
+      "Contextual framing: polite tone helps when matched with clarity"
+    ]
+  },
+  "tags": [
+    "communication",
+    "diplomacy",
+    "negotiation",
+    "balance",
+    "partnership",
+    "aesthetics"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mercury as mind/communication archetype in daily cycles"
+  ]
+}

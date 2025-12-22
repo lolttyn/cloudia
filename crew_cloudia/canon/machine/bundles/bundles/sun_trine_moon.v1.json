@@ -1,0 +1,102 @@
+{
+  "slug": "sun_trine_moon",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Sun trine Moon",
+  "summary": "A harmonious link between feelings and expression. It's easier to act from a place of inner coherence, making relationships and decisions feel natural. The opportunity is to use this ease to build continuity, not just comfort.",
+  "trigger": {
+    "signal_key": "sun_trine_moon",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Inner mood and outward intent flow in the same direction.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Sun-Moon trines support emotional steadiness that translates into smooth action."
+      },
+      {
+        "speakability": "must_say",
+        "text": "It is easier to show up consistently because internal and external priorities are aligned."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Empathy comes more naturally, improving collaboration."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Creative work benefits from a balanced mix of feeling and focus."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Everything will stay easy without attention or boundaries."
+      }
+    ],
+    "frictions": [
+      "Coasting on comfort instead of making choices",
+      "Avoiding challenge to keep the mood pleasant",
+      "Assuming others share your sense of ease",
+      "Taking alignment for granted and skipping follow-through",
+      "Letting intuition replace clear communication"
+    ],
+    "opportunities": [
+      "Stabilizing routines that support emotional health",
+      "Having supportive conversations",
+      "Starting projects that need both heart and organization",
+      "Offering care without losing yourself",
+      "Practicing consistency in how you show up"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Move on plans that feel both right and realistic.",
+      "Share encouragement or gratitude where it is due.",
+      "Build habits that keep you steady beyond today.",
+      "Use calm to address tasks you usually avoid.",
+      "Keep boundaries visible even when energy is smooth."
+    ],
+    "avoid": [
+      "Assuming ease equals consent",
+      "Putting off commitments because you feel good",
+      "Skipping feedback loops",
+      "Overextending emotional labor",
+      "Making promises just because today feels aligned"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Inner ease can translate into steady action today."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Use the harmony to reinforce habits you want to keep."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of emotional or relational success",
+      "Promises that decisions made now will be perfect",
+      "Deterministic claims about mood or outcomes"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can ease coherence between feeling and doing",
+      "Agency-forward language: you choose how to use the smoothness",
+      "Contextual framing: conditions are helpful but not magic"
+    ]
+  },
+  "tags": [
+    "harmony",
+    "coherence",
+    "emotional_health",
+    "consistency",
+    "collaboration",
+    "stability"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Sun-Moon trine as easeful alignment"
+  ]
+}
