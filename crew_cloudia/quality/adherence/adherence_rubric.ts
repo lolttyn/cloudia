@@ -193,42 +193,47 @@ function enforceLunationFrontLoad(
 
   const lower = script.toLowerCase();
   const lunationKeywords = ["new moon", "full moon", "moon", "lunation"];
-  const mention = lunationKeywords
-    .map((k) => lower.indexOf(k))
-    .filter((idx) => idx >= 0)
-    .sort((a, b) => a - b)[0];
-
-  if (mention === undefined) {
-    blocking.add("LUNATION_NOT_FRONT_LOADED");
-    return;
-  }
-
+  
+  // Phase D: Semantic check - lunation must feel special, not necessarily be first
+  // Check if lunation feeling markers appear in the first ~40% of the intro
   const sentences = splitSentences(script);
-  const firstMentionSentence = sentences.find((s) =>
-    lunationKeywords.some((k) => s.toLowerCase().includes(k))
-  );
-
-  if (!firstMentionSentence) {
-    blocking.add("LUNATION_NOT_FRONT_LOADED");
-    return;
-  }
-
-  const lowerSentence = firstMentionSentence.toLowerCase();
+  const firstFortyPercent = Math.ceil(sentences.length * 0.4);
+  const earlySentences = sentences.slice(0, firstFortyPercent).join(" ").toLowerCase();
+  
+  // Check for feeling markers OR explicit lunation mention in early portion
   const hasFeelingMarker = LUNATION_FEELING_MARKERS.some((m) =>
-    lowerSentence.includes(m)
+    earlySentences.includes(m)
   );
+  
+  const hasLunationMention = lunationKeywords.some((k) => earlySentences.includes(k));
+  
+  // If lunation is mentioned early, check that feeling precedes chronology
+  if (hasLunationMention) {
+    const firstMentionSentence = sentences.find((s) =>
+      lunationKeywords.some((k) => s.toLowerCase().includes(k))
+    );
+    
+    if (firstMentionSentence) {
+      const lowerSentence = firstMentionSentence.toLowerCase();
+      const chronologyIndex = CHRONOLOGY_MARKERS.map((m) => lowerSentence.indexOf(m))
+        .filter((i) => i >= 0)
+        .sort((a, b) => a - b)[0] ?? -1;
+      const feelingIndex = LUNATION_FEELING_MARKERS.map((m) => lowerSentence.indexOf(m))
+        .filter((i) => i >= 0)
+        .sort((a, b) => a - b)[0] ?? -1;
 
-  const chronologyIndex = CHRONOLOGY_MARKERS.map((m) => lowerSentence.indexOf(m))
-    .filter((i) => i >= 0)
-    .sort((a, b) => a - b)[0] ?? -1;
-  const feelingIndex = LUNATION_FEELING_MARKERS.map((m) => lowerSentence.indexOf(m))
-    .filter((i) => i >= 0)
-    .sort((a, b) => a - b)[0] ?? -1;
+      const chronologyPrecedesFeeling =
+        chronologyIndex >= 0 && (feelingIndex === -1 || chronologyIndex < feelingIndex);
 
-  const chronologyPrecedesFeeling =
-    chronologyIndex >= 0 && (feelingIndex === -1 || chronologyIndex < feelingIndex);
-
-  if (!hasFeelingMarker || chronologyPrecedesFeeling) {
+      if (chronologyPrecedesFeeling && !hasFeelingMarker) {
+        blocking.add("LUNATION_NOT_FRONT_LOADED");
+        return;
+      }
+    }
+  }
+  
+  // If no feeling markers in early portion AND no lunation mention, it's not front-loaded
+  if (!hasFeelingMarker && !hasLunationMention) {
     blocking.add("LUNATION_NOT_FRONT_LOADED");
   }
 }

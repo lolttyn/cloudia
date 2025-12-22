@@ -69,10 +69,33 @@ export function generateEditInstructions(
         );
         break;
 
+      case reason.startsWith("intro:greeting_missing"):
+        instructions.push(
+          `Include the greeting that names the date (e.g., "Hey Celestial Besties. It's me, Cloudia Rey, here with the Cosmic Forecast for [date].").`
+        );
+        break;
+        
+      case reason.startsWith("intro:causal_missing"):
+        instructions.push(
+          'Add a causal sentence that includes the word "because" to link sky to meaning.'
+        );
+        break;
+        
+      case reason.startsWith("intro:expressive_window_length"):
+        instructions.push(
+          "Add at least one expressive sentence after the greeting. Aim for 1-3 sentences total."
+        );
+        break;
+        
       case reason.startsWith("intro:") || reason.startsWith("closing:"):
-        // Structural issues (greeting missing, scaffold issues, etc.)
-        // These are usually caught by frame evaluator, but pass through as-is
-        instructions.push(`Fix structural issue: ${reason}`);
+        // Most intro structural issues are now warnings, not blockers
+        // Only handle critical ones here
+        if (reason.includes("greeting") || reason.includes("causal") || reason.includes("expressive")) {
+          // Already handled above
+          break;
+        }
+        // For other intro/closing issues, provide generic guidance
+        instructions.push(`Address the structural issue: ${reason}`);
         break;
 
       default:

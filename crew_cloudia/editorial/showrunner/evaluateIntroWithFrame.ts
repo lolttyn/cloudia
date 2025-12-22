@@ -62,45 +62,59 @@ export function evaluateIntroWithFrame(params: {
     rewrite_instructions.push(`Add the exact greeting: "${greeting}".`);
   }
 
-  // Hard gate: meaning coherence with dominant axis (verbatim)
-  const axis = params.interpretive_frame.dominant_contrast_axis.statement.toLowerCase();
-  if (!lower.includes(axis)) {
-    notes.push("Intro must include the dominant contrast axis verbatim (no substitutions).");
-    blocking_reasons.push("intro:axis_missing");
-    rewrite_instructions.push(
-      `Include the dominant contrast axis exactly as "${params.interpretive_frame.dominant_contrast_axis.statement}".`
-    );
+  // Phase D: Semantic check for core tension/theme (not verbatim requirement)
+  // The intro must orient the listener toward the day's core tension, but can express it naturally
+  const axisStatement = params.interpretive_frame.dominant_contrast_axis.statement;
+  const axisPrimary = params.interpretive_frame.dominant_contrast_axis.primary.toLowerCase();
+  const axisCounter = params.interpretive_frame.dominant_contrast_axis.counter.toLowerCase();
+  
+  // Check if the meaning is present semantically (either primary or counter concept appears)
+  const hasAxisMeaning = lower.includes(axisPrimary) || lower.includes(axisCounter) || 
+                         lower.includes(axisStatement.toLowerCase());
+  
+  if (!hasAxisMeaning) {
+    // Downgrade to warning, not blocking - allow natural expression
+    notes.push(`Intro should orient the listener toward the day's core tension (${axisPrimary} vs ${axisCounter}), but can express it in natural language.`);
+    // Do NOT add to blocking_reasons - this is now a soft requirement
   }
 
-  // Why-today clause verbatim
-  const whyTodayClause = params.interpretive_frame.why_today_clause;
-  if (!lower.includes(whyTodayClause.toLowerCase())) {
-    notes.push("Intro must include the why-today clause verbatim from the frame.");
-    blocking_reasons.push("intro:why_today_missing");
-    rewrite_instructions.push(`Insert the why-today clause verbatim: "${whyTodayClause}".`);
+  // Phase D: Semantic check for "why today" - must convey temporal significance
+  const whyTodayClause = params.interpretive_frame.why_today_clause.toLowerCase();
+  // Check if the meaning is present (either verbatim or semantically)
+  const hasWhyToday = lower.includes(whyTodayClause) || 
+                      params.interpretive_frame.why_today.some(w => lower.includes(w.toLowerCase()));
+  
+  if (!hasWhyToday) {
+    // Downgrade to warning - allow natural expression of temporal significance
+    notes.push(`Intro should convey why today matters (${params.interpretive_frame.why_today_clause}), but can express it naturally.`);
+    // Do NOT add to blocking_reasons - this is now a soft requirement
   }
 
-  // Require static anchors for ingress-sensitive bodies (may appear in scaffold)
-  const missingIngressAnchors: string[] = [];
+  // Phase D: Semantic check for sky anchors - must anchor to the sky, but not verbatim
+  const missingSkyAnchors: string[] = [];
   for (const anchor of params.interpretive_frame.sky_anchors) {
     const lowerLabel = anchor.label.toLowerCase();
-    const bodyMentioned = ingressSensitiveBodies.some((body) =>
-      lowerLabel.startsWith(`${body} in `)
-    );
-    if (bodyMentioned && !lower.includes(lowerLabel)) {
-      missingIngressAnchors.push(anchor.label);
+    // Check if the anchor is mentioned semantically (body + sign, not necessarily exact phrase)
+    const bodyMatch = lowerLabel.match(/(\w+)\s+in\s+(\w+)/);
+    if (bodyMatch) {
+      const [, body, sign] = bodyMatch;
+      const hasAnchor = lower.includes(body) && lower.includes(sign);
+      if (!hasAnchor) {
+        missingSkyAnchors.push(anchor.label);
+      }
+    } else {
+      // Fallback: check for exact label if pattern doesn't match
+      if (!lower.includes(lowerLabel)) {
+        missingSkyAnchors.push(anchor.label);
+      }
     }
   }
-  if (missingIngressAnchors.length > 0) {
+  if (missingSkyAnchors.length > 0) {
+    // Downgrade to warning - sky anchoring is important but can be natural
     notes.push(
-      `Intro must reference ingress-sensitive anchors: ${missingIngressAnchors
-        .map((a) => `"${a}"`)
-        .join(", ")}.`
+      `Intro should anchor to the sky (reference ${missingSkyAnchors.map(a => a.split(' in ')[0]).join(' or ')}), but can express it naturally.`
     );
-    blocking_reasons.push("intro:ingress_anchor_missing");
-    for (const label of missingIngressAnchors) {
-      rewrite_instructions.push(`Ensure the scaffold contains the exact anchor phrase: "${label}".`);
-    }
+    // Do NOT add to blocking_reasons - this is now a soft requirement
   }
 
   // Require causal language
@@ -110,34 +124,43 @@ export function evaluateIntroWithFrame(params: {
     rewrite_instructions.push('Add a causal sentence that includes the word "because".');
   }
 
-  // Scaffold presence
-  const scaffold = buildIntroScaffold({
-    episode_date: params.episode_date,
-    axis: params.interpretive_frame.dominant_contrast_axis.statement,
-    why_today_clause: params.interpretive_frame.why_today_clause,
-  });
-  if (!script.includes(scaffold)) {
-    notes.push("Intro scaffold is missing or altered.");
-    blocking_reasons.push("intro:scaffold_missing");
-    rewrite_instructions.push("Ensure the scaffold lines appear verbatim and first.");
-  }
-
-  // Expressive window: must be exactly two sentences beyond the scaffold.
-  const remainder = script.replace(scaffold, "").trim();
-  const sentenceCount = remainder
-    .split(/[.!?]/)
+  // Phase D: Remove rigid scaffold check - replaced with semantic requirements
+  // The intro must establish emotional field, anchor to sky, and convey why today
+  // But these can appear in any order and wording
+  
+  // Expressive window: relaxed to 1-3 sentences (Phase D alignment)
+  const allSentences = script
+    .split(/[.!?]+/)
     .map((s) => s.trim())
-    .filter((s) => s.length > 0).length;
-  if (sentenceCount !== 2) {
-    notes.push("Intro must include exactly two expressive sentences after the scaffold.");
-    blocking_reasons.push("intro:expressive_window_length");
-    rewrite_instructions.push("Return exactly two sentences after the scaffold.");
+    .filter((s) => s.length > 0);
+  
+  // Count sentences after greeting (greeting is always first)
+  const greeting = expectedIntroGreeting(params.episode_date);
+  const afterGreeting = script.replace(greeting, "").trim();
+  const expressiveSentences = afterGreeting
+    .split(/[.!?]+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+  
+  const sentenceCount = expressiveSentences.length;
+  if (sentenceCount < 1 || sentenceCount > 3) {
+    notes.push(`Intro should contain 1-3 expressive sentences (found ${sentenceCount}).`);
+    // Downgrade to warning for now - allow natural rhythm
+    // Only block if completely missing (0 sentences)
+    if (sentenceCount === 0) {
+      blocking_reasons.push("intro:expressive_window_length");
+      rewrite_instructions.push("Add at least one expressive sentence after the greeting.");
+    }
   }
+  
+  // Use afterGreeting for remainder checks (no scaffold to remove)
+  const remainder = afterGreeting;
 
-  // Expressive window constraints (affective only)
+  // Expressive window constraints (affective only) - soft requirements
   if (!LISTENER_PATTERN.test(remainder)) {
     notes.push('Intro expressive lines should address the listener (e.g., "you", "today", "this moment").');
-    rewrite_instructions.push('Address the listener directly in the two expressive sentences (e.g., "you", "your", "today").');
+    rewrite_instructions.push('Address the listener directly in the expressive sentences (e.g., "you", "your", "today").');
+    // Do NOT add to blocking_reasons - this is guidance, not a hard requirement
   }
 
   if (/\b(yesterday|tomorrow)\b/i.test(remainder)) {

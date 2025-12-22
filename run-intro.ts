@@ -118,16 +118,15 @@ export async function runIntroForDate(params: {
       script = draft.draft_script;
       previousScript = script; // Store for comparison in next iteration
     } else {
-      // CRITICAL: Extract the expressive portion from the CURRENT script (which is the previous attempt)
-      const previousExpressive = extractExpressiveFromScript(script, params.episode_date);
-      
-      console.log(`[intro] Rewriting attempt ${attemptNumber}. Previous expressive: "${previousExpressive}"`);
+      // CRITICAL: Pass the FULL intro script to the writer, not just the expressive portion
+      // The rubric evaluates the entire intro, so we must revise the entire intro
+      console.log(`[intro] Rewriting attempt ${attemptNumber}. Previous full script length: ${script.length} chars`);
       
       const rewritePromptPayload = {
-        system_prompt: "You are revising an existing draft based on editor feedback. Your job is to apply the requested changes to the two expressive sentences, not to write a new draft from scratch.",
-        user_prompt: buildIntroExpressiveRewritePrompt({
+        system_prompt: "You are revising an existing draft based on editor feedback. You may rewrite, remove, or replace any part of the previous draft, including the opening. Your job is to apply the requested changes to the entire intro, not to preserve any specific structure.",
+        user_prompt: buildIntroFullRewritePrompt({
           interpretive_frame: params.interpretive_frame,
-          previous_expressive: previousExpressive,
+          previous_script: script,
           editor_instructions: rewriteInstructions,
           episode_date: params.episode_date,
         }),
@@ -140,25 +139,8 @@ export async function runIntroForDate(params: {
         );
       }
 
-      const expressiveText = rewriteResult.text.trim();
-      console.log(`[intro] Rewrite returned: "${expressiveText}"`);
-      
-      const sentenceCount = countSentences(expressiveText);
-      if (sentenceCount !== 2) {
-        rewriteInstructions = [
-          `Return exactly two sentences (found ${sentenceCount}). No greeting, no scaffold, no sign-off.`,
-        ];
-        continue;
-      }
-
-      const scaffold = buildIntroScaffold({
-        episode_date: params.episode_date,
-        axis: params.interpretive_frame.dominant_contrast_axis.statement,
-        why_today_clause: params.interpretive_frame.why_today_clause,
-        sky_anchors: params.interpretive_frame.sky_anchors,
-      });
-
-      const revisedScript = `${scaffold}\n\n${expressiveText}`;
+      const revisedScript = rewriteResult.text.trim();
+      console.log(`[intro] Rewrite returned full script (${revisedScript.length} chars). New hash: ${createHash("md5").update(revisedScript).digest("hex").substring(0, 8)}`);
 
       // Hard check: ensure revision actually differs from previous attempt
       if (revisedScript.trim() === previousScript.trim()) {
@@ -169,7 +151,6 @@ export async function runIntroForDate(params: {
       }
 
       script = revisedScript;
-      console.log(`[intro] Updated script. New hash: ${createHash("md5").update(script).digest("hex").substring(0, 8)}`);
     }
 
     // Frame evaluator provides diagnostics (structural/grounding checks)
@@ -341,28 +322,9 @@ export async function runIntroForDate(params: {
   };
 }
 
-function extractExpressiveFromScript(script: string, episode_date: string): string {
-  // The intro structure is: greeting + scaffold (axis + why_today + anchors) + expressive (2 sentences)
-  // The expressive portion is always the last two sentences
-  
-  // Split by sentence boundaries (period, exclamation, question mark)
-  const sentences = script
-    .split(/(?<=[.!?])\s+/)
-    .map(s => s.trim())
-    .filter(s => s.length > 0);
-  
-  // The expressive sentences are the last two
-  if (sentences.length >= 2) {
-    return sentences.slice(-2).join(" ");
-  }
-  
-  // Fallback: return last sentence or empty
-  return sentences.length > 0 ? sentences[sentences.length - 1] : "";
-}
-
-function buildIntroExpressiveRewritePrompt(params: {
+function buildIntroFullRewritePrompt(params: {
   interpretive_frame: InterpretiveFrame;
-  previous_expressive: string;
+  previous_script: string;
   editor_instructions: string[];
   episode_date: string;
 }) {
@@ -383,15 +345,23 @@ function buildIntroExpressiveRewritePrompt(params: {
   return `
 ${PERMISSION_BLOCK}
 
-You are REVISING the two expressive sentences of the intro based on editor feedback. The scaffold (greeting + axis line + why-today clause) is locked and will be inserted by the system. You must NOT include the greeting, scaffold lines, or sign-off. Return EXACTLY TWO sentences, plain text only.
+You are REVISING the entire intro based on editor feedback. You may rewrite, remove, or replace any part of the previous draft, including the opening.
 
-Here are the previous two expressive sentences:
+Here is the previous full intro:
 ---
-${params.previous_expressive}
+${params.previous_script}
 ---
 
 Your editor has requested the following changes:
 ${instructions}
+
+CRITICAL: You must include:
+- A greeting that names the date (use: ${expectedIntroGreeting(params.episode_date)})
+- The dominant contrast axis meaning: "${params.interpretive_frame.dominant_contrast_axis.statement}" (but translate it into human experience, don't use the phrase verbatim)
+- The why-today clause: "${params.interpretive_frame.why_today_clause}"
+- At least one sky anchor from: ${params.interpretive_frame.sky_anchors.map((a) => `"${a.label}"`).join(", ")}
+- A causal sentence that uses the word "because"
+- Exactly two expressive sentences at the end
 
 Begin with an experiential entry point:
 how the day meets someone emotionally, physically, or situationally.
@@ -408,10 +378,6 @@ not with astronomical sequencing.
 Authoritative interpretive frame (context only, do not restate as scaffold):
 ${JSON.stringify(params.interpretive_frame, null, 2)}
 
-Required explicit references (must appear verbatim in your two sentences):
-- At least one sky anchor from: ${params.interpretive_frame.sky_anchors.map((a) => `"${a.label}"`).join(", ")}
-- Include a causal sentence that uses the word "because".
-
 Tone and intensity:
 - Today's intensity: ${intensity}.
 - Use tone/word choice to convey this; do NOT explain intensity, arcs, or phases.
@@ -419,9 +385,12 @@ ${cues.length > 0 ? `- Helpful tone cues: ${cues.join(", ")}.` : ""}
 
 Revision requirements:
 - Apply ALL editor instructions above.
+- You may rewrite the opening, middle, or ending - whatever needs fixing.
+- Remove any banned phrases or abstract scaffolding entirely.
 - Do not repeat language from the previous version.
 - Preserve what works; fix what doesn't.
 - Write in a conversational, grounded voice.
+- Return the COMPLETE revised intro, not just a portion.
 `.trim();
 }
 
