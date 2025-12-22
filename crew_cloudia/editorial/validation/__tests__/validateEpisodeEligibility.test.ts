@@ -43,17 +43,18 @@ const validSegments = (): SegmentPromptInput[] => [
 ];
 
 describe("validateEpisodeEligibility", () => {
-  it("happy path: all segments valid and warnings collected", () => {
+  it("happy path: all segments valid and warnings collected", async () => {
     const segments = validSegments();
-    const result = validateEpisodeEligibility("2025-01-01", segments);
+    const result = await validateEpisodeEligibility("2025-01-01", segments);
 
     expect(result.is_valid).toBe(true);
     expect(result.blocking_segments).toHaveLength(0);
     expect(result.segment_results).toHaveLength(segments.length);
     expect(result.warnings).toHaveLength(0);
+    expect(result.lexical_fatigue).toHaveLength(0);
   });
 
-  it("identifies a single blocking segment", () => {
+  it("identifies a single blocking segment", async () => {
     const segments = validSegments().map((segment) =>
       segment.segment_key === "reflection"
         ? {
@@ -66,7 +67,7 @@ describe("validateEpisodeEligibility", () => {
         : segment
     );
 
-    const result = validateEpisodeEligibility("2025-01-01", segments);
+    const result = await validateEpisodeEligibility("2025-01-01", segments);
 
     expect(result.is_valid).toBe(false);
     expect(result.blocking_segments).toHaveLength(1);
@@ -74,7 +75,7 @@ describe("validateEpisodeEligibility", () => {
     expect(result.blocking_segments[0].reasons).toContain("reflection must acknowledge uncertainty");
   });
 
-  it("aggregates multiple blocking segments in order", () => {
+  it("aggregates multiple blocking segments in order", async () => {
     const segments = validSegments().map((segment) => {
       if (segment.segment_key === "intro") {
         return {
@@ -91,7 +92,7 @@ describe("validateEpisodeEligibility", () => {
       return segment;
     });
 
-    const result = validateEpisodeEligibility("2025-01-01", segments);
+    const result = await validateEpisodeEligibility("2025-01-01", segments);
 
     expect(result.is_valid).toBe(false);
     expect(result.blocking_segments.map((b) => b.segment_key)).toStrictEqual(["intro", "closing"]);
@@ -100,7 +101,7 @@ describe("validateEpisodeEligibility", () => {
     );
   });
 
-  it("surfaces warnings without blocking the episode", () => {
+  it("surfaces warnings without blocking the episode", async () => {
     const warningConstraints = (() => {
       let reads = 0;
       return {
@@ -124,33 +125,33 @@ describe("validateEpisodeEligibility", () => {
         : segment
     );
 
-    const result = validateEpisodeEligibility("2025-01-01", segments);
+    const result = await validateEpisodeEligibility("2025-01-01", segments);
 
     expect(result.is_valid).toBe(true);
     expect(result.blocking_segments).toHaveLength(0);
     expect(result.warnings).toHaveLength(0);
   });
 
-  it("throws on duplicate segment keys", () => {
+  it("throws on duplicate segment keys", async () => {
     const segments = [
       baseSegment({ segment_key: "intro" }),
       baseSegment({ segment_key: "intro", intent: ["repeat"], included_tags: ["theme:dup"] }),
     ];
 
-    expect(() => validateEpisodeEligibility("2025-01-01", segments)).toThrow(/duplicate/i);
+    await expect(validateEpisodeEligibility("2025-01-01", segments)).rejects.toThrow(/duplicate/i);
   });
 
-  it("throws when no segments provided", () => {
-    expect(() => validateEpisodeEligibility("2025-01-01", [])).toThrow(/at least one segment/i);
+  it("throws when no segments provided", async () => {
+    await expect(validateEpisodeEligibility("2025-01-01", [])).rejects.toThrow(
+      /at least one segment/i
+    );
   });
 
-  it("is deterministic for identical inputs", () => {
+  it("is deterministic for identical inputs", async () => {
     const segments = validSegments();
-    const first = validateEpisodeEligibility("2025-01-01", segments);
-    const second = validateEpisodeEligibility("2025-01-01", segments);
+    const first = await validateEpisodeEligibility("2025-01-01", segments);
+    const second = await validateEpisodeEligibility("2025-01-01", segments);
 
     expect(first).toStrictEqual(second);
   });
 });
-
-

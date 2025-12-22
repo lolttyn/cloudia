@@ -95,6 +95,7 @@ const blocked_validation: EpisodeValidationResult = {
   episode_date: "2025-01-01",
   is_valid: false,
   segment_results: [],
+  lexical_fatigue: [],
   blocking_segments: [
     {
       segment_key: "intro",
@@ -108,6 +109,7 @@ const passing_validation: EpisodeValidationResult = {
   episode_date: "2025-01-01",
   is_valid: true,
   segment_results: [],
+  lexical_fatigue: [],
   blocking_segments: [],
   warnings: [],
 };
@@ -259,4 +261,3 @@ describe("generateSegmentDraft", () => {
     expect(script).toMatch(/(it’s|it's|don't|you might|you’ll|you'll)/i);
   });
 });
-

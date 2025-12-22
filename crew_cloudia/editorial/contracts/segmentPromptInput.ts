@@ -9,11 +9,13 @@ export type SegmentPromptInput = {
 
   continuity_notes?: string[]; // optional, scoped to segment
 
+  // Optional when performing lexical fatigue checks against an already-written script.
+  script_text?: string;
+
   constraints: {
     max_ideas: number; // required, >= 1
     must_acknowledge_uncertainty: boolean;
     ban_repetition: boolean;
   };
 };
-
 
