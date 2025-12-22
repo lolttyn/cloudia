@@ -403,10 +403,10 @@ Avoid summarizing the day as a concept.
 Authoritative interpretive frame:
 ${JSON.stringify(params.interpretive_frame, null, 2)}
 
-Required explicit references (must appear verbatim in the output):
-- "${params.interpretive_frame.dominant_contrast_axis.statement}"
-${params.interpretive_frame.sky_anchors.map((a) => `- "${a.label}"`).join("\n")}
-- "${params.interpretive_frame.why_today_clause}"
+Required references (express naturally, not verbatim):
+- The core tension: ${params.interpretive_frame.dominant_contrast_axis.primary} vs ${params.interpretive_frame.dominant_contrast_axis.counter} (express through lived experience, not as a named contrast)
+${params.interpretive_frame.sky_anchors.map((a) => `- Sky anchor: ${a.label} (reference naturally, body + sign)`).join("\n")}
+- Why today matters: ${params.interpretive_frame.why_today_clause} (express naturally, not verbatim)
 
 Revision requirements:
 - Apply ALL editor instructions above.

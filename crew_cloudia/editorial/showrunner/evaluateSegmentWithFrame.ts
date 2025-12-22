@@ -128,14 +128,24 @@ export function evaluateSegmentWithFrame(params: {
     }
   }
 
-  // Hard gate: meaning fidelity (axis present, no substitution)
-  if (!scriptLower.includes(frame.dominant_contrast_axis.statement.toLowerCase())) {
+  // Phase D: Semantic check for axis meaning (not verbatim requirement)
+  // The segment should orient toward the day's core tension, but can express it naturally
+  const axisStatement = frame.dominant_contrast_axis.statement.toLowerCase();
+  const axisPrimary = frame.dominant_contrast_axis.primary.toLowerCase();
+  const axisCounter = frame.dominant_contrast_axis.counter.toLowerCase();
+  
+  // Check if the meaning is present semantically (either primary or counter concept appears)
+  const hasAxisMeaning = scriptLower.includes(axisPrimary) || 
+                         scriptLower.includes(axisCounter) ||
+                         scriptLower.includes(axisStatement);
+  
+  if (!hasAxisMeaning) {
+    // Downgrade to warning, not blocking - allow natural expression
     notes.push(
-      `Meaning fidelity: include the dominant axis "${frame.dominant_contrast_axis.statement}".`
+      `Meaning fidelity: the segment should orient toward the day's core tension (${axisPrimary} vs ${axisCounter}), but can express it in natural language.`
     );
-    rewrite_instructions.push(
-      `Insert the dominant axis verbatim: "${frame.dominant_contrast_axis.statement}".`
-    );
+    // Do NOT add to blocking_reasons - this is now a soft requirement
+    // Do NOT add rewrite_instructions that require verbatim insertion
   }
 
   // Hard gate: astrological grounding (sky anchors + because + anchor tie)

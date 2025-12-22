@@ -133,10 +133,31 @@ const addScore = (
 };
 
 function enforceHardBans(normalized: string, blocking: Set<string>): void {
+  // Phase D: Only block EXACT banned phrases, not semantic paraphrases
+  // Use exact phrase matching to avoid false positives from similar concepts
   for (const phrase of HARD_BANNED_PHRASES) {
     const normalizedPhrase = normalizeText(phrase);
-    if (normalized.includes(normalizedPhrase)) {
-      blocking.add(`HARD_BANNED_LANGUAGE:${normalizedPhrase}`);
+    
+    // Check for exact phrase match (all words in sequence)
+    // This prevents matching partial phrases or paraphrases
+    // Use word boundaries to ensure we match the complete phrase, not substrings
+    const words = normalizedPhrase.split(/\s+/).filter(Boolean);
+    if (words.length > 1) {
+      // Multi-word phrase: require exact sequence with word boundaries
+      // Escape special regex characters in each word
+      const escapedWords = words.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+      const phrasePattern = `\\b${escapedWords.join("\\s+")}\\b`;
+      const regex = new RegExp(phrasePattern, "i");
+      if (regex.test(normalized)) {
+        blocking.add(`HARD_BANNED_LANGUAGE:${normalizedPhrase}`);
+      }
+    } else {
+      // Single word: use word boundary to avoid partial matches
+      const escapedWord = normalizedPhrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(`\\b${escapedWord}\\b`, "i");
+      if (regex.test(normalized)) {
+        blocking.add(`HARD_BANNED_LANGUAGE:${normalizedPhrase}`);
+      }
     }
   }
 }

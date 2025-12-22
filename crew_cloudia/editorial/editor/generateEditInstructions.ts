@@ -22,9 +22,20 @@ export function generateEditInstructions(
         const bannedPhrase = reason.includes(":")
           ? reason.split(":")[1]?.trim()
           : "abstract rubric scaffolding";
-        instructions.push(
-          `Remove "${bannedPhrase}" and any similar abstract framing. Replace it with how the day feels or shows up in real life.`
-        );
+        
+        // Phase D: Give clear alternatives, not just prohibitions
+        if (segmentKey === "main_themes") {
+          instructions.push(
+            `Delete the banned phrase "${bannedPhrase}" entirely. ` +
+            `Express the idea through a lived experience, choice, or action—not a concept or contrast. ` +
+            `For example: "step back from details" or "zoom out to what matters" or "slow down and notice what's actually important" ` +
+            `instead of naming it as a contrast or theme.`
+          );
+        } else {
+          instructions.push(
+            `Remove "${bannedPhrase}" and any similar abstract framing. Replace it with how the day feels or shows up in real life.`
+          );
+        }
         break;
 
       case reason === "SYSTEM_LEVEL_EXPLANATION":
