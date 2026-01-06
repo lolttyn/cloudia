@@ -28,23 +28,47 @@
 ### Core Meaning Fields
 
 #### `dominant_contrast_axis`
-- **Legacy Source:** `pickAxis(moonEntry, canon)` in `crew_cloudia/interpretation/runInterpreter.ts`
-- **Current Implementation:** `deriveDominantAxis()` in `deriveDailyInterpretation.ts` (placeholder)
-- **Fix Required:** Port `pickAxis()` logic to use `DailyFacts` + `SkyState` instead of `SkyFeatures` + canon entries
+- **Legacy Source:** `pickAxis(moonEntry, canon)` - simply returns `moonEntry.dominant_axis` after validation
+- **Legacy Logic:** 
+  ```ts
+  const axis = moonEntry.dominant_axis;
+  ensureAxisAllowed(axis, canon);
+  return axis;
+  ```
+- **Current Implementation:** `deriveDominantAxis()` - placeholder using first primary transit
+- **Fix Required:** 
+  1. Load moon sign from `SkyState.bodies.moon.sign`
+  2. Load moon entry from interpretive canon (`canon.moon_signs[moonSign]`)
+  3. Return `moonEntry.dominant_axis` directly
+  4. Validate with `ensureAxisAllowed()` if that function exists
 - **Status:** ❌ Placeholder - needs porting
 - **Function to Fix:** `deriveDominantAxis()` in `deriveDailyInterpretation.ts`
+- **Dependencies:** Need access to interpretive canon JSON
 
 #### `why_today` (array)
 - **Legacy Source:** `pickWhyToday(features, moonEntry, phaseEntry, aspect, canon.why_today_templates)` 
+- **Legacy Logic:**
+  1. Check for ingress (Moon/Sun) in `features.highlights` with `INGRESS_SENSITIVE_BODIES`
+  2. If ingress found:
+     - If `window === "next_24h"` and `to_sign !== currentSign`: "enters X within next 24h"
+     - Else: "after entering from X within past 24h"
+     - Append `templates.ingress`
+  3. Else if aspect found:
+     - "Today the Sun and Moon perfect a {aspect}, so {primary} outweighs {counter}"
+     - Append `templates.aspect`
+  4. Else:
+     - `phaseEntry.why_today`
+     - Append `templates.phase`
+  5. Return `reasons.slice(0, 4)`
 - **Current Implementation:** `deriveWhyToday()` - simple transit listing
-- **Fix Required:** Port logic that:
-  - Checks for ingress (Moon/Sun) with window detection
-  - Checks for Sun-Moon aspects
-  - Falls back to lunar phase templates
-  - Uses canon templates (`why_today_templates`)
+- **Fix Required:** 
+  1. Detect ingress from `DailyFacts.background_conditions` (kind === "ingress")
+  2. Detect Sun-Moon aspect from `SkyState.aspects` (filter body_a/body_b for sun/moon)
+  3. Load moon/phase entries from canon
+  4. Port exact logic above
 - **Status:** ❌ Placeholder - missing ingress/aspect/phase logic
 - **Function to Fix:** `deriveWhyToday()` in `deriveDailyInterpretation.ts`
-- **Dependencies:** Need to detect ingress from `DailyFacts.background_conditions` or `SkyState`
+- **Dependencies:** Need ingress detection, aspect detection, canon entries, templates
 
 #### `why_today_clause` (string)
 - **Legacy Source:** First element of `why_today` array
@@ -55,10 +79,16 @@
 
 #### `tone_descriptor`
 - **Legacy Source:** `pickTone(moonEntry, phaseEntry, aspect, canon)`
+- **Legacy Logic:**
+  1. Start with `[moonEntry.tone]`
+  2. If aspect exists: add `canon.aspects.sun_moon[aspect.aspect]?.tone` if present
+  3. If `phaseEntry.why_today.includes("peaks")` and tone doesn't include "illuminated": add "illuminated"
+  4. Return `parts.filter(Boolean).join("; ")`
 - **Current Implementation:** Hardcoded `"balanced"`
-- **Fix Required:** Port `pickTone()` logic
+- **Fix Required:** Port exact logic above
 - **Status:** ❌ Placeholder
 - **Function to Fix:** Add `deriveToneDescriptor()` in `deriveDailyInterpretation.ts`
+- **Dependencies:** Need moon/phase entries, aspect detection, canon.aspects
 
 #### `supporting_themes` (array)
 - **Legacy Source:** `dedupe([...moonEntry.supporting_themes, ...(sunEntry.modulates ?? [])]).slice(0, 8)`
@@ -74,11 +104,29 @@
 
 #### `sky_anchors` (array)
 - **Legacy Source:** `buildAnchors(features.sun.sign, features.moon.sign, sunEntry, moonEntry)`
+- **Legacy Logic:**
+  ```ts
+  return [
+    {
+      type: "moon_sign",
+      label: `Moon in ${moonSign}`,
+      meaning: moonEntry.core_meanings.join(", "),
+    },
+    {
+      type: "sun_sign",
+      label: `Sun in ${sunSign}`,
+      meaning: sunEntry.core_meanings.join(", "),
+    },
+  ];
+  ```
 - **Current Implementation:** Simple `{body, sign, description}` from `SkyState`
-- **Fix Required:** Port `buildAnchors()` which creates `{type, label, meaning}` format
+- **Fix Required:** 
+  1. Load sun/moon entries from canon
+  2. Transform to `{type, label, meaning}` format
+  3. Order: moon_sign first, then sun_sign
 - **Status:** ❌ Structure mismatch - needs transformation
 - **Function to Fix:** `transformSkyAnchors()` in `transformToInterpretiveFrame.ts`
-- **Note:** Legacy format is `{type: "sun_sign"|"moon_sign"|"major_aspect", label: string, meaning: string}`
+- **Dependencies:** Need sun/moon canon entries
 
 ---
 
@@ -86,11 +134,17 @@
 
 #### `causal_logic` (array)
 - **Legacy Source:** `buildCausalLogic(sunSign, moonSign, sunEntry, moonEntry, aspect, canon)`
+- **Legacy Logic:**
+  1. Always include:
+     - `"Because the Moon is in {moonSign}, {core_meanings[0]} and {core_meanings[1]} take precedence."`
+     - `"Because the Sun is in {sunSign}, the day stays framed by {core_meanings.join(' and ')}."`
+  2. If aspect exists:
+     - `"Because the Sun and Moon form a {aspect}, {canon.aspects.sun_moon[aspect].meaning}."`
 - **Current Implementation:** Simple transit descriptions
-- **Fix Required:** Port `buildCausalLogic()` which uses canon entries and aspect info
+- **Fix Required:** Port exact logic above
 - **Status:** ❌ Placeholder
 - **Function to Fix:** `deriveCausalLogic()` in `deriveDailyInterpretation.ts`
-- **Dependencies:** Need canon entries and aspect detection
+- **Dependencies:** Need sun/moon canon entries, aspect detection, canon.aspects
 
 ---
 
@@ -98,11 +152,19 @@
 
 #### `signals` (array)
 - **Legacy Source:** `deriveSignalsFromSkyFeatures(features)` 
-- **Current Implementation:** Simple mapping from `interpreter_transits_v1`
-- **Fix Required:** Port `deriveSignalsFromSkyFeatures()` logic
-- **Status:** ❌ Structure likely different
+- **Legacy Logic:**
+  1. Sun in sign: `{signal_key: sunInSignKey(sign), kind: "planet_in_sign", salience: 0.35, source: "sky_features", meta: {...}}`
+  2. Moon in sign: `{signal_key: moonInSignKey(sign), kind: "planet_in_sign", salience: 0.3, source: "sky_features", meta: {...}}`
+  3. Moon phase: `{signal_key: moonPhaseKey(phase), kind: "lunar_phase", salience: moonPhaseSalience(phase), source: "sky_features", meta: {...}}`
+  4. Lunation (if new/full): `{signal_key: newMoonKey/fullMoonKey(sign), kind: "lunation", salience: 0.95, source: "sky_features", meta: {...}}`
+  5. Aspects from highlights: `{signal_key: sunMoonAspectKey(aspect), kind: "aspect", salience: aspectSalience(orb_deg), source: "sky_features", orb_deg, meta: {...}}`
+  6. Ingresses from highlights: `{signal_key: ingressKey(to_sign, window), kind: "ingress", salience: 0.2, source: "sky_features", meta: {...}}`
+  7. Sort by salience (desc), then signal_key (asc)
+- **Current Implementation:** Simple mapping from `interpreter_transits_v1` - wrong structure
+- **Fix Required:** Port entire `deriveSignalsFromSkyFeatures()` logic
+- **Status:** ❌ Completely different structure
 - **Function to Fix:** `deriveDailyInterpretation()` - signals derivation
-- **Note:** Legacy signals have `source: "sky_features"` and specific structure
+- **Dependencies:** Need signal key functions, salience calculations, ingress detection
 
 #### Signal Ordering
 - **Issue:** Arrays from maps/sets may have non-deterministic order
@@ -116,11 +178,18 @@
 
 #### `interpretation_bundles`
 - **Legacy Source:** `selectInterpretationBundles({ signals, bundleIndex })`
-- **Current Implementation:** `transformInterpretationBundles()` - simplified lookup
-- **Fix Required:** Port `selectInterpretationBundles()` logic exactly
-- **Status:** ❌ Simplified - needs full port
+- **Legacy Logic:**
+  1. For each signal, get bundles from `bundleIndex.get(signal.signal_key)`
+  2. Choose bundle: sort by version (desc), check `orb_max_degrees` constraint if present
+  3. Categorize: `lunar_phase` → phaseBundles, `planet_in_sign` → placementBundles, else → acceptedBundles
+  4. Combine: `[...phaseBundles, ...placementBundles, ...acceptedBundles]`
+  5. First 2 → primary, 3rd → secondary, rest → suppressed with reason "over_cap"
+  6. Suppress bundles that fail orb constraints with reason "constraint_mismatch"
+- **Current Implementation:** `transformInterpretationBundles()` - simplified lookup (wrong)
+- **Fix Required:** Port entire `selectInterpretationBundles()` logic
+- **Status:** ❌ Completely wrong - needs full port
 - **Function to Fix:** `transformInterpretationBundles()` in `transformToInterpretiveFrame.ts`
-- **Note:** Legacy returns `{primary, secondary, suppressed}` with full bundles
+- **Dependencies:** Need signal structure to match legacy (see signals fix above)
 
 #### Bundle Ordering
 - **Issue:** Bundle arrays may have non-deterministic order
@@ -133,12 +202,24 @@
 ### Confidence
 
 #### `confidence_level`
-- **Legacy Source:** `confidenceFrom(aspect)` - checks if aspect exists
-- **Current Implementation:** `deriveConfidenceLevel()` - counts primary/secondary transits
-- **Fix Required:** Port `confidenceFrom()` logic (aspect-based, not transit-count-based)
-- **Status:** ❌ Different logic
+- **Legacy Source:** `confidenceFrom(aspect)` 
+- **Legacy Logic:**
+  ```ts
+  if (aspect?.type === "aspect") {
+    if (aspect.orb_deg <= 2) return "high";
+    if (aspect.orb_deg <= 4) return "medium";
+    return "low";
+  }
+  return "medium";
+  ```
+- **Current Implementation:** `deriveConfidenceLevel()` - counts primary/secondary transits (wrong)
+- **Fix Required:** 
+  1. Detect Sun-Moon aspect from `SkyState.aspects`
+  2. Apply orb-based logic above
+  3. Default to "medium" if no aspect
+- **Status:** ❌ Completely different logic
 - **Function to Fix:** `deriveConfidenceLevel()` in `deriveDailyInterpretation.ts`
-- **Note:** Legacy checks for aspect presence, not transit counts
+- **Dependencies:** Need Sun-Moon aspect detection
 
 ---
 
