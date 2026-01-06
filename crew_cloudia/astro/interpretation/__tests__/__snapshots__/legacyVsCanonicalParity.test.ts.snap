@@ -36,6 +36,8 @@ exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-str
       "meta": {
         "body": "sun",
         "sign": "capricorn",
+        "temporal_label": undefined,
+        "temporal_window": undefined,
       },
       "salience": 0.35,
       "signal_key": "sun_in_capricorn",
@@ -86,8 +88,8 @@ exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-str
           "Moon",
         ],
       },
-      "orb_deg": 4.9268,
-      "salience": 0.17886666666666662,
+      "orb_deg": 4.93,
+      "salience": 0.17833333333333334,
       "signal_key": "sun_moon_sextile",
       "source": "sky_features",
     },
@@ -543,16 +545,12 @@ exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-str
 exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-strict) > captures both outputs for comparison without requiring equality > legacy-vs-canonical-diff-summary 1`] = `
 {
   "sample_differences": [
-    "signals[0].meta.temporal_window: missing in canonical",
-    "signals[0].meta.temporal_label: missing in canonical",
-    "signals[4].salience: 0.17833333333333334 !== 0.17886666666666662",
-    "signals[4].orb_deg: 4.93 !== 4.9268",
     "interpretation_bundles.primary: array length mismatch (2 vs 0)",
     "interpretation_bundles.primary[0]: missing in canonical",
     "interpretation_bundles.primary[1]: missing in canonical",
     "interpretation_bundles.secondary: array length mismatch (1 vs 0)",
     "interpretation_bundles.secondary[0]: missing in canonical",
   ],
-  "total_differences": 9,
+  "total_differences": 5,
 }
 `;

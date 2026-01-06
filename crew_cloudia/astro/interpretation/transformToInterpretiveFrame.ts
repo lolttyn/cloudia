@@ -130,43 +130,17 @@ function transformSignals(
 }
 
 /**
- * Transform interpretation bundles from refs to full bundles
+ * Pass through interpretation bundles (already full bundles, not refs)
  */
 function transformInterpretationBundles(
-  bundleRefs: DailyInterpretation["interpretation_bundles"]
+  bundles: DailyInterpretation["interpretation_bundles"]
 ): InterpretiveFrame["interpretation_bundles"] {
-  const bundleIndex = loadInterpretationBundles();
-  
-  // Load full bundles from refs
-  const primary: InterpretiveFrame["interpretation_bundles"]["primary"] = [];
-  const secondary: InterpretiveFrame["interpretation_bundles"]["secondary"] = [];
-  const suppressed: InterpretiveFrame["interpretation_bundles"]["suppressed"] = [];
-  
-  // Map bundle refs to full bundles
-  for (const ref of bundleRefs.primary) {
-    // Find bundle in index
-    // This is simplified - actual lookup logic may be more complex
-    const bundles = bundleIndex.get(ref.signal_key) || [];
-    if (bundles.length > 0) {
-      primary.push(bundles[0]); // Take first matching bundle
-    }
-  }
-  
-  for (const ref of bundleRefs.secondary) {
-    const bundles = bundleIndex.get(ref.signal_key) || [];
-    if (bundles.length > 0) {
-      secondary.push(bundles[0]);
-    }
-  }
-  
-  for (const ref of bundleRefs.background) {
-    suppressed.push({
-      bundle_slug: ref.bundle_slug,
-      reason: "background salience",
-    });
-  }
-  
-  return { primary, secondary, suppressed };
+  // Bundles are already in the correct format (full InterpretationBundle objects)
+  return {
+    primary: bundles.primary,
+    secondary: bundles.secondary,
+    suppressed: bundles.suppressed,
+  };
 }
 
 /**

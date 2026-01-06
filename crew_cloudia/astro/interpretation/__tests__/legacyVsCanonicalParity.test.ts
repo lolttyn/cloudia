@@ -121,17 +121,17 @@ describe("Legacy vs Canonical Parity", () => {
 
   describe("Strict equivalence gate (gated until parity)", () => {
     /**
-     * This test is SKIPPED until meaning parity is achieved.
+     * This test runs when CLOUDIA_STRICT_PARITY=1 is set.
      * 
      * To enable:
-     * 1. Remove .skip or change to .todo
-     * 2. Ensure deriveDailyInterpretation() produces equivalent meaning to legacy
-     * 3. Ensure transformToInterpretiveFrame() preserves all fields correctly
-     * 4. Run and verify it passes
+     * CLOUDIA_STRICT_PARITY=1 node -r dotenv/config ./node_modules/.bin/vitest run ...
      * 
      * Once this passes, it becomes the "safe to switch production" gate.
      */
-    it.skip("legacy vs canonical strict equivalence (parity gate)", async () => {
+    const STRICT = process.env.CLOUDIA_STRICT_PARITY === "1";
+    const maybeIt = STRICT ? it : it.skip;
+
+    maybeIt("legacy vs canonical strict equivalence (parity gate)", async () => {
       // Run legacy path
       const legacy = await runInterpreter({ date: TEST_DATE });
 
@@ -140,22 +140,6 @@ describe("Legacy vs Canonical Parity", () => {
 
       // Strict deep equality check
       // This will fail until parity is achieved
-      expect(canonical).toEqual(legacy);
-    });
-
-    /**
-     * Alternative: Environment-gated version
-     * Uncomment and use this if you want to enable via env var instead of .skip
-     */
-    it.todo("legacy vs canonical strict equivalence (enable with CLOUDIA_STRICT_PARITY=1)", async () => {
-      if (!process.env.CLOUDIA_STRICT_PARITY) {
-        console.log("[SKIP] Strict parity test requires CLOUDIA_STRICT_PARITY=1");
-        return;
-      }
-
-      const legacy = await runInterpreter({ date: TEST_DATE });
-      const canonical = await runCanonicalMeaningToFrameForTest(TEST_DATE);
-
       expect(canonical).toEqual(legacy);
     });
   });

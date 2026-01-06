@@ -27,6 +27,8 @@ import {
   fullMoonKey,
   normalizeSign,
 } from "../../interpretation/signals/signalKeys.js";
+import { loadInterpretationBundles } from "../../interpretation/bundles/loadInterpretationBundles.js";
+import { selectInterpretationBundles } from "../../interpretation/bundles/selectInterpretationBundles.js";
 type InterpretiveCanon = typeof interpretiveCanon;
 
 // Minimal SkyFeatures type for window logic (matches legacy)
@@ -584,32 +586,34 @@ function deriveSignalsFromSkyFeatures(
   ) as Extract<SkyAspect, { type: "ingress"; body: "Sun" }> | undefined;
 
   // Sun in sign
+  // Always include temporal_window and temporal_label (legacy always includes them)
   signals.push({
     signal_key: sunInSignKey(features.sun.sign),
     kind: "planet_in_sign",
     salience: 0.35,
     source: "sky_features",
-    meta: compact({
+    meta: {
       sign: features.sun.sign.toLowerCase(),
       body: "sun",
       temporal_window: sunIngressHighlight?.window,
       temporal_label: sunIngressHighlight ? temporalLabelFromWindow(sunIngressHighlight.window) : undefined,
-    }),
+    },
   });
 
   // Moon in sign
+  // Always include temporal_window and temporal_label (legacy always includes them)
   signals.push({
     signal_key: moonInSignKey(features.moon.sign),
     kind: "planet_in_sign",
     salience: 0.3,
     source: "sky_features",
-    meta: compact({
+    meta: {
       sign: features.moon.sign.toLowerCase(),
       body: "moon",
       phase: features.moon.phase,
       temporal_window: moonIngressHighlight?.window,
       temporal_label: moonIngressHighlight ? temporalLabelFromWindow(moonIngressHighlight.window) : undefined,
-    }),
+    },
   });
 
   // Moon phase
@@ -644,6 +648,7 @@ function deriveSignalsFromSkyFeatures(
 
   for (const highlight of features.highlights) {
     if (highlight.type === "aspect") {
+      // orb_deg is already rounded to 2 decimals in buildSkyFeaturesWithHighlights
       signals.push({
         signal_key: sunMoonAspectKey(highlight.aspect),
         kind: "aspect",
@@ -768,10 +773,12 @@ async function buildSkyFeaturesWithHighlights(
       aspectType === "trine" ||
       aspectType === "opposition"
     ) {
+      // Round orb to 2 decimals first (legacy behavior)
+      const orbRounded = Number((sunMoonAspect.orb_deg || 0).toFixed(2));
       highlights.push({
         type: "aspect",
         aspect: aspectType,
-        orb_deg: sunMoonAspect.orb_deg || 0,
+        orb_deg: orbRounded,
       });
     }
   }
@@ -979,34 +986,18 @@ export async function deriveDailyInterpretation(
   );
   const signals = deriveSignalsFromSkyFeatures(featuresWithHighlights);
   
-  // Port legacy bundle selection
-  const { loadInterpretationBundles } = await import("../../interpretation/bundles/loadInterpretationBundles.js");
-  const { selectInterpretationBundles } = await import("../../interpretation/bundles/selectInterpretationBundles.js");
+  // Port legacy bundle selection - output full bundles for strict parity
   const bundleIndex = loadInterpretationBundles();
   const bundleSelection = selectInterpretationBundles({
     signals,
     bundleIndex,
   });
   
-  // Convert InterpretationBundle[] to InterpretationBundleRef[]
-  // Bundle has: id (optional UUID), slug (required)
-  // Schema expects: bundle_id (required string), bundle_slug (required string)
+  // Store full bundles directly (matches legacy InterpretiveFrame format)
   const interpretation_bundles = {
-    primary: bundleSelection.primary.map((bundle) => ({
-      bundle_id: bundle.id || bundle.slug, // use id if available, else slug
-      bundle_slug: bundle.slug,
-      salience_class: "primary" as const,
-    })),
-    secondary: bundleSelection.secondary.map((bundle) => ({
-      bundle_id: bundle.id || bundle.slug,
-      bundle_slug: bundle.slug,
-      salience_class: "secondary" as const,
-    })),
-    background: bundleSelection.suppressed.map((suppressed) => ({
-      bundle_id: suppressed.bundle_slug, // suppressed only has bundle_slug
-      bundle_slug: suppressed.bundle_slug,
-      salience_class: "background" as const,
-    })),
+    primary: bundleSelection.primary,
+    secondary: bundleSelection.secondary,
+    suppressed: bundleSelection.suppressed,
   };
   
   // Port legacy confidenceFrom() - based on aspect orb
