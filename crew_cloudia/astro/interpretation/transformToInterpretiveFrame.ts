@@ -40,21 +40,63 @@ function transformSkyAnchors(
 
 /**
  * Transform signals from DailyInterpretation format to InterpretiveFrame format
+ * 
+ * For Phase 5.2 scaffolding: produces minimal valid signals.
+ * Real signal derivation will be ported from deriveSignalsFromSkyFeatures() later.
  */
 function transformSignals(
   signals: DailyInterpretation["signals"]
 ): InterpretiveFrame["signals"] {
-  // Convert to InterpretiveFrame signal format
-  // The structure should match InterpretationSignalSchema
-  return signals.map((signal): InterpretationSignal => {
-    // Return in the format expected by InterpretiveFrame
-    // This is a placeholder - actual structure depends on InterpretationSignalSchema
+  // Map string salience to numeric salience
+  const salienceMap: Record<string, number> = {
+    primary: 0.7,
+    secondary: 0.5,
+    background: 0.3,
+  };
+  
+  // Infer kind from signal_key pattern, default to "planet_in_sign"
+  const inferKind = (signalKey: string): InterpretationSignal["kind"] => {
+    if (signalKey.includes("_aspect_") || signalKey.includes("aspect")) {
+      return "aspect";
+    }
+    if (signalKey.includes("lunar_phase") || signalKey.includes("moon_phase")) {
+      return "lunar_phase";
+    }
+    if (signalKey.includes("ingress")) {
+      return "ingress";
+    }
+    if (signalKey.includes("new_moon") || signalKey.includes("full_moon")) {
+      return "lunation";
+    }
+    return "planet_in_sign";
+  };
+  
+  // Transform signals to InterpretiveFrame format
+  const transformed = signals.map((signal): InterpretationSignal => {
+    const numericSalience = salienceMap[signal.salience] ?? 0.3;
+    const kind = inferKind(signal.signal_key);
+    
     return {
       signal_key: signal.signal_key,
-      salience: signal.salience,
-      // Add other required fields as needed
-    } as InterpretationSignal;
+      kind,
+      salience: numericSalience,
+      source: "sky_features" as const,
+    };
   });
+  
+  // Schema requires min(1) signals, so provide placeholder if empty
+  if (transformed.length === 0) {
+    return [
+      {
+        signal_key: "placeholder_lunar_phase",
+        kind: "lunar_phase" as const,
+        salience: 0.3,
+        source: "sky_features" as const,
+      },
+    ];
+  }
+  
+  return transformed;
 }
 
 /**
