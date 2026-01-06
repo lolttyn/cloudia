@@ -12,6 +12,7 @@ import {
   interpretation_high_confidence_basic,
   interpretation_low_confidence_with_repeats,
   interpretation_lunation_special,
+  interpretation_lunation_full_moon_cancer,
   memory_with_recent_theme_repetition,
 } from "./fixtures.js";
 
@@ -203,5 +204,47 @@ describe("planEpisodeEditorial", () => {
       ["integrate_and_reflect"],
       ["close_with_action"],
     ]);
+  });
+
+  it("includes both generic phase tag and overlay tag for full moon in Cancer", () => {
+    const plan = planEpisodeEditorial({
+      interpretation: interpretation_lunation_full_moon_cancer,
+      memory: { recent_tags: [] },
+    });
+
+    const intro = plan.segments.find((s) => s.segment_key === "intro");
+    const main = plan.segments.find((s) => s.segment_key === "main_themes");
+
+    // Generic phase tag must headline on lunation days (like Sagittarius test)
+    expect(intro?.included_tags).toContain("moon_phase_full");
+    expect(main?.included_tags).toContain("moon_phase_full");
+    
+    // Overlay tag should exist somewhere in the plan (selection logic determines which segments)
+    const allTags = plan.segments.flatMap((s) => s.included_tags);
+    expect(allTags).toContain("full_moon_in_cancer");
+  });
+
+  it("ensures generic phase tag is present when overlay lunation tag exists (invariant)", () => {
+    // Test with new moon in Sagittarius
+    const planNew = planEpisodeEditorial({
+      interpretation: interpretation_lunation_special,
+      memory: { recent_tags: [] },
+    });
+    const allTagsNew = planNew.segments.flatMap((s) => s.included_tags);
+    const hasNewMoonOverlay = allTagsNew.some((tag) => tag.startsWith("new_moon_in_"));
+    if (hasNewMoonOverlay) {
+      expect(allTagsNew).toContain("moon_phase_new");
+    }
+
+    // Test with full moon in Cancer
+    const planFull = planEpisodeEditorial({
+      interpretation: interpretation_lunation_full_moon_cancer,
+      memory: { recent_tags: [] },
+    });
+    const allTagsFull = planFull.segments.flatMap((s) => s.included_tags);
+    const hasFullMoonOverlay = allTagsFull.some((tag) => tag.startsWith("full_moon_in_"));
+    if (hasFullMoonOverlay) {
+      expect(allTagsFull).toContain("moon_phase_full");
+    }
   });
 });

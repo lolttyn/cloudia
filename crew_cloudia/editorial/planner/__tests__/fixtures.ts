@@ -106,6 +106,42 @@ export const interpretation_lunation_special: DailyInterpretation = {
   ],
 };
 
+export const interpretation_lunation_full_moon_cancer: DailyInterpretation = {
+  episode_date: "2025-07-10",
+  confidence_level: "high",
+  lunation: { kind: "full", sign: "cancer", signal_key: "full_moon_in_cancer" },
+  tags: [
+    {
+      tag: "moon_phase_full",
+      field: "theme",
+      salience: "primary",
+      speakability: "must_say",
+      rule_ids: ["rule.lunar_phase.full"],
+    },
+    {
+      tag: "full_moon_in_cancer",
+      field: "theme",
+      salience: "primary",
+      speakability: "can_say",
+      rule_ids: ["rule.lunation.primary"],
+    },
+    {
+      tag: "supporting-note",
+      field: "advice",
+      salience: "secondary",
+      speakability: "can_say",
+      rule_ids: ["rule.supporting.note"],
+    },
+    {
+      tag: "background-thread",
+      field: "theme",
+      salience: "background",
+      speakability: "can_say",
+      rule_ids: ["rule.background.thread"],
+    }
+  ],
+};
+
 export const memory_with_recent_theme_repetition: RecentEditorialMemory = {
   recent_tags: [
     { tag: "repeat-must", last_seen_date: "2025-02-10", segment_key: "intro" },
