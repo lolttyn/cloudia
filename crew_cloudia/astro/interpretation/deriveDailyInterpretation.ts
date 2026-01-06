@@ -13,6 +13,8 @@ import {
   DailyInterpretationSchema,
   type DailyInterpretation,
 } from "./schema/dailyInterpretation.schema.js";
+import interpretiveCanon from "../../interpretation/canon/interpretiveCanon_v1.json" assert { type: "json" };
+type InterpretiveCanon = typeof interpretiveCanon;
 
 /**
  * Derive dominant contrast axis from sky state and daily facts
@@ -171,7 +173,7 @@ export function deriveDailyInterpretation(
   }
   
   // Derive core meaning fields
-  const dominant_contrast_axis = deriveDominantAxis(inputs);
+  const dominant_contrast_axis = deriveDominantAxis(inputs, interpretiveCanon);
   const why_today = deriveWhyToday(inputs);
   const why_today_clause = why_today[0] || "Today's configuration offers unique opportunities";
   const sky_anchors = deriveSkyAnchors(inputs);
