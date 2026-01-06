@@ -23,32 +23,38 @@ type InterpretiveCanon = typeof interpretiveCanon;
  * the axis from the primary transits and planetary positions.
  */
 function deriveDominantAxis(
-  inputs: InterpretationInputs
+  inputs: InterpretationInputs,
+  canon: InterpretiveCanon = interpretiveCanon
 ): DailyInterpretation["dominant_contrast_axis"] {
-  const { sky_state, daily_facts } = inputs;
+  const { sky_state } = inputs;
   
-  // Placeholder: derive from primary transits
-  // TODO: Implement actual axis derivation logic
-  const primaryTransits = daily_facts.interpreter_transits_v1.filter(
-    (t) => t.salience === "primary"
-  );
-  
-  if (primaryTransits.length > 0) {
-    const first = primaryTransits[0];
-    // Placeholder logic - should be more sophisticated
+  // Get moon sign (titlecase to match canon keys)
+  const moonSignRaw = sky_state.bodies.moon?.sign;
+  if (!moonSignRaw) {
+    // Fallback if moon sign missing (shouldn't happen)
     return {
-      statement: `${first.planet} in ${first.sign} over background conditions`,
-      primary: `${first.planet} in ${first.sign}`,
-      counter: "background conditions",
+      statement: "stability over change",
+      primary: "stability",
+      counter: "change",
     };
   }
   
-  // Fallback
-  return {
-    statement: "stability over change",
-    primary: "stability",
-    counter: "change",
-  };
+  // Titlecase sign name to match canon keys (e.g., "Pisces", "Capricorn")
+  const moonSign = moonSignRaw.charAt(0).toUpperCase() + moonSignRaw.slice(1).toLowerCase();
+  
+  // Load moon entry from canon
+  const moonEntry = canon.moon_signs[moonSign];
+  if (!moonEntry || !moonEntry.dominant_axis) {
+    // Fallback if canon entry missing
+    return {
+      statement: "stability over change",
+      primary: "stability",
+      counter: "change",
+    };
+  }
+  
+  // Return moon entry's dominant axis (matches legacy pickAxis behavior)
+  return moonEntry.dominant_axis;
 }
 
 /**
