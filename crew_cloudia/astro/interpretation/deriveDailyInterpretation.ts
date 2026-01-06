@@ -58,25 +58,114 @@ function deriveDominantAxis(
 }
 
 /**
- * Derive why_today from primary transits and conditions
+ * Derive why_today from ingress/aspect/phase priority
+ * 
+ * Ports legacy pickWhyToday() logic exactly:
+ * 1. Check for ingress (Moon/Sun) - highest priority
+ * 2. Check for Sun-Moon aspect - second priority
+ * 3. Fallback to lunar phase - third priority
  */
-function deriveWhyToday(inputs: InterpretationInputs): string[] {
-  const { daily_facts } = inputs;
-  const primaryTransits = daily_facts.interpreter_transits_v1.filter(
-    (t) => t.salience === "primary"
-  );
-  
+function deriveWhyToday(
+  inputs: InterpretationInputs,
+  canon: InterpretiveCanon = interpretiveCanon
+): { why_today: string[]; why_today_clause: string } {
+  const { sky_state, daily_facts } = inputs;
   const reasons: string[] = [];
   
-  for (const transit of primaryTransits.slice(0, 3)) {
-    reasons.push(`${transit.planet} in ${transit.sign} with ${transit.orb_deg}° orb`);
+  // Get moon and sun signs (titlecase for canon lookup)
+  const moonSignRaw = sky_state.bodies.moon?.sign;
+  const sunSignRaw = sky_state.bodies.sun?.sign;
+  const moonSign = moonSignRaw 
+    ? moonSignRaw.charAt(0).toUpperCase() + moonSignRaw.slice(1).toLowerCase()
+    : null;
+  const sunSign = sunSignRaw
+    ? sunSignRaw.charAt(0).toUpperCase() + sunSignRaw.slice(1).toLowerCase()
+    : null;
+  
+  // Get moon entry for core_meanings and dominant_axis
+  const moonEntry = moonSign ? canon.moon_signs[moonSign] : null;
+  if (!moonEntry) {
+    // Fallback if moon entry missing
+    return {
+      why_today: ["Today's configuration offers unique opportunities"],
+      why_today_clause: "Today's configuration offers unique opportunities",
+    };
   }
   
-  if (reasons.length === 0) {
-    reasons.push("Background conditions dominate");
+  // Priority 1: Check for ingress (Moon or Sun) in background_conditions
+  const INGRESS_SENSITIVE_BODIES = ["moon", "sun"] as const;
+  const ingressCondition = daily_facts.background_conditions.find(
+    (c) => c.kind === "ingress" && INGRESS_SENSITIVE_BODIES.includes(c.body.toLowerCase() as any)
+  );
+  
+  if (ingressCondition && ingressCondition.kind === "ingress") {
+    const bodyLabel = ingressCondition.body.charAt(0).toUpperCase() + ingressCondition.body.slice(1).toLowerCase();
+    const currentSign = ingressCondition.body.toLowerCase() === "moon" 
+      ? (moonSign || "")
+      : (sunSign || "");
+    
+    // Determine window: if to_sign matches current, it's past_24h; otherwise next_24h
+    const isNext24h = ingressCondition.to_sign.toLowerCase() !== currentSign.toLowerCase();
+    
+    if (isNext24h) {
+      reasons.push(
+        `The ${bodyLabel} is in ${currentSign} today and enters ${ingressCondition.to_sign} within the next 24 hours, emphasizing ${moonEntry.core_meanings[0]}.`
+      );
+    } else {
+      reasons.push(
+        `The ${bodyLabel} is in ${currentSign} today after entering from ${ingressCondition.from_sign} within the past 24 hours, emphasizing ${moonEntry.core_meanings[0]}.`
+      );
+    }
+    reasons.push(canon.why_today_templates.ingress);
+  } else {
+    // Priority 2: Check for Sun-Moon aspect in sky_state.aspects
+    const sunMoonAspect = sky_state.aspects?.find(
+      (a) => 
+        (a.body_a === "sun" && a.body_b === "moon") ||
+        (a.body_a === "moon" && a.body_b === "sun")
+    );
+    
+    if (sunMoonAspect) {
+      // Map aspect type to legacy format (SkyState uses "type", legacy uses "aspect")
+      const aspectName = sunMoonAspect.type; // e.g., "sextile", "conjunction"
+      reasons.push(
+        `Today the Sun and Moon perfect a ${aspectName}, so ${moonEntry.dominant_axis.primary} outweighs ${moonEntry.dominant_axis.counter}.`
+      );
+      reasons.push(canon.why_today_templates.aspect);
+    } else {
+      // Priority 3: Fallback to lunar phase
+      // Map SkyState phase_name to legacy phase names
+      const phaseName = sky_state.lunar?.phase_name;
+      let legacyPhase: "new" | "waxing" | "full" | "waning" | undefined;
+      
+      if (phaseName) {
+        if (phaseName === "new") {
+          legacyPhase = "new";
+        } else if (phaseName.startsWith("waxing")) {
+          legacyPhase = "waxing";
+        } else if (phaseName === "full") {
+          legacyPhase = "full";
+        } else if (phaseName.startsWith("waning")) {
+          legacyPhase = "waning";
+        }
+      }
+      
+      const moonPhase = legacyPhase || "waxing"; // Default fallback
+      const phaseEntry = canon.moon_phases[moonPhase];
+      if (phaseEntry) {
+        reasons.push(phaseEntry.why_today);
+        reasons.push(canon.why_today_templates.phase);
+      } else {
+        // Final fallback
+        reasons.push("Today's configuration offers unique opportunities");
+      }
+    }
   }
   
-  return reasons;
+  return {
+    why_today: reasons.slice(0, 4),
+    why_today_clause: reasons[0] || "Today's configuration offers unique opportunities",
+  };
 }
 
 /**
@@ -180,8 +269,7 @@ export function deriveDailyInterpretation(
   
   // Derive core meaning fields
   const dominant_contrast_axis = deriveDominantAxis(inputs, interpretiveCanon);
-  const why_today = deriveWhyToday(inputs);
-  const why_today_clause = why_today[0] || "Today's configuration offers unique opportunities";
+  const { why_today, why_today_clause } = deriveWhyToday(inputs, interpretiveCanon);
   const sky_anchors = deriveSkyAnchors(inputs);
   const causal_logic = deriveCausalLogic(inputs);
   const confidence_level = deriveConfidenceLevel(inputs);
