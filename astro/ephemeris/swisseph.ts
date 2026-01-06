@@ -1,6 +1,7 @@
 import { createRequire } from "node:module";
 import path from "node:path";
 import fs from "node:fs";
+import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 
 const require = createRequire(import.meta.url);
@@ -61,6 +62,66 @@ function init() {
   ensureEphePath();
   swe.swe_set_ephe_path(EPHE_PATH);
   initialized = true;
+}
+
+/**
+ * Get the Swiss Ephemeris engine version string.
+ * Returns version like "2.10.03" or similar.
+ */
+export function getEngineVersion(): string {
+  init();
+  const version = swe.swe_version();
+  if (typeof version !== "string" || !version) {
+    throw new Error("Failed to retrieve Swiss Ephemeris version");
+  }
+  return version;
+}
+
+/**
+ * Get a deterministic identifier for the ephemeris fileset.
+ * This identifier changes when ephemeris files are added, removed, or modified.
+ * 
+ * Strategy: Create a hash from the sorted list of .se1 filenames and their sizes.
+ * This ensures determinism while detecting changes to the fileset.
+ */
+export function getEphemerisFileset(): string {
+  ensureEphePath();
+  const entries = fs.readdirSync(EPHE_PATH);
+  const se1Files = entries
+    .filter((name) => name.toLowerCase().endsWith(".se1"))
+    .sort(); // Deterministic ordering
+
+  if (!se1Files.length) {
+    throw new Error("No .se1 files found in ephemeris directory");
+  }
+
+  // Create deterministic identifier from file list and sizes
+  const fileInfo = se1Files
+    .map((name) => {
+      const filePath = path.join(EPHE_PATH, name);
+      const stats = fs.statSync(filePath);
+      return `${name}:${stats.size}`;
+    })
+    .join("|");
+
+  const hash = crypto.createHash("sha256").update(fileInfo).digest("hex");
+  const shortHash = hash.slice(0, 16); // 16 hex chars = 64 bits
+
+  // Also include file count and date range hint if available
+  const fileCount = se1Files.length;
+  const yearHints = se1Files
+    .map((name) => {
+      const match = name.match(/_(\d+)/);
+      return match ? match[1] : null;
+    })
+    .filter((y): y is string => y !== null)
+    .sort()
+    .join("-");
+
+  if (yearHints) {
+    return `se-${fileCount}files-${yearHints}-${shortHash}`;
+  }
+  return `se-${fileCount}files-${shortHash}`;
 }
 
 const BODY_MAP: Record<string, number> = {

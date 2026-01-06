@@ -65,13 +65,28 @@ const AspectSchema = z.object({
   orb_deg: z.number().min(0).max(180),
 });
 
+const LunarPhaseSchema = z.object({
+  phase_name: z.enum([
+    "new",
+    "waxing_crescent",
+    "first_quarter",
+    "waxing_gibbous",
+    "full",
+    "waning_gibbous",
+    "last_quarter",
+    "waning_crescent",
+  ]),
+  phase_angle_deg: z.number().min(0).max(180),
+  illumination_pct: z.number().min(0).max(100),
+});
+
 export const SkyStateSchema = z.object({
   schema_version: z.literal("1.0.0"),
   meta: MetaSchema,
   timestamp: TimestampSchema,
   bodies: z.record(z.enum(BODY_NAMES), BodyStateSchema),
   aspects: z.array(AspectSchema),
-  lunar: z.record(z.string(), z.unknown()), // Empty object for now, reserved for future
+  lunar: LunarPhaseSchema,
 });
 
 export type SkyState = z.infer<typeof SkyStateSchema>;
@@ -79,4 +94,5 @@ export type BodyState = z.infer<typeof BodyStateSchema>;
 export type Timestamp = z.infer<typeof TimestampSchema>;
 export type Meta = z.infer<typeof MetaSchema>;
 export type Aspect = z.infer<typeof AspectSchema>;
+export type LunarPhase = z.infer<typeof LunarPhaseSchema>;
 
