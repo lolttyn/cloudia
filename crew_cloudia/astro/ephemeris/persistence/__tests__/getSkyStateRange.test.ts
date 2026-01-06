@@ -250,9 +250,13 @@ describe("getSkyStateRange", () => {
         "read_only"
       );
 
+      // Should return all dates in range with nulls for missing ones
       expect(result).toEqual({
         "2026-01-15": mockSkyState,
+        "2026-01-16": null,
+        "2026-01-17": null,
         "2026-01-18": mockSkyState,
+        "2026-01-19": null,
       });
     });
   });

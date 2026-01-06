@@ -272,7 +272,7 @@ function extractBackgroundConditions(
  * 
  * @param skyState - The sky_state to derive facts from
  * @param policy - The technician policy to apply
- * @param date - The date for the facts (YYYY-MM-DD)
+ * @param date - The date for the facts (YYYY-MM-DD) - must match skyState.timestamp.date
  * @returns DailyFacts object (validated)
  */
 export function deriveDailyFactsFromSkyState(
@@ -280,6 +280,14 @@ export function deriveDailyFactsFromSkyState(
   policy: TechnicianPolicyV1,
   date: string
 ): DailyFacts {
+  // Hard requirement: facts must be derived from persisted sky_state
+  // Assert that date matches sky_state.timestamp.date to catch accidental mismatch wiring
+  if (date !== skyState.timestamp.date) {
+    throw new Error(
+      `Date mismatch: provided date "${date}" does not match sky_state.timestamp.date "${skyState.timestamp.date}". Facts must be derived from the correct sky_state row.`
+    );
+  }
+
   // Extract transits
   const transits = extractTransits(skyState, policy);
   
