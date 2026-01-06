@@ -26,8 +26,284 @@ exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-str
   },
   "intensity_modifier": "strengthening",
   "interpretation_bundles": {
-    "primary": [],
-    "secondary": [],
+    "primary": [
+      {
+        "guidance": {
+          "avoid": [
+            "Overextending because energy feels higher",
+            "Skipping rest or feedback loops",
+            "Treating this as an all-or-nothing push",
+          ],
+          "do": [
+            "Take the next small, testable action.",
+            "Check for new information before scaling up.",
+            "Adjust pacing to keep growth steady.",
+          ],
+          "reusable_lines": [
+            {
+              "speakability": "must_say",
+              "text": "Build steadily—small moves compound here.",
+            },
+            {
+              "speakability": "can_say",
+              "text": "Gather input and refine before you accelerate.",
+            },
+          ],
+        },
+        "kind": "cycle",
+        "meaning": {
+          "frames": [
+            {
+              "speakability": "must_say",
+              "text": "The waxing Moon supports building gradually rather than leaping ahead.",
+            },
+            {
+              "speakability": "can_say",
+              "text": "It’s a good time to collect information and test the next step.",
+            },
+            {
+              "speakability": "avoid",
+              "text": "This guarantees rapid progress if you push hard.",
+            },
+          ],
+          "frictions": [
+            "Rushing growth faster than it can hold",
+            "Skipping checkpoints or feedback",
+            "Ignoring signals to adjust",
+          ],
+          "headline": "Momentum is growing—take measured steps and gather what you need.",
+          "opportunities": [
+            "Pilot small moves and iterate",
+            "Refine plans with new input",
+            "Let momentum build through consistency",
+          ],
+        },
+        "safety": {
+          "allowed_framing": [
+            "Process-focused: “momentum builds through steady steps.”",
+            "Agency-forward: “you can choose to test and adjust.”",
+            "Non-deterministic: “growing energy can support small expansions.”",
+          ],
+          "forbidden_claims": [
+            "Promising rapid or guaranteed success",
+            "Linking progress to destiny or identity",
+            "Predicting specific outcomes from taking action now",
+          ],
+        },
+        "slug": "moon_phase_waxing",
+        "summary": "A build phase favoring steady momentum, gathering information, and making small course corrections.",
+        "tags": [
+          "momentum",
+          "iteration",
+          "steady_growth",
+          "information_gathering",
+        ],
+        "title": "Waxing Moon",
+        "trigger": {
+          "signal_key": "moon_phase_waxing",
+        },
+        "version": 1,
+      },
+      {
+        "guidance": {
+          "avoid": [
+            "Rushing outcomes for short-term relief",
+            "Carrying unnecessary burdens alone",
+            "Treating rest as unproductive",
+            "Confusing pressure with purpose",
+            "Overcommitting out of obligation",
+          ],
+          "do": [
+            "Work within clear boundaries rather than fighting them.",
+            "Prioritize tasks that benefit from long-term effort.",
+            "Measure progress realistically.",
+            "Take responsibility for pacing and sustainability.",
+            "Let structure support momentum.",
+          ],
+          "reusable_lines": [
+            {
+              "speakability": "must_say",
+              "text": "Progress now favors consistency over speed.",
+            },
+            {
+              "speakability": "can_say",
+              "text": "Structure can be a support, not a constraint.",
+            },
+          ],
+        },
+        "kind": "planet_in_sign",
+        "meaning": {
+          "frames": [
+            {
+              "speakability": "must_say",
+              "text": "Sun in Capricorn places emphasis on responsibility, structure, and practical progress over time.",
+            },
+            {
+              "speakability": "must_say",
+              "text": "This period favors measured effort, accountability, and decisions that hold up under scrutiny.",
+            },
+            {
+              "speakability": "can_say",
+              "text": "Momentum builds through consistency rather than speed.",
+            },
+            {
+              "speakability": "can_say",
+              "text": "Limits and constraints become clearer, offering guidance rather than restriction.",
+            },
+            {
+              "speakability": "avoid",
+              "text": "This means success requires struggle or self-denial.",
+            },
+          ],
+          "frictions": [
+            "Impatience with slow progress",
+            "Over-identifying with obligation",
+            "Equating worth with productivity",
+            "Pushing past sustainable limits",
+            "Treating seriousness as the only valid tone",
+          ],
+          "headline": "Focus shifts toward responsibility and long-term outcomes.",
+          "opportunities": [
+            "Building durable systems and habits",
+            "Clarifying priorities through structure",
+            "Making realistic plans",
+            "Strengthening follow-through",
+            "Earning trust through consistency",
+          ],
+        },
+        "safety": {
+          "allowed_framing": [
+            "Environmental language: 'this period emphasizes...'",
+            "Agency-forward framing: 'you can choose how to work with limits...'",
+            "Contextual framing: 'if responsibilities feel heavier...'",
+          ],
+          "forbidden_claims": [
+            "Deterministic career or success predictions",
+            "Moralizing productivity or ambition",
+            "Framing hardship as required for growth",
+          ],
+        },
+        "slug": "sun_in_capricorn",
+        "sources": [
+          "Modern psychological astrology",
+          "Seasonal solar sign interpretation",
+        ],
+        "summary": "A season emphasizing responsibility, structure, and long-range thinking. Attention turns toward durability over speed and results that can be sustained. The opportunity is to work deliberately with limits rather than pushing past them.",
+        "tags": [
+          "structure",
+          "responsibility",
+          "long_term_focus",
+          "discipline",
+          "sustainability",
+        ],
+        "title": "Sun in Capricorn",
+        "trigger": {
+          "signal_key": "sun_in_capricorn",
+        },
+        "version": 1,
+      },
+    ],
+    "secondary": [
+      {
+        "guidance": {
+          "avoid": [
+            "Overcommitting because it feels kinder",
+            "Numbing out when rest would help",
+            "Letting vague language hide your needs",
+            "Taking on others' emotions without consent",
+            "Assuming intuition equals fact",
+          ],
+          "do": [
+            "Schedule quiet time to decompress.",
+            "Write down dreams or insights before they fade.",
+            "Use grounding techniques to stay present.",
+            "Clarify plans in writing to avoid confusion.",
+            "Choose soothing media and company.",
+          ],
+          "reusable_lines": [
+            {
+              "speakability": "must_say",
+              "text": "The mood is porous and imaginative today, so keep boundaries gentle and clear.",
+            },
+            {
+              "speakability": "can_say",
+              "text": "Soft focus and rest let the right insights surface under this sky.",
+            },
+          ],
+        },
+        "kind": "planet_in_sign",
+        "meaning": {
+          "frames": [
+            {
+              "speakability": "must_say",
+              "text": "With the Moon in Pisces, moods become more impressionable and empathetic.",
+            },
+            {
+              "speakability": "must_say",
+              "text": "Imagination and intuition color perceptions.",
+            },
+            {
+              "speakability": "can_say",
+              "text": "Creative or spiritual practice can be soothing.",
+            },
+            {
+              "speakability": "can_say",
+              "text": "Rest and quiet help keep boundaries clear.",
+            },
+            {
+              "speakability": "avoid",
+              "text": "Everyone will feel lost or overwhelmed.",
+            },
+          ],
+          "frictions": [
+            "Difficulty distinguishing your feelings from others'",
+            "Vague plans or slippery timelines",
+            "Escaping into fantasy instead of resting",
+            "Saying yes to avoid disappointing",
+            "Misreading signals due to wishful thinking",
+          ],
+          "headline": "Emotions lean porous, dreamy, and receptive to subtle cues.",
+          "opportunities": [
+            "Resting and letting ideas drift into view",
+            "Expressing feelings through art or music",
+            "Offering compassion without self-erasure",
+            "Practicing gentle boundaries",
+            "Concluding loose ends with grace",
+          ],
+        },
+        "safety": {
+          "allowed_framing": [
+            "Environmental focus on empathy and imagination",
+            "Agency-based choices about boundaries and rest",
+            "Contextual language about endings and integration",
+          ],
+          "forbidden_claims": [
+            "Identity statements about Pisces Moons",
+            "Promises of spiritual outcomes",
+            "Deterministic claims about confusion",
+          ],
+        },
+        "slug": "moon_in_pisces",
+        "sources": [
+          "Lunar transit through Pisces",
+          "Moon in Pisces as short-term climate of sensitivity",
+        ],
+        "summary": "A soft emotional climate that heightens sensitivity and imagination. Feelings blur edges, inviting rest, compassion, and creative flow.",
+        "tags": [
+          "imagination",
+          "compassion",
+          "rest",
+          "intuition",
+          "boundaries",
+          "closure",
+        ],
+        "title": "Moon in Pisces",
+        "trigger": {
+          "signal_key": "moon_in_pisces",
+        },
+        "version": 1,
+      },
+    ],
     "suppressed": [],
   },
   "signals": [
