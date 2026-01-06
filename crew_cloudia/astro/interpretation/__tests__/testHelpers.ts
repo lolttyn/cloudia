@@ -38,7 +38,7 @@ export async function runCanonicalMeaningToFrameForTest(
   const _interpreterFacts = adaptToInterpreterInput(inputs);
 
   // Step 3: Derive canonical meaning
-  const dailyInterpretation = deriveDailyInterpretation(inputs);
+  const dailyInterpretation = await deriveDailyInterpretation(inputs);
 
   // Step 4: Transform to InterpretiveFrame
   const frame = transformToInterpretiveFrame(dailyInterpretation);

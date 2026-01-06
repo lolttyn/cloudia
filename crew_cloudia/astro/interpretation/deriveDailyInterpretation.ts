@@ -314,9 +314,9 @@ function deriveConfidenceLevel(inputs: InterpretationInputs): "high" | "medium" 
  * @param inputs - Canonical Layer 0 + Layer 1 inputs
  * @returns DailyInterpretation (validated)
  */
-export function deriveDailyInterpretation(
+export async function deriveDailyInterpretation(
   inputs: InterpretationInputs
-): DailyInterpretation {
+): Promise<DailyInterpretation> {
   const { sky_state, daily_facts, timestamp, meta } = inputs;
   
   // Derive signals (placeholder - will be ported from deriveSignalsFromSkyFeatures in Phase 5.2)
