@@ -12,30 +12,60 @@ import { type DailyInterpretation } from "./schema/dailyInterpretation.schema.js
 import { InterpretiveFrameSchema, type InterpretiveFrame } from "../../interpretation/schema/InterpretiveFrame.js";
 import { loadInterpretationBundles } from "../../interpretation/bundles/loadInterpretationBundles.js";
 import type { InterpretationSignal } from "../../interpretation/signals/signals.schema.js";
+import interpretiveCanon from "../../interpretation/canon/interpretiveCanon_v1.json" assert { type: "json" };
+type InterpretiveCanon = typeof interpretiveCanon;
 
 /**
  * Transform sky anchors from DailyInterpretation format to InterpretiveFrame format
+ * 
+ * Matches legacy buildAnchors() behavior:
+ * - Order: moon_sign first, sun_sign second
+ * - Labels: titlecase ("Moon in Pisces", "Sun in Capricorn")
+ * - Meanings: from canon core_meanings
  */
 function transformSkyAnchors(
-  anchors: DailyInterpretation["sky_anchors"]
+  anchors: DailyInterpretation["sky_anchors"],
+  canon: InterpretiveCanon = interpretiveCanon
 ): InterpretiveFrame["sky_anchors"] {
-  return anchors.map((anchor) => {
-    // Determine type based on body
-    let type: "sun_sign" | "moon_sign" | "major_aspect";
-    if (anchor.body === "sun") {
-      type = "sun_sign";
-    } else if (anchor.body === "moon") {
-      type = "moon_sign";
-    } else {
-      type = "major_aspect";
+  // Extract moon and sun signs from anchors (titlecase)
+  let moonSign: string | null = null;
+  let sunSign: string | null = null;
+  
+  for (const anchor of anchors) {
+    if (anchor.body === "moon") {
+      moonSign = anchor.sign.charAt(0).toUpperCase() + anchor.sign.slice(1).toLowerCase();
+    } else if (anchor.body === "sun") {
+      sunSign = anchor.sign.charAt(0).toUpperCase() + anchor.sign.slice(1).toLowerCase();
     }
-    
-    return {
-      type,
-      label: anchor.description, // Use description as label
-      meaning: anchor.description, // Use description as meaning (can be refined later)
-    };
-  });
+  }
+  
+  const result: InterpretiveFrame["sky_anchors"] = [];
+  
+  // Moon anchor first (legacy order)
+  if (moonSign) {
+    const moonEntry = canon.moon_signs[moonSign];
+    if (moonEntry) {
+      result.push({
+        type: "moon_sign",
+        label: `Moon in ${moonSign}`,
+        meaning: moonEntry.core_meanings.join(", "),
+      });
+    }
+  }
+  
+  // Sun anchor second (legacy order)
+  if (sunSign) {
+    const sunEntry = canon.sun_signs[sunSign];
+    if (sunEntry) {
+      result.push({
+        type: "sun_sign",
+        label: `Sun in ${sunSign}`,
+        meaning: sunEntry.core_meanings.join(", "),
+      });
+    }
+  }
+  
+  return result;
 }
 
 /**
