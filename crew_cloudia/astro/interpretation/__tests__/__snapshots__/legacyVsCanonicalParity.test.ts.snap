@@ -74,9 +74,10 @@ exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-str
   },
   "tone_descriptor": "balanced",
   "why_today": [
-    "This applies today because it's computed for the episode date and anchored to 12:00 UTC.",
+    "The Moon is in Pisces today and enters Aries within the next 24 hours, emphasizing surrender.",
+    "today marks a brief sign change that re-weights attention",
   ],
-  "why_today_clause": "mars in capricorn with 2.1483° orb",
+  "why_today_clause": "The Moon is in Pisces today and enters Aries within the next 24 hours, emphasizing surrender.",
 }
 `;
 
@@ -493,9 +494,6 @@ exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-str
 {
   "sample_differences": [
     "tone_descriptor: "open and imaginal; engaged curiosity" !== "balanced"",
-    "why_today: array length mismatch (2 vs 1)",
-    "why_today[0]: "The Moon is in Pisces today and enters Aries within the next 24 hours, emphasizing surrender." !== "This applies today because it's computed for the episode date and anchored to 12:00 UTC."",
-    "why_today[1]: missing in canonical",
     "supporting_themes: array length mismatch (4 vs 0)",
     "supporting_themes[0]: missing in canonical",
     "supporting_themes[1]: missing in canonical",
@@ -504,7 +502,6 @@ exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-str
     "causal_logic[0]: "Because the Moon is in Pisces, surrender and empathy take precedence." !== "This is true because moon in pisces anchors the interpretation for today (12:00 UTC)."",
     "causal_logic[1]: "Because the Sun is in Capricorn, the day stays framed by structure and accountability and long-range focus." !== "mars in capricorn creates primary influence"",
     "causal_logic[2]: "Because the Sun and Moon form a sextile, latent opportunities appear if you engage them." !== "mercury in capricorn creates primary influence"",
-    "why_today_clause: "The Moon is in Pisces today and enters Aries within the next 24 hours, emphasizing surrender." !== "mars in capricorn with 2.1483° orb"",
     "temporal_phase: "building" !== "baseline"",
     "intensity_modifier: "strengthening" !== "emerging"",
     "continuity.references_yesterday: missing in canonical",
@@ -536,6 +533,6 @@ exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-str
     "confidence_level: "low" !== "high"",
     "canon_compliance.notes[0]: "canon:v1.0.0" !== "Phase 5.2: derived from canonical inputs"",
   ],
-  "total_differences": 43,
+  "total_differences": 39,
 }
 `;
