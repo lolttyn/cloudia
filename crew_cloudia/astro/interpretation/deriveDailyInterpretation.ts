@@ -15,6 +15,18 @@ import {
 } from "./schema/dailyInterpretation.schema.js";
 import interpretiveCanon from "../../interpretation/canon/interpretiveCanon_v1.json" assert { type: "json" };
 import type { InterpretiveFrame } from "../../interpretation/schema/InterpretiveFrame.js";
+import type { InterpretationSignal } from "../../interpretation/signals/signals.schema.js";
+import {
+  sunInSignKey,
+  moonInSignKey,
+  moonPhaseKey,
+  sunMoonAspectKey,
+  moonIngressKey,
+  sunIngressKey,
+  newMoonKey,
+  fullMoonKey,
+  normalizeSign,
+} from "../../interpretation/signals/signalKeys.js";
 type InterpretiveCanon = typeof interpretiveCanon;
 
 // Minimal SkyFeatures type for window logic (matches legacy)
@@ -505,24 +517,171 @@ function buildContinuityHooks(
 }
 
 /**
- * Derive confidence level from transits
+ * Port legacy deriveSignalsFromSkyFeatures() function exactly
  */
-function deriveConfidenceLevel(inputs: InterpretationInputs): "high" | "medium" | "low" {
-  const { daily_facts } = inputs;
-  const primaryCount = daily_facts.interpreter_transits_v1.filter(
-    (t) => t.salience === "primary"
-  ).length;
-  const secondaryCount = daily_facts.interpreter_transits_v1.filter(
-    (t) => t.salience === "secondary"
-  ).length;
+function deriveSignalsFromSkyFeatures(
+  features: SkyFeatures & { highlights: SkyAspect[] }
+): InterpretationSignal[] {
+  const signals: InterpretationSignal[] = [];
+  const ORB_MAX = 6;
+  const SIGNS = [
+    "aries", "taurus", "gemini", "cancer", "leo", "virgo",
+    "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces",
+  ];
+
+  function clamp01(value: number): number {
+    if (value < 0) return 0;
+    if (value > 1) return 1;
+    return value;
+  }
+
+  function aspectSalience(orbDeg: number): number {
+    return clamp01(1 - orbDeg / ORB_MAX);
+  }
+
+  function moonPhaseSalience(phase: SkyFeatures["moon"]["phase"]): number {
+    if (phase === "new" || phase === "full") return 0.45;
+    return 0.25;
+  }
+
+  function normalizeDeg(value: number) {
+    let v = value % 360;
+    if (v < 0) v += 360;
+    return v;
+  }
+
+  function angularSeparation(a: number, b: number) {
+    const diff = Math.abs(normalizeDeg(a) - normalizeDeg(b));
+    return Math.min(diff, 360 - diff);
+  }
+
+  function isOppositeSign(a: string, b: string): boolean {
+    const ai = SIGNS.indexOf(a.toLowerCase());
+    const bi = SIGNS.indexOf(b.toLowerCase());
+    if (ai === -1 || bi === -1) return false;
+    return (ai + 6) % 12 === bi;
+  }
+
+  function temporalLabelFromWindow(window: "past_24h" | "next_24h") {
+    return window === "past_24h" ? "entering" : "exiting";
+  }
+
+  const moonIngressHighlight = features.highlights.find(
+    (h) => h.type === "ingress" && h.body === "Moon"
+  ) as Extract<SkyAspect, { type: "ingress"; body: "Moon" }> | undefined;
   
-  if (primaryCount >= 2) {
-    return "high";
-  } else if (primaryCount >= 1 || secondaryCount >= 2) {
-    return "medium";
-  } else {
+  const sunIngressHighlight = features.highlights.find(
+    (h) => h.type === "ingress" && h.body === "Sun"
+  ) as Extract<SkyAspect, { type: "ingress"; body: "Sun" }> | undefined;
+
+  // Sun in sign
+  signals.push({
+    signal_key: sunInSignKey(features.sun.sign),
+    kind: "planet_in_sign",
+    salience: 0.35,
+    source: "sky_features",
+    meta: {
+      sign: features.sun.sign.toLowerCase(),
+      body: "sun",
+      temporal_window: sunIngressHighlight?.window,
+      temporal_label: sunIngressHighlight ? temporalLabelFromWindow(sunIngressHighlight.window) : undefined,
+    },
+  });
+
+  // Moon in sign
+  signals.push({
+    signal_key: moonInSignKey(features.moon.sign),
+    kind: "planet_in_sign",
+    salience: 0.3,
+    source: "sky_features",
+    meta: {
+      sign: features.moon.sign.toLowerCase(),
+      body: "moon",
+      phase: features.moon.phase,
+      temporal_window: moonIngressHighlight?.window,
+      temporal_label: moonIngressHighlight ? temporalLabelFromWindow(moonIngressHighlight.window) : undefined,
+    },
+  });
+
+  // Moon phase
+  signals.push({
+    signal_key: moonPhaseKey(features.moon.phase),
+    kind: "lunar_phase",
+    salience: moonPhaseSalience(features.moon.phase),
+    source: "sky_features",
+    meta: { phase: features.moon.phase },
+  });
+
+  // Lunation detection: high-salience, single-dominant triggers.
+  // Note: We need sun/moon longitudes for elongation, but we don't have them in SkyFeatures
+  // For now, we'll use a simplified check - legacy uses elongation but we can approximate
+  if (features.moon.phase === "new" && features.sun.sign === features.moon.sign) {
+    signals.push({
+      signal_key: newMoonKey(features.sun.sign),
+      kind: "lunation",
+      salience: 0.95,
+      source: "sky_features",
+      meta: { sign: features.sun.sign.toLowerCase(), phase: "new" },
+    });
+  } else if (features.moon.phase === "full" && isOppositeSign(features.sun.sign, features.moon.sign)) {
+    signals.push({
+      signal_key: fullMoonKey(features.moon.sign),
+      kind: "lunation",
+      salience: 0.95,
+      source: "sky_features",
+      meta: { sign: features.moon.sign.toLowerCase(), phase: "full" },
+    });
+  }
+
+  for (const highlight of features.highlights) {
+    if (highlight.type === "aspect") {
+      signals.push({
+        signal_key: sunMoonAspectKey(highlight.aspect),
+        kind: "aspect",
+        salience: aspectSalience(highlight.orb_deg),
+        source: "sky_features",
+        orb_deg: highlight.orb_deg,
+        meta: { aspect: highlight.aspect, bodies: ["Sun", "Moon"] },
+      });
+    } else if (highlight.type === "ingress") {
+      signals.push({
+        signal_key:
+          highlight.body === "Sun"
+            ? sunIngressKey(highlight.to_sign, highlight.window)
+            : moonIngressKey(highlight.to_sign, highlight.window),
+        kind: "ingress",
+        salience: 0.2,
+        source: "sky_features",
+        meta: {
+          body: highlight.body,
+          from_sign: highlight.from_sign,
+          to_sign: highlight.to_sign,
+          window: highlight.window,
+          temporal_window: highlight.window,
+          temporal_label: temporalLabelFromWindow(highlight.window),
+        },
+      });
+    }
+  }
+
+  return signals.sort((a, b) => {
+    if (b.salience !== a.salience) {
+      return b.salience - a.salience;
+    }
+    return a.signal_key.localeCompare(b.signal_key);
+  });
+}
+
+/**
+ * Port legacy confidenceFrom() function - based on aspect orb, not transits
+ */
+function confidenceFrom(aspect: SkyAspect | undefined): "high" | "medium" | "low" {
+  if (aspect?.type === "aspect") {
+    if (aspect.orb_deg <= 2) return "high";
+    if (aspect.orb_deg <= 4) return "medium";
     return "low";
   }
+  return "medium";
 }
 
 /**
@@ -556,6 +715,99 @@ async function mapSkyStateToSkyFeatures(
       phase: legacyPhase,
     },
   };
+}
+
+/**
+ * Helper: Build SkyFeatures with highlights (aspects and ingresses) for signal derivation
+ */
+async function buildSkyFeaturesWithHighlights(
+  todayState: InterpretationInputs["sky_state"],
+  prevState: any,
+  nextState: any,
+  date: string
+): Promise<SkyFeatures & { highlights: SkyAspect[] }> {
+  const { computeSkyState } = await import("../../../astro/computeSkyState.js");
+  
+  // Helper to titlecase sign
+  function titleCase(sign: string): string {
+    return sign.charAt(0).toUpperCase() + sign.slice(1).toLowerCase();
+  }
+  
+  const todayMoonSign = titleCase(todayState.bodies.moon?.sign || "");
+  const todaySunSign = titleCase(todayState.bodies.sun?.sign || "");
+  const prevMoonSign = titleCase(prevState?.bodies?.moon?.sign || "");
+  const nextMoonSign = titleCase(nextState?.bodies?.moon?.sign || "");
+  const prevSunSign = titleCase(prevState?.bodies?.sun?.sign || "");
+  const nextSunSign = titleCase(nextState?.bodies?.sun?.sign || "");
+  
+  const features = await mapSkyStateToSkyFeatures(todayState, date);
+  const highlights: SkyAspect[] = [];
+  
+  // Detect Sun-Moon aspect
+  const sunMoonAspect = todayState.aspects?.find(
+    (a) => 
+      (a.body_a === "sun" && a.body_b === "moon") ||
+      (a.body_a === "moon" && a.body_b === "sun")
+  );
+  
+  if (sunMoonAspect) {
+    const aspectType = sunMoonAspect.type;
+    if (
+      aspectType === "conjunction" ||
+      aspectType === "sextile" ||
+      aspectType === "square" ||
+      aspectType === "trine" ||
+      aspectType === "opposition"
+    ) {
+      highlights.push({
+        type: "aspect",
+        aspect: aspectType,
+        orb_deg: sunMoonAspect.orb_deg || 0,
+      });
+    }
+  }
+  
+  // Detect Moon ingress
+  if (prevMoonSign !== todayMoonSign) {
+    highlights.push({
+      type: "ingress",
+      body: "Moon",
+      from_sign: prevMoonSign,
+      to_sign: todayMoonSign,
+      window: "past_24h",
+    });
+  } else if (nextMoonSign !== todayMoonSign) {
+    highlights.push({
+      type: "ingress",
+      body: "Moon",
+      from_sign: todayMoonSign,
+      to_sign: nextMoonSign,
+      window: "next_24h",
+    });
+  }
+  
+  // Detect Sun ingress (only if no Moon ingress)
+  if (highlights.find(h => h.type === "ingress" && h.body === "Moon") === undefined) {
+    if (prevSunSign !== todaySunSign) {
+      highlights.push({
+        type: "ingress",
+        body: "Sun",
+        from_sign: prevSunSign,
+        to_sign: todaySunSign,
+        window: "past_24h",
+      });
+    } else if (nextSunSign !== todaySunSign) {
+      highlights.push({
+        type: "ingress",
+        body: "Sun",
+        from_sign: todaySunSign,
+        to_sign: nextSunSign,
+        window: "next_24h",
+      });
+    }
+  }
+  
+  return { ...features, highlights };
 }
 
 /**
@@ -707,33 +959,49 @@ export async function deriveDailyInterpretation(
     ? `Sun-Moon ${aspect.aspect} with ${(aspect.orb_deg || 0).toFixed(2)}° orb`
     : `Lunar phase pacing: ${legacyPhase}`;
   
-  // Derive signals (placeholder - will be ported from deriveSignalsFromSkyFeatures in Phase 5.2)
-  // For now, create minimal signals from transits to satisfy schema
-  const signals = daily_facts.interpreter_transits_v1.slice(0, 3).map((t) => ({
-    signal_key: `${t.planet}_in_${t.sign}`,
-    salience: t.salience as "primary" | "secondary" | "background",
-    description: `${t.planet} in ${t.sign}`,
-  }));
+  // Port legacy deriveSignalsFromSkyFeatures() - build features with highlights
+  const prevState = windowSkyStates[0]; // yesterday
+  const nextState = windowSkyStates[2]; // tomorrow
+  const featuresWithHighlights = await buildSkyFeaturesWithHighlights(
+    sky_state,
+    prevState,
+    nextState,
+    timestamp.date
+  );
+  const signals = deriveSignalsFromSkyFeatures(featuresWithHighlights);
   
-  // Ensure at least one signal for schema validation
-  if (signals.length === 0) {
-    signals.push({
-      signal_key: "placeholder_signal",
-      salience: "background" as const,
-      description: "Background conditions",
-    });
-  }
+  // Port legacy bundle selection
+  const { loadInterpretationBundles } = await import("../../interpretation/bundles/loadInterpretationBundles.js");
+  const { selectInterpretationBundles } = await import("../../interpretation/bundles/selectInterpretationBundles.js");
+  const bundleIndex = loadInterpretationBundles();
+  const bundleSelection = selectInterpretationBundles({
+    signals,
+    bundleIndex,
+  });
   
-  const confidence_level = deriveConfidenceLevel(inputs);
-  
-  // Build interpretation bundles structure
-  // For Phase 5.2 scaffolding: use empty arrays until bundle selection is properly ported
-  // This ensures schema validation passes while we work on parity
+  // Convert InterpretationBundle[] to InterpretationBundleRef[]
+  // Bundle has: id (optional UUID), slug (required)
+  // Schema expects: bundle_id (required string), bundle_slug (required string)
   const interpretation_bundles = {
-    primary: [],
-    secondary: [],
-    background: [],
+    primary: bundleSelection.primary.map((bundle) => ({
+      bundle_id: bundle.id || bundle.slug, // use id if available, else slug
+      bundle_slug: bundle.slug,
+      salience_class: "primary" as const,
+    })),
+    secondary: bundleSelection.secondary.map((bundle) => ({
+      bundle_id: bundle.id || bundle.slug,
+      bundle_slug: bundle.slug,
+      salience_class: "secondary" as const,
+    })),
+    background: bundleSelection.suppressed.map((suppressed) => ({
+      bundle_id: suppressed.bundle_slug, // suppressed only has bundle_slug
+      bundle_slug: suppressed.bundle_slug,
+      salience_class: "background" as const,
+    })),
   };
+  
+  // Port legacy confidenceFrom() - based on aspect orb
+  const confidence_level = confidenceFrom(aspect);
   
   // Map phaseEntry.timing_state to InterpretiveFrame timing.state enum
   // Canon values: "building", "peaking", "settling" - all map directly

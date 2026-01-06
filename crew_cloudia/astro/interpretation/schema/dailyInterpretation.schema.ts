@@ -9,6 +9,7 @@
  */
 
 import { z } from "zod";
+import { InterpretationSignalSchema } from "../../interpretation/signals/signals.schema.js";
 
 /**
  * Dominant contrast axis - the primary tension/contrast for the day
@@ -26,15 +27,6 @@ const SkyAnchorSchema = z.object({
   body: z.string().min(1), // e.g., "sun", "moon"
   sign: z.string().min(1), // e.g., "cancer"
   description: z.string().min(1), // Human-readable anchor description
-});
-
-/**
- * Interpretation signal - a key signal extracted from the sky state
- */
-const InterpretationSignalSchema = z.object({
-  signal_key: z.string().min(1), // Canonical signal identifier
-  salience: z.enum(["primary", "secondary", "background"]),
-  description: z.string().min(1).optional(), // Optional human-readable description
 });
 
 /**
@@ -152,6 +144,5 @@ export const DailyInterpretationSchema = z.object({
 export type DailyInterpretation = z.infer<typeof DailyInterpretationSchema>;
 export type DominantAxis = z.infer<typeof DominantAxisSchema>;
 export type SkyAnchor = z.infer<typeof SkyAnchorSchema>;
-export type InterpretationSignal = z.infer<typeof InterpretationSignalSchema>;
 export type InterpretationBundleRef = z.infer<typeof InterpretationBundleRefSchema>;
 

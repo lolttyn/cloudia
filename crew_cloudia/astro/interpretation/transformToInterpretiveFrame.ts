@@ -260,8 +260,8 @@ export function transformToInterpretiveFrame(
   const tone_descriptor = dailyInterpretation.tone_descriptor;
   const confidence_level = dailyInterpretation.confidence_level;
   
-  // Transform structured fields (sky_anchors already transformed above)
-  const signals = transformSignals(dailyInterpretation.signals);
+  // Pass through signals directly (already in InterpretiveFrame format from deriveSignalsFromSkyFeatures)
+  const signals = dailyInterpretation.signals;
   const interpretation_bundles = transformInterpretationBundles(
     dailyInterpretation.interpretation_bundles
   );
@@ -276,10 +276,10 @@ export function transformToInterpretiveFrame(
   // Optional fields
   const lunation: InterpretiveFrame["lunation"] = undefined; // TODO: derive from signals
   
-  // Canon compliance (empty for now)
+  // Canon compliance - match legacy format exactly
   const canon_compliance: InterpretiveFrame["canon_compliance"] = {
     violations: [],
-    notes: [`Phase 5.2: derived from canonical inputs`],
+    notes: [`canon:v${interpretiveCanon.version}`],
   };
   
   const frame: InterpretiveFrame = {
