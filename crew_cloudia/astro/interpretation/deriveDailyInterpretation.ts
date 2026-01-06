@@ -65,10 +65,10 @@ function deriveDominantAxis(
  * 2. Check for Sun-Moon aspect - second priority
  * 3. Fallback to lunar phase - third priority
  */
-function deriveWhyToday(
+async function deriveWhyToday(
   inputs: InterpretationInputs,
   canon: InterpretiveCanon = interpretiveCanon
-): { why_today: string[]; why_today_clause: string } {
+): Promise<{ why_today: string[]; why_today_clause: string }> {
   const { sky_state, daily_facts } = inputs;
   const reasons: string[] = [];
   
@@ -92,28 +92,97 @@ function deriveWhyToday(
     };
   }
   
-  // Priority 1: Check for ingress (Moon or Sun) in background_conditions
-  const INGRESS_SENSITIVE_BODIES = ["moon", "sun"] as const;
-  const ingressCondition = daily_facts.background_conditions.find(
-    (c) => c.kind === "ingress" && INGRESS_SENSITIVE_BODIES.includes(c.body.toLowerCase() as any)
-  );
+  // Priority 1: Check for ingress (Moon or Sun) by comparing today with prev/next day
+  // Legacy detects ingress by comparing sky states (extractSkyFeatures logic)
+  // (background_conditions don't include ingress timing in v1)
+  const { computeSkyState } = await import("../../../astro/computeSkyState.js");
   
-  if (ingressCondition && ingressCondition.kind === "ingress") {
-    const bodyLabel = ingressCondition.body.charAt(0).toUpperCase() + ingressCondition.body.slice(1).toLowerCase();
-    const currentSign = ingressCondition.body.toLowerCase() === "moon" 
-      ? (moonSign || "")
-      : (sunSign || "");
-    
-    // Determine window: if to_sign matches current, it's past_24h; otherwise next_24h
-    const isNext24h = ingressCondition.to_sign.toLowerCase() !== currentSign.toLowerCase();
-    
-    if (isNext24h) {
+  // Helper to offset date (same as legacy)
+  function offsetDate(base: string, deltaDays: number): string {
+    const d = new Date(`${base}T00:00:00Z`);
+    if (Number.isNaN(d.getTime())) throw new Error(`Invalid date ${base}`);
+    d.setUTCDate(d.getUTCDate() + deltaDays);
+    return d.toISOString().slice(0, 10);
+  }
+  
+  // Helper to titlecase sign (same as legacy)
+  function titleCase(sign: string): string {
+    return sign.charAt(0).toUpperCase() + sign.slice(1).toLowerCase();
+  }
+  
+  const prevDate = offsetDate(inputs.timestamp.date, -1);
+  const nextDate = offsetDate(inputs.timestamp.date, 1);
+  const [prevState, nextState] = await Promise.all([
+    computeSkyState({ date: prevDate, timezone: "UTC" }),
+    computeSkyState({ date: nextDate, timezone: "UTC" }),
+  ]);
+  
+  // Get today's signs (titlecase for comparison)
+  const todayMoonSign = titleCase(sky_state.bodies.moon?.sign || "");
+  const todaySunSign = titleCase(sky_state.bodies.sun?.sign || "");
+  const prevMoonSign = titleCase(prevState.bodies.moon?.sign || "");
+  const nextMoonSign = titleCase(nextState.bodies.moon?.sign || "");
+  const prevSunSign = titleCase(prevState.bodies.sun?.sign || "");
+  const nextSunSign = titleCase(nextState.bodies.sun?.sign || "");
+  
+  // Check for Moon ingress (legacy priority: check prev first, then next)
+  let moonIngress: { body: "Moon"; from_sign: string; to_sign: string; window: "past_24h" | "next_24h" } | null = null;
+  if (prevMoonSign !== todayMoonSign) {
+    moonIngress = {
+      body: "Moon",
+      from_sign: prevMoonSign,
+      to_sign: todayMoonSign,
+      window: "past_24h",
+    };
+  } else if (nextMoonSign !== todayMoonSign) {
+    moonIngress = {
+      body: "Moon",
+      from_sign: todayMoonSign,
+      to_sign: nextMoonSign,
+      window: "next_24h",
+    };
+  }
+  
+  // Check for Sun ingress (only if no Moon ingress)
+  let sunIngress: { body: "Sun"; from_sign: string; to_sign: string; window: "past_24h" | "next_24h" } | null = null;
+  if (!moonIngress) {
+    if (prevSunSign !== todaySunSign) {
+      sunIngress = {
+        body: "Sun",
+        from_sign: prevSunSign,
+        to_sign: todaySunSign,
+        window: "past_24h",
+      };
+    } else if (nextSunSign !== todaySunSign) {
+      sunIngress = {
+        body: "Sun",
+        from_sign: todaySunSign,
+        to_sign: nextSunSign,
+        window: "next_24h",
+      };
+    }
+  }
+  
+  // Moon ingress takes priority (legacy behavior)
+  if (moonIngress) {
+    if (moonIngress.window === "next_24h") {
       reasons.push(
-        `The ${bodyLabel} is in ${currentSign} today and enters ${ingressCondition.to_sign} within the next 24 hours, emphasizing ${moonEntry.core_meanings[0]}.`
+        `The ${moonIngress.body} is in ${moonIngress.from_sign} today and enters ${moonIngress.to_sign} within the next 24 hours, emphasizing ${moonEntry.core_meanings[0]}.`
       );
     } else {
       reasons.push(
-        `The ${bodyLabel} is in ${currentSign} today after entering from ${ingressCondition.from_sign} within the past 24 hours, emphasizing ${moonEntry.core_meanings[0]}.`
+        `The ${moonIngress.body} is in ${moonIngress.from_sign} today after entering from ${moonIngress.to_sign} within the past 24 hours, emphasizing ${moonEntry.core_meanings[0]}.`
+      );
+    }
+    reasons.push(canon.why_today_templates.ingress);
+  } else if (sunIngress) {
+    if (sunIngress.window === "next_24h") {
+      reasons.push(
+        `The ${sunIngress.body} is in ${sunIngress.from_sign} today and enters ${sunIngress.to_sign} within the next 24 hours, emphasizing ${moonEntry.core_meanings[0]}.`
+      );
+    } else {
+      reasons.push(
+        `The ${sunIngress.body} is in ${sunIngress.from_sign} today after entering from ${sunIngress.to_sign} within the past 24 hours, emphasizing ${moonEntry.core_meanings[0]}.`
       );
     }
     reasons.push(canon.why_today_templates.ingress);
@@ -269,7 +338,7 @@ export function deriveDailyInterpretation(
   
   // Derive core meaning fields
   const dominant_contrast_axis = deriveDominantAxis(inputs, interpretiveCanon);
-  const { why_today, why_today_clause } = deriveWhyToday(inputs, interpretiveCanon);
+  const { why_today, why_today_clause } = await deriveWhyToday(inputs, interpretiveCanon);
   const sky_anchors = deriveSkyAnchors(inputs);
   const causal_logic = deriveCausalLogic(inputs);
   const confidence_level = deriveConfidenceLevel(inputs);
