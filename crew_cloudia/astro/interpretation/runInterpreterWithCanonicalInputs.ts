@@ -9,40 +9,27 @@ import { loadInterpretationInputs } from "./loadInterpretationInputs.js";
 import { adaptToInterpreterInput } from "./adaptToInterpreterInput.js";
 import { runInterpreter, type InterpreterInput } from "./interpreter/runInterpreter.js";
 import { CANON_V0_1 } from "./canon/canon.v0_1.js";
+import { COMBINATION_RULES_V0_1 } from "./canon/combinationRules.v0_1.js";
+import { WEIGHTING_POLICY_V0_1 } from "./canon/weightingPolicy.v0_1.js";
 import type { CombinationRule } from "./interpreter/applyCombinationRules.js";
 import type { WeightingPolicy } from "./interpreter/applyWeighting.js";
 
 /**
- * Load combination rules (placeholder - will be replaced with canonical source in future)
- * For Phase 5.2, returns empty array. Rules should be loaded from canonical source.
+ * Load combination rules from canonical source
+ * 
+ * @returns Canonical combination rules v0.1
  */
 function loadCombinationRules(): CombinationRule[] {
-  // TODO: Load from canonical source (e.g., rule registry or config)
-  // For now, return empty - interpreter will still run but produce empty outputs
-  return [];
+  return COMBINATION_RULES_V0_1;
 }
 
 /**
- * Load weighting policy (placeholder - will be replaced with canonical source in future)
- * For Phase 5.2, returns default policy.
+ * Load weighting policy from canonical source
+ * 
+ * @returns Canonical weighting policy v0.1
  */
 function loadWeightingPolicy(): WeightingPolicy {
-  // TODO: Load from canonical source
-  // For now, return default policy
-  return {
-    rules: [
-      {
-        id: "weight.default",
-        priority: 1,
-        weights: {
-          time_horizon: "medium",
-          psychological_weight: 0.5,
-          behavioral_weight: 0.5,
-          speakability: "can_say",
-        },
-      },
-    ],
-  };
+  return WEIGHTING_POLICY_V0_1;
 }
 
 /**
