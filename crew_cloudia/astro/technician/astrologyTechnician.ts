@@ -6,7 +6,8 @@
  */
 
 import { computeSkyState } from "../../../astro/computeSkyState.js";
-import { TECHNICIAN_POLICY_V1, type AspectType, type BodyId } from "./policy/technicianPolicy.v1.js";
+import { getSkyStateRange } from "../ephemeris/persistence/getSkyStateRange.js";
+import { TECHNICIAN_POLICY_V1, type AspectType, type BodyId, type TechnicianPolicyV1 } from "./policy/technicianPolicy.v1.js";
 import {
   DailyFactsSchema,
   type DailyFacts,
@@ -266,19 +267,19 @@ function extractBackgroundConditions(
 }
 
 /**
- * Main function: Compute daily facts from sky_state
+ * Pure function: Derive daily facts from a sky_state
+ * This is deterministic and does not depend on external state.
+ * 
+ * @param skyState - The sky_state to derive facts from
+ * @param policy - The technician policy to apply
+ * @param date - The date for the facts (YYYY-MM-DD)
+ * @returns DailyFacts object (validated)
  */
-export async function astrologyTechnician(
-  input: AstrologyTechnicianInput
-): Promise<DailyFacts> {
-  // Compute sky_state (Layer 0)
-  const skyState = await computeSkyState({
-    date: input.date,
-    timezone: input.timezone,
-  });
-  
-  const policy = TECHNICIAN_POLICY_V1;
-  
+export function deriveDailyFactsFromSkyState(
+  skyState: SkyState,
+  policy: TechnicianPolicyV1,
+  date: string
+): DailyFacts {
   // Extract transits
   const transits = extractTransits(skyState, policy);
   
@@ -318,7 +319,7 @@ export async function astrologyTechnician(
   const dailyFacts = {
     schema_version: "1.0.0",
     technician_policy_version: policy.technician_policy_version,
-    date: input.date,
+    date,
     timestamp_generated: new Date().toISOString(),
     source,
     transits_primary: transits.primary,
@@ -329,5 +330,36 @@ export async function astrologyTechnician(
   
   // Validate against schema
   return DailyFactsSchema.parse(dailyFacts);
+}
+
+/**
+ * Main function: Compute daily facts from sky_state
+ * 
+ * This function now uses persisted sky_state_daily for reproducibility.
+ * It will load sky_state from the database (computing if missing in compute_on_miss mode),
+ * then derive facts from that persisted sky_state.
+ */
+export async function astrologyTechnician(
+  input: AstrologyTechnicianInput
+): Promise<DailyFacts> {
+  // Load sky_state from persisted cache (or compute if missing)
+  // This ensures facts are pinned to a known sky_state row (and therefore known fileset/version)
+  const skyStates = await getSkyStateRange(
+    input.date,
+    input.date,
+    "compute_on_miss"
+  );
+  
+  const skyState = skyStates[input.date];
+  if (!skyState) {
+    throw new Error(
+      `Failed to load or compute sky_state for ${input.date}`
+    );
+  }
+  
+  const policy = TECHNICIAN_POLICY_V1;
+  
+  // Derive facts from persisted sky_state
+  return deriveDailyFactsFromSkyState(skyState, policy, input.date);
 }
 
