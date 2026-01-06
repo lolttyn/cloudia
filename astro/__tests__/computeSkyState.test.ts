@@ -45,7 +45,7 @@ describe("computeSkyState", () => {
     const result = await computeSkyState({ date: "2025-12-19", timezone: "UTC" });
 
     // timestamp.julian_day is a finite number
-    expect(result.timestamp.julian_day).toBeFinite();
+    expect(Number.isFinite(result.timestamp.julian_day)).toBe(true);
     expect(result.timestamp.julian_day).toBeGreaterThan(0);
 
     // bodies.sun and bodies.moon exist
@@ -57,26 +57,26 @@ describe("computeSkyState", () => {
       // longitude is >= 0 and < 360
       expect(body.longitude).toBeGreaterThanOrEqual(0);
       expect(body.longitude).toBeLessThan(360);
-      expect(body.longitude).toBeFinite();
+      expect(Number.isFinite(body.longitude)).toBe(true);
       expect(body.longitude).not.toBeNaN();
 
       // speed_deg_per_day is finite
-      expect(body.speed_deg_per_day).toBeFinite();
+      expect(Number.isFinite(body.speed_deg_per_day)).toBe(true);
       expect(body.speed_deg_per_day).not.toBeNaN();
 
       // sign_degree is >= 0 and <= 30
       expect(body.sign_degree).toBeGreaterThanOrEqual(0);
       expect(body.sign_degree).toBeLessThanOrEqual(30);
-      expect(body.sign_degree).toBeFinite();
+      expect(Number.isFinite(body.sign_degree)).toBe(true);
       expect(body.sign_degree).not.toBeNaN();
 
       // Optional fields: if present, must be finite and not NaN
       if (body.latitude !== undefined) {
-        expect(body.latitude).toBeFinite();
+        expect(Number.isFinite(body.latitude)).toBe(true);
         expect(body.latitude).not.toBeNaN();
       }
       if (body.distance_au !== undefined) {
-        expect(body.distance_au).toBeFinite();
+        expect(Number.isFinite(body.distance_au)).toBe(true);
         expect(body.distance_au).not.toBeNaN();
         expect(body.distance_au).toBeGreaterThan(0);
       }
@@ -87,7 +87,7 @@ describe("computeSkyState", () => {
       expect(aspect.body_a).toBeDefined();
       expect(aspect.body_b).toBeDefined();
       expect(aspect.type).toBeDefined();
-      expect(aspect.orb_deg).toBeFinite();
+      expect(Number.isFinite(aspect.orb_deg)).toBe(true);
       expect(aspect.orb_deg).not.toBeNaN();
       expect(aspect.orb_deg).toBeGreaterThanOrEqual(0);
       expect(aspect.orb_deg).toBeLessThanOrEqual(180);
@@ -95,11 +95,11 @@ describe("computeSkyState", () => {
 
     // Validate lunar phase data
     expect(result.lunar.phase_name).toBeDefined();
-    expect(result.lunar.phase_angle_deg).toBeFinite();
+    expect(Number.isFinite(result.lunar.phase_angle_deg)).toBe(true);
     expect(result.lunar.phase_angle_deg).not.toBeNaN();
     expect(result.lunar.phase_angle_deg).toBeGreaterThanOrEqual(0);
     expect(result.lunar.phase_angle_deg).toBeLessThanOrEqual(180);
-    expect(result.lunar.illumination_pct).toBeFinite();
+    expect(Number.isFinite(result.lunar.illumination_pct)).toBe(true);
     expect(result.lunar.illumination_pct).not.toBeNaN();
     expect(result.lunar.illumination_pct).toBeGreaterThanOrEqual(0);
     expect(result.lunar.illumination_pct).toBeLessThanOrEqual(100);

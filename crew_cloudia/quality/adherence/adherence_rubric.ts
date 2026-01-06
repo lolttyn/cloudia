@@ -167,11 +167,29 @@ function enforceSystemLevel(
   blocking: Set<string>
 ): void {
   sentences.forEach((sentence, idx) => {
-    const lower = sentence.toLowerCase();
-    const matched = SYSTEM_LEVEL_EXPLANATION_PATTERNS.some((p) => lower.includes(p));
-    if (!matched) return;
+    const lower = sentence.toLowerCase().trim();
+    
+    // Check for system-level explanation patterns
+    const hasSystemPattern = SYSTEM_LEVEL_EXPLANATION_PATTERNS.some((p) => lower.includes(p));
+    
+    // Additional explicit check: "astrologically speaking/in astrology" + "represents/means/symbolizes"
+    // This pattern is always system-level explanation
+    const astrologyIntroPattern = /\b(astrologically speaking|in astrology|astrology says)\b/i;
+    const representsPattern = /\b(represents|means|symbolizes|stands for)\b/i;
+    const hasAstrologyIntro = astrologyIntroPattern.test(lower);
+    const hasRepresents = representsPattern.test(lower);
+    
+    // If it has both astrology intro AND represents/means pattern, it's definitely system-level
+    if (hasAstrologyIntro && hasRepresents) {
+      blocking.add("SYSTEM_LEVEL_EXPLANATION");
+      return;
+    }
+    
+    // Otherwise, check standard patterns
+    if (!hasSystemPattern) return;
 
-    const neighbor = [sentence, sentences[idx + 1] ?? ""].join(" ").toLowerCase();
+    // Check if there's lived experience to exempt it
+    const neighbor = [sentence, sentences[idx + 1] ?? ""].join(" ").toLowerCase().trim();
     const hasLived = BODY_OR_EMOTION_MARKERS.some((marker) => neighbor.includes(marker));
     if (!hasLived) {
       blocking.add("SYSTEM_LEVEL_EXPLANATION");
@@ -257,7 +275,14 @@ function enforceLunationFrontLoad(
     return;
   }
   
-  // For intro/main_themes: check first ~40% for feeling markers or lunation mention
+  // For intro/main_themes: only require front-loading if lunation is actually mentioned
+  // If the script doesn't mention moon/lunation at all, don't require front-loading
+  const hasLunationMentionAnywhere = lunationKeywords.some((k) => lower.includes(k));
+  if (!hasLunationMentionAnywhere) {
+    return; // No lunation mention = no requirement to front-load
+  }
+  
+  // Check first ~40% for feeling markers or lunation mention
   const firstFortyPercent = Math.ceil(sentences.length * 0.4);
   const earlySentences = sentences.slice(0, firstFortyPercent).join(" ").toLowerCase();
   
@@ -292,7 +317,7 @@ function enforceLunationFrontLoad(
     }
   }
   
-  // If no feeling markers in early portion AND no lunation mention, it's not front-loaded
+  // If no feeling markers in early portion AND no lunation mention in early portion, it's not front-loaded
   if (!hasFeelingMarker && !hasLunationMention) {
     blocking.add("LUNATION_NOT_FRONT_LOADED");
   }
@@ -351,7 +376,9 @@ function enforceBehavioralAffordance(
     }
   } else {
     // For main_themes: use standard affordance markers
-    if (!containsAny(lower, AFFORDANCE_MARKERS)) {
+    // Check if any affordance marker appears in the text
+    const hasAffordance = containsAny(lower, AFFORDANCE_MARKERS);
+    if (!hasAffordance) {
       blocking.add("NO_BEHAVIORAL_AFFORDANCE");
     }
     return;

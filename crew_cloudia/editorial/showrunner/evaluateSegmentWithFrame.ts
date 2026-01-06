@@ -225,17 +225,9 @@ export function evaluateSegmentWithFrame(params: {
   // These were structural requirements that led to rubric scaffolding.
   // Rubric now enforces experiential quality, not structural completeness.
 
-  // NOTE: This function is demoted to diagnostics-only per Phase D authority inversion.
-  // It no longer makes final approval decisions. It only flags grounding/structural issues.
-  // Final approval authority belongs to evaluateAdherenceRubric.
-  //
-  // Return diagnostics: if there are blocking reasons, signal REVISE/FAIL.
-  // If no blocking reasons, return REVISE (not APPROVE) to defer to rubric.
-  // The caller must check rubric blocking_reasons for final approval.
-
   const nextDecision = params.attempt + 1 >= params.max_attempts ? "FAIL_EPISODE" : "REVISE";
 
-  // If we have blocking reasons, return them; otherwise return REVISE to defer to rubric
+  // If we have blocking reasons, return them
   if (blocking_reasons.length > 0) {
     return {
       decision: nextDecision,
@@ -245,9 +237,9 @@ export function evaluateSegmentWithFrame(params: {
     };
   }
 
-  // No blocking reasons from this evaluator, but don't approve - defer to rubric
+  // No blocking reasons - approve
   return {
-    decision: "REVISE", // Defer final approval to rubric
+    decision: "APPROVE",
     notes: [...warnings],
     blocking_reasons: [],
     rewrite_instructions: [],
