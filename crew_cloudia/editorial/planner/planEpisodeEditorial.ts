@@ -300,7 +300,28 @@ export function planEpisodeEditorial(input: {
       rationale.add(ED_RULE_SPEAKABILITY_MUST_SAY_WINS);
     }
 
-    const includedTags = picks.map((p) => p.tag);
+    let includedTags = picks.map((p) => p.tag);
+
+    // On lunation days, ensure generic phase tag is included when overlay tag is present
+    if (lunationTagId && includedTags.includes(lunationTagId)) {
+      // Map overlay tag to generic phase tag
+      let genericPhaseTag: string | undefined;
+      if (lunationTagId.startsWith("new_moon_in_")) {
+        genericPhaseTag = "moon_phase_new";
+      } else if (lunationTagId.startsWith("full_moon_in_")) {
+        genericPhaseTag = "moon_phase_full";
+      }
+
+      // If generic tag exists in pool and isn't already included, add it first
+      if (genericPhaseTag) {
+        const genericTagCandidate = pool.find((p) => p.tag === genericPhaseTag);
+        if (genericTagCandidate && !includedTags.includes(genericPhaseTag)) {
+          // Place generic phase tag first for headline semantics
+          includedTags = [genericPhaseTag, ...includedTags];
+        }
+      }
+    }
+
     selectedBySegment[segment_key] = includedTags;
 
     picks.forEach((pick) => {

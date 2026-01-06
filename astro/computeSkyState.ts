@@ -11,7 +11,14 @@
  * - Deterministic outputs only
  */
 
-import { calcBody, julianDayFor } from "./ephemeris/swisseph";
+import {
+  calcBody,
+  julianDayFor,
+  getEngineVersion,
+  getEphemerisFileset,
+} from "./ephemeris/swisseph";
+import { computeAspects } from "./computeAspects.js";
+import { computeLunarPhase } from "./computeLunar.js";
 
 export interface ComputeSkyStateInput {
   date: string; // YYYY-MM-DD
@@ -59,6 +66,11 @@ export async function computeSkyState(input: ComputeSkyStateInput) {
 
   const date = input.date;
   const jd = julianDayFor(date, 12.0); // 12:00 UTC
+  const timestampGenerated = new Date().toISOString();
+
+  // Get metadata (deterministic)
+  const engineVersion = getEngineVersion();
+  const ephemerisFileset = getEphemerisFileset();
 
   const bodies: Record<
     string,
@@ -90,10 +102,23 @@ export async function computeSkyState(input: ComputeSkyStateInput) {
     };
   }
 
+  // Compute aspects between all body pairs
+  const aspects = computeAspects(bodies, 10); // 10 degree max orb
+
+  // Compute lunar phase data
+  const lunar = computeLunarPhase(
+    bodies.sun.longitude,
+    bodies.moon.longitude
+  );
+
   return {
+    schema_version: "1.0.0",
     meta: {
       engine: "swisseph",
+      engine_version: engineVersion,
+      ephemeris_fileset: ephemerisFileset,
       coordinate_system: "tropical",
+      timestamp_generated: timestampGenerated,
     },
     timestamp: {
       date,
@@ -102,8 +127,8 @@ export async function computeSkyState(input: ComputeSkyStateInput) {
       julian_day: jd,
     },
     bodies,
-    aspects: [],
-    lunar: {},
+    aspects,
+    lunar,
   };
 }
 
