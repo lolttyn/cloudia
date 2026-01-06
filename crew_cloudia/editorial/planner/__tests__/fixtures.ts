@@ -76,10 +76,17 @@ export const interpretation_lunation_special: DailyInterpretation = {
   lunation: { kind: "new", sign: "sagittarius", signal_key: "new_moon_in_sagittarius" },
   tags: [
     {
-      tag: "new_moon_in_sagittarius",
+      tag: "moon_phase_new",
       field: "theme",
       salience: "primary",
       speakability: "must_say",
+      rule_ids: ["rule.lunar_phase.new"],
+    },
+    {
+      tag: "new_moon_in_sagittarius",
+      field: "theme",
+      salience: "primary",
+      speakability: "can_say",
       rule_ids: ["rule.lunation.primary"],
     },
     {

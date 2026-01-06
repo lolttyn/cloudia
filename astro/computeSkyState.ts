@@ -59,6 +59,7 @@ export async function computeSkyState(input: ComputeSkyStateInput) {
 
   const date = input.date;
   const jd = julianDayFor(date, 12.0); // 12:00 UTC
+  const timestampGenerated = new Date().toISOString();
 
   const bodies: Record<
     string,
@@ -91,9 +92,13 @@ export async function computeSkyState(input: ComputeSkyStateInput) {
   }
 
   return {
+    schema_version: "1.0.0",
     meta: {
       engine: "swisseph",
+      engine_version: "unversioned",
+      ephemeris_fileset: "unversioned",
       coordinate_system: "tropical",
+      timestamp_generated: timestampGenerated,
     },
     timestamp: {
       date,

@@ -147,7 +147,7 @@ describe("planEpisodeEditorial", () => {
     expect(plan1).toStrictEqual(plan2);
   });
 
-  it("collapses around lunation days with the lunation tag headlining", () => {
+  it("collapses around lunation days with the lunar phase headlining", () => {
     const plan = planEpisodeEditorial({
       interpretation: interpretation_lunation_special,
       memory: { recent_tags: [] },
@@ -158,12 +158,14 @@ describe("planEpisodeEditorial", () => {
     const reflection = plan.segments.find((s) => s.segment_key === "reflection");
     const closing = plan.segments.find((s) => s.segment_key === "closing");
 
-    expect(intro?.included_tags).toContain("new_moon_in_sagittarius");
-    expect(main?.included_tags).toContain("new_moon_in_sagittarius");
+    // Phase must headline on lunation days (not the overlay)
+    expect(intro?.included_tags).toContain("moon_phase_new");
+    expect(main?.included_tags).toContain("moon_phase_new");
     expect(reflection?.included_tags.length).toBeLessThanOrEqual(1);
     expect(closing?.included_tags.length).toBeLessThanOrEqual(1);
+    // Phase tag should appear in at least one segment
     expect(plan.segments.flatMap((s) => s.included_tags)).toContain(
-      "new_moon_in_sagittarius"
+      "moon_phase_new"
     );
   });
 
@@ -181,7 +183,9 @@ describe("planEpisodeEditorial", () => {
     ]);
 
     const allTags = plan.segments.flatMap((s) => s.included_tags);
-    expect(allTags).toContain("new_moon_in_sagittarius");
+    // Phase tag should be present
+    expect(allTags).toContain("moon_phase_new");
+    // Other themes can coexist (including optional lunation overlay)
     expect(new Set(allTags).size).toBeGreaterThan(1);
   });
 
