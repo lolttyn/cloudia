@@ -4,7 +4,7 @@ exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-str
 {
   "canon_compliance": {
     "notes": [
-      "Phase 5.2: derived from canonical inputs",
+      "canon:v1.0.0",
     ],
     "violations": [],
   },
@@ -13,7 +13,7 @@ exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-str
     "Because the Sun is in Capricorn, the day stays framed by structure and accountability and long-range focus.",
     "Because the Sun and Moon form a sextile, latent opportunities appear if you engage them.",
   ],
-  "confidence_level": "high",
+  "confidence_level": "low",
   "continuity": {
     "references_tomorrow": "Today sets the tone; tomorrow carries the echo of surrender over control.",
     "references_yesterday": "Yesterday signaled surrender over control; today it is strengthening.",
@@ -33,20 +33,62 @@ exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-str
   "signals": [
     {
       "kind": "planet_in_sign",
-      "salience": 0.7,
-      "signal_key": "mars_in_capricorn",
+      "meta": {
+        "body": "sun",
+        "sign": "capricorn",
+      },
+      "salience": 0.35,
+      "signal_key": "sun_in_capricorn",
       "source": "sky_features",
     },
     {
       "kind": "planet_in_sign",
-      "salience": 0.7,
-      "signal_key": "mercury_in_capricorn",
+      "meta": {
+        "body": "moon",
+        "phase": "waxing",
+        "sign": "pisces",
+        "temporal_label": "exiting",
+        "temporal_window": "next_24h",
+      },
+      "salience": 0.3,
+      "signal_key": "moon_in_pisces",
       "source": "sky_features",
     },
     {
-      "kind": "planet_in_sign",
-      "salience": 0.7,
-      "signal_key": "jupiter_in_taurus",
+      "kind": "lunar_phase",
+      "meta": {
+        "phase": "waxing",
+      },
+      "salience": 0.25,
+      "signal_key": "moon_phase_waxing",
+      "source": "sky_features",
+    },
+    {
+      "kind": "ingress",
+      "meta": {
+        "body": "Moon",
+        "from_sign": "Pisces",
+        "temporal_label": "exiting",
+        "temporal_window": "next_24h",
+        "to_sign": "Aries",
+        "window": "next_24h",
+      },
+      "salience": 0.2,
+      "signal_key": "moon_ingress_aries_next_24h",
+      "source": "sky_features",
+    },
+    {
+      "kind": "aspect",
+      "meta": {
+        "aspect": "sextile",
+        "bodies": [
+          "Sun",
+          "Moon",
+        ],
+      },
+      "orb_deg": 4.9268,
+      "salience": 0.17886666666666662,
+      "signal_key": "sun_moon_sextile",
       "source": "sky_features",
     },
   ],
@@ -501,27 +543,16 @@ exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-str
 exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-strict) > captures both outputs for comparison without requiring equality > legacy-vs-canonical-diff-summary 1`] = `
 {
   "sample_differences": [
-    "signals: array length mismatch (5 vs 3)",
-    "signals[0].signal_key: "sun_in_capricorn" !== "mars_in_capricorn"",
-    "signals[0].salience: 0.35 !== 0.7",
-    "signals[0].meta: missing in canonical",
-    "signals[1].signal_key: "moon_in_pisces" !== "mercury_in_capricorn"",
-    "signals[1].salience: 0.3 !== 0.7",
-    "signals[1].meta: missing in canonical",
-    "signals[2].signal_key: "moon_phase_waxing" !== "jupiter_in_taurus"",
-    "signals[2].kind: "lunar_phase" !== "planet_in_sign"",
-    "signals[2].salience: 0.25 !== 0.7",
-    "signals[2].meta: missing in canonical",
-    "signals[3]: missing in canonical",
-    "signals[4]: missing in canonical",
+    "signals[0].meta.temporal_window: missing in canonical",
+    "signals[0].meta.temporal_label: missing in canonical",
+    "signals[4].salience: 0.17833333333333334 !== 0.17886666666666662",
+    "signals[4].orb_deg: 4.93 !== 4.9268",
     "interpretation_bundles.primary: array length mismatch (2 vs 0)",
     "interpretation_bundles.primary[0]: missing in canonical",
     "interpretation_bundles.primary[1]: missing in canonical",
     "interpretation_bundles.secondary: array length mismatch (1 vs 0)",
     "interpretation_bundles.secondary[0]: missing in canonical",
-    "confidence_level: "low" !== "high"",
-    "canon_compliance.notes[0]: "canon:v1.0.0" !== "Phase 5.2: derived from canonical inputs"",
   ],
-  "total_differences": 20,
+  "total_differences": 9,
 }
 `;

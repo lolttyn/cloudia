@@ -364,6 +364,15 @@ function dedupe<T>(list: T[]): T[] {
 }
 
 /**
+ * Helper: strip undefined fields from object (for meta objects)
+ */
+function compact<T extends Record<string, any>>(obj: T): Partial<T> {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([, v]) => v !== undefined)
+  ) as Partial<T>;
+}
+
+/**
  * Helper: build date window (yesterday/today/tomorrow)
  */
 function buildDateWindow(base: string, lookback: number, lookahead: number): string[] {
@@ -580,12 +589,12 @@ function deriveSignalsFromSkyFeatures(
     kind: "planet_in_sign",
     salience: 0.35,
     source: "sky_features",
-    meta: {
+    meta: compact({
       sign: features.sun.sign.toLowerCase(),
       body: "sun",
       temporal_window: sunIngressHighlight?.window,
       temporal_label: sunIngressHighlight ? temporalLabelFromWindow(sunIngressHighlight.window) : undefined,
-    },
+    }),
   });
 
   // Moon in sign
@@ -594,13 +603,13 @@ function deriveSignalsFromSkyFeatures(
     kind: "planet_in_sign",
     salience: 0.3,
     source: "sky_features",
-    meta: {
+    meta: compact({
       sign: features.moon.sign.toLowerCase(),
       body: "moon",
       phase: features.moon.phase,
       temporal_window: moonIngressHighlight?.window,
       temporal_label: moonIngressHighlight ? temporalLabelFromWindow(moonIngressHighlight.window) : undefined,
-    },
+    }),
   });
 
   // Moon phase
@@ -609,7 +618,7 @@ function deriveSignalsFromSkyFeatures(
     kind: "lunar_phase",
     salience: moonPhaseSalience(features.moon.phase),
     source: "sky_features",
-    meta: { phase: features.moon.phase },
+    meta: compact({ phase: features.moon.phase }),
   });
 
   // Lunation detection: high-salience, single-dominant triggers.
@@ -621,7 +630,7 @@ function deriveSignalsFromSkyFeatures(
       kind: "lunation",
       salience: 0.95,
       source: "sky_features",
-      meta: { sign: features.sun.sign.toLowerCase(), phase: "new" },
+      meta: compact({ sign: features.sun.sign.toLowerCase(), phase: "new" }),
     });
   } else if (features.moon.phase === "full" && isOppositeSign(features.sun.sign, features.moon.sign)) {
     signals.push({
@@ -629,7 +638,7 @@ function deriveSignalsFromSkyFeatures(
       kind: "lunation",
       salience: 0.95,
       source: "sky_features",
-      meta: { sign: features.moon.sign.toLowerCase(), phase: "full" },
+      meta: compact({ sign: features.moon.sign.toLowerCase(), phase: "full" }),
     });
   }
 
@@ -641,7 +650,7 @@ function deriveSignalsFromSkyFeatures(
         salience: aspectSalience(highlight.orb_deg),
         source: "sky_features",
         orb_deg: highlight.orb_deg,
-        meta: { aspect: highlight.aspect, bodies: ["Sun", "Moon"] },
+        meta: compact({ aspect: highlight.aspect, bodies: ["Sun", "Moon"] }),
       });
     } else if (highlight.type === "ingress") {
       signals.push({
@@ -652,14 +661,14 @@ function deriveSignalsFromSkyFeatures(
         kind: "ingress",
         salience: 0.2,
         source: "sky_features",
-        meta: {
+        meta: compact({
           body: highlight.body,
           from_sign: highlight.from_sign,
           to_sign: highlight.to_sign,
           window: highlight.window,
           temporal_window: highlight.window,
           temporal_label: temporalLabelFromWindow(highlight.window),
-        },
+        }),
       });
     }
   }

@@ -9,7 +9,7 @@
  */
 
 import { z } from "zod";
-import { InterpretationSignalSchema } from "../../interpretation/signals/signals.schema.js";
+import { InterpretationSignalSchema } from "../../../interpretation/signals/signals.schema.js";
 
 /**
  * Dominant contrast axis - the primary tension/contrast for the day
