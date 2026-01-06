@@ -2,7 +2,7 @@ import { DailyInterpretationSchema } from "../schema/ikb.schemas.js";
 import {
   applyCombinationRules,
   CombinationRule,
-  MockFacts,
+  InterpreterFactsInput,
   AggregatedOutputs,
   TagRecord,
   TagField,
@@ -13,7 +13,7 @@ import { evaluateCanon } from "./evaluateCanon.js";
 import { CanonConstraint } from "../canon/canon.schemas.js";
 
 export type InterpreterInput = {
-  facts: MockFacts;
+  facts: InterpreterFactsInput;
   combinationRules: CombinationRule[];
   weightingPolicy: WeightingPolicy;
   canon: CanonConstraint[];

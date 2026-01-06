@@ -14,8 +14,11 @@ import {
   type TransitFact,
   type ConditionFact,
   type ExcludedRecord,
+  type InterpreterTransit,
+  type InterpreterTransitSource,
 } from "./schema/dailyFacts.schema.js";
 import type { SkyState, Aspect } from "../../../astro/schemas/skyState.schema.js";
+import type { BodyId } from "./policy/technicianPolicy.v1.js";
 
 export interface AstrologyTechnicianInput {
   date: string; // YYYY-MM-DD
@@ -27,6 +30,55 @@ export interface AstrologyTechnicianInput {
  * (Not yet in policy, using default per docs)
  */
 const PRIMARY_EXACT_THRESHOLD_DEG = 1.0;
+
+/**
+ * Deterministic body speed order for planet selection from aspect pairs.
+ * Faster-moving bodies come first. Used to select "primary" planet from (body_a, body_b).
+ * This is a normalization rule, not interpretive meaning.
+ */
+const BODY_SPEED_ORDER: Record<BodyId, number> = {
+  moon: 1,
+  mercury: 2,
+  venus: 3,
+  sun: 4,
+  mars: 5,
+  jupiter: 6,
+  saturn: 7,
+  uranus: 8,
+  neptune: 9,
+  pluto: 10,
+  north_node: 11,
+  south_node: 12,
+};
+
+/**
+ * Deterministic duration_days mapping by salience.
+ * Matches legacy fixture pattern (primary→2, secondary→7, background→90).
+ * This is a pinned rule, not a heuristic.
+ */
+const DURATION_DAYS_BY_SALIENCE: Record<"primary" | "secondary" | "background", number> = {
+  primary: 2,
+  secondary: 7,
+  background: 90,
+};
+
+/**
+ * Select primary planet from aspect pair using deterministic speed order.
+ * Faster-moving body wins; tiebreak to body_a.
+ */
+function selectPrimaryPlanet(bodyA: BodyId, bodyB: BodyId): BodyId {
+  const speedA = BODY_SPEED_ORDER[bodyA] ?? 99;
+  const speedB = BODY_SPEED_ORDER[bodyB] ?? 99;
+  
+  if (speedA < speedB) {
+    return bodyA;
+  } else if (speedB < speedA) {
+    return bodyB;
+  } else {
+    // Tiebreak to body_a
+    return bodyA;
+  }
+}
 
 /**
  * Map sky_state body name to BodyId (handles case normalization)
@@ -267,6 +319,139 @@ function extractBackgroundConditions(
 }
 
 /**
+ * Derive interpreter_transits_v1 from existing facts + skyState.
+ * This is a pure, deterministic mapping with no heuristics.
+ */
+function deriveInterpreterTransits(
+  transitsPrimary: TransitFact[],
+  transitsSecondary: TransitFact[],
+  backgroundConditions: ConditionFact[],
+  skyState: SkyState
+): InterpreterTransit[] {
+  const result: InterpreterTransit[] = [];
+
+  // Map primary transits
+  for (const transit of transitsPrimary) {
+    const planet = selectPrimaryPlanet(transit.body_a, transit.body_b);
+    const bodyState = skyState.bodies[planet];
+    
+    if (!bodyState) {
+      // Skip if body not in sky_state (shouldn't happen, but defensive)
+      continue;
+    }
+
+    result.push({
+      planet,
+      sign: bodyState.sign as any,
+      salience: "primary",
+      orb_deg: transit.orb_deg,
+      duration_days: DURATION_DAYS_BY_SALIENCE.primary,
+      retrograde: bodyState.retrograde,
+      source: {
+        kind: "aspect",
+        body_a: transit.body_a,
+        body_b: transit.body_b,
+        aspect_type: transit.aspect_type,
+      },
+    });
+  }
+
+  // Map secondary transits
+  for (const transit of transitsSecondary) {
+    const planet = selectPrimaryPlanet(transit.body_a, transit.body_b);
+    const bodyState = skyState.bodies[planet];
+    
+    if (!bodyState) {
+      continue;
+    }
+
+    result.push({
+      planet,
+      sign: bodyState.sign as any,
+      salience: "secondary",
+      orb_deg: transit.orb_deg,
+      duration_days: DURATION_DAYS_BY_SALIENCE.secondary,
+      retrograde: bodyState.retrograde,
+      source: {
+        kind: "aspect",
+        body_a: transit.body_a,
+        body_b: transit.body_b,
+        aspect_type: transit.aspect_type,
+      },
+    });
+  }
+
+  // Map background conditions
+  for (const condition of backgroundConditions) {
+    if (condition.kind === "retrograde") {
+      const bodyState = skyState.bodies[condition.body];
+      if (!bodyState) {
+        continue;
+      }
+
+      result.push({
+        planet: condition.body,
+        sign: bodyState.sign as any,
+        salience: "background",
+        orb_deg: 0, // Retrograde is a state, not an aspect
+        duration_days: DURATION_DAYS_BY_SALIENCE.background,
+        retrograde: true,
+        source: {
+          kind: "retrograde",
+        },
+      });
+    } else if (condition.kind === "ingress") {
+      const bodyState = skyState.bodies[condition.body];
+      if (!bodyState) {
+        continue;
+      }
+
+      // Use to_sign as the current sign (ingress just happened)
+      result.push({
+        planet: condition.body,
+        sign: condition.to_sign,
+        salience: "background",
+        orb_deg: 0,
+        duration_days: DURATION_DAYS_BY_SALIENCE.background,
+        retrograde: bodyState.retrograde,
+        source: {
+          kind: "ingress",
+        },
+      });
+    } else if (condition.kind === "lunation") {
+      // Lunation doesn't map to a single planet transit
+      // Skip for now - legacy interpreter may handle separately
+      // If needed, we can add moon-based transit entry here
+    } else if (condition.kind === "aspect") {
+      // Background aspect - treat like primary/secondary but with background salience
+      const planet = selectPrimaryPlanet(condition.body_a, condition.body_b);
+      const bodyState = skyState.bodies[planet];
+      
+      if (!bodyState) {
+        continue;
+      }
+
+      result.push({
+        planet,
+        sign: bodyState.sign as any,
+        salience: "background",
+        orb_deg: condition.orb_deg,
+        duration_days: DURATION_DAYS_BY_SALIENCE.background,
+        retrograde: bodyState.retrograde,
+        source: {
+          kind: "aspect",
+          body_a: condition.body_a,
+          body_b: condition.body_b,
+          aspect_type: condition.aspect_type,
+        },
+      });
+    }
+  }
+
+  return result;
+}
+
+/**
  * Pure function: Derive daily facts from a sky_state
  * This is deterministic and does not depend on external state.
  * 
@@ -323,6 +508,14 @@ export function deriveDailyFactsFromSkyState(
     ephemeris_fileset: skyState.meta.ephemeris_fileset,
   };
   
+  // Derive interpreter_transits_v1 (deterministic compatibility view)
+  const interpreterTransits = deriveInterpreterTransits(
+    transits.primary,
+    transits.secondary,
+    backgroundConditions,
+    skyState
+  );
+
   // Build daily facts object
   const dailyFacts = {
     schema_version: "1.0.0",
@@ -334,6 +527,7 @@ export function deriveDailyFactsFromSkyState(
     transits_secondary: transits.secondary,
     background_conditions: backgroundConditions,
     excluded,
+    interpreter_transits_v1: interpreterTransits,
   };
   
   // Validate against schema

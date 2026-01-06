@@ -140,6 +140,35 @@ const SourceReferenceSchema = z.object({
 });
 
 /**
+ * Interpreter transit source metadata
+ * Tracks where the transit came from in the original facts structure
+ */
+const InterpreterTransitSourceSchema = z.object({
+  kind: z.enum(["aspect", "retrograde", "ingress", "lunation"]),
+  body_a: BodyIdSchema.optional(),
+  body_b: BodyIdSchema.optional(),
+  aspect_type: AspectTypeSchema.optional(),
+  condition_id: z.string().optional(),
+});
+
+/**
+ * Interpreter transit (compatibility view for legacy interpreter)
+ * 
+ * This is a flattened, deterministic view of transits that matches the
+ * legacy interpreter's MockFacts input shape. All fields are derived
+ * deterministically from SkyStateDaily + existing facts.
+ */
+const InterpreterTransitSchema = z.object({
+  planet: BodyIdSchema,
+  sign: SignNameSchema,
+  salience: z.enum(["primary", "secondary", "background"]),
+  orb_deg: z.number().min(0),
+  duration_days: z.number().int().min(0),
+  retrograde: z.boolean(),
+  source: InterpreterTransitSourceSchema,
+});
+
+/**
  * Daily Facts Schema
  * 
  * The complete output of Layer 1 fact extraction.
@@ -167,6 +196,15 @@ export const DailyFactsSchema = z.object({
   
   /** Records of items that were excluded/ignored during extraction */
   excluded: z.array(ExcludedRecordSchema),
+  
+  /** 
+   * Canonical flattened transit view for legacy interpreter compatibility
+   * 
+   * This field provides a deterministic mapping from DailyFacts to the
+   * interpreter's expected input shape. All fields are derived from
+   * SkyStateDaily + existing facts with pinned rules (no heuristics).
+   */
+  interpreter_transits_v1: z.array(InterpreterTransitSchema),
 });
 
 export type DailyFacts = z.infer<typeof DailyFactsSchema>;
@@ -178,6 +216,8 @@ export type LunationCondition = z.infer<typeof LunationConditionSchema>;
 export type BackgroundAspectCondition = z.infer<typeof BackgroundAspectConditionSchema>;
 export type ExcludedRecord = z.infer<typeof ExcludedRecordSchema>;
 export type SourceReference = z.infer<typeof SourceReferenceSchema>;
+export type InterpreterTransit = z.infer<typeof InterpreterTransitSchema>;
+export type InterpreterTransitSource = z.infer<typeof InterpreterTransitSourceSchema>;
 export type AspectType = z.infer<typeof AspectTypeSchema>;
 export type BodyId = z.infer<typeof BodyIdSchema>;
 export type SignName = z.infer<typeof SignNameSchema>;

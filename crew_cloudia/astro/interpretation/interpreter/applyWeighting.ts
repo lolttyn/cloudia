@@ -1,4 +1,4 @@
-import { MockFacts, CombinationResult } from "./applyCombinationRules.js";
+import { InterpreterFactsInput, CombinationResult } from "./applyCombinationRules.js";
 
 export type WeightingRule = {
   id: string;
@@ -33,7 +33,7 @@ export type WeightingResult = {
 };
 
 export function applyWeighting(
-  facts: MockFacts,
+  facts: InterpreterFactsInput,
   combo: CombinationResult,
   policy: WeightingPolicy
 ): WeightingResult {

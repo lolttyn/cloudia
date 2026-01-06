@@ -1,7 +1,13 @@
 import { z } from "zod";
 import { InterpretationLayerSchema } from "../schema/ikb.schemas";
 
-export type MockFacts = {
+/**
+ * InterpreterFactsInput (renamed from MockFacts)
+ * 
+ * The current interpreter input shape. This matches the shape produced by
+ * adaptToInterpreterInput() from canonical Layer 1 DailyFacts.
+ */
+export type InterpreterFactsInput = {
   date: string;
   transits: Array<{
     planet: string;
@@ -12,6 +18,11 @@ export type MockFacts = {
     retrograde: boolean;
   }>;
 };
+
+/**
+ * @deprecated Use InterpreterFactsInput instead. Kept for backward compatibility during migration.
+ */
+export type MockFacts = InterpreterFactsInput;
 
 const shortTag = z
   .string()
@@ -96,7 +107,7 @@ export type TagRecord = {
 };
 
 export function applyCombinationRules(
-  facts: MockFacts,
+  facts: InterpreterFactsInput,
   rules: CombinationRule[]
 ): CombinationResult {
   const matchedRules: CombinationRule[] = [];

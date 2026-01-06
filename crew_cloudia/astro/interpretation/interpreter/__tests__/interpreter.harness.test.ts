@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { runInterpreter } from "../runInterpreter.js";
-import { CombinationRule, MockFacts } from "../applyCombinationRules.js";
+import { CombinationRule, InterpreterFactsInput } from "../applyCombinationRules.js";
 import { WeightingPolicy } from "../applyWeighting.js";
 import { CanonConstraintSchema } from "../../canon/canon.schemas.js";
 
-const MOCK_FACTS: MockFacts = {
+const MOCK_FACTS: InterpreterFactsInput = {
   date: "2025-01-15",
   transits: [
     {
