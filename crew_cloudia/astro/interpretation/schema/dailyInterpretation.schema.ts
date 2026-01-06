@@ -47,12 +47,65 @@ const InterpretationBundleRefSchema = z.object({
 });
 
 /**
+ * Temporal arc schema (matches InterpretiveFrame)
+ */
+const TemporalArcSchema = z
+  .object({
+    type: z.enum(["retrograde", "lunar_phase", "major_aspect", "solar_ingress", "none"]),
+    phase: z.string().min(1),
+    intensity: z.enum(["emerging", "strengthening", "dominant", "softening"]),
+    arc_day_index: z.number().int().min(1),
+    arc_total_days: z.number().int().min(1),
+  })
+  .superRefine((arc, ctx) => {
+    if (arc.arc_day_index > arc.arc_total_days) {
+      ctx.addIssue({
+        code: "custom",
+        message: "arc_day_index cannot exceed arc_total_days",
+        path: ["arc_day_index"],
+      });
+    }
+    if (arc.type === "none" && arc.phase.toLowerCase() !== "baseline") {
+      ctx.addIssue({
+        code: "custom",
+        message: "arc type 'none' must use phase 'baseline'",
+        path: ["phase"],
+      });
+    }
+  });
+
+/**
+ * Continuity schema (matches InterpretiveFrame)
+ */
+const ContinuitySchema = z
+  .object({
+    references_yesterday: z.string().min(1).max(180).optional(),
+    references_tomorrow: z.string().min(1).max(180).optional(),
+  })
+  .refine(
+    (c) =>
+      (c.references_yesterday ? c.references_yesterday.split(/[.!?]/).filter(Boolean).length <= 1 : true) &&
+      (c.references_tomorrow ? c.references_tomorrow.split(/[.!?]/).filter(Boolean).length <= 1 : true),
+    {
+      message: "Continuity hooks must be at most one sentence each",
+    }
+  );
+
+/**
+ * Timing schema (matches InterpretiveFrame)
+ */
+const TimingSchema = z.object({
+  state: z.enum(["building", "peaking", "settling", "transitioning"]),
+  notes: z.string().min(1).optional(),
+});
+
+/**
  * DailyInterpretation Schema
  * 
  * Canonical Layer 2 meaning object. All fields are derived deterministically
  * from Layer 0 (SkyStateDaily) + Layer 1 (DailyFacts) inputs.
  * 
- * No window logic (yesterday/tomorrow) - that belongs in Phase 5.3.
+ * Includes temporal/window logic fields (Phase 5.3).
  */
 export const DailyInterpretationSchema = z.object({
   schema_version: z.string().min(1), // e.g., "1.0.0"
@@ -79,6 +132,13 @@ export const DailyInterpretationSchema = z.object({
   
   // Confidence and metadata
   confidence_level: z.enum(["high", "medium", "low"]),
+  
+  // Temporal/window logic fields (Phase 5.3)
+  temporal_phase: z.enum(["building", "peak", "releasing", "aftershock", "baseline"]),
+  intensity_modifier: z.enum(["emerging", "strengthening", "dominant", "softening"]),
+  temporal_arc: TemporalArcSchema,
+  continuity: ContinuitySchema,
+  timing: TimingSchema,
   
   // Provenance
   provenance: z.object({

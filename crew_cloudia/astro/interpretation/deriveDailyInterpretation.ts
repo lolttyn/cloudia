@@ -5,7 +5,7 @@
  * Layer 0 (SkyStateDaily) + Layer 1 (DailyFacts) inputs.
  * 
  * This is DB-free and deterministic - all inputs come from InterpretationInputs.
- * No window logic (that's Phase 5.3).
+ * Includes window logic for temporal fields (Phase 5.3).
  */
 
 import { InterpretationInputs } from "./loadInterpretationInputs.js";
@@ -14,7 +14,34 @@ import {
   type DailyInterpretation,
 } from "./schema/dailyInterpretation.schema.js";
 import interpretiveCanon from "../../interpretation/canon/interpretiveCanon_v1.json" assert { type: "json" };
+import type { InterpretiveFrame } from "../../interpretation/schema/InterpretiveFrame.js";
 type InterpretiveCanon = typeof interpretiveCanon;
+
+// Minimal SkyFeatures type for window logic (matches legacy)
+type SkyFeatures = {
+  date: string;
+  sun: { sign: string };
+  moon: { sign: string; phase: "new" | "waxing" | "full" | "waning" };
+};
+
+// Legacy SkyAspect type for aspect detection
+type SkyAspect =
+  | {
+      type: "aspect";
+      aspect: "conjunction" | "sextile" | "square" | "trine" | "opposition";
+      orb_deg: number;
+    }
+  | {
+      type: "ingress";
+      body: "Moon" | "Sun";
+      from_sign: string;
+      to_sign: string;
+      window: "past_24h" | "next_24h";
+    };
+
+type CanonSunSign = InterpretiveCanon["sun_signs"][string];
+type CanonMoonSign = InterpretiveCanon["moon_signs"][string];
+type CanonPhase = InterpretiveCanon["moon_phases"][keyof InterpretiveCanon["moon_phases"]];
 
 /**
  * Derive dominant contrast axis from sky state and daily facts
@@ -266,25 +293,215 @@ function deriveSkyAnchors(inputs: InterpretationInputs): DailyInterpretation["sk
 }
 
 /**
- * Derive causal logic from transits
+ * Port legacy pickTone() function
  */
-function deriveCausalLogic(inputs: InterpretationInputs): string[] {
-  const { daily_facts } = inputs;
-  const primaryTransits = daily_facts.interpreter_transits_v1.filter(
-    (t) => t.salience === "primary"
-  );
-  
-  const logic: string[] = [];
-  
-  for (const transit of primaryTransits.slice(0, 2)) {
-    logic.push(`${transit.planet} in ${transit.sign} creates ${transit.salience} influence`);
+function pickTone(
+  moonEntry: CanonMoonSign,
+  phaseEntry: CanonPhase,
+  aspect: SkyAspect | undefined,
+  canon: InterpretiveCanon
+): string {
+  const parts = [moonEntry.tone];
+
+  if (aspect?.type === "aspect") {
+    const aspectTone = canon.aspects.sun_moon[aspect.aspect]?.tone;
+    if (aspectTone) parts.push(aspectTone);
   }
-  
-  if (logic.length === 0) {
-    logic.push("Background conditions provide steady context");
+
+  // Use the phase hint sparingly to keep tone bounded.
+  if (phaseEntry.why_today.includes("peaks") && !parts.includes("illuminated")) {
+    parts.push("illuminated");
   }
-  
-  return logic;
+
+  return parts.filter(Boolean).join("; ");
+}
+
+/**
+ * Port legacy buildCausalLogic() function
+ */
+function buildCausalLogic(
+  sunSign: string,
+  moonSign: string,
+  sunEntry: CanonSunSign,
+  moonEntry: CanonMoonSign,
+  aspect: SkyAspect | undefined,
+  canon: InterpretiveCanon
+): string[] {
+  const lines = [
+    `Because the Moon is in ${moonSign}, ${moonEntry.core_meanings[0]} and ${moonEntry.core_meanings[1]} take precedence.`,
+    `Because the Sun is in ${sunSign}, the day stays framed by ${sunEntry.core_meanings.join(" and ")}.`,
+  ];
+
+  if (aspect?.type === "aspect") {
+    const aspectCanon = canon.aspects.sun_moon[aspect.aspect];
+    if (aspectCanon) {
+      lines.push(
+        `Because the Sun and Moon form a ${aspect.aspect}, ${aspectCanon.meaning}.`
+      );
+    }
+  }
+
+  return lines;
+}
+
+/**
+ * Helper: dedupe array
+ */
+function dedupe<T>(list: T[]): T[] {
+  return Array.from(new Set(list));
+}
+
+/**
+ * Helper: build date window (yesterday/today/tomorrow)
+ */
+function buildDateWindow(base: string, lookback: number, lookahead: number): string[] {
+  const baseDate = new Date(`${base}T00:00:00Z`);
+  if (Number.isNaN(baseDate.getTime())) throw new Error(`Invalid date ${base}`);
+  const dates: string[] = [];
+  for (let i = lookback; i >= 1; i--) {
+    const d = new Date(baseDate);
+    d.setUTCDate(d.getUTCDate() - i);
+    dates.push(d.toISOString().slice(0, 10));
+  }
+  dates.push(base);
+  for (let i = 1; i <= lookahead; i++) {
+    const d = new Date(baseDate);
+    d.setUTCDate(d.getUTCDate() + i);
+    dates.push(d.toISOString().slice(0, 10));
+  }
+  return dates;
+}
+
+/**
+ * Port legacy deriveTemporalPhase() function
+ */
+function deriveTemporalPhase(today: SkyFeatures, window: SkyFeatures[]): InterpretiveFrame["temporal_phase"] {
+  // Map coarse lunar phase to temporal phase with simple trend detection.
+  const idx = window.findIndex((w) => w.date === today.date);
+  if (idx === -1) {
+    throw new Error("Temporal window missing today snapshot");
+  }
+  const phase = today.moon.phase;
+  const yesterday = window[idx - 1];
+
+  if (phase === "full") return "peak";
+  if (phase === "waning") return yesterday?.moon.phase === "full" ? "aftershock" : "releasing";
+  if (phase === "waxing") return "building";
+  if (phase === "new") return "baseline";
+  return "baseline";
+}
+
+/**
+ * Port legacy deriveIntensityModifier() function
+ */
+function deriveIntensityModifier(
+  axisStatement: string,
+  temporal_phase: InterpretiveFrame["temporal_phase"],
+  window: SkyFeatures[],
+  baseDate: string
+): InterpretiveFrame["intensity_modifier"] {
+  const todayIdx = window.findIndex((w) => w.date === baseDate);
+  if (todayIdx === -1) throw new Error("Temporal window missing today snapshot");
+  const today = window[todayIdx];
+  const yesterday = window[todayIdx - 1];
+
+  const novelty =
+    !yesterday || yesterday.moon.sign.toLowerCase() !== today.moon.sign.toLowerCase();
+
+  if (novelty) {
+    return temporal_phase === "peak" ? "dominant" : "emerging";
+  }
+
+  if (temporal_phase === "peak") return "dominant";
+  if (temporal_phase === "building") return "strengthening";
+  if (temporal_phase === "releasing" || temporal_phase === "aftershock") return "softening";
+  return "emerging";
+}
+
+/**
+ * Port legacy deriveTemporalArc() function
+ */
+function deriveTemporalArc(
+  temporal_phase: InterpretiveFrame["temporal_phase"],
+  intensity: InterpretiveFrame["intensity_modifier"],
+  today: SkyFeatures,
+  window: SkyFeatures[]
+): InterpretiveFrame["temporal_arc"] {
+  // Simple deterministic arc assignment based on available features.
+  // Priority: lunar_phase (from Moon phase) -> solar_ingress (sun sign change in window) -> none.
+
+  const idx = window.findIndex((w) => w.date === today.date);
+  const yesterday = window[idx - 1];
+  const tomorrow = window[idx + 1];
+
+  // Detect lunar phase arc (short arc ~7 days)
+  const phaseMap: Record<SkyFeatures["moon"]["phase"], { phase: string; arc_day_index: number }> =
+    {
+      new: { phase: "building", arc_day_index: 1 },
+      waxing: { phase: "building", arc_day_index: 2 },
+      full: { phase: "peak", arc_day_index: 4 },
+      waning: { phase: "releasing", arc_day_index: 5 },
+    };
+
+  const lunarPhase = phaseMap[today.moon.phase];
+  if (lunarPhase) {
+    return {
+      type: "lunar_phase",
+      phase: lunarPhase.phase,
+      intensity,
+      arc_day_index: lunarPhase.arc_day_index,
+      arc_total_days: 7,
+    };
+  }
+
+  // Detect solar ingress (micro arc 3 days)
+  const sunChange =
+    (yesterday && yesterday.sun.sign !== today.sun.sign) ||
+    (tomorrow && tomorrow.sun.sign !== today.sun.sign);
+  if (sunChange) {
+    return {
+      type: "solar_ingress",
+      phase: "ingress",
+      intensity,
+      arc_day_index: 1,
+      arc_total_days: 3,
+    };
+  }
+
+  return {
+    type: "none",
+    phase: "baseline",
+    intensity: "emerging",
+    arc_day_index: 1,
+    arc_total_days: 1,
+  };
+}
+
+/**
+ * Port legacy buildContinuityHooks() function
+ */
+function buildContinuityHooks(
+  temporal_phase: InterpretiveFrame["temporal_phase"],
+  intensity: InterpretiveFrame["intensity_modifier"],
+  window: SkyFeatures[],
+  axisStatement: string,
+  baseDate: string
+): InterpretiveFrame["continuity"] {
+  const todayIdx = window.findIndex((w) => w.date === baseDate);
+  if (todayIdx === -1) throw new Error("Temporal window missing today snapshot");
+  const yesterday = window[todayIdx - 1];
+  const tomorrow = window[todayIdx + 1];
+  const hooks: InterpretiveFrame["continuity"] = {};
+
+  if (yesterday && temporal_phase !== "baseline") {
+    hooks.references_yesterday = `Yesterday signaled ${axisStatement.toLowerCase()}; today it is ${intensity}.`;
+  }
+
+  if (tomorrow && (temporal_phase === "building" || temporal_phase === "peak")) {
+    hooks.references_tomorrow = `Today sets the tone; tomorrow carries the echo of ${axisStatement.toLowerCase()}.`;
+  }
+
+  return hooks;
 }
 
 /**
@@ -309,6 +526,72 @@ function deriveConfidenceLevel(inputs: InterpretationInputs): "high" | "medium" 
 }
 
 /**
+ * Helper: Map SkyState to SkyFeatures for window logic
+ */
+async function mapSkyStateToSkyFeatures(
+  skyState: InterpretationInputs["sky_state"],
+  date: string
+): Promise<SkyFeatures> {
+  // Map phase_name to legacy phase enum
+  const phaseName = skyState.lunar?.phase_name;
+  let legacyPhase: "new" | "waxing" | "full" | "waning" = "waxing";
+  
+  if (phaseName) {
+    if (phaseName === "new") {
+      legacyPhase = "new";
+    } else if (phaseName.startsWith("waxing")) {
+      legacyPhase = "waxing";
+    } else if (phaseName === "full") {
+      legacyPhase = "full";
+    } else if (phaseName.startsWith("waning")) {
+      legacyPhase = "waning";
+    }
+  }
+  
+  return {
+    date,
+    sun: { sign: skyState.bodies.sun?.sign || "" },
+    moon: {
+      sign: skyState.bodies.moon?.sign || "",
+      phase: legacyPhase,
+    },
+  };
+}
+
+/**
+ * Helper: Detect Sun-Moon aspect from sky state
+ */
+function detectSunMoonAspect(
+  skyState: InterpretationInputs["sky_state"]
+): SkyAspect | undefined {
+  const sunMoonAspect = skyState.aspects?.find(
+    (a) => 
+      (a.body_a === "sun" && a.body_b === "moon") ||
+      (a.body_a === "moon" && a.body_b === "sun")
+  );
+  
+  if (!sunMoonAspect) return undefined;
+  
+  // Map aspect type to legacy format
+  const aspectType = sunMoonAspect.type;
+  if (
+    aspectType === "conjunction" ||
+    aspectType === "sextile" ||
+    aspectType === "square" ||
+    aspectType === "trine" ||
+    aspectType === "opposition"
+  ) {
+    return {
+      type: "aspect",
+      aspect: aspectType,
+      orb_deg: sunMoonAspect.orb_deg || 0,
+    };
+  }
+  
+  return undefined;
+}
+
+/**
  * Pure function: Derive DailyInterpretation from canonical inputs
  * 
  * @param inputs - Canonical Layer 0 + Layer 1 inputs
@@ -318,6 +601,111 @@ export async function deriveDailyInterpretation(
   inputs: InterpretationInputs
 ): Promise<DailyInterpretation> {
   const { sky_state, daily_facts, timestamp, meta } = inputs;
+  const { computeSkyState } = await import("../../../astro/computeSkyState.js");
+  
+  // Helper to titlecase sign
+  function titleCase(sign: string): string {
+    return sign.charAt(0).toUpperCase() + sign.slice(1).toLowerCase();
+  }
+  
+  // Get moon and sun signs (titlecase for canon lookup)
+  const moonSignRaw = sky_state.bodies.moon?.sign;
+  const sunSignRaw = sky_state.bodies.sun?.sign;
+  const moonSign = moonSignRaw 
+    ? titleCase(moonSignRaw)
+    : null;
+  const sunSign = sunSignRaw
+    ? titleCase(sunSignRaw)
+    : null;
+  
+  if (!moonSign || !sunSign) {
+    throw new Error("Missing moon or sun sign in sky state");
+  }
+  
+  // Load canon entries
+  const moonEntry = interpretiveCanon.moon_signs[moonSign];
+  const sunEntry = interpretiveCanon.sun_signs[sunSign];
+  
+  if (!moonEntry) {
+    throw new Error(`No canon entry for Moon in ${moonSign}`);
+  }
+  if (!sunEntry) {
+    throw new Error(`No canon entry for Sun in ${sunSign}`);
+  }
+  
+  // Map phase_name to legacy phase enum (reuse helper logic)
+  const todayFeatures = await mapSkyStateToSkyFeatures(sky_state, timestamp.date);
+  const legacyPhase = todayFeatures.moon.phase;
+  
+  const phaseEntry = interpretiveCanon.moon_phases[legacyPhase];
+  if (!phaseEntry) {
+    throw new Error(`No canon entry for lunar phase ${legacyPhase}`);
+  }
+  
+  // Detect Sun-Moon aspect
+  const aspect = detectSunMoonAspect(sky_state);
+  
+  // Derive core meaning fields using legacy functions
+  const dominant_contrast_axis = deriveDominantAxis(inputs, interpretiveCanon);
+  const { why_today, why_today_clause } = await deriveWhyToday(inputs, interpretiveCanon);
+  const sky_anchors = deriveSkyAnchors(inputs);
+  
+  // Port legacy pickTone()
+  const tone_descriptor = pickTone(moonEntry, phaseEntry, aspect, interpretiveCanon);
+  
+  // Port legacy buildCausalLogic()
+  const causal_logic = buildCausalLogic(
+    sunSign,
+    moonSign,
+    sunEntry,
+    moonEntry,
+    aspect,
+    interpretiveCanon
+  );
+  
+  // Port legacy supporting_themes logic
+  const supporting_themes = dedupe([
+    ...moonEntry.supporting_themes,
+    ...(sunEntry.modulates ?? []),
+  ]).slice(0, 8);
+  
+  // Build window for temporal logic (yesterday/today/tomorrow)
+  const windowDates = buildDateWindow(timestamp.date, 1, 1);
+  const windowSkyStates = await Promise.all(
+    windowDates.map((d) => computeSkyState({ date: d, timezone: "UTC" }))
+  );
+  const windowFeatures = await Promise.all(
+    windowSkyStates.map((state, idx) => mapSkyStateToSkyFeatures(state, windowDates[idx]))
+  );
+  
+  // todayFeatures already computed above
+  
+  // Derive temporal fields using legacy functions
+  const temporal_phase = deriveTemporalPhase(todayFeatures, windowFeatures);
+  const intensity_modifier = deriveIntensityModifier(
+    dominant_contrast_axis.statement,
+    temporal_phase,
+    windowFeatures,
+    timestamp.date
+  );
+  const temporal_arc = deriveTemporalArc(
+    temporal_phase,
+    intensity_modifier,
+    todayFeatures,
+    windowFeatures
+  );
+  const continuity = buildContinuityHooks(
+    temporal_phase,
+    intensity_modifier,
+    windowFeatures,
+    dominant_contrast_axis.statement,
+    timestamp.date
+  );
+  
+  // Port legacy timing.notes logic
+  const timingNotes = aspect?.type === "aspect"
+    ? `Sun-Moon ${aspect.aspect} with ${(aspect.orb_deg || 0).toFixed(2)}° orb`
+    : `Lunar phase pacing: ${legacyPhase}`;
   
   // Derive signals (placeholder - will be ported from deriveSignalsFromSkyFeatures in Phase 5.2)
   // For now, create minimal signals from transits to satisfy schema
@@ -336,11 +724,6 @@ export async function deriveDailyInterpretation(
     });
   }
   
-  // Derive core meaning fields
-  const dominant_contrast_axis = deriveDominantAxis(inputs, interpretiveCanon);
-  const { why_today, why_today_clause } = await deriveWhyToday(inputs, interpretiveCanon);
-  const sky_anchors = deriveSkyAnchors(inputs);
-  const causal_logic = deriveCausalLogic(inputs);
   const confidence_level = deriveConfidenceLevel(inputs);
   
   // Build interpretation bundles structure
@@ -352,7 +735,14 @@ export async function deriveDailyInterpretation(
     background: [],
   };
   
-  const dailyInterpretation = {
+  // Map phaseEntry.timing_state to InterpretiveFrame timing.state enum
+  // Canon values: "building", "peaking", "settling" - all map directly
+  const timingState = (phaseEntry.timing_state === "building" ? "building"
+    : phaseEntry.timing_state === "peaking" ? "peaking"
+    : phaseEntry.timing_state === "settling" ? "settling"
+    : "building") as "building" | "peaking" | "settling" | "transitioning";
+  
+  const dailyInterpretation = DailyInterpretationSchema.parse({
     schema_version: "1.0.0",
     date: timestamp.date,
     dominant_contrast_axis,
@@ -360,19 +750,27 @@ export async function deriveDailyInterpretation(
     why_today_clause,
     sky_anchors,
     causal_logic,
-    supporting_themes: [], // TODO: derive from transits
-    tone_descriptor: "balanced", // TODO: derive from transits and conditions
+    supporting_themes,
+    tone_descriptor,
     signals,
     interpretation_bundles,
     confidence_level,
+    temporal_phase,
+    intensity_modifier,
+    temporal_arc,
+    continuity,
+    timing: {
+      state: timingState,
+      notes: timingNotes,
+    },
     provenance: {
       sky_state_date: timestamp.date,
       sky_state_version: meta?.sky_state_version,
       daily_facts_date: timestamp.date,
       daily_facts_policy_version: meta?.daily_facts_policy_version,
     },
-  };
+  });
   
-  return DailyInterpretationSchema.parse(dailyInterpretation);
+  return dailyInterpretation;
 }
 

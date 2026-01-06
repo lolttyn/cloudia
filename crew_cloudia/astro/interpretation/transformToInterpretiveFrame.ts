@@ -255,6 +255,7 @@ export function transformToInterpretiveFrame(
     ];
   }
   
+  // Pass through fields from DailyInterpretation (transformer should not re-derive)
   const supporting_themes = dailyInterpretation.supporting_themes;
   const tone_descriptor = dailyInterpretation.tone_descriptor;
   const confidence_level = dailyInterpretation.confidence_level;
@@ -265,21 +266,12 @@ export function transformToInterpretiveFrame(
     dailyInterpretation.interpretation_bundles
   );
   
-  // Window logic fields (Phase 5.3 placeholders)
-  const temporal_phase: InterpretiveFrame["temporal_phase"] = "baseline";
-  const intensity_modifier: InterpretiveFrame["intensity_modifier"] = "emerging";
-  const continuity: InterpretiveFrame["continuity"] = {}; // No window logic yet
-  const temporal_arc: InterpretiveFrame["temporal_arc"] = {
-    type: "none",
-    phase: "baseline",
-    intensity: "emerging",
-    arc_day_index: 1,
-    arc_total_days: 1,
-  };
-  const timing: InterpretiveFrame["timing"] = {
-    state: "building",
-    notes: "Phase 5.2: window logic pending",
-  };
+  // Pass through temporal fields from deriveDailyInterpretation (computed using legacy logic)
+  const temporal_phase = dailyInterpretation.temporal_phase;
+  const intensity_modifier = dailyInterpretation.intensity_modifier;
+  const continuity = dailyInterpretation.continuity;
+  const temporal_arc = dailyInterpretation.temporal_arc;
+  const timing = dailyInterpretation.timing;
   
   // Optional fields
   const lunation: InterpretiveFrame["lunation"] = undefined; // TODO: derive from signals
