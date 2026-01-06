@@ -1,0 +1,548 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-strict) > captures both outputs for comparison without requiring equality > canonical-interpretive-frame 1`] = `
+{
+  "canon_compliance": {
+    "notes": [
+      "Phase 5.2: derived from canonical inputs",
+    ],
+    "violations": [],
+  },
+  "causal_logic": [
+    "This is true because sun in capricorn anchors the interpretation for today (12:00 UTC).",
+    "mars in capricorn creates primary influence",
+    "mercury in capricorn creates primary influence",
+  ],
+  "confidence_level": "high",
+  "continuity": {},
+  "date": "2024-01-15",
+  "dominant_contrast_axis": {
+    "counter": "background conditions",
+    "primary": "mars in capricorn",
+    "statement": "mars in capricorn over background conditions",
+  },
+  "intensity_modifier": "emerging",
+  "interpretation_bundles": {
+    "primary": [],
+    "secondary": [],
+    "suppressed": [],
+  },
+  "signals": [
+    {
+      "kind": "planet_in_sign",
+      "salience": 0.7,
+      "signal_key": "mars_in_capricorn",
+      "source": "sky_features",
+    },
+    {
+      "kind": "planet_in_sign",
+      "salience": 0.7,
+      "signal_key": "mercury_in_capricorn",
+      "source": "sky_features",
+    },
+    {
+      "kind": "planet_in_sign",
+      "salience": 0.7,
+      "signal_key": "jupiter_in_taurus",
+      "source": "sky_features",
+    },
+  ],
+  "sky_anchors": [
+    {
+      "label": "Sun in capricorn",
+      "meaning": "Sun in capricorn",
+      "type": "sun_sign",
+    },
+    {
+      "label": "Moon in pisces",
+      "meaning": "Moon in pisces",
+      "type": "moon_sign",
+    },
+  ],
+  "supporting_themes": [],
+  "temporal_arc": {
+    "arc_day_index": 1,
+    "arc_total_days": 1,
+    "intensity": "emerging",
+    "phase": "baseline",
+    "type": "none",
+  },
+  "temporal_phase": "baseline",
+  "timing": {
+    "notes": "Phase 5.2: window logic pending",
+    "state": "building",
+  },
+  "tone_descriptor": "balanced",
+  "why_today": [
+    "This applies today because it's computed for the episode date and anchored to 12:00 UTC.",
+  ],
+  "why_today_clause": "mars in capricorn with 2.1483° orb",
+}
+`;
+
+exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-strict) > captures both outputs for comparison without requiring equality > legacy-interpretive-frame 1`] = `
+{
+  "canon_compliance": {
+    "notes": [
+      "canon:v1.0.0",
+    ],
+    "violations": [],
+  },
+  "causal_logic": [
+    "Because the Moon is in Pisces, surrender and empathy take precedence.",
+    "Because the Sun is in Capricorn, the day stays framed by structure and accountability and long-range focus.",
+    "Because the Sun and Moon form a sextile, latent opportunities appear if you engage them.",
+  ],
+  "confidence_level": "low",
+  "continuity": {
+    "references_tomorrow": "Today sets the tone; tomorrow carries the echo of surrender over control.",
+    "references_yesterday": "Yesterday signaled surrender over control; today it is strengthening.",
+  },
+  "date": "2024-01-15",
+  "dominant_contrast_axis": {
+    "counter": "control",
+    "primary": "surrender",
+    "statement": "surrender over control",
+  },
+  "intensity_modifier": "strengthening",
+  "interpretation_bundles": {
+    "primary": [
+      {
+        "guidance": {
+          "avoid": [
+            "Overextending because energy feels higher",
+            "Skipping rest or feedback loops",
+            "Treating this as an all-or-nothing push",
+          ],
+          "do": [
+            "Take the next small, testable action.",
+            "Check for new information before scaling up.",
+            "Adjust pacing to keep growth steady.",
+          ],
+          "reusable_lines": [
+            {
+              "speakability": "must_say",
+              "text": "Build steadily—small moves compound here.",
+            },
+            {
+              "speakability": "can_say",
+              "text": "Gather input and refine before you accelerate.",
+            },
+          ],
+        },
+        "kind": "cycle",
+        "meaning": {
+          "frames": [
+            {
+              "speakability": "must_say",
+              "text": "The waxing Moon supports building gradually rather than leaping ahead.",
+            },
+            {
+              "speakability": "can_say",
+              "text": "It’s a good time to collect information and test the next step.",
+            },
+            {
+              "speakability": "avoid",
+              "text": "This guarantees rapid progress if you push hard.",
+            },
+          ],
+          "frictions": [
+            "Rushing growth faster than it can hold",
+            "Skipping checkpoints or feedback",
+            "Ignoring signals to adjust",
+          ],
+          "headline": "Momentum is growing—take measured steps and gather what you need.",
+          "opportunities": [
+            "Pilot small moves and iterate",
+            "Refine plans with new input",
+            "Let momentum build through consistency",
+          ],
+        },
+        "safety": {
+          "allowed_framing": [
+            "Process-focused: “momentum builds through steady steps.”",
+            "Agency-forward: “you can choose to test and adjust.”",
+            "Non-deterministic: “growing energy can support small expansions.”",
+          ],
+          "forbidden_claims": [
+            "Promising rapid or guaranteed success",
+            "Linking progress to destiny or identity",
+            "Predicting specific outcomes from taking action now",
+          ],
+        },
+        "slug": "moon_phase_waxing",
+        "summary": "A build phase favoring steady momentum, gathering information, and making small course corrections.",
+        "tags": [
+          "momentum",
+          "iteration",
+          "steady_growth",
+          "information_gathering",
+        ],
+        "title": "Waxing Moon",
+        "trigger": {
+          "signal_key": "moon_phase_waxing",
+        },
+        "version": 1,
+      },
+      {
+        "guidance": {
+          "avoid": [
+            "Rushing outcomes for short-term relief",
+            "Carrying unnecessary burdens alone",
+            "Treating rest as unproductive",
+            "Confusing pressure with purpose",
+            "Overcommitting out of obligation",
+          ],
+          "do": [
+            "Work within clear boundaries rather than fighting them.",
+            "Prioritize tasks that benefit from long-term effort.",
+            "Measure progress realistically.",
+            "Take responsibility for pacing and sustainability.",
+            "Let structure support momentum.",
+          ],
+          "reusable_lines": [
+            {
+              "speakability": "must_say",
+              "text": "Progress now favors consistency over speed.",
+            },
+            {
+              "speakability": "can_say",
+              "text": "Structure can be a support, not a constraint.",
+            },
+          ],
+        },
+        "kind": "planet_in_sign",
+        "meaning": {
+          "frames": [
+            {
+              "speakability": "must_say",
+              "text": "Sun in Capricorn places emphasis on responsibility, structure, and practical progress over time.",
+            },
+            {
+              "speakability": "must_say",
+              "text": "This period favors measured effort, accountability, and decisions that hold up under scrutiny.",
+            },
+            {
+              "speakability": "can_say",
+              "text": "Momentum builds through consistency rather than speed.",
+            },
+            {
+              "speakability": "can_say",
+              "text": "Limits and constraints become clearer, offering guidance rather than restriction.",
+            },
+            {
+              "speakability": "avoid",
+              "text": "This means success requires struggle or self-denial.",
+            },
+          ],
+          "frictions": [
+            "Impatience with slow progress",
+            "Over-identifying with obligation",
+            "Equating worth with productivity",
+            "Pushing past sustainable limits",
+            "Treating seriousness as the only valid tone",
+          ],
+          "headline": "Focus shifts toward responsibility and long-term outcomes.",
+          "opportunities": [
+            "Building durable systems and habits",
+            "Clarifying priorities through structure",
+            "Making realistic plans",
+            "Strengthening follow-through",
+            "Earning trust through consistency",
+          ],
+        },
+        "safety": {
+          "allowed_framing": [
+            "Environmental language: 'this period emphasizes...'",
+            "Agency-forward framing: 'you can choose how to work with limits...'",
+            "Contextual framing: 'if responsibilities feel heavier...'",
+          ],
+          "forbidden_claims": [
+            "Deterministic career or success predictions",
+            "Moralizing productivity or ambition",
+            "Framing hardship as required for growth",
+          ],
+        },
+        "slug": "sun_in_capricorn",
+        "sources": [
+          "Modern psychological astrology",
+          "Seasonal solar sign interpretation",
+        ],
+        "summary": "A season emphasizing responsibility, structure, and long-range thinking. Attention turns toward durability over speed and results that can be sustained. The opportunity is to work deliberately with limits rather than pushing past them.",
+        "tags": [
+          "structure",
+          "responsibility",
+          "long_term_focus",
+          "discipline",
+          "sustainability",
+        ],
+        "title": "Sun in Capricorn",
+        "trigger": {
+          "signal_key": "sun_in_capricorn",
+        },
+        "version": 1,
+      },
+    ],
+    "secondary": [
+      {
+        "guidance": {
+          "avoid": [
+            "Overcommitting because it feels kinder",
+            "Numbing out when rest would help",
+            "Letting vague language hide your needs",
+            "Taking on others' emotions without consent",
+            "Assuming intuition equals fact",
+          ],
+          "do": [
+            "Schedule quiet time to decompress.",
+            "Write down dreams or insights before they fade.",
+            "Use grounding techniques to stay present.",
+            "Clarify plans in writing to avoid confusion.",
+            "Choose soothing media and company.",
+          ],
+          "reusable_lines": [
+            {
+              "speakability": "must_say",
+              "text": "The mood is porous and imaginative today, so keep boundaries gentle and clear.",
+            },
+            {
+              "speakability": "can_say",
+              "text": "Soft focus and rest let the right insights surface under this sky.",
+            },
+          ],
+        },
+        "kind": "planet_in_sign",
+        "meaning": {
+          "frames": [
+            {
+              "speakability": "must_say",
+              "text": "With the Moon in Pisces, moods become more impressionable and empathetic.",
+            },
+            {
+              "speakability": "must_say",
+              "text": "Imagination and intuition color perceptions.",
+            },
+            {
+              "speakability": "can_say",
+              "text": "Creative or spiritual practice can be soothing.",
+            },
+            {
+              "speakability": "can_say",
+              "text": "Rest and quiet help keep boundaries clear.",
+            },
+            {
+              "speakability": "avoid",
+              "text": "Everyone will feel lost or overwhelmed.",
+            },
+          ],
+          "frictions": [
+            "Difficulty distinguishing your feelings from others'",
+            "Vague plans or slippery timelines",
+            "Escaping into fantasy instead of resting",
+            "Saying yes to avoid disappointing",
+            "Misreading signals due to wishful thinking",
+          ],
+          "headline": "Emotions lean porous, dreamy, and receptive to subtle cues.",
+          "opportunities": [
+            "Resting and letting ideas drift into view",
+            "Expressing feelings through art or music",
+            "Offering compassion without self-erasure",
+            "Practicing gentle boundaries",
+            "Concluding loose ends with grace",
+          ],
+        },
+        "safety": {
+          "allowed_framing": [
+            "Environmental focus on empathy and imagination",
+            "Agency-based choices about boundaries and rest",
+            "Contextual language about endings and integration",
+          ],
+          "forbidden_claims": [
+            "Identity statements about Pisces Moons",
+            "Promises of spiritual outcomes",
+            "Deterministic claims about confusion",
+          ],
+        },
+        "slug": "moon_in_pisces",
+        "sources": [
+          "Lunar transit through Pisces",
+          "Moon in Pisces as short-term climate of sensitivity",
+        ],
+        "summary": "A soft emotional climate that heightens sensitivity and imagination. Feelings blur edges, inviting rest, compassion, and creative flow.",
+        "tags": [
+          "imagination",
+          "compassion",
+          "rest",
+          "intuition",
+          "boundaries",
+          "closure",
+        ],
+        "title": "Moon in Pisces",
+        "trigger": {
+          "signal_key": "moon_in_pisces",
+        },
+        "version": 1,
+      },
+    ],
+    "suppressed": [],
+  },
+  "signals": [
+    {
+      "kind": "planet_in_sign",
+      "meta": {
+        "body": "sun",
+        "sign": "capricorn",
+        "temporal_label": undefined,
+        "temporal_window": undefined,
+      },
+      "salience": 0.35,
+      "signal_key": "sun_in_capricorn",
+      "source": "sky_features",
+    },
+    {
+      "kind": "planet_in_sign",
+      "meta": {
+        "body": "moon",
+        "phase": "waxing",
+        "sign": "pisces",
+        "temporal_label": "exiting",
+        "temporal_window": "next_24h",
+      },
+      "salience": 0.3,
+      "signal_key": "moon_in_pisces",
+      "source": "sky_features",
+    },
+    {
+      "kind": "lunar_phase",
+      "meta": {
+        "phase": "waxing",
+      },
+      "salience": 0.25,
+      "signal_key": "moon_phase_waxing",
+      "source": "sky_features",
+    },
+    {
+      "kind": "ingress",
+      "meta": {
+        "body": "Moon",
+        "from_sign": "Pisces",
+        "temporal_label": "exiting",
+        "temporal_window": "next_24h",
+        "to_sign": "Aries",
+        "window": "next_24h",
+      },
+      "salience": 0.2,
+      "signal_key": "moon_ingress_aries_next_24h",
+      "source": "sky_features",
+    },
+    {
+      "kind": "aspect",
+      "meta": {
+        "aspect": "sextile",
+        "bodies": [
+          "Sun",
+          "Moon",
+        ],
+      },
+      "orb_deg": 4.93,
+      "salience": 0.17833333333333334,
+      "signal_key": "sun_moon_sextile",
+      "source": "sky_features",
+    },
+  ],
+  "sky_anchors": [
+    {
+      "label": "Moon in Pisces",
+      "meaning": "surrender, empathy, integration through flow",
+      "type": "moon_sign",
+    },
+    {
+      "label": "Sun in Capricorn",
+      "meaning": "structure, accountability, long-range focus",
+      "type": "sun_sign",
+    },
+  ],
+  "supporting_themes": [
+    "allow emergence",
+    "listen below the noise",
+    "commit to the plan",
+    "organize for durability",
+  ],
+  "temporal_arc": {
+    "arc_day_index": 2,
+    "arc_total_days": 7,
+    "intensity": "strengthening",
+    "phase": "building",
+    "type": "lunar_phase",
+  },
+  "temporal_phase": "building",
+  "timing": {
+    "notes": "Sun-Moon sextile with 4.93° orb",
+    "state": "building",
+  },
+  "tone_descriptor": "open and imaginal; engaged curiosity",
+  "why_today": [
+    "The Moon is in Pisces today and enters Aries within the next 24 hours, emphasizing surrender.",
+    "today marks a brief sign change that re-weights attention",
+  ],
+  "why_today_clause": "The Moon is in Pisces today and enters Aries within the next 24 hours, emphasizing surrender.",
+}
+`;
+
+exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-strict) > captures both outputs for comparison without requiring equality > legacy-vs-canonical-diff-summary 1`] = `
+{
+  "sample_differences": [
+    "dominant_contrast_axis.statement: "surrender over control" !== "mars in capricorn over background conditions"",
+    "dominant_contrast_axis.primary: "surrender" !== "mars in capricorn"",
+    "dominant_contrast_axis.counter: "control" !== "background conditions"",
+    "tone_descriptor: "open and imaginal; engaged curiosity" !== "balanced"",
+    "why_today: array length mismatch (2 vs 1)",
+    "why_today[0]: "The Moon is in Pisces today and enters Aries within the next 24 hours, emphasizing surrender." !== "This applies today because it's computed for the episode date and anchored to 12:00 UTC."",
+    "why_today[1]: missing in canonical",
+    "supporting_themes: array length mismatch (4 vs 0)",
+    "supporting_themes[0]: missing in canonical",
+    "supporting_themes[1]: missing in canonical",
+    "supporting_themes[2]: missing in canonical",
+    "supporting_themes[3]: missing in canonical",
+    "sky_anchors[0].type: "moon_sign" !== "sun_sign"",
+    "sky_anchors[0].label: "Moon in Pisces" !== "Sun in capricorn"",
+    "sky_anchors[0].meaning: "surrender, empathy, integration through flow" !== "Sun in capricorn"",
+    "sky_anchors[1].type: "sun_sign" !== "moon_sign"",
+    "sky_anchors[1].label: "Sun in Capricorn" !== "Moon in pisces"",
+    "sky_anchors[1].meaning: "structure, accountability, long-range focus" !== "Moon in pisces"",
+    "causal_logic[0]: "Because the Moon is in Pisces, surrender and empathy take precedence." !== "This is true because sun in capricorn anchors the interpretation for today (12:00 UTC)."",
+    "causal_logic[1]: "Because the Sun is in Capricorn, the day stays framed by structure and accountability and long-range focus." !== "mars in capricorn creates primary influence"",
+    "causal_logic[2]: "Because the Sun and Moon form a sextile, latent opportunities appear if you engage them." !== "mercury in capricorn creates primary influence"",
+    "why_today_clause: "The Moon is in Pisces today and enters Aries within the next 24 hours, emphasizing surrender." !== "mars in capricorn with 2.1483° orb"",
+    "temporal_phase: "building" !== "baseline"",
+    "intensity_modifier: "strengthening" !== "emerging"",
+    "continuity.references_yesterday: missing in canonical",
+    "continuity.references_tomorrow: missing in canonical",
+    "temporal_arc.type: "lunar_phase" !== "none"",
+    "temporal_arc.phase: "building" !== "baseline"",
+    "temporal_arc.intensity: "strengthening" !== "emerging"",
+    "temporal_arc.arc_day_index: 2 !== 1",
+    "temporal_arc.arc_total_days: 7 !== 1",
+    "timing.notes: "Sun-Moon sextile with 4.93° orb" !== "Phase 5.2: window logic pending"",
+    "signals: array length mismatch (5 vs 3)",
+    "signals[0].signal_key: "sun_in_capricorn" !== "mars_in_capricorn"",
+    "signals[0].salience: 0.35 !== 0.7",
+    "signals[0].meta: missing in canonical",
+    "signals[1].signal_key: "moon_in_pisces" !== "mercury_in_capricorn"",
+    "signals[1].salience: 0.3 !== 0.7",
+    "signals[1].meta: missing in canonical",
+    "signals[2].signal_key: "moon_phase_waxing" !== "jupiter_in_taurus"",
+    "signals[2].kind: "lunar_phase" !== "planet_in_sign"",
+    "signals[2].salience: 0.25 !== 0.7",
+    "signals[2].meta: missing in canonical",
+    "signals[3]: missing in canonical",
+    "signals[4]: missing in canonical",
+    "interpretation_bundles.primary: array length mismatch (2 vs 0)",
+    "interpretation_bundles.primary[0]: missing in canonical",
+    "interpretation_bundles.primary[1]: missing in canonical",
+    "interpretation_bundles.secondary: array length mismatch (1 vs 0)",
+    "interpretation_bundles.secondary[0]: missing in canonical",
+  ],
+  "total_differences": 52,
+}
+`;
