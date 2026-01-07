@@ -1,19 +1,22 @@
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.SUPABASE_URL;
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const key =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ??
+  process.env.SUPABASE_ANON_KEY ??
+  process.env.SUPABASE_KEY;
 
 function missingEnvError() {
   return new Error(
-    "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in environment"
+    "Missing Supabase key env var (SUPABASE_SERVICE_ROLE_KEY preferred)"
   );
 }
 
 // If env exists, create a real client.
 // If env missing, export a proxy that throws ONLY when accessed.
 export const supabase =
-  supabaseUrl && serviceRoleKey
-    ? createClient(supabaseUrl, serviceRoleKey, {
+  supabaseUrl && key
+    ? createClient(supabaseUrl, key, {
         auth: {
           persistSession: false,
           autoRefreshToken: false
