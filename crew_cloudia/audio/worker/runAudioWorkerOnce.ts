@@ -3,7 +3,9 @@ import { supabase } from "../../lib/supabaseClient";
 import { buildAudioJobKey, buildSegmentAudioStoragePath } from "./buildAudioStoragePath";
 import { rpcClaimPendingSegment, rpcMarkFailed, rpcMarkReady } from "./supabaseAudioRpcs";
 import { uploadToAudioPrivateBucket } from "./storageUpload";
-import { generatePlaceholderAudioMp3Bytes } from "./generatePlaceholderAudio";
+import { synthesizeElevenLabsMp3 } from "./elevenlabsTts";
+import { qaNonEmpty } from "./audioQa";
+import { classifyError, decideRetry, sleep } from "./retryPolicy";
 
 function requireEnv(name: string) {
   if (!process.env[name]) throw new Error(`Missing env var: ${name}`);
@@ -15,6 +17,17 @@ export async function runAudioWorkerOnce(params?: { limit?: number }) {
   // We'll fix supabaseClient to prefer service role for workers in the next task if needed.
   requireEnv("SUPABASE_URL");
   requireEnv("SUPABASE_SERVICE_ROLE_KEY");
+
+  // Requeue stale generating jobs (best-effort)
+  try {
+    const { data, error } = await supabase.rpc("audio_requeue_stale_generating", { p_ttl_minutes: 30 });
+    if (error) throw error;
+    if (typeof data === "number" && data > 0) {
+      console.log("[audio-worker] requeued stale generating", { count: data });
+    }
+  } catch (e: any) {
+    console.warn("[audio-worker] stale requeue failed (ignored)", { msg: e?.message ?? String(e) });
+  }
 
   const limit = params?.limit ?? 5;
 
@@ -52,8 +65,15 @@ export async function runAudioWorkerOnce(params?: { limit?: number }) {
       ttsModelId,
     });
 
+    let claimed: any = null;
+    let attempt = 1;
+
     try {
-      await rpcClaimPendingSegment({ episodeId, segmentKey, jobKey });
+      claimed = await rpcClaimPendingSegment({ episodeId, segmentKey, jobKey });
+      // Use attempt count from claim RPC if available
+      if (claimed && typeof claimed.audio_attempt_count === "number") {
+        attempt = claimed.audio_attempt_count;
+      }
 
       const storagePath = buildSegmentAudioStoragePath({
         episodeDate: row.episode_date as string,
@@ -63,37 +83,69 @@ export async function runAudioWorkerOnce(params?: { limit?: number }) {
         ext: "mp3",
       });
 
-      const bytes = generatePlaceholderAudioMp3Bytes();
-      await uploadToAudioPrivateBucket({ path: storagePath, bytes, contentType: "audio/mpeg" });
+      const tts = await synthesizeElevenLabsMp3({
+        text: row.script_text as string,
+        voiceId: ttsVoiceId,
+        modelId: ttsModelId,
+      });
 
-      // Placeholder duration; real duration comes from actual audio in next step
+      const qa = qaNonEmpty(tts.bytes);
+      if (!qa.ok) {
+        throw new Error(`${qa.errorClass}: ${qa.message}`);
+      }
+
+      await uploadToAudioPrivateBucket({ path: storagePath, bytes: tts.bytes, contentType: "audio/mpeg" });
+
+      // Duration: we will compute it with ffprobe next step; for now store NULL-able numeric.
+      // Keep 0 only if you must; better: omit and update later. Our RPC currently requires a number.
+      // Set a sentinel like 0.01 to avoid "0 length" confusion.
       await rpcMarkReady({
         episodeId,
         segmentKey,
         jobKey,
         audioStoragePath: storagePath,
-        durationSeconds: 0.0,
-        codec: "placeholder",
+        durationSeconds: 0.01,
+        codec: "mp3",
         sampleRateHz: null,
         checksumSha256: null,
       });
 
       console.log("[audio-worker] ready", { episodeId, segmentKey, storagePath });
     } catch (e: any) {
-      const msg = e?.message ?? String(e);
-      console.error("[audio-worker] failed", { episodeId, segmentKey, jobKey, msg });
+      const { errorClass, message } = classifyError(e);
+      console.error("[audio-worker] failed", { episodeId, segmentKey, jobKey, errorClass, msg: message });
 
-      // Try to mark failed if we already claimed (best effort)
+      // Try mark failed (best-effort)
       try {
         await rpcMarkFailed({
           episodeId,
           segmentKey,
           jobKey,
-          errorClass: "worker_error",
-          errorMessage: msg,
+          errorClass,
+          errorMessage: message,
         });
       } catch (markErr: any) {
         console.error("[audio-worker] mark_failed failed", { episodeId, segmentKey, err: markErr?.message ?? String(markErr) });
+      }
+
+      // Decide retry using current attempt count (if claim succeeded)
+      // We can fetch attempt from DB if needed, but simplest: assume attemptCount>=1 once claimed.
+      // If claim never happened, requeue doesn't matter.
+      if (claimed) {
+        const decision = decideRetry({ attempt, errorClass });
+        if (decision.shouldRetry) {
+          try {
+            await supabase.rpc("audio_requeue_failed", {
+              p_episode_id: episodeId,
+              p_segment_key: segmentKey,
+              p_reason: `retrying after ${errorClass}`,
+            });
+            console.log("[audio-worker] requeued for retry", { episodeId, segmentKey, attempt, backoffMs: decision.backoffMs });
+            await sleep(decision.backoffMs);
+          } catch (requeueErr: any) {
+            console.error("[audio-worker] requeue_failed failed", { episodeId, segmentKey, err: requeueErr?.message ?? String(requeueErr) });
+          }
+        }
       }
     }
   }
