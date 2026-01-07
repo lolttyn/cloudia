@@ -398,7 +398,7 @@ CRITICAL: You must include (express naturally, not verbatim):
 
 End with integration, not summary.
 
-The closing must include one gentle permission or release, expressed as optional and present-tense (not advice, not prediction).
+The closing must include exactly one soft-permission line using one of these exact forms: "It's okay to …" OR "You don't have to …" OR "You might notice …" (present tense only; no "will", "soon", "next", "tomorrow").
 
 You may:
 - reflect the day back in human terms
@@ -414,12 +414,13 @@ ${JSON.stringify(params.interpretive_frame, null, 2)}
 CLOSING SHAPE CONSTRAINTS (NON-NEGOTIABLE):
 
 - Write a SHORT closing: exactly 1–3 sentences total.
-- Do NOT give advice, instructions, or guidance.
-- Do NOT tell the listener what to do.
+- Do NOT give advice or directives.
+- You MUST include exactly one soft-permission line using one of these exact forms: "It's okay to …" OR "You don't have to …" OR "You might notice …" (present tense only; no "will", "soon", "next", "tomorrow").
 - This is an observational reflection, not a takeaway.
 - Begin with how the day is *settling or integrating* emotionally.
 - If a lunation is referenced, it must appear in the first sentence or be felt implicitly.
 - End with a natural sense of closure or release (no calls to action).
+- Example structure (1–2 sentences): "The day settles into [felt reality]. It's okay to [release/permission]."
 
 Revision requirements:
 - Apply ALL editor instructions above.
