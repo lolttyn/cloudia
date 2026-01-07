@@ -8,7 +8,7 @@ export function classifyError(e: unknown): { errorClass: string; message: string
   if (message.includes("timeout") || message.toLowerCase().includes("etimedout")) return { errorClass: "tts_timeout", message };
   if (message.includes("fetch") || message.toLowerCase().includes("network")) return { errorClass: "tts_network", message };
 
-  if (message.toLowerCase().startsWith("qa_") || message.toLowerCase().includes("qa_")) {
+  if (message.toLowerCase().startsWith("qa_") || message.toLowerCase().includes("qa_") || message.toLowerCase().includes("qa_silence")) {
     return { errorClass: "qa_failure", message };
   }
 

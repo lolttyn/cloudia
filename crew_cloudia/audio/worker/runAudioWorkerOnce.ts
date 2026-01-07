@@ -7,6 +7,7 @@ import { synthesizeElevenLabsMp3 } from "./elevenlabsTts";
 import { qaNonEmpty, qaDuration } from "./audioQa";
 import { classifyError, decideRetry, sleep } from "./retryPolicy";
 import { getMp3DurationSecondsFromBytes } from "./ffprobeDuration";
+import { detectLeadingTrailingSilenceFromMp3Bytes } from "./silenceDetect";
 
 function requireEnv(name: string) {
   if (!process.env[name]) throw new Error(`Missing env var: ${name}`);
@@ -105,6 +106,11 @@ export async function runAudioWorkerOnce(params?: {
       const qa2 = qaDuration({ segmentKey, durationSeconds });
       if (!qa2.ok) {
         throw new Error(`${qa2.errorClass}: ${qa2.message}`);
+      }
+
+      const silence = await detectLeadingTrailingSilenceFromMp3Bytes(tts.bytes);
+      if (silence.leadingSilenceSeconds > 1.0) {
+        throw new Error(`qa_silence_leading: leading silence ${silence.leadingSilenceSeconds}s > 1.0s`);
       }
 
       await uploadToAudioPrivateBucket({ path: storagePath, bytes: tts.bytes, contentType: "audio/mpeg" });
