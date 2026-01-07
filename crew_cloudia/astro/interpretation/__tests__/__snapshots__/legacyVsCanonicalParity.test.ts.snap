@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-strict) > captures both outputs for comparison without requiring equality > canonical-interpretive-frame 1`] = `
+exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-strict) > captures both outputs for comparison without requiring equality > canonical-hydrated-frame 1`] = `
 {
   "canon_compliance": {
     "notes": [
@@ -409,7 +409,155 @@ exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-str
 }
 `;
 
-exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-strict) > captures both outputs for comparison without requiring equality > legacy-interpretive-frame 1`] = `
+exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-strict) > captures both outputs for comparison without requiring equality > canonical-raw-refs-daily 1`] = `
+{
+  "causal_logic": [
+    "Because the Moon is in Pisces, surrender and empathy take precedence.",
+    "Because the Sun is in Capricorn, the day stays framed by structure and accountability and long-range focus.",
+    "Because the Sun and Moon form a sextile, latent opportunities appear if you engage them.",
+  ],
+  "confidence_level": "low",
+  "continuity": {
+    "references_tomorrow": "Today sets the tone; tomorrow carries the echo of surrender over control.",
+    "references_yesterday": "Yesterday signaled surrender over control; today it is strengthening.",
+  },
+  "date": "2024-01-15",
+  "dominant_contrast_axis": {
+    "counter": "control",
+    "primary": "surrender",
+    "statement": "surrender over control",
+  },
+  "intensity_modifier": "strengthening",
+  "interpretation_bundles": {
+    "primary": [
+      {
+        "bundle_slug": "moon_phase_waxing",
+        "salience_class": "primary",
+      },
+      {
+        "bundle_slug": "sun_in_capricorn",
+        "salience_class": "primary",
+      },
+    ],
+    "secondary": [
+      {
+        "bundle_slug": "moon_in_pisces",
+        "salience_class": "secondary",
+      },
+    ],
+    "suppressed": [],
+  },
+  "provenance": {
+    "daily_facts_date": "2024-01-15",
+    "daily_facts_policy_version": "tech_v1",
+    "sky_state_date": "2024-01-15",
+    "sky_state_version": "1.0.0",
+  },
+  "schema_version": "1.0.0",
+  "signals": [
+    {
+      "kind": "planet_in_sign",
+      "meta": {
+        "body": "sun",
+        "sign": "capricorn",
+        "temporal_label": undefined,
+        "temporal_window": undefined,
+      },
+      "salience": 0.35,
+      "signal_key": "sun_in_capricorn",
+      "source": "sky_features",
+    },
+    {
+      "kind": "planet_in_sign",
+      "meta": {
+        "body": "moon",
+        "phase": "waxing",
+        "sign": "pisces",
+        "temporal_label": "exiting",
+        "temporal_window": "next_24h",
+      },
+      "salience": 0.3,
+      "signal_key": "moon_in_pisces",
+      "source": "sky_features",
+    },
+    {
+      "kind": "lunar_phase",
+      "meta": {
+        "phase": "waxing",
+      },
+      "salience": 0.25,
+      "signal_key": "moon_phase_waxing",
+      "source": "sky_features",
+    },
+    {
+      "kind": "ingress",
+      "meta": {
+        "body": "Moon",
+        "from_sign": "Pisces",
+        "temporal_label": "exiting",
+        "temporal_window": "next_24h",
+        "to_sign": "Aries",
+        "window": "next_24h",
+      },
+      "salience": 0.2,
+      "signal_key": "moon_ingress_aries_next_24h",
+      "source": "sky_features",
+    },
+    {
+      "kind": "aspect",
+      "meta": {
+        "aspect": "sextile",
+        "bodies": [
+          "Sun",
+          "Moon",
+        ],
+      },
+      "orb_deg": 4.93,
+      "salience": 0.17833333333333334,
+      "signal_key": "sun_moon_sextile",
+      "source": "sky_features",
+    },
+  ],
+  "sky_anchors": [
+    {
+      "body": "sun",
+      "description": "Sun in capricorn",
+      "sign": "capricorn",
+    },
+    {
+      "body": "moon",
+      "description": "Moon in pisces",
+      "sign": "pisces",
+    },
+  ],
+  "supporting_themes": [
+    "allow emergence",
+    "listen below the noise",
+    "commit to the plan",
+    "organize for durability",
+  ],
+  "temporal_arc": {
+    "arc_day_index": 2,
+    "arc_total_days": 7,
+    "intensity": "strengthening",
+    "phase": "building",
+    "type": "lunar_phase",
+  },
+  "temporal_phase": "building",
+  "timing": {
+    "notes": "Sun-Moon sextile with 4.93° orb",
+    "state": "building",
+  },
+  "tone_descriptor": "open and imaginal; engaged curiosity",
+  "why_today": [
+    "The Moon is in Pisces today and enters Aries within the next 24 hours, emphasizing surrender.",
+    "today marks a brief sign change that re-weights attention",
+  ],
+  "why_today_clause": "The Moon is in Pisces today and enters Aries within the next 24 hours, emphasizing surrender.",
+}
+`;
+
+exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-strict) > captures both outputs for comparison without requiring equality > legacy-full-frame 1`] = `
 {
   "canon_compliance": {
     "notes": [
@@ -815,18 +963,5 @@ exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-str
     "today marks a brief sign change that re-weights attention",
   ],
   "why_today_clause": "The Moon is in Pisces today and enters Aries within the next 24 hours, emphasizing surrender.",
-}
-`;
-
-exports[`Legacy vs Canonical Parity > Informational snapshot comparison (non-strict) > captures both outputs for comparison without requiring equality > legacy-vs-canonical-diff-summary 1`] = `
-{
-  "sample_differences": [
-    "interpretation_bundles.primary: array length mismatch (2 vs 0)",
-    "interpretation_bundles.primary[0]: missing in canonical",
-    "interpretation_bundles.primary[1]: missing in canonical",
-    "interpretation_bundles.secondary: array length mismatch (1 vs 0)",
-    "interpretation_bundles.secondary[0]: missing in canonical",
-  ],
-  "total_differences": 5,
 }
 `;
