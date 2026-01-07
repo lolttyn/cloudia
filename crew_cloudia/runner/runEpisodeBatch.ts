@@ -9,6 +9,7 @@ import { evaluateEpisodeGate } from "../editorial/gate/evaluateEpisodeGate.js";
 import { persistEpisodeGateResult } from "../editorial/gate/persistEpisodeGateResult.js";
 import { runInterpreter } from "../interpretation/runInterpreter.js";
 import { runInterpreterCanonical } from "../astro/interpretation/runInterpreterCanonical.js";
+import { assertEpisodeIsPublishable } from "../editorial/gates/assertEpisodeIsPublishable.js";
 
 type ParsedArgs = {
   program_slug: string;
@@ -85,7 +86,11 @@ function deterministicEpisodeId(program_slug: string, episode_date: string): str
   ].join("-");
 }
 
-export async function runForDate(program_slug: string, episode_date: string): Promise<void> {
+export async function runForDate(
+  program_slug: string,
+  episode_date: string,
+  scripts_only: boolean
+): Promise<void> {
   const episode_id = deterministicEpisodeId(program_slug, episode_date);
   const today = new Date().toISOString().slice(0, 10);
   const time_context = episode_date === today ? "day_of" : "future";
@@ -170,26 +175,42 @@ export async function runForDate(program_slug: string, episode_date: string): Pr
         .join(", ")}`
     );
   }
+
+  // Publish-time enforcement: only run when we intend to publish / continue beyond scripts
+  if (!scripts_only) {
+    await assertEpisodeIsPublishable({
+      episode_date,
+      required_segments: ["intro", "main_themes", "closing"],
+    });
+  }
 }
 
 async function main() {
-  const { program_slug, start_date, window_days } = parseArgs(process.argv);
+  const { program_slug, start_date, window_days, scripts_only } = parseArgs(process.argv);
   const dates = expandDates(start_date, window_days);
 
   console.log(`[batch:start] ${batchId}`);
 
   for (const date of dates) {
-    await runForDate(program_slug, date);
+    await runForDate(program_slug, date, scripts_only);
   }
 
   console.log(`[batch:complete] ${batchId}`);
 }
 
-// Only run main() if this file is executed directly (not imported for testing)
-if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith("runEpisodeBatch.ts")) {
-  main().catch((err) => {
-    console.error(err);
-    process.exit(1);
-  });
+if (process.argv[1]) {
+  const invokedPath = (() => {
+    try {
+      return new URL(`file://${process.argv[1]}`).href;
+    } catch {
+      return undefined;
+    }
+  })();
+  if (invokedPath && invokedPath === import.meta.url) {
+    main().catch((err) => {
+      console.error(err);
+      process.exit(1);
+    });
+  }
 }
 
