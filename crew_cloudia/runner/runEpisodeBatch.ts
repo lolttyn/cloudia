@@ -8,6 +8,7 @@ import { runClosingForDate } from "../../run-closing.js";
 import { evaluateEpisodeGate } from "../editorial/gate/evaluateEpisodeGate.js";
 import { persistEpisodeGateResult } from "../editorial/gate/persistEpisodeGateResult.js";
 import { runInterpreter } from "../interpretation/runInterpreter.js";
+import { runInterpreterCanonical } from "../astro/interpretation/runInterpreterCanonical.js";
 
 type ParsedArgs = {
   program_slug: string;
@@ -84,7 +85,7 @@ function deterministicEpisodeId(program_slug: string, episode_date: string): str
   ].join("-");
 }
 
-async function runForDate(program_slug: string, episode_date: string): Promise<void> {
+export async function runForDate(program_slug: string, episode_date: string): Promise<void> {
   const episode_id = deterministicEpisodeId(program_slug, episode_date);
   const today = new Date().toISOString().slice(0, 10);
   const time_context = episode_date === today ? "day_of" : "future";
@@ -92,7 +93,14 @@ async function runForDate(program_slug: string, episode_date: string): Promise<v
 
   console.log(`[batch:date] ${episode_date}`);
 
-  const interpretive_frame = await runInterpreter({ date: episode_date });
+  // Parse interpretation mode from environment (default to legacy)
+  const modeRaw = (process.env.CLOUDIA_INTERPRETATION_MODE ?? "legacy").toLowerCase();
+  const interpretationMode = modeRaw === "canonical" ? "canonical" : "legacy";
+
+  const interpretive_frame =
+    interpretationMode === "canonical"
+      ? await runInterpreterCanonical({ date: episode_date })
+      : await runInterpreter({ date: episode_date });
 
   const introResult = await runIntroForDate({
     program_slug,
@@ -177,8 +185,11 @@ async function main() {
   console.log(`[batch:complete] ${batchId}`);
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+// Only run main() if this file is executed directly (not imported for testing)
+if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith("runEpisodeBatch.ts")) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
 
