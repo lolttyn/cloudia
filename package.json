@@ -7,17 +7,18 @@
   "scripts": {
     "test": "env $(cat env.test | xargs) vitest run",
     "inspect:intro": "tsx run-intro.ts",
-    "cloudia:batch": "tsx crew_cloudia/runner/runEpisodeBatch.ts"
+    "cloudia:batch": "tsx crew_cloudia/runner/runEpisodeBatch.ts",
+    "audio-worker": "tsx crew_cloudia/audio/worker/runAudioWorkerLoop.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.48.0",
     "swisseph": "^0.5.17",
+    "tsx": "^4.21.0",
     "zod": "3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20.17.9",
     "dotenv": "^16.4.5",
-    "tsx": "^4.21.0",
     "vitest": "^4.0.16"
   }
 }

@@ -17,6 +17,6 @@ COPY . .
 # Railway sets PORT sometimes; we don't need it, but harmless.
 ENV NODE_ENV=production
 
-# Run the loop entrypoint
-CMD ["npx", "tsx", "crew_cloudia/audio/worker/runAudioWorkerLoop.ts"]
+# Run the loop entrypoint via npm script (Railway-happy path)
+CMD ["npm", "run", "audio-worker"]
 
