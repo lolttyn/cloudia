@@ -1,0 +1,22 @@
+FROM node:20-bookworm-slim
+
+# Install ffmpeg (includes ffprobe)
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends ffmpeg ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Install deps
+COPY package*.json ./
+RUN npm ci
+
+# Copy source
+COPY . .
+
+# Railway sets PORT sometimes; we don't need it, but harmless.
+ENV NODE_ENV=production
+
+# Run the loop entrypoint
+CMD ["npx", "tsx", "crew_cloudia/audio/worker/runAudioWorkerLoop.ts"]
+
