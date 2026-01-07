@@ -4,8 +4,9 @@ import { buildAudioJobKey, buildSegmentAudioStoragePath } from "./buildAudioStor
 import { rpcClaimPendingSegment, rpcMarkFailed, rpcMarkReady } from "./supabaseAudioRpcs";
 import { uploadToAudioPrivateBucket } from "./storageUpload";
 import { synthesizeElevenLabsMp3 } from "./elevenlabsTts";
-import { qaNonEmpty } from "./audioQa";
+import { qaNonEmpty, qaDuration } from "./audioQa";
 import { classifyError, decideRetry, sleep } from "./retryPolicy";
+import { getMp3DurationSecondsFromBytes } from "./ffprobeDuration";
 
 function requireEnv(name: string) {
   if (!process.env[name]) throw new Error(`Missing env var: ${name}`);
@@ -29,7 +30,7 @@ export async function runAudioWorkerOnce(params?: { limit?: number }) {
     console.warn("[audio-worker] stale requeue failed (ignored)", { msg: e?.message ?? String(e) });
   }
 
-  const limit = params?.limit ?? 5;
+  const limit = params?.limit ?? 1;
 
   const { data: rows, error } = await supabase
     .from("cloudia_segments")
@@ -70,10 +71,7 @@ export async function runAudioWorkerOnce(params?: { limit?: number }) {
 
     try {
       claimed = await rpcClaimPendingSegment({ episodeId, segmentKey, jobKey });
-      // Use attempt count from claim RPC if available
-      if (claimed && typeof claimed.audio_attempt_count === "number") {
-        attempt = claimed.audio_attempt_count;
-      }
+      attempt = Number(claimed?.audio_attempt_count ?? 1);
 
       const storagePath = buildSegmentAudioStoragePath({
         episodeDate: row.episode_date as string,
@@ -94,17 +92,21 @@ export async function runAudioWorkerOnce(params?: { limit?: number }) {
         throw new Error(`${qa.errorClass}: ${qa.message}`);
       }
 
+      const durationSeconds = await getMp3DurationSecondsFromBytes(tts.bytes);
+
+      const qa2 = qaDuration({ segmentKey, durationSeconds });
+      if (!qa2.ok) {
+        throw new Error(`${qa2.errorClass}: ${qa2.message}`);
+      }
+
       await uploadToAudioPrivateBucket({ path: storagePath, bytes: tts.bytes, contentType: "audio/mpeg" });
 
-      // Duration: we will compute it with ffprobe next step; for now store NULL-able numeric.
-      // Keep 0 only if you must; better: omit and update later. Our RPC currently requires a number.
-      // Set a sentinel like 0.01 to avoid "0 length" confusion.
       await rpcMarkReady({
         episodeId,
         segmentKey,
         jobKey,
         audioStoragePath: storagePath,
-        durationSeconds: 0.01,
+        durationSeconds,
         codec: "mp3",
         sampleRateHz: null,
         checksumSha256: null,
@@ -151,6 +153,15 @@ export async function runAudioWorkerOnce(params?: { limit?: number }) {
   }
 }
 
+function parseArgInt(name: string, defaultValue: number) {
+  const idx = process.argv.indexOf(`--${name}`);
+  if (idx === -1) return defaultValue;
+  const raw = process.argv[idx + 1];
+  const n = Number(raw);
+  if (!Number.isFinite(n) || n <= 0) return defaultValue;
+  return Math.floor(n);
+}
+
 // Allow running as a script: npx tsx crew_cloudia/audio/worker/runAudioWorkerOnce.ts
 if (process.argv[1]) {
   const invokedPath = (() => {
@@ -161,7 +172,8 @@ if (process.argv[1]) {
     }
   })();
   if (invokedPath && invokedPath === import.meta.url) {
-    runAudioWorkerOnce({ limit: 5 }).catch((e) => {
+    const limit = parseArgInt("limit", 1);
+    runAudioWorkerOnce({ limit }).catch((e) => {
       console.error(e);
       process.exit(1);
     });
