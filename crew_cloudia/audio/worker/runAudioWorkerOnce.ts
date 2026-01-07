@@ -12,7 +12,11 @@ function requireEnv(name: string) {
   if (!process.env[name]) throw new Error(`Missing env var: ${name}`);
 }
 
-export async function runAudioWorkerOnce(params?: { limit?: number }) {
+export async function runAudioWorkerOnce(params?: {
+  limit?: number;
+  episodeDate?: string | null;
+  segmentKey?: string | null;
+}) {
   // Worker requires a key that can write storage + call RPCs
   // If your supabaseClient currently uses the anon key, this will fail.
   // We'll fix supabaseClient to prefer service role for workers in the next task if needed.
@@ -32,12 +36,16 @@ export async function runAudioWorkerOnce(params?: { limit?: number }) {
 
   const limit = params?.limit ?? 1;
 
-  const { data: rows, error } = await supabase
+  let q = supabase
     .from("cloudia_segments")
     .select("episode_id, segment_key, episode_date, script_version, script_text, tts_voice_id, tts_model_id, audio_status")
     .eq("audio_status", "pending")
-    .order("episode_date", { ascending: true })
-    .limit(limit);
+    .order("episode_date", { ascending: true });
+
+  if (params?.episodeDate) q = q.eq("episode_date", params.episodeDate);
+  if (params?.segmentKey) q = q.eq("segment_key", params.segmentKey);
+
+  const { data: rows, error } = await q.limit(limit);
 
   if (error) throw error;
   if (!rows || rows.length === 0) {
@@ -162,6 +170,12 @@ function parseArgInt(name: string, defaultValue: number) {
   return Math.floor(n);
 }
 
+function parseArgString(name: string): string | null {
+  const idx = process.argv.indexOf(`--${name}`);
+  if (idx === -1) return null;
+  return process.argv[idx + 1] ?? null;
+}
+
 // Allow running as a script: npx tsx crew_cloudia/audio/worker/runAudioWorkerOnce.ts
 if (process.argv[1]) {
   const invokedPath = (() => {
@@ -173,7 +187,9 @@ if (process.argv[1]) {
   })();
   if (invokedPath && invokedPath === import.meta.url) {
     const limit = parseArgInt("limit", 1);
-    runAudioWorkerOnce({ limit }).catch((e) => {
+    const episodeDate = parseArgString("episode-date"); // YYYY-MM-DD
+    const segmentKey = parseArgString("segment-key");
+    runAudioWorkerOnce({ limit, episodeDate, segmentKey }).catch((e) => {
       console.error(e);
       process.exit(1);
     });
