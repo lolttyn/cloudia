@@ -179,7 +179,7 @@ export async function runForDate(
   // Publish-time enforcement: only run when we intend to publish / continue beyond scripts
   if (!scripts_only) {
     await assertEpisodeIsPublishable({
-      episode_date,
+      episode_id,
       required_segments: ["intro", "main_themes", "closing"],
     });
   }

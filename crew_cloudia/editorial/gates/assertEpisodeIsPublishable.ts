@@ -1,35 +1,41 @@
 import { supabase } from "../../lib/supabaseClient";
 
 export async function assertEpisodeIsPublishable(params: {
-  episode_date: string; // YYYY-MM-DD
+  episode_id: string;
   required_segments: string[];
 }): Promise<void> {
-  const { episode_date, required_segments } = params;
+  const { episode_id, required_segments } = params;
 
   if (required_segments.length === 0) {
     throw new Error("required_segments cannot be empty");
   }
 
-  // Query cloudia_segment_versions to get the latest attempt per segment
-  // Order by segment_key, then attempt_number DESC, then created_at DESC for deterministic selection
-  const { data, error } = await supabase
-    .from("cloudia_segment_versions")
-    .select("segment_key, gate_decision, blocking_reasons, attempt_number, created_at")
-    .eq("episode_date", episode_date)
-    .in("segment_key", required_segments)
-    .order("segment_key", { ascending: true })
-    .order("attempt_number", { ascending: false })
-    .order("created_at", { ascending: false });
+  // Query latest attempt per segment using episode_id + segment_key
+  // This matches the pattern used in getNextAttemptNumber for deterministic selection
+  const latestBySegment = new Map<string, {
+    segment_key: string;
+    gate_decision: string;
+    blocking_reasons: string[];
+    attempt_number: number;
+  }>();
 
-  if (error) {
-    throw new Error(`Failed to query segment versions: ${error.message}`);
-  }
+  for (const segmentKey of required_segments) {
+    const { data, error } = await supabase
+      .from("cloudia_segment_versions")
+      .select("segment_key, gate_decision, blocking_reasons, attempt_number, created_at")
+      .eq("episode_id", episode_id)
+      .eq("segment_key", segmentKey)
+      .order("attempt_number", { ascending: false })
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
 
-  // Group by segment_key and take the latest version (first after DESC sort)
-  const latestBySegment = new Map<string, typeof data[0]>();
-  for (const row of data || []) {
-    if (!latestBySegment.has(row.segment_key)) {
-      latestBySegment.set(row.segment_key, row);
+    if (error) {
+      throw new Error(`Failed to query segment versions for ${segmentKey}: ${error.message}`);
+    }
+
+    if (data) {
+      latestBySegment.set(segmentKey, data);
     }
   }
 

@@ -22,6 +22,7 @@ import { evaluateSegmentWithFrame } from "./crew_cloudia/editorial/showrunner/ev
 import { evaluateAdherenceRubric } from "./crew_cloudia/quality/adherence/adherence_rubric.js";
 import { PERMISSION_BLOCK } from "./crew_cloudia/editorial/prompts/permissionBlock.js";
 import { generateEditInstructions } from "./crew_cloudia/editorial/editor/generateEditInstructions.js";
+import { supabase } from "./crew_cloudia/lib/supabaseClient.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -103,6 +104,54 @@ export async function runMainThemesForDate(params: {
   const today = new Date().toISOString().slice(0, 10);
   const time_context = params.time_context ?? (params.episode_date === today ? "day_of" : "future");
   const writing_contract = getWritingContract("main_themes");
+
+  // Idempotency guard: if latest attempt is already approved, return it immediately
+  const { data: latestAttempt, error: latestError } = await supabase
+    .from("cloudia_segment_versions")
+    .select("script_text, gate_decision, attempt_number")
+    .eq("episode_id", params.episode_id)
+    .eq("segment_key", "main_themes")
+    .order("attempt_number", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (latestError) {
+    throw new Error(`Failed to check existing attempts: ${latestError.message}`);
+  }
+
+  if (latestAttempt && latestAttempt.gate_decision === "approve") {
+    // Already have an approved version - return it without generating new attempts
+    console.log(`[main_themes] Idempotency guard: found approved attempt ${latestAttempt.attempt_number}, skipping generation`);
+    const diagnostics = mapDiagnosticsToEditorialViolations(
+      performSelfCheck(latestAttempt.script_text, writing_contract)
+    );
+
+    const gateResult = evaluateEditorialGate({
+      episode_id: params.episode_id,
+      episode_date: params.episode_date,
+      segment_key: "main_themes",
+      time_context,
+      generated_script: latestAttempt.script_text,
+      diagnostics,
+      segment_contract: {
+        allows_rewrites: false,
+      },
+      policy_version: "v0.1",
+      max_attempts_remaining: 0,
+    });
+
+    await persistEditorialGateResult({
+      episode_id: params.episode_id,
+      episode_date: params.episode_date,
+      segment_key: "main_themes",
+      gate_result: gateResult,
+    });
+
+    return {
+      segment_key: "main_themes",
+      gate_result: gateResult,
+    };
+  }
 
   let script = "";
   let previousScript = "";
@@ -213,6 +262,7 @@ export async function runMainThemesForDate(params: {
       // Both evaluators pass - approve
       approved = true;
       lastDecision = "APPROVE";
+      // CRITICAL: Exit immediately after first approval - do not continue loop
       break;
     }
 
@@ -385,6 +435,10 @@ ${PERMISSION_BLOCK}
 
 You are REVISING an existing draft based on editor feedback. This is not a new draft—you must actively change the previous version.
 
+Non-negotiable format requirement:
+- Your revision MUST include at least one of these exact phrases (case-insensitive): "you don't have to", "you dont have to", "take the space", "let this sit", "not today", "this isn't urgent", "wait", "stop", "don't", or "dont".
+- These phrases can appear anywhere in your revision, but at least one MUST be present or the draft will be rejected.
+
 Here is the previous draft:
 ---
 ${params.previous_script}
@@ -392,6 +446,8 @@ ${params.previous_script}
 
 Your editor has requested the following changes:
 ${instructions}
+
+CRITICAL: You MUST include at least one of these exact phrases somewhere in your revision: "you don't have to", "you dont have to", "take the space", "let this sit", "not today", "this isn't urgent", "wait", "stop", "don't", or "dont". This is non-negotiable and will cause the draft to be rejected if missing.
 
 Focus on translation, not explanation.
 
@@ -413,16 +469,20 @@ Required continuity lines (MUST appear verbatim, once each, anywhere in the scri
 ${params.interpretive_frame.continuity?.references_yesterday ? `- Yesterday: "${params.interpretive_frame.continuity.references_yesterday}"` : "- Yesterday: (none)"}
 ${params.interpretive_frame.continuity?.references_tomorrow ? `- Tomorrow: "${params.interpretive_frame.continuity.references_tomorrow}"` : "- Tomorrow: (none)"}
 
-Sign hygiene (STRICT):
-- You may ONLY mention zodiac signs that appear in the Sky anchors list above.
-- Do NOT mention any other signs (e.g., do not add Libra/Leo/etc unless present in sky anchors).
-- If a sign is not explicitly listed above, it is forbidden.
+Sign hygiene (STRICT - VIOLATION WILL CAUSE REJECTION):
+- ALLOWED signs (ONLY these may be mentioned): ${params.interpretive_frame.sky_anchors.map(a => {
+  const signMatch = a.label.match(/\b(aries|taurus|gemini|cancer|leo|virgo|libra|scorpio|sagittarius|capricorn|aquarius|pisces)\b/i);
+  return signMatch ? signMatch[1].toLowerCase() : null;
+}).filter(Boolean).join(", ") || "none listed above"}
+- FORBIDDEN: Do NOT mention ANY other zodiac signs (Libra, Leo, Aries, etc.) unless they appear in the ALLOWED list above.
+- If you mention a sign not in the ALLOWED list, your draft will be rejected.
 
 Behavioral affordance (REQUIRED):
 - Include one explicit permission or stance using direct language (e.g., "you don't have to...", "it's okay to...", "you might let...").
 
 Revision requirements:
 - Apply ALL editor instructions above.
+- **MANDATORY: Include at least one of these exact phrases: "you don't have to", "you dont have to", "take the space", "let this sit", "not today", "this isn't urgent", "wait", "stop", "don't", or "dont". This phrase MUST appear in your revision or it will be rejected.**
 - Do not repeat language from the previous version.
 - Preserve what works; fix what doesn't.
 - Preserve the dominant_contrast_axis meaning, but translate it into human experience.
