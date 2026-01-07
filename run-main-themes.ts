@@ -409,12 +409,25 @@ Required references (express naturally, not verbatim):
 ${params.interpretive_frame.sky_anchors.map((a) => `- Sky anchor: ${a.label} (reference naturally, body + sign)`).join("\n")}
 - Why today matters: ${params.interpretive_frame.why_today_clause} (express naturally, not verbatim)
 
+Required continuity lines (MUST appear verbatim, once each, anywhere in the script):
+${params.interpretive_frame.continuity?.references_yesterday ? `- Yesterday: "${params.interpretive_frame.continuity.references_yesterday}"` : "- Yesterday: (none)"}
+${params.interpretive_frame.continuity?.references_tomorrow ? `- Tomorrow: "${params.interpretive_frame.continuity.references_tomorrow}"` : "- Tomorrow: (none)"}
+
+Sign hygiene (STRICT):
+- You may ONLY mention zodiac signs that appear in the Sky anchors list above.
+- Do NOT mention any other signs (e.g., do not add Libra/Leo/etc unless present in sky anchors).
+- If a sign is not explicitly listed above, it is forbidden.
+
+Behavioral affordance (REQUIRED):
+- Include one explicit permission or stance using direct language (e.g., "you don't have to...", "it's okay to...", "you might let...").
+
 Revision requirements:
 - Apply ALL editor instructions above.
 - Do not repeat language from the previous version.
 - Preserve what works; fix what doesn't.
 - Preserve the dominant_contrast_axis meaning, but translate it into human experience.
 - Include the specified sky anchors and causal logic using "because".
+- Include the continuity lines above verbatim (do not paraphrase them).
 - Write in natural, conversational prose.
 - Match the frame's confidence_level in tone; do not increase certainty.
 - Do not add new themes; fix only the issues identified by the editor.
