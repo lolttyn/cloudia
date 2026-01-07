@@ -4,7 +4,7 @@ import { buildAudioJobKey, buildSegmentAudioStoragePath } from "./buildAudioStor
 import { rpcClaimPendingSegment, rpcMarkFailed, rpcMarkReady } from "./supabaseAudioRpcs";
 import { uploadToAudioPrivateBucket } from "./storageUpload";
 import { synthesizeElevenLabsMp3 } from "./elevenlabsTts";
-import { qaNonEmpty, qaDuration } from "./audioQa";
+import { qaNonEmpty, qaDuration, qaScriptWordCount } from "./audioQa";
 import { classifyError, decideRetry, sleep } from "./retryPolicy";
 import { getMp3DurationSecondsFromBytes } from "./ffprobeDuration";
 import { detectLeadingTrailingSilenceFromMp3Bytes } from "./silenceDetect";
@@ -82,6 +82,14 @@ export async function runAudioWorkerOnce(params?: {
       claimed = await rpcClaimPendingSegment({ episodeId, segmentKey, jobKey });
       attempt = Number(claimed?.audio_attempt_count ?? 1);
 
+      const scriptText = row.script_text as string;
+      
+      // Check script word count before TTS (deterministic, cheap)
+      const qaScript = qaScriptWordCount({ segmentKey, scriptText });
+      if (!qaScript.ok) {
+        throw new Error(`${qaScript.errorClass}: ${qaScript.message}`);
+      }
+
       const storagePath = buildSegmentAudioStoragePath({
         episodeDate: row.episode_date as string,
         segmentKey,
@@ -91,7 +99,7 @@ export async function runAudioWorkerOnce(params?: {
       });
 
       const tts = await synthesizeElevenLabsMp3({
-        text: row.script_text as string,
+        text: scriptText,
         voiceId: ttsVoiceId,
         modelId: ttsModelId,
       });

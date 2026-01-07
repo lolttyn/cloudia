@@ -12,14 +12,21 @@ async function main() {
   requireEnv("ELEVENLABS_API_KEY");
 
   const pollMs = Number(process.env.CLOUDIA_AUDIO_POLL_MS ?? "5000");
-  console.log("[audio-worker-loop] started", { pollMs });
+  const killSwitchValue = process.env.CLOUDIA_AUDIO_WORKER_DISABLED ?? "not set";
+  const isEnabled = killSwitchValue !== "1";
+  
+  console.log("[audio-worker-loop] started", { 
+    pollMs, 
+    CLOUDIA_AUDIO_WORKER_DISABLED: killSwitchValue,
+    enabled: isEnabled 
+  });
+
+  if (!isEnabled) {
+    console.log("[audio-worker-loop] worker is disabled (CLOUDIA_AUDIO_WORKER_DISABLED=1), exiting");
+    process.exit(0);
+  }
 
   while (true) {
-    if (process.env.CLOUDIA_AUDIO_WORKER_DISABLED === "1") {
-      console.log("[audio-worker-loop] disabled via CLOUDIA_AUDIO_WORKER_DISABLED=1");
-      await sleep(10_000);
-      continue;
-    }
 
     try {
       await runAudioWorkerOnce({ limit: 1 });
