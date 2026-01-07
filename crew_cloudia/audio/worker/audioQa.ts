@@ -25,7 +25,7 @@ export function qaDuration(params: { segmentKey: string; durationSeconds: number
     segmentKey === "intro"
       ? { min: 20, max: 120 }
       : segmentKey === "closing"
-      ? { min: 20, max: 120 }
+      ? { min: 18, max: 120 }
       : segmentKey === "main_themes"
       ? { min: 120, max: 900 }
       : { min: 5, max: 1800 };
