@@ -1,8 +1,15 @@
 /**
  * Phase 5.2 Step 4 — Transform DailyInterpretation → InterpretiveFrame
  * 
+ * TEST-ONLY: This function is currently used only in test helpers for parity comparison.
+ * 
  * Preserves downstream expectations exactly by transforming the canonical
  * DailyInterpretation to the InterpretiveFrame shape that downstream code expects.
+ * 
+ * NOTE: This function hydrates bundle refs to full bundles because InterpretiveFrame
+ * schema requires full bundles for legacy compatibility. When production switches to
+ * the canonical path, hydration should happen at the boundary where InterpretiveFrame
+ * is needed (e.g., in runEpisodeBatch or a dedicated hydration helper), not here.
  * 
  * Window logic fields (temporal_phase, continuity, temporal_arc) are set to
  * defaults/placeholders until Phase 5.3.
@@ -130,15 +137,46 @@ function transformSignals(
 }
 
 /**
- * Pass through interpretation bundles (already full bundles, not refs)
+ * Pass through interpretation bundle refs (no hydration in production transformer)
+ * 
+ * NOTE: This function is TEST-ONLY. It currently hydrates refs to full bundles
+ * because InterpretiveFrame schema requires full bundles for legacy compatibility.
+ * 
+ * When production switches to canonical path, hydration should happen at the
+ * boundary where InterpretiveFrame is needed (e.g., in runEpisodeBatch or
+ * a dedicated hydration helper).
  */
 function transformInterpretationBundles(
   bundles: DailyInterpretation["interpretation_bundles"]
 ): InterpretiveFrame["interpretation_bundles"] {
-  // Bundles are already in the correct format (full InterpretationBundle objects)
+  // For now, we hydrate because InterpretiveFrame schema requires full bundles
+  // This is a temporary compatibility layer - production should hydrate at boundary
+  const bundleIndex = loadInterpretationBundles();
+  
+  const hydrateRefs = (refs: typeof bundles.primary) => {
+    return refs.map(ref => {
+      // Look up bundle by signal_key (bundle index is keyed by signal_key, not slug)
+      // We need to search all bundles to find by slug
+      let foundBundle: ReturnType<typeof loadInterpretationBundles> extends Map<string, infer T> ? T[number] : never | null = null;
+      for (const bundleList of bundleIndex.values()) {
+        const match = bundleList.find(b => b.slug === ref.bundle_slug);
+        if (match) {
+          if (!foundBundle || match.version > foundBundle.version) {
+            foundBundle = match;
+          }
+        }
+      }
+      
+      if (!foundBundle) {
+        throw new Error(`Bundle not found in index: ${ref.bundle_slug}`);
+      }
+      return foundBundle;
+    });
+  };
+
   return {
-    primary: bundles.primary,
-    secondary: bundles.secondary,
+    primary: hydrateRefs(bundles.primary),
+    secondary: hydrateRefs(bundles.secondary),
     suppressed: bundles.suppressed,
   };
 }
@@ -236,6 +274,10 @@ export function transformToInterpretiveFrame(
   
   // Pass through signals directly (already in InterpretiveFrame format from deriveSignalsFromSkyFeatures)
   const signals = dailyInterpretation.signals;
+  
+  // Transform bundle refs to full bundles (hydration happens here for InterpretiveFrame compatibility)
+  // NOTE: This is a compatibility layer. When production switches to canonical path,
+  // hydration should happen at the boundary (e.g., in runEpisodeBatch or a hydration helper).
   const interpretation_bundles = transformInterpretationBundles(
     dailyInterpretation.interpretation_bundles
   );

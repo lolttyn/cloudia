@@ -10,7 +10,7 @@
 import { loadInterpretationInputs } from "../loadInterpretationInputs.js";
 import { adaptToInterpreterInput } from "../adaptToInterpreterInput.js";
 import { deriveDailyInterpretation } from "../deriveDailyInterpretation.js";
-import { transformToInterpretiveFrame } from "../transformToInterpretiveFrame.js";
+import { transformToHydratedInterpretiveFrameForParity } from "../transformToHydratedInterpretiveFrameForParity.js";
 import type { InterpretiveFrame } from "../../../interpretation/schema/InterpretiveFrame.js";
 
 /**
@@ -37,11 +37,12 @@ export async function runCanonicalMeaningToFrameForTest(
   // Note: deriveDailyInterpretation takes inputs directly, not the adapted facts
   const _interpreterFacts = adaptToInterpreterInput(inputs);
 
-  // Step 3: Derive canonical meaning
+  // Step 3: Derive canonical meaning (with bundle refs)
   const dailyInterpretation = await deriveDailyInterpretation(inputs);
 
-  // Step 4: Transform to InterpretiveFrame
-  const frame = transformToInterpretiveFrame(dailyInterpretation);
+  // Step 4: Transform to InterpretiveFrame with explicit hydration for parity
+  // This uses the test-only hydrated transformer that explicitly hydrates refs to full bundles
+  const frame = transformToHydratedInterpretiveFrameForParity(dailyInterpretation);
 
   return frame;
 }

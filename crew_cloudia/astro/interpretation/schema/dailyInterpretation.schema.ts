@@ -10,7 +10,6 @@
 
 import { z } from "zod";
 import { InterpretationSignalSchema } from "../../../interpretation/signals/signals.schema.js";
-import { InterpretationBundleSchema } from "../../../canon/machine/bundles/interpretation_bundle_schema.js";
 
 /**
  * Dominant contrast axis - the primary tension/contrast for the day
@@ -31,11 +30,10 @@ const SkyAnchorSchema = z.object({
 });
 
 /**
- * Interpretation bundle reference (for future use)
- * Note: For strict parity, we use full InterpretationBundle objects instead of refs
+ * Interpretation bundle reference (production shape)
+ * Canonical output returns refs only; hydration happens in tests for parity comparison.
  */
 const InterpretationBundleRefSchema = z.object({
-  bundle_id: z.string().min(1),
   bundle_slug: z.string().min(1),
   salience_class: z.enum(["primary", "secondary", "background"]),
 });
@@ -119,8 +117,8 @@ export const DailyInterpretationSchema = z.object({
   // Signals and bundles
   signals: z.array(InterpretationSignalSchema).min(1),
   interpretation_bundles: z.object({
-    primary: z.array(InterpretationBundleSchema),
-    secondary: z.array(InterpretationBundleSchema),
+    primary: z.array(InterpretationBundleRefSchema),
+    secondary: z.array(InterpretationBundleRefSchema),
     suppressed: z.array(
       z.object({
         bundle_slug: z.string().min(1),

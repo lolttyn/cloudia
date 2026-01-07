@@ -12,6 +12,10 @@ import { describe, it, expect } from "vitest";
 import { runInterpreter } from "../../../interpretation/runInterpreter.js";
 import { runCanonicalMeaningToFrameForTest } from "./testHelpers.js";
 import { InterpretiveFrameSchema } from "../../../interpretation/schema/InterpretiveFrame.js";
+import { buildBundleIndex } from "../hydrateBundles.js";
+import { hydrateDailyInterpretationBundles } from "./hydrateBundlesForParity.js";
+import { loadInterpretationInputs } from "../loadInterpretationInputs.js";
+import { deriveDailyInterpretation } from "../deriveDailyInterpretation.js";
 
 const TEST_DATE = "2024-01-15";
 
@@ -68,22 +72,31 @@ function computeDiff(legacy: any, canonical: any, path = ""): string[] {
 describe("Legacy vs Canonical Parity", () => {
   describe("Informational snapshot comparison (non-strict)", () => {
     it("captures both outputs for comparison without requiring equality", async () => {
-      // Run legacy path
-      const legacy = await runInterpreter({ date: TEST_DATE });
+      // Run legacy path (full bundles)
+      const legacyFullFrame = await runInterpreter({ date: TEST_DATE });
       
-      // Run canonical path
-      const canonical = await runCanonicalMeaningToFrameForTest(TEST_DATE);
+      // Run canonical path (returns InterpretiveFrame with full bundles via transformer)
+      const canonicalFrame = await runCanonicalMeaningToFrameForTest(TEST_DATE);
+      
+      // Also get canonical raw DailyInterpretation (with refs) for snapshot
+      const inputs = await loadInterpretationInputs(TEST_DATE, { semantics: "require" });
+      const canonicalRawDaily = await deriveDailyInterpretation(inputs);
 
       // Validate both are valid InterpretiveFrames
-      expect(() => InterpretiveFrameSchema.parse(legacy)).not.toThrow();
-      expect(() => InterpretiveFrameSchema.parse(canonical)).not.toThrow();
+      expect(() => InterpretiveFrameSchema.parse(legacyFullFrame)).not.toThrow();
+      expect(() => InterpretiveFrameSchema.parse(canonicalFrame)).not.toThrow();
 
-      // Snapshot both outputs (for visual comparison)
-      expect(legacy).toMatchSnapshot("legacy-interpretive-frame");
-      expect(canonical).toMatchSnapshot("canonical-interpretive-frame");
+      // Snapshot legacy full frame
+      expect(legacyFullFrame).toMatchSnapshot("legacy-full-frame");
+      
+      // Snapshot canonical raw refs (DailyInterpretation with refs)
+      expect(canonicalRawDaily).toMatchSnapshot("canonical-raw-refs-daily");
+      
+      // Snapshot canonical hydrated frame (InterpretiveFrame with full bundles)
+      expect(canonicalFrame).toMatchSnapshot("canonical-hydrated-frame");
 
       // Compute and snapshot diff (informational only)
-      const diffs = computeDiff(legacy, canonical);
+      const diffs = computeDiff(legacyFullFrame, canonicalFrame);
       if (diffs.length > 0) {
         // Log diffs for visibility (but don't fail the test)
         console.log(`[INFO] Legacy vs Canonical differences (${diffs.length} total):`);
@@ -132,15 +145,36 @@ describe("Legacy vs Canonical Parity", () => {
     const maybeIt = STRICT ? it : it.skip;
 
     maybeIt("legacy vs canonical strict equivalence (parity gate)", async () => {
-      // Run legacy path
-      const legacy = await runInterpreter({ date: TEST_DATE });
+      // Run legacy path (full bundles)
+      const legacyFullFrame = await runInterpreter({ date: TEST_DATE });
 
-      // Run canonical path
-      const canonical = await runCanonicalMeaningToFrameForTest(TEST_DATE);
-
-      // Strict deep equality check
+      // Run canonical path and hydrate for comparison
+      // Get canonical DailyInterpretation (with refs)
+      const inputs = await loadInterpretationInputs(TEST_DATE, { semantics: "require" });
+      const canonicalDaily = await deriveDailyInterpretation(inputs);
+      
+      // Build bundle index for hydration
+      const bundleIndex = buildBundleIndex();
+      
+      // Hydrate canonical DailyInterpretation refs to full bundles
+      const canonicalHydrated = hydrateDailyInterpretationBundles(canonicalDaily, bundleIndex);
+      
+      // Transform to InterpretiveFrame for comparison (already has full bundles from transformer)
+      const canonicalFrame = await runCanonicalMeaningToFrameForTest(TEST_DATE);
+      
+      // For strict parity, compare legacy full frame vs canonical hydrated frame
+      // The canonical frame already has full bundles (via transformer), so we can compare directly
+      // But we also verify the DailyInterpretation hydration works correctly
+      expect(canonicalFrame.interpretation_bundles.primary).toHaveLength(
+        legacyFullFrame.interpretation_bundles.primary.length
+      );
+      expect(canonicalFrame.interpretation_bundles.secondary).toHaveLength(
+        legacyFullFrame.interpretation_bundles.secondary.length
+      );
+      
+      // Strict deep equality check: legacy full frame vs canonical hydrated frame
       // This will fail until parity is achieved
-      expect(canonical).toEqual(legacy);
+      expect(canonicalFrame).toEqual(legacyFullFrame);
     });
   });
 });

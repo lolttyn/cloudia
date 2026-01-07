@@ -986,17 +986,23 @@ export async function deriveDailyInterpretation(
   );
   const signals = deriveSignalsFromSkyFeatures(featuresWithHighlights);
   
-  // Port legacy bundle selection - output full bundles for strict parity
+  // Port legacy bundle selection - output refs only (production shape)
   const bundleIndex = loadInterpretationBundles();
   const bundleSelection = selectInterpretationBundles({
     signals,
     bundleIndex,
   });
   
-  // Store full bundles directly (matches legacy InterpretiveFrame format)
+  // Convert full bundles to refs (production shape: refs only)
   const interpretation_bundles = {
-    primary: bundleSelection.primary,
-    secondary: bundleSelection.secondary,
+    primary: bundleSelection.primary.map(bundle => ({
+      bundle_slug: bundle.slug,
+      salience_class: "primary" as const,
+    })),
+    secondary: bundleSelection.secondary.map(bundle => ({
+      bundle_slug: bundle.slug,
+      salience_class: "secondary" as const,
+    })),
     suppressed: bundleSelection.suppressed,
   };
   
