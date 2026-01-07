@@ -1,9 +1,14 @@
 # Cloudia audio worker
-FROM node:22-slim
+FROM node:20-bookworm-slim
 
-# Install ffmpeg (includes ffprobe)
+# Install ffmpeg (includes ffprobe) and build tools for native modules (swisseph)
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends ffmpeg ca-certificates \
+  && apt-get install -y --no-install-recommends \
+    ffmpeg \
+    ca-certificates \
+    python3 \
+    make \
+    g++ \
   && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
