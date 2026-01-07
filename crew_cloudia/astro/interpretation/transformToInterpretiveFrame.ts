@@ -1,23 +1,28 @@
 /**
  * Phase 5.2 Step 4 — Transform DailyInterpretation → InterpretiveFrame
  * 
- * TEST-ONLY: This function is currently used only in test helpers for parity comparison.
+ * PRODUCTION-SAFE: Constructs legacy-compatible InterpretiveFrame view from canonical DailyInterpretation.
  * 
- * Preserves downstream expectations exactly by transforming the canonical
- * DailyInterpretation to the InterpretiveFrame shape that downstream code expects.
+ * This is the canonical frame view builder. It:
+ * 1. Takes `DailyInterpretation` (canonical meaning with bundle refs)
+ * 2. Transforms all fields to match `InterpretiveFrame` schema
+ * 3. Hydrates bundle refs to full bundles (for legacy compatibility)
+ * 4. Returns `InterpretiveFrame` ready for downstream consumers
  * 
- * NOTE: This function hydrates bundle refs to full bundles because InterpretiveFrame
- * schema requires full bundles for legacy compatibility. When production switches to
- * the canonical path, hydration should happen at the boundary where InterpretiveFrame
- * is needed (e.g., in runEpisodeBatch or a dedicated hydration helper), not here.
+ * Architecture:
+ * - Input: `DailyInterpretation` (refs-only, persisted canonical form)
+ * - Output: `InterpretiveFrame` (full bundles, legacy-compatible view)
+ * - Used by: Production boundary (`hydrateInterpretiveFrameForProduction`) and parity tests
  * 
- * Window logic fields (temporal_phase, continuity, temporal_arc) are set to
- * defaults/placeholders until Phase 5.3.
+ * Dependencies:
+ * - Stable canon sources only (no test fixtures)
+ * - Shared hydrator (`hydrateBundles.ts`) for bundle resolution
+ * - No imports from `__tests__` directories
  */
 
 import { type DailyInterpretation } from "./schema/dailyInterpretation.schema.js";
 import { InterpretiveFrameSchema, type InterpretiveFrame } from "../../interpretation/schema/InterpretiveFrame.js";
-import { loadInterpretationBundles } from "../../interpretation/bundles/loadInterpretationBundles.js";
+import { buildBundleIndex, hydrateInterpretationBundleRefs } from "./hydrateBundles.js";
 import type { InterpretationSignal } from "../../interpretation/signals/signals.schema.js";
 import interpretiveCanon from "../../interpretation/canon/interpretiveCanon_v1.json" assert { type: "json" };
 type InterpretiveCanon = typeof interpretiveCanon;
@@ -137,46 +142,20 @@ function transformSignals(
 }
 
 /**
- * Pass through interpretation bundle refs (no hydration in production transformer)
+ * Transform interpretation bundle refs to full bundles for InterpretiveFrame
  * 
- * NOTE: This function is TEST-ONLY. It currently hydrates refs to full bundles
- * because InterpretiveFrame schema requires full bundles for legacy compatibility.
- * 
- * When production switches to canonical path, hydration should happen at the
- * boundary where InterpretiveFrame is needed (e.g., in runEpisodeBatch or
- * a dedicated hydration helper).
+ * This hydrates refs to full bundles because InterpretiveFrame schema requires
+ * full bundles for legacy compatibility. Uses shared hydrator for consistency.
  */
 function transformInterpretationBundles(
   bundles: DailyInterpretation["interpretation_bundles"]
 ): InterpretiveFrame["interpretation_bundles"] {
-  // For now, we hydrate because InterpretiveFrame schema requires full bundles
-  // This is a temporary compatibility layer - production should hydrate at boundary
-  const bundleIndex = loadInterpretationBundles();
+  // Use shared hydrator (memoized, deterministic)
+  const bundleIndex = buildBundleIndex();
   
-  const hydrateRefs = (refs: typeof bundles.primary) => {
-    return refs.map(ref => {
-      // Look up bundle by signal_key (bundle index is keyed by signal_key, not slug)
-      // We need to search all bundles to find by slug
-      let foundBundle: ReturnType<typeof loadInterpretationBundles> extends Map<string, infer T> ? T[number] : never | null = null;
-      for (const bundleList of bundleIndex.values()) {
-        const match = bundleList.find(b => b.slug === ref.bundle_slug);
-        if (match) {
-          if (!foundBundle || match.version > foundBundle.version) {
-            foundBundle = match;
-          }
-        }
-      }
-      
-      if (!foundBundle) {
-        throw new Error(`Bundle not found in index: ${ref.bundle_slug}`);
-      }
-      return foundBundle;
-    });
-  };
-
   return {
-    primary: hydrateRefs(bundles.primary),
-    secondary: hydrateRefs(bundles.secondary),
+    primary: hydrateInterpretationBundleRefs(bundles.primary, bundleIndex),
+    secondary: hydrateInterpretationBundleRefs(bundles.secondary, bundleIndex),
     suppressed: bundles.suppressed,
   };
 }

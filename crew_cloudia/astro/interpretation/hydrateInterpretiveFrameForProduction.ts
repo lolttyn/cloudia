@@ -16,8 +16,7 @@
  */
 
 import { type DailyInterpretation } from "./schema/dailyInterpretation.schema.js";
-import { InterpretiveFrameSchema, type InterpretiveFrame } from "../../interpretation/schema/InterpretiveFrame.js";
-import { buildBundleIndex, hydrateInterpretationBundleRefs } from "./hydrateBundles.js";
+import { type InterpretiveFrame } from "../../interpretation/schema/InterpretiveFrame.js";
 import { transformToInterpretiveFrame } from "./transformToInterpretiveFrame.js";
 
 /**
@@ -53,11 +52,9 @@ import { transformToInterpretiveFrame } from "./transformToInterpretiveFrame.js"
 export async function hydrateInterpretiveFrameForProduction(
   dailyInterpretation: DailyInterpretation
 ): Promise<InterpretiveFrame> {
-  // Use the core transformer for all field transformations
+  // Use the canonical frame view builder for all field transformations
   // It hydrates bundles for InterpretiveFrame schema compatibility
   // This ensures the same transformation logic is used in tests and production
-  // NOTE: transformToInterpretiveFrame is currently test-only but will be used here
-  // when production switches to canonical path
   return transformToInterpretiveFrame(dailyInterpretation);
 }
 
