@@ -398,7 +398,9 @@ CRITICAL: You must include (express naturally, not verbatim):
 
 End with integration, not summary.
 
-The closing must include exactly one soft-permission line using one of these exact forms: "It's okay to …" OR "You don't have to …" OR "You might notice …" (present tense only; no "will", "soon", "next", "tomorrow").
+The closing must include exactly one soft-permission line using one of these exact forms with plain ASCII apostrophes: "It's okay to …" OR "You don't have to …" OR "You might notice …" (present tense only; no "will", "soon", "next", "tomorrow").
+
+CRITICAL TYPOGRAPHY REQUIREMENT: Use plain ASCII apostrophes (') in the soft-permission phrase. Write: "It's" and "don't" (NOT curly quotes like "It's" or "don't"). The soft-permission phrase must appear verbatim as the start of sentence 2 or 3.
 
 You may:
 - reflect the day back in human terms
@@ -415,12 +417,13 @@ CLOSING SHAPE CONSTRAINTS (NON-NEGOTIABLE):
 
 - Write a SHORT closing: exactly 1–3 sentences total.
 - Do NOT give advice or directives.
-- You MUST include exactly one soft-permission line using one of these exact forms: "It's okay to …" OR "You don't have to …" OR "You might notice …" (present tense only; no "will", "soon", "next", "tomorrow").
+- You MUST include exactly one soft-permission line using one of these exact forms with plain ASCII apostrophes: "It's okay to …" OR "You don't have to …" OR "You might notice …" (present tense only; no "will", "soon", "next", "tomorrow").
+- CRITICAL: Use plain ASCII apostrophes (') in the soft-permission phrase. Write: "It's" and "don't" (NOT curly quotes like "It's" or "don't"). The soft-permission phrase must appear verbatim as the start of sentence 2 or 3.
 - This is an observational reflection, not a takeaway.
 - Begin with how the day is *settling or integrating* emotionally.
 - If a lunation is referenced, it must appear in the first sentence or be felt implicitly.
 - End with a natural sense of closure or release (no calls to action).
-- Example structure (1–2 sentences): "The day settles into [felt reality]. It's okay to [release/permission]."
+- Example with ASCII apostrophes: "The day settles into something steadier. It's okay to let the small stuff stay small."
 
 Revision requirements:
 - Apply ALL editor instructions above.

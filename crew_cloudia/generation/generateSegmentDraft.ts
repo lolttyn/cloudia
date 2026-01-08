@@ -333,6 +333,8 @@ Additional constraints:
 - No sign-off language.
 - Do not restate the dominant axis or temporal phase; they are already stated above.
 - Keep it concise and calm; no commands.
+- CRITICAL: You MUST include exactly one soft-permission line using one of these exact forms with plain ASCII apostrophes: "It's okay to …" OR "You don't have to …" OR "You might notice …" (present tense only; no "will", "soon", "next", "tomorrow"). Use ASCII apostrophe (') NOT curly apostrophe ('). The soft-permission phrase must appear verbatim as the start of sentence 2.
+- Example with ASCII apostrophes: "The day settles into something steadier. It's okay to let the small stuff stay small."
 
 Interpretation bundles (only allowed meaning):
 ${JSON.stringify(
