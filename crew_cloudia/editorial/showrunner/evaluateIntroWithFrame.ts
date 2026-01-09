@@ -2,10 +2,24 @@ import { InterpretiveFrame } from "../../interpretation/schema/InterpretiveFrame
 import { EditorFeedback } from "./editorContracts.js";
 import { buildIntroScaffold } from "../../generation/introScaffold.js";
 
+/**
+ * Normalizes a greeting string for comparison, handling unicode variations.
+ * Normalizes smart quotes, line endings, and whitespace to prevent false negatives.
+ */
+function normalizeGreeting(s: string): string {
+  return s
+    .normalize("NFKC") // Normalize unicode (combines compatible characters)
+    .replace(/[''`]/g, "'") // Replace all apostrophe variants (curly, smart, backtick) with straight
+    .replace(/[""]/g, '"') // Replace smart quotes with straight quotes (defensive)
+    .replace(/\r\n/g, "\n") // Normalize line endings
+    .replace(/\u00A0/g, " ") // Replace non-breaking spaces with regular spaces
+    .trimStart();
+}
+
 export function expectedIntroGreeting(episode_date: string): string {
   const parsed = new Date(`${episode_date}T00:00:00Z`);
   if (Number.isNaN(parsed.getTime())) {
-    return `Hey Celestial Besties. It’s me, Cloudia Rey, here with the Cosmic Forecast for ${episode_date}.`;
+    return `Hey Celestial Besties. It's me, Cloudia Rey, here with the Cosmic Forecast for ${episode_date}.`;
   }
   const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const monthNames = [
@@ -28,7 +42,7 @@ export function expectedIntroGreeting(episode_date: string): string {
   const dayOfMonth = parsed.getUTCDate();
   const year = parsed.getUTCFullYear();
 
-  return `Hey Celestial Besties. It’s me, Cloudia Rey, here with the Cosmic Forecast for ${dayName}, ${monthName} ${dayOfMonth}, ${year}.`;
+  return `Hey Celestial Besties. It's me, Cloudia Rey, here with the Cosmic Forecast for ${dayName}, ${monthName} ${dayOfMonth}, ${year}.`;
 }
 
 export function evaluateIntroWithFrame(params: {
@@ -54,9 +68,15 @@ export function evaluateIntroWithFrame(params: {
     softening: ["settling", "easing", "unwinding", "softening", "exhale"],
   };
 
-  // Hard gate: greeting must be verbatim
+  // Hard gate: greeting must be verbatim (normalize for unicode/apostrophe variations)
   const greeting = expectedIntroGreeting(params.episode_date);
-  if (!script.includes(greeting)) {
+  const normalizedScript = normalizeGreeting(script);
+  const normalizedGreeting = normalizeGreeting(greeting);
+  
+  // Check if script contains the normalized greeting (starts with it, or includes it with leading whitespace)
+  // Use includes() to handle cases where there might be leading whitespace or the greeting appears later
+  const hasGreeting = normalizedScript.startsWith(normalizedGreeting) || normalizedScript.includes(normalizedGreeting);
+  if (!hasGreeting) {
     notes.push("Intro greeting is missing or altered from the canonical verbatim line.");
     blocking_reasons.push("intro:greeting_missing");
     rewrite_instructions.push(`Add the exact greeting: "${greeting}".`);
@@ -135,8 +155,8 @@ export function evaluateIntroWithFrame(params: {
     .filter((s) => s.length > 0);
   
   // Count sentences after greeting (greeting is always first)
-  // Note: greeting is already declared above (line 58), reuse it
-  const afterGreeting = script.replace(greeting, "").trim();
+  // Note: normalize both strings before replacing to handle unicode variations
+  const afterGreeting = normalizedScript.replace(normalizedGreeting, "").trim();
   const expressiveSentences = afterGreeting
     .split(/[.!?]+/)
     .map((s) => s.trim())
