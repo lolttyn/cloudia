@@ -382,7 +382,7 @@ ${instructions}
 
 Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like: "the inbox triage", "the tiny correction you keep re-doing", "re-reading the same message", "double-checking calendar details", "one more errand / one more small fix"
 
-CRITICAL: You must begin with this exact greeting (verbatim, ASCII apostrophes only). Do NOT modify, paraphrase, or rewrite it:
+CRITICAL: You must begin with this exact greeting (verbatim, ASCII apostrophes only). Copy/paste it EXACTLY as-is on the first line. Do NOT modify, paraphrase, or rewrite it. Do NOT use curly apostrophes (') - use straight apostrophes ('). Do NOT add extra spaces or different punctuation:
 "${expectedIntroGreeting(params.episode_date)}"
 
 After the greeting above, you must include:
@@ -391,6 +391,7 @@ After the greeting above, you must include:
 - At least one sky anchor from: ${params.interpretive_frame.sky_anchors.map((a) => `"${a.label}"`).join(", ")}
 - A causal sentence that uses the word "because"
 - Exactly two expressive sentences at the end
+- CRITICAL: At least two concrete micro-situations from lived experience. Use examples like: "the inbox triage", "the tiny correction you keep re-doing", "re-reading the same message", "double-checking calendar details", "one more errand / one more small fix". No abstract nouns without an example. Before finalizing, scan your draft and ensure you've included at least two concrete situations.
 
 Begin with an experiential entry point:
 how the day meets someone emotionally, physically, or situationally.

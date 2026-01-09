@@ -249,12 +249,15 @@ Each sentence must:
 - Acknowledge today's temporal phase "${temporalPhase}" and intensity "${intensity}".
 ${continuityLines.length ? "- Include at least one provided continuity hook." : ""}
 
-Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like:
+CRITICAL: Include at least two concrete micro-situations from lived experience. Use examples like:
 - "the inbox triage"
 - "the tiny correction you keep re-doing"
 - "re-reading the same message"
 - "double-checking calendar details"
 - "one more errand / one more small fix"
+No abstract nouns without an example. Before finalizing, scan your draft and ensure you've included at least two concrete situations.
+
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like the ones above.
 
 Additional constraints:
 - Do NOT include any greeting - the greeting is already in the scaffold above and will be combined with your sentences.

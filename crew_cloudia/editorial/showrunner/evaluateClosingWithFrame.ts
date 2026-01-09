@@ -172,6 +172,10 @@ export function evaluateClosingWithFrame(params: {
     ? script.split(signoff)[0].trim()  // Only check content before signoff
     : middle;  // Fallback: if signoff not found, use middle (scaffold already removed)
   
+  // CRITICAL: Strip parentheticals (meta/pacing content) before prediction scan
+  // Parentheticals like "(Sun-Moon trine next...)" contain meta information and shouldn't trigger prediction violations
+  const contentForPredictionCheckNoParens = contentForPredictionCheck.replace(/\([^)]*\)/g, "").trim();
+  
   const futureCertaintyPatterns = [
     /\bwill\b/i,
     /\bgoing to\b/i,
@@ -182,7 +186,8 @@ export function evaluateClosingWithFrame(params: {
   ];
   
   // Find the first match with context for debugging (detailed context goes to notes, not rewrite_instructions)
-  const matchResult = firstMatchWithContext(contentForPredictionCheck, futureCertaintyPatterns);
+  // Run prediction scan on content without parentheticals
+  const matchResult = firstMatchWithContext(contentForPredictionCheckNoParens, futureCertaintyPatterns);
   const hasFutureCertainty = matchResult !== null;
   
   if (hasFutureCertainty && matchResult) {
