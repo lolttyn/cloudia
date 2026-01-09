@@ -144,6 +144,12 @@ export function evaluateClosingWithFrame(params: {
 
   // Phase D: Narrow prediction detection to only future certainty
   // Do not flag "might", "can", "today holds", "this moment allows"
+  // CRITICAL: Exclude the sign-off from prediction checks - it contains required text like "tomorrow" and "We'll"
+  // Split on signoff and only scan the content before it (handles unicode variations gracefully)
+  const contentForPredictionCheck = hasSignoff 
+    ? script.split(signoff)[0].trim()  // Only check content before signoff
+    : middle;  // Fallback: if signoff not found, use middle (scaffold already removed)
+  
   const futureCertaintyPatterns = [
     /\bwill\b/i,
     /\bgoing to\b/i,
@@ -153,11 +159,11 @@ export function evaluateClosingWithFrame(params: {
     /\bnext\b/i,
   ];
   
-  const hasFutureCertainty = futureCertaintyPatterns.some((re) => re.test(middle));
+  const hasFutureCertainty = futureCertaintyPatterns.some((re) => re.test(contentForPredictionCheck));
   if (hasFutureCertainty) {
     notes.push("Avoid predictions; keep the tone reflective of today only.");
     blocking_reasons.push("closing:prediction_language");
-    rewrite_instructions.push("Remove predictive language (e.g., 'will', 'going to', 'soon', 'tomorrow').");
+    rewrite_instructions.push("Remove predictive language (e.g., 'will', 'going to', 'soon', 'tomorrow'). The only allowed 'tomorrow' is in the locked sign-off.");
   }
 
   if (params.interpretive_frame.temporal_arc.arc_day_index > 1) {
