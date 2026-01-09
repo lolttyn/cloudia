@@ -10,8 +10,9 @@ export async function assertEpisodeIsPublishable(params: {
     throw new Error("required_segments cannot be empty");
   }
 
-  // Query latest attempt per segment using episode_id + segment_key
-  // This matches the pattern used in getNextAttemptNumber for deterministic selection
+  // Query canonical approved segments from cloudia_segments table
+  // This is the authoritative source for publishability (updated by upsertCurrentSegment after approval)
+  // Note: cloudia_segments only contains approved segments (gate_decision is always "approve")
   const latestBySegment = new Map<string, {
     segment_key: string;
     gate_decision: string;
@@ -21,21 +22,25 @@ export async function assertEpisodeIsPublishable(params: {
 
   for (const segmentKey of required_segments) {
     const { data, error } = await supabase
-      .from("cloudia_segment_versions")
-      .select("segment_key, gate_decision, blocking_reasons, attempt_number, created_at")
+      .from("cloudia_segments")
+      .select("segment_key, gate_decision, script_version")
       .eq("episode_id", episode_id)
       .eq("segment_key", segmentKey)
-      .order("attempt_number", { ascending: false })
-      .order("created_at", { ascending: false })
-      .limit(1)
       .maybeSingle();
 
     if (error) {
-      throw new Error(`Failed to query segment versions for ${segmentKey}: ${error.message}`);
+      throw new Error(`Failed to query segment for ${segmentKey}: ${error.message}`);
     }
 
     if (data) {
-      latestBySegment.set(segmentKey, data);
+      // cloudia_segments only contains approved segments, so gate_decision should be "approve"
+      // If it exists in this table, it's been approved (blocking_reasons are not stored here)
+      latestBySegment.set(segmentKey, {
+        segment_key: data.segment_key,
+        gate_decision: data.gate_decision || "approve",
+        blocking_reasons: [], // Approved segments have no blocking reasons
+        attempt_number: data.script_version || 0,
+      });
     }
   }
 
