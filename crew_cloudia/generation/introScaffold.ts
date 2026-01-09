@@ -34,7 +34,8 @@ const INGRESS_SENSITIVE_BODIES = ["moon_sign", "sun_sign"] as const;
 
 export function buildIntroScaffold(params: {
   episode_date: string;
-  axis: string;
+  axis_primary: string;
+  axis_counter: string;
   why_today_clause: string;
   sky_anchors?: SkyAnchor[];
   ingress_notes?: { body: "Moon" | "Sun"; current: string; next: string }[];
@@ -54,9 +55,10 @@ export function buildIntroScaffold(params: {
       (n) => `The ${n.body} is in ${n.current} today and enters ${n.next} soon.`
     ) ?? [];
 
+  // Do NOT include axis statement in scaffold - it gets inserted verbatim and contains banned phrases
+  // The axis should be expressed naturally in the LLM-generated micro content that follows the scaffold
   return [
-    `Hey Celestial Besties. It’s me, Cloudia Rey, here with the Cosmic Forecast for ${dateStr}.`,
-    `Today’s dominant tension is: ${params.axis}.`,
+    `Hey Celestial Besties. It's me, Cloudia Rey, here with the Cosmic Forecast for ${dateStr}.`,
     params.why_today_clause,
     ...anchorLines,
     ...ingressLines,
