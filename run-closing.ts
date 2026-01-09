@@ -26,6 +26,7 @@ import { PERMISSION_BLOCK } from "./crew_cloudia/editorial/prompts/permissionBlo
 import { generateEditInstructions } from "./crew_cloudia/editorial/editor/generateEditInstructions.js";
 import { buildClosingScaffold } from "./crew_cloudia/generation/closingScaffold.js";
 import { RunSummaryCollector } from "./crew_cloudia/runner/phaseG/runSummaryCollector.js";
+import { sanitizeInterpretiveFrameForPrompt } from "./crew_cloudia/generation/prompt/sanitizeInterpretiveFrame.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -444,7 +445,7 @@ You may:
 Do not restate earlier language.
 
 Authoritative interpretive frame:
-${JSON.stringify(params.interpretive_frame, null, 2)}
+${JSON.stringify(sanitizeInterpretiveFrameForPrompt(params.interpretive_frame), null, 2)}
 
 CLOSING SHAPE CONSTRAINTS (NON-NEGOTIABLE):
 

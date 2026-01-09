@@ -231,8 +231,17 @@ async function generateIntroDraft(params: {
     frame.continuity?.references_tomorrow,
   ].filter(Boolean);
 
+  // Get exact greeting format expected by validator (must match verbatim)
+  // Extract from scaffold - first line is the greeting
+  const expectedGreeting = scaffold.split("\n")[0];
+
   const user_prompt = `
-Write exactly two sentences.
+CRITICAL: The greeting below is LOCKED. It must appear verbatim in the final intro. Do NOT modify, paraphrase, or rewrite it. You may only write exactly two sentences that come AFTER this greeting.
+
+LOCKED GREETING (copy verbatim, ASCII apostrophes only):
+"${expectedGreeting}"
+
+Write exactly two sentences that follow the greeting above.
 Each sentence must:
 - Reference at least one of these sky anchors by label: ${anchorLabels.join(", ")}.
 - Reinforce the dominant contrast by showing "${axisPrimary}" vs "${axisCounter}" in real-life moments (no slogans).
@@ -248,9 +257,9 @@ Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, us
 - "one more errand / one more small fix"
 
 Additional constraints:
-- Do not greet.
+- Do NOT include any greeting - the greeting is already in the scaffold above and will be combined with your sentences.
 - Do not use any set phrase for this contrast. Reference the contrast through lived experience; do not repeat any canned axis phrase.
-- Do not restate the why-today clause.
+- Do not restate the why-today clause (it's already in the scaffold).
 - Do not describe episode structure or meta framing.
 - Target 20-30 words per sentence.
 

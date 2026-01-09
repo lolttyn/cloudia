@@ -28,6 +28,7 @@ import { createHash } from "crypto";
 import { buildIntroScaffold } from "./crew_cloudia/generation/introScaffold.js";
 import { invokeLLM, CLOUDIA_LLM_CONFIG } from "./crew_cloudia/generation/invokeLLM.js";
 import { RunSummaryCollector } from "./crew_cloudia/runner/phaseG/runSummaryCollector.js";
+import { sanitizeInterpretiveFrameForPrompt } from "./crew_cloudia/generation/prompt/sanitizeInterpretiveFrame.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -402,7 +403,7 @@ If a lunation is present, lead with how it feels or what is opening/closing,
 not with astronomical sequencing.
 
 Authoritative interpretive frame (context only, do not restate as scaffold):
-${JSON.stringify(params.interpretive_frame, null, 2)}
+${JSON.stringify(sanitizeInterpretiveFrameForPrompt(params.interpretive_frame), null, 2)}
 
 Tone and intensity:
 - Today's intensity: ${intensity}.

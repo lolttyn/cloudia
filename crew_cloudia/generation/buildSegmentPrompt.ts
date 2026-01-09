@@ -3,6 +3,7 @@ import { SegmentPromptInput } from "../editorial/contracts/segmentPromptInput.js
 import { SegmentWritingContract } from "../editorial/types/SegmentWritingContract.js";
 import { EpisodeValidationResult } from "../editorial/validation/episodeValidationResult.js";
 import { PERMISSION_BLOCK } from "../editorial/prompts/permissionBlock.js";
+import { sanitizeInterpretiveFrameForPrompt } from "./prompt/sanitizeInterpretiveFrame.js";
 
 export type AssembledPrompt = {
   system_prompt: string;
@@ -85,20 +86,34 @@ Formatting rules:
 - Questions are ${writing_contract.formatting_rules.allow_questions ? "allowed" : "not allowed"}.
 `.trim();
 
+  const interpretiveFrame =
+    (segment as unknown as { constraints?: { interpretive_frame?: unknown } })?.constraints
+      ?.interpretive_frame;
+  
+  // Sanitize the interpretive frame before embedding in prompts (remove statement to prevent banned phrase injection)
+  const sanitizedInterpretiveFrame = sanitizeInterpretiveFrameForPrompt(
+    interpretiveFrame as any
+  );
+
+  // Create sanitized constraints for payload
+  const sanitizedConstraints = segment.constraints
+    ? {
+        ...segment.constraints,
+        interpretive_frame: sanitizedInterpretiveFrame,
+      }
+    : segment.constraints;
+
   const payload = {
     intent: segment.intent,
     included_tags: segment.included_tags,
     suppressed_tags: segment.suppressed_tags,
     confidence_level: segment.confidence_level,
     continuity_notes: segment.continuity_notes ?? [],
-    constraints: segment.constraints,
+    constraints: sanitizedConstraints,
     plan_intent: segment_plan.intent,
     plan_rationale: segment_plan.rationale,
   };
 
-  const interpretiveFrame =
-    (segment as unknown as { constraints?: { interpretive_frame?: unknown } })?.constraints
-      ?.interpretive_frame;
   const interpretationBundles =
     (interpretiveFrame as any)?.interpretation_bundles ?? { primary: [], secondary: [] };
 
@@ -128,7 +143,7 @@ ${
         const whyToday = frame.why_today_clause ?? "";
         const anchorLines = anchors.map((a) => `- "${a.label ?? ""}"`).join("\n");
         return `Authoritative interpretive frame for this day:
-${JSON.stringify(interpretiveFrame, null, 2)}
+${JSON.stringify(sanitizedInterpretiveFrame, null, 2)}
 
 Interpretation bundles (allowed meaning only):
 ${JSON.stringify(
@@ -176,9 +191,21 @@ ${
         const anchorExample = anchors[0]?.label ?? "one sky anchor (e.g., 'Moon in Virgo')";
         const anchorLines = anchors.map((a) => `- "${a.label ?? ""}"`).join("\n");
 
+        // Format date exactly as expected by validator
+        const parsed = new Date(`${segment.episode_date}T00:00:00Z`);
+        const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const dayName = dayNames[parsed.getUTCDay()];
+        const monthName = monthNames[parsed.getUTCMonth()];
+        const dayOfMonth = parsed.getUTCDate();
+        const year = parsed.getUTCFullYear();
+        const expectedGreeting = `Hey Celestial Besties. It's me, Cloudia Rey, here with the Cosmic Forecast for ${dayName}, ${monthName} ${dayOfMonth}, ${year}.`;
+
         return `
-Flow guidance for intro (one conversational pass, no lists or numbering):
-Greet casually and name the day (use the exact date string). State the dominant tension by showing "${axisPrimary}" vs "${axisCounter}" through lived experience (do not use any set phrase for this contrast). Include the why-today clause ("${whyTodayClause}"). Name at least one sky anchor by label (e.g., ${anchorExample}) and use "because" once to link meaning to a sky anchor. Reinforce the dominant contrast as lived tension; do not introduce new themes.
+CRITICAL: You must begin with this exact greeting (verbatim, ASCII apostrophes only). Do NOT modify, paraphrase, or rewrite it:
+"${expectedGreeting}"
+
+After the greeting above, state the dominant tension by showing "${axisPrimary}" vs "${axisCounter}" through lived experience (do not use any set phrase for this contrast). Include the why-today clause ("${whyTodayClause}"). Name at least one sky anchor by label (e.g., ${anchorExample}) and use "because" once to link meaning to a sky anchor. Reinforce the dominant contrast as lived tension; do not introduce new themes.
 
 Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like: "the inbox triage", "the tiny correction you keep re-doing", "re-reading the same message", "double-checking calendar details", "one more errand / one more small fix"
 `.trim();

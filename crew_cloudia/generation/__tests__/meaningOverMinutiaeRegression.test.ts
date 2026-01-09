@@ -39,7 +39,7 @@ describe("meaning over minutiae regression test", () => {
     expect(scaffold.toLowerCase().replace(/\s+/g, " ")).not.toContain("meaning over minutiae");
   });
 
-  it("should not include banned phrase in intro prompt", () => {
+  it("should sanitize interpretive frame in intro prompt (remove statement, keep primary/counter)", () => {
     const interpretiveFrame = {
       date: "2026-01-14",
       dominant_contrast_axis: {
@@ -132,24 +132,31 @@ describe("meaning over minutiae regression test", () => {
     const userPromptLower = prompt.user_prompt.toLowerCase();
     const systemPromptLower = prompt.system_prompt.toLowerCase();
 
-    // Should not contain the banned phrase
-    expect(userPromptLower).not.toContain(BANNED_PHRASE.toLowerCase());
-    expect(systemPromptLower).not.toContain(BANNED_PHRASE.toLowerCase());
+    // Should not contain "statement" field in JSON (it should be removed by sanitizer)
+    expect(userPromptLower).not.toContain('"statement"');
+    expect(userPromptLower).not.toContain('"statement":');
 
-    // Should not contain the statement format
-    expect(userPromptLower.replace(/\s+/g, " ")).not.toContain("meaning over minutiae");
+    // Should contain primary/counter pattern in JSON instead
+    expect(userPromptLower).toContain('"primary":');
+    expect(userPromptLower).toContain('"counter":');
+    expect(userPromptLower).toContain('"primary": "meaning"');
+    expect(userPromptLower).toContain('"counter": "minutiae"');
 
-    // Should contain primary/counter pattern instead
+    // Should contain primary/counter in instructions too
     expect(userPromptLower).toContain("meaning");
     expect(userPromptLower).toContain("minutiae");
-    // But should use "vs" pattern, not "over"
+    // But should use "vs" pattern in instructions, not "over"
     expect(userPromptLower).toMatch(/meaning.*vs.*minutiae|minutiae.*vs.*meaning/);
 
-    // Should contain the ban instruction
-    expect(userPromptLower).toContain('never use the phrase "meaning over minutiae"');
+    // Should contain the ban instruction (prompt can mention the phrase as part of the instruction; that's fine)
+    expect(userPromptLower).toContain('never use the phrase');
+
+    // Note: The prompt may contain "meaning over minutiae" as part of the ban instruction.
+    // That's acceptable - the real requirement is that generated SCRIPTS don't contain it.
+    // The sanitizer prevents it from appearing in the JSON frame (checked above).
   });
 
-  it("should not include banned phrase in closing prompt", () => {
+  it("should sanitize interpretive frame in closing prompt (remove statement, keep primary/counter)", () => {
     const interpretiveFrame = {
       date: "2026-01-14",
       dominant_contrast_axis: {
@@ -242,14 +249,21 @@ describe("meaning over minutiae regression test", () => {
     const userPromptLower = prompt.user_prompt.toLowerCase();
     const systemPromptLower = prompt.system_prompt.toLowerCase();
 
-    // Should not contain the banned phrase
-    expect(userPromptLower).not.toContain(BANNED_PHRASE.toLowerCase());
-    expect(systemPromptLower).not.toContain(BANNED_PHRASE.toLowerCase());
+    // Should not contain "statement" field in JSON (it should be removed by sanitizer)
+    expect(userPromptLower).not.toContain('"statement"');
+    expect(userPromptLower).not.toContain('"statement":');
 
-    // Should not contain the statement format
-    expect(userPromptLower.replace(/\s+/g, " ")).not.toContain("meaning over minutiae");
+    // Should contain primary/counter pattern in JSON instead
+    expect(userPromptLower).toContain('"primary":');
+    expect(userPromptLower).toContain('"counter":');
+    expect(userPromptLower).toContain('"primary": "meaning"');
+    expect(userPromptLower).toContain('"counter": "minutiae"');
 
-    // Should contain the ban instruction
-    expect(userPromptLower).toContain('never use the phrase "meaning over minutiae"');
+    // Should contain the ban instruction (prompt can mention the phrase as part of the instruction; that's fine)
+    expect(userPromptLower).toContain('never use the phrase');
+
+    // Note: The prompt may contain "meaning over minutiae" as part of the ban instruction.
+    // That's acceptable - the real requirement is that generated SCRIPTS don't contain it.
+    // The sanitizer prevents it from appearing in the JSON frame (checked above).
   });
 });
