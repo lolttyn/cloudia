@@ -237,6 +237,23 @@ export async function runMainThemesForDate(params: {
       max_attempts_remaining: 0,
     });
 
+    // Record the existing attempt to collector for Phase G instrumentation
+    if (params.collector) {
+      params.collector.recordAttempt({
+        episode_date: params.episode_date,
+        segment_key: "main_themes",
+        attempt_number: latestAttempt.attempt_number,
+        decision: "approve",
+        blocking_reasons: [],
+        script_text: latestAttempt.script_text,
+      });
+      params.collector.recordFinal({
+        episode_date: params.episode_date,
+        segment_key: "main_themes",
+        final_decision: gateResult.decision,
+      });
+    }
+
     await persistEditorialGateResult({
       episode_id: params.episode_id,
       episode_date: params.episode_date,
@@ -526,7 +543,6 @@ export async function runMainThemesForDate(params: {
       params.collector.recordFinal({
         episode_date: params.episode_date,
         segment_key: "main_themes",
-        final_attempt_number: actualFinalAttempt,
         final_decision: gateResult.decision,
       });
     }

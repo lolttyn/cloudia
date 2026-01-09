@@ -1,0 +1,1103 @@
+{
+  "program_slug": "cloudia",
+  "batch_id": "644356bb-bd5a-4677-8e5f-90e477f3dd42",
+  "mode": {
+    "canonical": false,
+    "scripts_only": true
+  },
+  "date_from": "2026-01-01",
+  "date_to": "2026-01-14",
+  "episodes": [
+    {
+      "episode_date": "2026-01-01",
+      "segments": [
+        {
+          "segment_key": "intro",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "main_themes",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "closing",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [
+                  "tomorrow"
+                ],
+                "closing_soft_permission_present": true
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        }
+      ],
+      "episode_gate": {
+        "episode_date": "2026-01-01",
+        "decision": "ship",
+        "failed_segments": []
+      }
+    },
+    {
+      "episode_date": "2026-01-02",
+      "segments": [
+        {
+          "segment_key": "intro",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "main_themes",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "closing",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [
+                  "tomorrow"
+                ],
+                "closing_soft_permission_present": true
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        }
+      ],
+      "episode_gate": {
+        "episode_date": "2026-01-02",
+        "decision": "ship",
+        "failed_segments": []
+      }
+    },
+    {
+      "episode_date": "2026-01-03",
+      "segments": [
+        {
+          "segment_key": "intro",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "rewrite",
+              "blocking_reasons": [
+                "LUNATION_NOT_FRONT_LOADED"
+              ],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            },
+            {
+              "attempt_number": 1,
+              "decision": "rewrite",
+              "blocking_reasons": [
+                "LUNATION_NOT_FRONT_LOADED"
+              ],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            },
+            {
+              "attempt_number": 2,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 2
+          }
+        },
+        {
+          "segment_key": "main_themes",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "rewrite",
+              "blocking_reasons": [
+                "LUNATION_NOT_FRONT_LOADED"
+              ],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            },
+            {
+              "attempt_number": 1,
+              "decision": "rewrite",
+              "blocking_reasons": [
+                "LUNATION_NOT_FRONT_LOADED"
+              ],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            },
+            {
+              "attempt_number": 2,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 2
+          }
+        },
+        {
+          "segment_key": "closing",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [
+                  "tomorrow"
+                ],
+                "closing_soft_permission_present": true
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        }
+      ],
+      "episode_gate": {
+        "episode_date": "2026-01-03",
+        "decision": "ship",
+        "failed_segments": []
+      }
+    },
+    {
+      "episode_date": "2026-01-04",
+      "segments": [
+        {
+          "segment_key": "intro",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "rewrite",
+              "blocking_reasons": [
+                "LUNATION_NOT_FRONT_LOADED"
+              ],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            },
+            {
+              "attempt_number": 1,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 1
+          }
+        },
+        {
+          "segment_key": "main_themes",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "closing",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [
+                  "tomorrow"
+                ],
+                "closing_soft_permission_present": true
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        }
+      ],
+      "episode_gate": {
+        "episode_date": "2026-01-04",
+        "decision": "ship",
+        "failed_segments": []
+      }
+    },
+    {
+      "episode_date": "2026-01-05",
+      "segments": [
+        {
+          "segment_key": "intro",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "main_themes",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "closing",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [
+                  "tomorrow"
+                ],
+                "closing_soft_permission_present": true
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        }
+      ],
+      "episode_gate": {
+        "episode_date": "2026-01-05",
+        "decision": "ship",
+        "failed_segments": []
+      }
+    },
+    {
+      "episode_date": "2026-01-06",
+      "segments": [
+        {
+          "segment_key": "intro",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "main_themes",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "closing",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [
+                  "tomorrow"
+                ],
+                "closing_soft_permission_present": true
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        }
+      ],
+      "episode_gate": {
+        "episode_date": "2026-01-06",
+        "decision": "ship",
+        "failed_segments": []
+      }
+    },
+    {
+      "episode_date": "2026-01-07",
+      "segments": [
+        {
+          "segment_key": "intro",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "main_themes",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "closing",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "rewrite",
+              "blocking_reasons": [
+                "closing:prediction_language"
+              ],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [
+                  "tomorrow",
+                  "next"
+                ],
+                "closing_soft_permission_present": true
+              }
+            },
+            {
+              "attempt_number": 1,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": true
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 1
+          }
+        }
+      ],
+      "episode_gate": {
+        "episode_date": "2026-01-07",
+        "decision": "ship",
+        "failed_segments": []
+      }
+    },
+    {
+      "episode_date": "2026-01-08",
+      "segments": [
+        {
+          "segment_key": "intro",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "main_themes",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "closing",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [
+                  "tomorrow"
+                ],
+                "closing_soft_permission_present": true
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        }
+      ],
+      "episode_gate": {
+        "episode_date": "2026-01-08",
+        "decision": "ship",
+        "failed_segments": []
+      }
+    },
+    {
+      "episode_date": "2026-01-09",
+      "segments": [
+        {
+          "segment_key": "intro",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "main_themes",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "closing",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [
+                  "tomorrow"
+                ],
+                "closing_soft_permission_present": true
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        }
+      ],
+      "episode_gate": {
+        "episode_date": "2026-01-09",
+        "decision": "ship",
+        "failed_segments": []
+      }
+    },
+    {
+      "episode_date": "2026-01-10",
+      "segments": [
+        {
+          "segment_key": "intro",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "main_themes",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "closing",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [
+                  "tomorrow"
+                ],
+                "closing_soft_permission_present": true
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        }
+      ],
+      "episode_gate": {
+        "episode_date": "2026-01-10",
+        "decision": "ship",
+        "failed_segments": []
+      }
+    },
+    {
+      "episode_date": "2026-01-11",
+      "segments": [
+        {
+          "segment_key": "intro",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "main_themes",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "closing",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [
+                  "tomorrow"
+                ],
+                "closing_soft_permission_present": true
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        }
+      ],
+      "episode_gate": {
+        "episode_date": "2026-01-11",
+        "decision": "ship",
+        "failed_segments": []
+      }
+    },
+    {
+      "episode_date": "2026-01-12",
+      "segments": [
+        {
+          "segment_key": "intro",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "main_themes",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "closing",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "rewrite",
+              "blocking_reasons": [
+                "closing:prediction_language"
+              ],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [
+                  "tomorrow",
+                  "next"
+                ],
+                "closing_soft_permission_present": true
+              }
+            },
+            {
+              "attempt_number": 1,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": true
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 1
+          }
+        }
+      ],
+      "episode_gate": {
+        "episode_date": "2026-01-12",
+        "decision": "ship",
+        "failed_segments": []
+      }
+    },
+    {
+      "episode_date": "2026-01-13",
+      "segments": [
+        {
+          "segment_key": "intro",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "main_themes",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        },
+        {
+          "segment_key": "closing",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [
+                  "tomorrow"
+                ],
+                "closing_soft_permission_present": true
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 0
+          }
+        }
+      ],
+      "episode_gate": {
+        "episode_date": "2026-01-13",
+        "decision": "ship",
+        "failed_segments": []
+      }
+    },
+    {
+      "episode_date": "2026-01-14",
+      "segments": [
+        {
+          "segment_key": "intro",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "rewrite",
+              "blocking_reasons": [
+                "HARD_BANNED_LANGUAGE:meaning over minutiae",
+                "SYSTEM_LEVEL_EXPLANATION"
+              ],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": true,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            },
+            {
+              "attempt_number": 1,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": null
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 1
+          }
+        },
+        {
+          "segment_key": "closing",
+          "attempts": [
+            {
+              "attempt_number": 0,
+              "decision": "rewrite",
+              "blocking_reasons": [
+                "HARD_BANNED_LANGUAGE:meaning over minutiae",
+                "SYSTEM_LEVEL_EXPLANATION",
+                "ABSTRACT_WITHOUT_TRANSLATION"
+              ],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": true,
+                "closing_prediction_terms": [
+                  "tomorrow"
+                ],
+                "closing_soft_permission_present": true
+              }
+            },
+            {
+              "attempt_number": 1,
+              "decision": "approve",
+              "blocking_reasons": [],
+              "flags": {
+                "banned_phrase_meaning_over_minutiae": false,
+                "closing_prediction_terms": [],
+                "closing_soft_permission_present": true
+              }
+            }
+          ],
+          "final": {
+            "decision": "approve",
+            "attempt_number": 4
+          }
+        }
+      ],
+      "episode_gate": {
+        "episode_date": "2026-01-14",
+        "decision": "ship",
+        "failed_segments": []
+      }
+    }
+  ],
+  "rollups": {
+    "segments_total": 41,
+    "segments_approved": 41,
+    "attempts_per_segment": {
+      "p50": 1,
+      "p95": 2
+    },
+    "top_blockers": [
+      {
+        "id": "LUNATION_NOT_FRONT_LOADED",
+        "count": 5
+      },
+      {
+        "id": "closing:prediction_language",
+        "count": 2
+      },
+      {
+        "id": "HARD_BANNED_LANGUAGE:meaning over minutiae",
+        "count": 2
+      },
+      {
+        "id": "SYSTEM_LEVEL_EXPLANATION",
+        "count": 2
+      },
+      {
+        "id": "ABSTRACT_WITHOUT_TRANSLATION",
+        "count": 1
+      }
+    ],
+    "banned_phrase_hits": 2
+  }
+}

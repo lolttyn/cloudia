@@ -328,7 +328,6 @@ export async function runIntroForDate(params: {
       params.collector.recordFinal({
         episode_date: params.episode_date,
         segment_key: "intro",
-        final_attempt_number: actualFinalAttempt,
         final_decision: gateResult.decision,
       });
     }

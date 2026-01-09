@@ -19,7 +19,6 @@ export interface AttemptRecord {
 export interface FinalRecord {
   episode_date: string;
   segment_key: string;
-  final_attempt_number: number;
   final_decision: "approve" | "block" | "rewrite";
 }
 
@@ -126,14 +125,12 @@ export class RunSummaryCollector {
   recordFinal(params: {
     episode_date: string;
     segment_key: string;
-    final_attempt_number: number;
     final_decision: "approve" | "block" | "rewrite";
   }): void {
     const key = `${params.episode_date}:${params.segment_key}`;
     this.finals.set(key, {
       episode_date: params.episode_date,
       segment_key: params.segment_key,
-      final_attempt_number: params.final_attempt_number,
       final_decision: params.final_decision,
     });
   }
@@ -264,23 +261,27 @@ export class RunSummaryCollector {
           : null,
       };
 
+      // Store attempt_number as 0-based for artifact consistency
+      // (code uses 1-based: attemptNumber = attempt + 1, so subtract 1 here)
       segment.attempts.push({
-        attempt_number: attempt.attempt_number - 1, // Convert to 0-based for artifact
+        attempt_number: attempt.attempt_number - 1,
         decision: attempt.decision,
         blocking_reasons: attempt.blocking_reasons,
         flags,
       });
     }
 
-    // Add final records
+    // Add final records (compute attempt_number from max attempts)
     for (const final of this.finals.values()) {
       const episode = episodesByDate.get(final.episode_date);
       if (episode) {
         const segment = episode.segments.get(final.segment_key);
-        if (segment) {
+        if (segment && segment.attempts.length > 0) {
+          // Compute final attempt number from max attempt_number in attempts array
+          const maxAttemptNumber = Math.max(...segment.attempts.map(a => a.attempt_number));
           segment.final = {
             decision: final.final_decision,
-            attempt_number: final.final_attempt_number - 1, // Convert to 0-based for artifact
+            attempt_number: maxAttemptNumber,
           };
         }
       }
@@ -365,8 +366,9 @@ export class RunSummaryCollector {
             : "N"
           : "-";
 
+        // Display final decision and attempt count (attempt_number is 0-based in artifact)
         const finalStr = segment.final
-          ? `${segment.final.decision} (${segment.final.attempt_number + 1})` // Display as 1-based
+          ? `${segment.final.decision} (${segment.final.attempt_number + 1})`
           : "unknown";
 
         console.log(

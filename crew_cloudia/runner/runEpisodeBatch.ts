@@ -100,8 +100,8 @@ export async function runForDate(
 
   console.log(`[batch:date] ${episode_date}`);
 
-  // Parse interpretation mode from environment (default to legacy)
-  const modeRaw = (process.env.CLOUDIA_INTERPRETATION_MODE ?? "legacy").toLowerCase();
+  // Parse interpretation mode from environment (default to canonical for Phase G)
+  const modeRaw = (process.env.CLOUDIA_INTERPRETATION_MODE ?? "canonical").toLowerCase();
   const interpretationMode = modeRaw === "canonical" ? "canonical" : "legacy";
 
   const interpretive_frame =
@@ -203,8 +203,8 @@ async function main() {
   const { program_slug, start_date, window_days, scripts_only } = parseArgs(process.argv);
   const dates = expandDates(start_date, window_days);
 
-  // Parse interpretation mode from environment (default to legacy)
-  const modeRaw = (process.env.CLOUDIA_INTERPRETATION_MODE ?? "legacy").toLowerCase();
+  // Parse interpretation mode from environment (default to canonical for Phase G)
+  const modeRaw = (process.env.CLOUDIA_INTERPRETATION_MODE ?? "canonical").toLowerCase();
   const interpretationMode = modeRaw === "canonical" ? "canonical" : "legacy";
 
   const date_from = dates[0];
