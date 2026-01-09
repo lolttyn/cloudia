@@ -362,6 +362,11 @@ Additional constraints:
 - CRITICAL: The closing must start with exactly one of these phrases (verbatim, ASCII apostrophes) as the beginning of the segment: "It's okay to …" OR "You don't have to …" OR "You might notice …" (present tense only; no "will", "soon", "next", "tomorrow"). Use ASCII apostrophe (') NOT curly apostrophe ('). The soft-permission phrase must be the first words of the closing (sentence 1).
 - Example with ASCII apostrophes at start: "It's okay to let the small stuff stay small tonight. The rest can wait."
 
+CRITICAL: Do not reference the future outside the locked sign-off.
+Specifically, do not use words/phrases like: tomorrow, next, later, soon, coming days, what's coming next, going to, will (outside the sign-off).
+Keep the closing anchored to today/past/present ("as the day winds down…", "what you noticed today…").
+Before finalizing, scan your draft and remove any mention of tomorrow/next/soon/later/coming.
+
 Interpretation bundles (only allowed meaning):
 ${JSON.stringify(
   {

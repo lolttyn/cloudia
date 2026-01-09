@@ -5,6 +5,28 @@ const ADVICE_PATTERNS = [/you should/i, /\bshould\b/i, /\bneed to\b/i, /\bmust\b
 const PREDICTION_PATTERNS = [/\bwill\b/i, /\bgoing to\b/i, /\bsoon\b/i];
 const REFLECTIVE_PATTERNS = [/\bfeel\b/i, /\bnotice\b/i, /\bsense\b/i, /\bbreath/i, /\bholding\b/i, /\bsitting with\b/i, /\bcaring\b/i, /\bcarrying\b/i];
 const LISTENER_PATTERN = /\b(you|your|this moment)\b/i;
+
+/**
+ * Finds the first matching pattern in text and returns it with context window.
+ * Used for debugging prediction language violations.
+ */
+function firstMatchWithContext(text: string, patterns: RegExp[]): { pattern: string; match: string; context: string } | null {
+  for (const re of patterns) {
+    // Reset regex lastIndex to ensure fresh search
+    re.lastIndex = 0;
+    const m = re.exec(text);
+    if (m && m.index != null) {
+      const start = Math.max(0, m.index - 40);
+      const end = Math.min(text.length, m.index + (m[0]?.length ?? 0) + 40);
+      return {
+        pattern: re.toString(),
+        match: m[0],
+        context: text.slice(start, end).replace(/\n/g, " ").trim(),
+      };
+    }
+  }
+  return null;
+}
 const PHASE_POLARITY_CUES: Record<string, string[]> = {
   building: ["gather", "forming", "ready", "opening", "anticipation", "noticing"],
   peak: ["alive", "immediate", "now", "intense", "charged", "present"],
@@ -157,13 +179,20 @@ export function evaluateClosingWithFrame(params: {
     /\bin the coming days\b/i,
     /\btomorrow\b/i,
     /\bnext\b/i,
+    /\bcoming next\b/i,
+    /\bwhat's coming\b/i,
+    /\blater\b/i,
   ];
   
-  const hasFutureCertainty = futureCertaintyPatterns.some((re) => re.test(contentForPredictionCheck));
-  if (hasFutureCertainty) {
-    notes.push("Avoid predictions; keep the tone reflective of today only.");
+  // Find the first match with context for debugging
+  const matchResult = firstMatchWithContext(contentForPredictionCheck, futureCertaintyPatterns);
+  const hasFutureCertainty = matchResult !== null;
+  
+  if (hasFutureCertainty && matchResult) {
+    const matchDetail = `Matched "${matchResult.match}" (pattern: ${matchResult.pattern}) in context: "...${matchResult.context}..."`;
+    notes.push(`Avoid predictions; keep the tone reflective of today only. ${matchDetail}`);
     blocking_reasons.push("closing:prediction_language");
-    rewrite_instructions.push("Remove predictive language (e.g., 'will', 'going to', 'soon', 'tomorrow'). The only allowed 'tomorrow' is in the locked sign-off.");
+    rewrite_instructions.push(`Remove predictive language. Found: "${matchResult.match}" in: "...${matchResult.context}...". Do not use words/phrases like: tomorrow, next, later, soon, coming days, what's coming next, going to, will (outside the locked sign-off). The only allowed 'tomorrow' is in the locked sign-off.`);
   }
 
   if (params.interpretive_frame.temporal_arc.arc_day_index > 1) {

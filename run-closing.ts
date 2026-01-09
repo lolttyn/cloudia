@@ -466,7 +466,10 @@ Revision requirements:
 - Preserve what works; fix what doesn't.
 - Reflective and observational; no advice, no directives, no "you should".
 - Express the core tension (${axis.primary} vs ${axis.counter}) through lived experience, not as a named contrast.
-- No predictions; stay with today.
+- CRITICAL: Do not reference the future outside the locked sign-off.
+  Specifically, do not use words/phrases like: tomorrow, next, later, soon, coming days, what's coming next, going to, will (outside the sign-off).
+  Keep the closing anchored to today/past/present ("as the day winds down…", "what you noticed today…").
+  Before finalizing, scan your draft and remove any mention of tomorrow/next/soon/later/coming.
 - Return the COMPLETE revised closing, not just a portion.
 - CRITICAL: Keep it to 1-3 sentences total. If you wrote more, cut it down.
 `.trim();
