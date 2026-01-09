@@ -379,9 +379,11 @@ ${params.previous_script}
 Your editor has requested the following changes:
 ${instructions}
 
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like: "the inbox triage", "the tiny correction you keep re-doing", "re-reading the same message", "double-checking calendar details", "one more errand / one more small fix"
+
 CRITICAL: You must include:
 - A greeting that names the date (use: ${expectedIntroGreeting(params.episode_date)})
-- The dominant contrast axis meaning: "${params.interpretive_frame.dominant_contrast_axis.statement}" (but translate it into human experience, don't use the phrase verbatim)
+- The dominant contrast meaning: "${params.interpretive_frame.dominant_contrast_axis.primary}" vs "${params.interpretive_frame.dominant_contrast_axis.counter}" (translate into human experience through lived moments; do not use any set phrase for this contrast)
 - The why-today clause: "${params.interpretive_frame.why_today_clause}"
 - At least one sky anchor from: ${params.interpretive_frame.sky_anchors.map((a) => `"${a.label}"`).join(", ")}
 - A causal sentence that uses the word "because"

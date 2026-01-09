@@ -46,7 +46,8 @@ export function buildRewritePrompt(params: {
     params.episode_date
       ? buildIntroScaffold({
           episode_date: params.episode_date,
-          axis: params.interpretive_frame.dominant_contrast_axis.statement,
+          axis_primary: params.interpretive_frame.dominant_contrast_axis.primary,
+          axis_counter: params.interpretive_frame.dominant_contrast_axis.counter,
           why_today_clause: params.interpretive_frame.why_today_clause,
         })
       : undefined;

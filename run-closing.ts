@@ -111,12 +111,14 @@ export async function runClosingForDate(params: {
   let signoff = "";
   for (let attempt = 0; attempt < MAX_SEGMENT_RETRIES; attempt++) {
     const attemptNumber = attempt + 1;
-    const axis = params.interpretive_frame.dominant_contrast_axis.statement;
+    const axisPrimary = params.interpretive_frame.dominant_contrast_axis.primary;
+    const axisCounter = params.interpretive_frame.dominant_contrast_axis.counter;
     const timingNote =
       params.interpretive_frame.timing?.notes ?? params.interpretive_frame.timing?.state;
     const scaffoldBuild = buildClosingScaffold({
       episode_date: params.episode_date,
-      axis_statement: axis,
+      axis_primary: axisPrimary,
+      axis_counter: axisCounter,
       timing_note: timingNote,
       temporal_phase: params.interpretive_frame.temporal_phase,
     });
@@ -412,8 +414,10 @@ ${params.previous_script}
 Your editor has requested the following changes:
 ${instructions}
 
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like: "the inbox triage", "the tiny correction you keep re-doing", "re-reading the same message", "double-checking calendar details", "one more errand / one more small fix"
+
 CRITICAL: You must include (express naturally, not verbatim):
-- The day's core tension: ${axis.primary} vs ${axis.counter} (express through lived experience, not as a named contrast like "meaning over minutiae")
+- The day's core tension: ${axis.primary} vs ${axis.counter} (express through lived experience, do not use any set phrase for this contrast)
 - A timing note if provided: ${timingNote || "none"} (express naturally)
 - The temporal phase: ${params.interpretive_frame.temporal_phase} (express through tone, not by naming it)
 - A natural sign-off that feels human

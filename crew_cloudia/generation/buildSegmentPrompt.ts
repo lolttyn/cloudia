@@ -118,11 +118,12 @@ ${
   interpretiveFrame
     ? (() => {
         const frame = interpretiveFrame as {
-          dominant_contrast_axis?: { statement?: string };
+          dominant_contrast_axis?: { statement?: string; primary?: string; counter?: string };
           sky_anchors?: { label?: string }[];
           why_today_clause?: string;
         };
-        const axis = frame.dominant_contrast_axis?.statement ?? "";
+        const axisPrimary = frame.dominant_contrast_axis?.primary ?? "";
+        const axisCounter = frame.dominant_contrast_axis?.counter ?? "";
         const anchors = frame.sky_anchors ?? [];
         const whyToday = frame.why_today_clause ?? "";
         const anchorLines = anchors.map((a) => `- "${a.label ?? ""}"`).join("\n");
@@ -137,9 +138,11 @@ ${JSON.stringify(
 )}
 
 Work these into one flowing thought (no labels, no lists):
-- Dominant contrast axis: "${axis}"
+- Dominant contrast (primary vs counter): "${axisPrimary}" vs "${axisCounter}" (reference through lived experience; do not repeat any canned axis phrase)
 - Sky anchors: ${anchorLines || "- none"}
 - Why-today clause: "${whyToday}"
+
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like: "the inbox triage", "the tiny correction you keep re-doing", "re-reading the same message", "double-checking calendar details", "one more errand / one more small fix"
 `;
       })()
     : ""
@@ -162,11 +165,12 @@ ${
         }
 
         const frame = interpretiveFrame as {
-          dominant_contrast_axis?: { statement?: string };
+          dominant_contrast_axis?: { statement?: string; primary?: string; counter?: string };
           why_today_clause?: string;
           sky_anchors?: { label?: string }[];
         };
-        const axisStatement = frame.dominant_contrast_axis?.statement ?? "";
+        const axisPrimary = frame.dominant_contrast_axis?.primary ?? "";
+        const axisCounter = frame.dominant_contrast_axis?.counter ?? "";
         const whyTodayClause = frame.why_today_clause ?? "";
         const anchors = frame.sky_anchors ?? [];
         const anchorExample = anchors[0]?.label ?? "one sky anchor (e.g., 'Moon in Virgo')";
@@ -174,7 +178,9 @@ ${
 
         return `
 Flow guidance for intro (one conversational pass, no lists or numbering):
-Greet casually and name the day (use the exact date string). State the dominant tension plainly ("${axisStatement}"). Include the why-today clause ("${whyTodayClause}"). Name at least one sky anchor by label (e.g., ${anchorExample}) and use "because" once to link meaning to a sky anchor. Reinforce the dominant contrast as lived tension; do not introduce new themes.
+Greet casually and name the day (use the exact date string). State the dominant tension by showing "${axisPrimary}" vs "${axisCounter}" through lived experience (do not use any set phrase for this contrast). Include the why-today clause ("${whyTodayClause}"). Name at least one sky anchor by label (e.g., ${anchorExample}) and use "because" once to link meaning to a sky anchor. Reinforce the dominant contrast as lived tension; do not introduce new themes.
+
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like: "the inbox triage", "the tiny correction you keep re-doing", "re-reading the same message", "double-checking calendar details", "one more errand / one more small fix"
 `.trim();
       })()
     : ""
@@ -183,6 +189,8 @@ Greet casually and name the day (use the exact date string). State the dominant 
 ${
   segment.segment_key === "closing"
     ? `
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like: "the inbox triage", "the tiny correction you keep re-doing", "re-reading the same message", "double-checking calendar details", "one more errand / one more small fix"
+
 You must end the episode with the following exact sign-off (verbatim). Do not paraphrase or alter it:
 
 "The Cosmic Forecast for ${formatBroadcastDate(

@@ -205,15 +205,17 @@ async function generateIntroDraft(params: {
   if (!frame) {
     throw new Error("Intro generation requires an interpretive_frame");
   }
-  const axis = frame.dominant_contrast_axis?.statement;
+  const axisPrimary = frame.dominant_contrast_axis?.primary;
+  const axisCounter = frame.dominant_contrast_axis?.counter;
   const whyClause = frame.why_today_clause;
-  if (!axis || !whyClause) {
-    throw new Error("Intro generation requires dominant_contrast_axis and why_today_clause");
+  if (!axisPrimary || !axisCounter || !whyClause) {
+    throw new Error("Intro generation requires dominant_contrast_axis (primary and counter) and why_today_clause");
   }
 
   const scaffold = buildIntroScaffold({
     episode_date: params.segment.episode_date,
-    axis,
+    axis_primary: axisPrimary,
+    axis_counter: axisCounter,
     why_today_clause: whyClause,
   });
 
@@ -233,14 +235,21 @@ async function generateIntroDraft(params: {
 Write exactly two sentences.
 Each sentence must:
 - Reference at least one of these sky anchors by label: ${anchorLabels.join(", ")}.
-- Reinforce the dominant contrast axis: "${axis}".
+- Reinforce the dominant contrast by showing "${axisPrimary}" vs "${axisCounter}" in real-life moments (no slogans).
 - Include causal language using the word "because".
 - Acknowledge today's temporal phase "${temporalPhase}" and intensity "${intensity}".
 ${continuityLines.length ? "- Include at least one provided continuity hook." : ""}
 
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like:
+- "the inbox triage"
+- "the tiny correction you keep re-doing"
+- "re-reading the same message"
+- "double-checking calendar details"
+- "one more errand / one more small fix"
+
 Additional constraints:
 - Do not greet.
-- Do not restate the axis line.
+- Do not use any set phrase for this contrast. Reference the contrast through lived experience; do not repeat any canned axis phrase.
 - Do not restate the why-today clause.
 - Do not describe episode structure or meta framing.
 - Target 20-30 words per sentence.
@@ -299,21 +308,29 @@ async function generateClosingDraft(params: {
   if (!frame) {
     throw new Error("Closing generation requires an interpretive_frame");
   }
-  const axis = frame.dominant_contrast_axis?.statement;
-  if (!axis) {
-    throw new Error("Closing generation requires dominant_contrast_axis");
+  const axisPrimary = frame.dominant_contrast_axis?.primary;
+  const axisCounter = frame.dominant_contrast_axis?.counter;
+  if (!axisPrimary || !axisCounter) {
+    throw new Error("Closing generation requires dominant_contrast_axis (primary and counter)");
   }
 
   const timingNote = frame.timing?.notes ?? frame.timing?.state;
   const { scaffold, signoff } = buildClosingScaffold({
     episode_date: params.segment.episode_date,
-    axis_statement: axis,
+    axis_primary: axisPrimary,
+    axis_counter: axisCounter,
     timing_note: timingNote,
     temporal_phase: (frame.temporal_phase as any) ?? "baseline",
   });
 
   const user_prompt = `
-The dominant contrast axis is "${axis}". Do not restate or quote it.
+The dominant contrast is "${axisPrimary}" vs "${axisCounter}". Do not use any set phrase for this contrast. Reference it through lived experience; do not repeat any canned axis phrase.
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like:
+- "the inbox triage"
+- "the tiny correction you keep re-doing"
+- "re-reading the same message"
+- "double-checking calendar details"
+- "one more errand / one more small fix"
 Today's temporal phase is "${frame.temporal_phase}". Match the polarity without naming it:
 - building → anticipation, gathering, noticing
 - peak → intensity, presence, immediacy
