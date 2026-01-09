@@ -179,20 +179,19 @@ export function evaluateClosingWithFrame(params: {
     /\bin the coming days\b/i,
     /\btomorrow\b/i,
     /\bnext\b/i,
-    /\bcoming next\b/i,
-    /\bwhat's coming\b/i,
-    /\blater\b/i,
   ];
   
-  // Find the first match with context for debugging
+  // Find the first match with context for debugging (detailed context goes to notes, not rewrite_instructions)
   const matchResult = firstMatchWithContext(contentForPredictionCheck, futureCertaintyPatterns);
   const hasFutureCertainty = matchResult !== null;
   
   if (hasFutureCertainty && matchResult) {
+    // Detailed match context for debugging/artifact only (don't echo violating phrase to model)
     const matchDetail = `Matched "${matchResult.match}" (pattern: ${matchResult.pattern}) in context: "...${matchResult.context}..."`;
-    notes.push(`Avoid predictions; keep the tone reflective of today only. ${matchDetail}`);
+    notes.push(`Avoid predictions; keep the tone reflective of today only. [DEBUG: ${matchDetail}]`);
     blocking_reasons.push("closing:prediction_language");
-    rewrite_instructions.push(`Remove predictive language. Found: "${matchResult.match}" in: "...${matchResult.context}...". Do not use words/phrases like: tomorrow, next, later, soon, coming days, what's coming next, going to, will (outside the locked sign-off). The only allowed 'tomorrow' is in the locked sign-off.`);
+    // Keep rewrite instructions at high level to avoid feedback loop (don't include exact phrase)
+    rewrite_instructions.push(`Remove future-oriented phrasing. Do not use words/phrases like: tomorrow, next, later, soon, coming days, going to, will (outside the locked sign-off). Keep the closing anchored to today/past/present. The only allowed 'tomorrow' is in the locked sign-off.`);
   }
 
   if (params.interpretive_frame.temporal_arc.arc_day_index > 1) {
