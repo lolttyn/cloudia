@@ -172,9 +172,14 @@ export function evaluateClosingWithFrame(params: {
     ? script.split(signoff)[0].trim()  // Only check content before signoff
     : middle;  // Fallback: if signoff not found, use middle (scaffold already removed)
   
-  // CRITICAL: Strip parentheticals (meta/pacing content) before prediction scan
-  // Parentheticals like "(Sun-Moon trine next...)" contain meta information and shouldn't trigger prediction violations
-  const contentForPredictionCheckNoParens = contentForPredictionCheck.replace(/\([^)]*\)/g, "").trim();
+  // CRITICAL: Strip meta/pacing content (parentheticals, brackets, JSON-style notes) before prediction scan
+  // Parentheticals like "(Sun-Moon trine next...)" and brackets like "[pacing note: next transit]" 
+  // contain meta information and shouldn't trigger prediction violations
+  const contentForPredictionCheckNoParens = contentForPredictionCheck
+    .replace(/\([^)]*\)/g, "") // Strip parentheticals
+    .replace(/\[[^\]]*\]/g, "") // Strip brackets (pacing notes, asides)
+    .replace(/\{[^\}]*\}/g, "") // Strip JSON-style notes
+    .trim();
   
   const futureCertaintyPatterns = [
     /\bwill\b/i,

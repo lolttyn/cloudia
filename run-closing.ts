@@ -257,6 +257,14 @@ export async function runClosingForDate(params: {
     );
     if (allBlockingReasons.length > 0) {
       console.log(`  Blocking reasons: ${allBlockingReasons.join(", ")}`);
+      
+      // Print detailed match context from validator notes (especially for prediction_language debugging)
+      if (frameEval.notes.length > 0) {
+        const debugNotes = frameEval.notes.filter((n) => n.includes("[DEBUG:") || n.includes("Matched"));
+        if (debugNotes.length > 0) {
+          console.log(`  Match context: ${debugNotes.join(" | ")}`);
+        }
+      }
     }
 
     // Final decision: only approve if BOTH evaluators have zero blocking reasons
@@ -469,7 +477,8 @@ Revision requirements:
 - CRITICAL: Do not reference the future outside the locked sign-off.
   Specifically, do not use words/phrases like: tomorrow, next, later, soon, coming days, what's coming next, going to, will (outside the sign-off).
   Keep the closing anchored to today/past/present ("as the day winds down…", "what you noticed today…").
-  Before finalizing, scan your draft and remove any mention of tomorrow/next/soon/later/coming.
+  HARD CONSTRAINT: All verbs must be present or past tense (e.g., "you noticed", "it showed up", "you felt", not "you will notice", "it's going to show", "you'll feel").
+  Before finalizing, scan your draft and remove any mention of: tomorrow, next, later, soon, coming, will, going to. If you find any of these words (outside the locked sign-off), rewrite those sentences using present/past tense only.
 - Return the COMPLETE revised closing, not just a portion.
 - CRITICAL: Keep it to 1-3 sentences total. If you wrote more, cut it down.
 `.trim();

@@ -368,7 +368,8 @@ Additional constraints:
 CRITICAL: Do not reference the future outside the locked sign-off.
 Specifically, do not use words/phrases like: tomorrow, next, later, soon, coming days, what's coming next, going to, will (outside the sign-off).
 Keep the closing anchored to today/past/present ("as the day winds down…", "what you noticed today…").
-Before finalizing, scan your draft and remove any mention of tomorrow/next/soon/later/coming.
+HARD CONSTRAINT: All verbs must be present or past tense (e.g., "you noticed", "it showed up", "you felt", not "you will notice", "it's going to show", "you'll feel").
+Before finalizing, scan your draft and remove any mention of: tomorrow, next, later, soon, coming, will, going to. If you find any of these words (outside the locked sign-off), rewrite those sentences using present/past tense only.
 
 Interpretation bundles (only allowed meaning):
 ${JSON.stringify(
