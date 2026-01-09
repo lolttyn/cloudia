@@ -25,6 +25,7 @@ import { evaluateAdherenceRubric } from "./crew_cloudia/quality/adherence/adhere
 import { PERMISSION_BLOCK } from "./crew_cloudia/editorial/prompts/permissionBlock.js";
 import { generateEditInstructions } from "./crew_cloudia/editorial/editor/generateEditInstructions.js";
 import { buildClosingScaffold } from "./crew_cloudia/generation/closingScaffold.js";
+import { RunSummaryCollector } from "./crew_cloudia/runner/phaseG/runSummaryCollector.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -39,6 +40,7 @@ export async function runClosingForDate(params: {
   batch_id: string;
   time_context: "day_of" | "future";
   interpretive_frame?: InterpretiveFrame;
+  collector?: RunSummaryCollector;
 }): Promise<{
   segment_key: string;
   gate_result: ReturnType<typeof evaluateEditorialGate>;
@@ -232,6 +234,18 @@ export async function runClosingForDate(params: {
       allBlockingReasons.push("NO_REVISION_MADE");
     }
 
+    // Record attempt for Phase G instrumentation
+    if (params.collector) {
+      params.collector.recordAttempt({
+        episode_date: params.episode_date,
+        segment_key: "closing",
+        attempt_number: attemptNumber,
+        decision: gateDecisionForAttempt,
+        blocking_reasons: allBlockingReasons,
+        script_text: script,
+      });
+    }
+
     // Log attempt evolution for debugging
     console.log(
       `[closing] Attempt ${attemptNumber}/${MAX_SEGMENT_RETRIES}: ` +
@@ -346,6 +360,16 @@ export async function runClosingForDate(params: {
       episode_id: params.episode_id,
       segment_key: "closing",
     });
+
+    // Record final for Phase G instrumentation
+    if (params.collector) {
+      params.collector.recordFinal({
+        episode_date: params.episode_date,
+        segment_key: "closing",
+        final_attempt_number: actualFinalAttempt,
+        final_decision: gateResult.decision,
+      });
+    }
   }
 
   await persistEditorialGateResult({

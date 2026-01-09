@@ -27,6 +27,7 @@ import { generateEditInstructions } from "./crew_cloudia/editorial/editor/genera
 import { createHash } from "crypto";
 import { buildIntroScaffold } from "./crew_cloudia/generation/introScaffold.js";
 import { invokeLLM, CLOUDIA_LLM_CONFIG } from "./crew_cloudia/generation/invokeLLM.js";
+import { RunSummaryCollector } from "./crew_cloudia/runner/phaseG/runSummaryCollector.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -41,6 +42,7 @@ export async function runIntroForDate(params: {
   batch_id: string;
   time_context: "day_of" | "future";
   interpretive_frame?: InterpretiveFrame;
+  collector?: RunSummaryCollector;
 }): Promise<{
   segment_key: string;
   gate_result: ReturnType<typeof evaluateEditorialGate>;
@@ -195,6 +197,18 @@ export async function runIntroForDate(params: {
       allBlockingReasons.push("NO_REVISION_MADE");
     }
 
+    // Record attempt for Phase G instrumentation
+    if (params.collector) {
+      params.collector.recordAttempt({
+        episode_date: params.episode_date,
+        segment_key: "intro",
+        attempt_number: attemptNumber,
+        decision: gateDecisionForAttempt,
+        blocking_reasons: allBlockingReasons,
+        script_text: script,
+      });
+    }
+
     // CRITICAL DIAGNOSTIC: Hash the script to verify it's changing
     const scriptHash = createHash("md5").update(script).digest("hex").substring(0, 8);
     
@@ -308,6 +322,16 @@ export async function runIntroForDate(params: {
       episode_id: params.episode_id,
       segment_key: "intro",
     });
+
+    // Record final for Phase G instrumentation
+    if (params.collector) {
+      params.collector.recordFinal({
+        episode_date: params.episode_date,
+        segment_key: "intro",
+        final_attempt_number: actualFinalAttempt,
+        final_decision: gateResult.decision,
+      });
+    }
   }
 
   await persistEditorialGateResult({

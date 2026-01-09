@@ -10,6 +10,7 @@ import { persistEpisodeGateResult } from "../editorial/gate/persistEpisodeGateRe
 import { runInterpreter } from "../interpretation/runInterpreter.js";
 import { runInterpreterCanonical } from "../astro/interpretation/runInterpreterCanonical.js";
 import { assertEpisodeIsPublishable } from "../editorial/gates/assertEpisodeIsPublishable.js";
+import { RunSummaryCollector } from "./phaseG/runSummaryCollector.js";
 
 type ParsedArgs = {
   program_slug: string;
@@ -89,7 +90,8 @@ function deterministicEpisodeId(program_slug: string, episode_date: string): str
 export async function runForDate(
   program_slug: string,
   episode_date: string,
-  scripts_only: boolean
+  scripts_only: boolean,
+  collector?: RunSummaryCollector
 ): Promise<void> {
   const episode_id = deterministicEpisodeId(program_slug, episode_date);
   const today = new Date().toISOString().slice(0, 10);
@@ -114,6 +116,7 @@ export async function runForDate(
     batch_id,
     time_context,
     interpretive_frame,
+    collector,
   });
 
   const mainThemesResult = await runMainThemesForDate({
@@ -123,6 +126,7 @@ export async function runForDate(
     batch_id,
     time_context,
     interpretive_frame,
+    collector,
   });
 
   const closingResult = await runClosingForDate({
@@ -132,6 +136,7 @@ export async function runForDate(
     batch_id,
     time_context,
     interpretive_frame,
+    collector,
   });
 
   const segment_results = [
@@ -166,6 +171,15 @@ export async function runForDate(
     gate_result: episodeGate,
   });
 
+  // Record episode gate for Phase G instrumentation
+  if (collector) {
+    collector.recordEpisodeGate({
+      episode_date,
+      decision: episodeGate.decision,
+      failed_segments: episodeGate.failed_segments,
+    });
+  }
+
   // Quality thresholds are uniform across all episode dates.
   // All episodes must meet the same quality standards regardless of date.
   if (episodeGate.decision === "fail") {
@@ -189,13 +203,39 @@ async function main() {
   const { program_slug, start_date, window_days, scripts_only } = parseArgs(process.argv);
   const dates = expandDates(start_date, window_days);
 
+  // Parse interpretation mode from environment (default to legacy)
+  const modeRaw = (process.env.CLOUDIA_INTERPRETATION_MODE ?? "legacy").toLowerCase();
+  const interpretationMode = modeRaw === "canonical" ? "canonical" : "legacy";
+
+  const date_from = dates[0];
+  const date_to = dates[dates.length - 1];
+
+  // Create Phase G collector
+  const collector = new RunSummaryCollector({
+    program_slug,
+    batch_id: batchId,
+    mode: {
+      canonical: interpretationMode === "canonical",
+      scripts_only,
+    },
+    date_from,
+    date_to,
+  });
+
   console.log(`[batch:start] ${batchId}`);
 
   for (const date of dates) {
-    await runForDate(program_slug, date, scripts_only);
+    await runForDate(program_slug, date, scripts_only, collector);
   }
 
   console.log(`[batch:complete] ${batchId}`);
+
+  // Print console summary table
+  collector.printConsoleTable();
+
+  // Write artifact to disk
+  const artifactPath = `./artifacts/phase-g/baseline/${program_slug}/${date_from}__${date_to}__${batchId}.json`;
+  await collector.writeArtifact(artifactPath);
 }
 
 if (process.argv[1]) {
