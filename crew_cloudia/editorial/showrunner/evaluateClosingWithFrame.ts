@@ -7,6 +7,49 @@ const REFLECTIVE_PATTERNS = [/\bfeel\b/i, /\bnotice\b/i, /\bsense\b/i, /\bbreath
 const LISTENER_PATTERN = /\b(you|your|this moment)\b/i;
 
 /**
+ * Normalizes strings for comparison (same normalization as intro greeting).
+ * Handles unicode variations, smart quotes, line endings, and whitespace.
+ */
+function normalizeForScan(s: string): string {
+  return (s ?? "")
+    .normalize("NFKC") // Normalize unicode (combines compatible characters)
+    .replace(/\r\n/g, "\n") // Normalize line endings
+    .replace(/\u00A0/g, " ") // Replace non-breaking spaces with regular spaces
+    .replace(/[''`]/g, "'") // Replace all apostrophe variants (curly, smart, backtick) with straight
+    .replace(/[""]/g, '"') // Replace smart quotes with straight quotes (defensive)
+    .trim();
+}
+
+/**
+ * Strips meta/pacing content (parentheticals, brackets, JSON-style notes) from text.
+ */
+function stripMeta(s: string): string {
+  return s
+    .replace(/\([^)]*\)/g, "") // Strip parentheticals
+    .replace(/\[[^\]]*\]/g, "") // Strip brackets (pacing notes, asides)
+    .replace(/\{[^}]*\}/g, ""); // Strip JSON-style notes
+}
+
+/**
+ * Extracts content before the sign-off by normalizing both strings and finding the last occurrence.
+ * Returns normalized prefix for scanning purposes.
+ */
+function contentBeforeSignOff(script: string, signOff: string): string {
+  const normalizedScript = normalizeForScan(script);
+  const normalizedSignOff = normalizeForScan(signOff);
+
+  // Use lastIndexOf to find the last occurrence (safer if sign-off appears multiple times)
+  const idx = normalizedScript.lastIndexOf(normalizedSignOff);
+  if (idx === -1) {
+    // Sign-off not found - return normalized script as fallback (don't accidentally drop content)
+    return normalizedScript;
+  }
+
+  // Return normalized prefix (content before sign-off)
+  return normalizedScript.slice(0, idx);
+}
+
+/**
  * Finds the first matching pattern in text and returns it with context window.
  * Used for debugging prediction language violations.
  */
@@ -53,8 +96,12 @@ export function evaluateClosingWithFrame(params: {
   const temporalPhase = params.interpretive_frame.temporal_phase.toLowerCase();
   const { scaffold, signoff } = params;
 
-  const hasScaffold = script.includes(scaffold);
-  const hasSignoff = script.includes(signoff);
+  // Use normalized matching for reliable detection (handles whitespace/unicode variations)
+  const normalizedScript = normalizeForScan(script);
+  const normalizedScaffold = normalizeForScan(scaffold);
+  const normalizedSignoff = normalizeForScan(signoff);
+  const hasScaffold = normalizedScript.includes(normalizedScaffold);
+  const hasSignoff = normalizedScript.includes(normalizedSignoff);
 
   // Phase D: Semantic check for scaffold/signoff (not verbatim requirement)
   // The closing must establish closure and integration, but can do so naturally
@@ -71,10 +118,36 @@ export function evaluateClosingWithFrame(params: {
   }
 
   // Extract the middle micro-reflection content
-  const middle = script
-    .replace(scaffold, "")
-    .replace(signoff, "")
-    .trim();
+  // Use normalized positions to find boundaries, but extract from original script to preserve exact text
+  // (this ensures sentence splitting and other checks work on actual model output)
+  let middle: string;
+  if (hasScaffold && hasSignoff) {
+    // Both scaffold and sign-off found - find positions in normalized space, extract from original
+    const scaffoldPos = normalizedScript.indexOf(normalizedScaffold);
+    const signoffPos = normalizedScript.lastIndexOf(normalizedSignoff);
+    if (scaffoldPos !== -1 && signoffPos !== -1 && signoffPos > scaffoldPos) {
+      // Map normalized positions to original script (approximate: use same positions)
+      // For reliability, extract from normalized and use that (checks are tolerant of normalization differences)
+      middle = normalizedScript.slice(scaffoldPos + normalizedScaffold.length, signoffPos).trim();
+    } else {
+      // Fallback: try simple replace on original
+      middle = script.replace(scaffold, "").replace(signoff, "").trim();
+    }
+  } else if (hasScaffold) {
+    // Scaffold found but sign-off not found - remove scaffold only
+    const scaffoldPos = normalizedScript.indexOf(normalizedScaffold);
+    if (scaffoldPos !== -1) {
+      middle = normalizedScript.slice(scaffoldPos + normalizedScaffold.length).trim();
+    } else {
+      middle = script.replace(scaffold, "").trim();
+    }
+  } else if (hasSignoff) {
+    // Sign-off found but scaffold not found - use contentBeforeSignOff (handles normalization)
+    middle = contentBeforeSignOff(script, signoff).trim();
+  } else {
+    // Neither found - use original script as-is (fallback)
+    middle = script.replace(scaffold, "").replace(signoff, "").trim();
+  }
 
   const middleLower = middle.toLowerCase();
 
@@ -167,32 +240,33 @@ export function evaluateClosingWithFrame(params: {
   // Phase D: Narrow prediction detection to only future certainty
   // Do not flag "might", "can", "today holds", "this moment allows"
   // CRITICAL: Exclude the sign-off from prediction checks - it contains required text like "tomorrow" and "We'll"
-  // Split on signoff and only scan the content before it (handles unicode variations gracefully)
-  const contentForPredictionCheck = hasSignoff 
-    ? script.split(signoff)[0].trim()  // Only check content before signoff
-    : middle;  // Fallback: if signoff not found, use middle (scaffold already removed)
+  // Always use contentBeforeSignOff for prediction scan (even if hasSignoff is false, defensive check catches format mismatches)
+  // This ensures sign-off is excluded even if whitespace/unicode variations caused the hasSignoff check to fail
+  const contentPrefix = contentBeforeSignOff(script, signoff); // Returns normalized content before sign-off
   
   // CRITICAL: Strip meta/pacing content (parentheticals, brackets, JSON-style notes) before prediction scan
   // Parentheticals like "(Sun-Moon trine next...)" and brackets like "[pacing note: next transit]" 
   // contain meta information and shouldn't trigger prediction violations
-  const contentForPredictionCheckNoParens = contentForPredictionCheck
-    .replace(/\([^)]*\)/g, "") // Strip parentheticals
-    .replace(/\[[^\]]*\]/g, "") // Strip brackets (pacing notes, asides)
-    .replace(/\{[^\}]*\}/g, "") // Strip JSON-style notes
-    .trim();
+  const contentForPredictionScan = stripMeta(contentPrefix).trim();
   
+  // Future certainty patterns - narrowed to actual prediction language, not sequencing
+  // NOTE: Removed /\bnext\b/i because it flags false positives like "next step" (not predictive)
+  // Only flag "next" when it appears in clearly future-leaning phrases
   const futureCertaintyPatterns = [
     /\bwill\b/i,
     /\bgoing to\b/i,
     /\bsoon\b/i,
     /\bin the coming days\b/i,
     /\btomorrow\b/i,
-    /\bnext\b/i,
+    /\bwhat'?s coming next\b/i, // "what's coming next" - clearly predictive
+    /\bcoming next\b/i, // "coming next" - future framing
+    /\bnext (week|month|year|time)\b/i, // "next week/month/year/time" - time references
+    /\bin the next (day|days|week|weeks|month|months)\b/i, // "in the next days/weeks" - future period
   ];
   
   // Find the first match with context for debugging (detailed context goes to notes, not rewrite_instructions)
-  // Run prediction scan on content without parentheticals
-  const matchResult = firstMatchWithContext(contentForPredictionCheckNoParens, futureCertaintyPatterns);
+  // Run prediction scan on content without meta markers and sign-off
+  const matchResult = firstMatchWithContext(contentForPredictionScan, futureCertaintyPatterns);
   const hasFutureCertainty = matchResult !== null;
   
   if (hasFutureCertainty && matchResult) {

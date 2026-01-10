@@ -141,11 +141,14 @@ export async function runClosingForDate(params: {
       // The rubric evaluates the entire closing, so we must revise the entire closing
       console.log(`[closing] Rewriting attempt ${attemptNumber}. Previous full script length: ${script.length} chars`);
       
+      // Extract just the micro-reflection from previous script for context (model should rewrite only this part)
+      const previousMicro = extractMicroReflection(script, scaffold, signoff);
+      
       const rewritePromptPayload = {
-        system_prompt: "You are revising an existing draft based on editor feedback. You may rewrite, remove, or replace any part of the previous closing, including the opening. Your job is to apply the requested changes to the entire closing, not to preserve any specific structure.",
+        system_prompt: "You are revising the micro-reflection content of a closing segment based on editor feedback. Return ONLY the revised micro-reflection (2-3 sentences). Do NOT include the scaffold or sign-off - the system appends those automatically.",
         user_prompt: buildClosingFullRewritePrompt({
           interpretive_frame: params.interpretive_frame,
-          previous_script: script,
+          previous_micro: previousMicro,
           editor_instructions: rewriteInstructions,
           episode_date: params.episode_date,
         }),
@@ -156,13 +159,28 @@ export async function runClosingForDate(params: {
           `LLM rewrite failed (${rewriteResult.error_type}): ${rewriteResult.message}`
         );
       }
-      const revisedScript = rewriteResult.text.trim();
+      let revisedScript = rewriteResult.text.trim();
+      
+      // CRITICAL: Strip any sign-off the model may have included (defensive)
+      // Normalize both strings for reliable matching (handles whitespace/unicode variations)
+      const normalizedRevised = revisedScript.normalize("NFKC").replace(/\r\n/g, "\n").replace(/[''`]/g, "'").trim();
+      const normalizedSignoff = signoff.normalize("NFKC").replace(/\r\n/g, "\n").replace(/[''`]/g, "'").trim();
+      const signoffIndex = normalizedRevised.lastIndexOf(normalizedSignoff);
+      if (signoffIndex !== -1) {
+        // Sign-off found - extract content before it
+        revisedScript = revisedScript.slice(0, signoffIndex).trim();
+      }
+      
+      // Append canonical sign-off (system always controls this)
+      revisedScript = assembleClosingScript(scaffold, revisedScript, signoff);
+      
       console.log(`[closing] Rewrite returned full script (${revisedScript.length} chars). New hash: ${createHash("md5").update(revisedScript).digest("hex").substring(0, 8)}`);
 
-      // Post-rewrite guard: enforce sentence count compression
-      const sentenceCount = revisedScript.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+      // Post-rewrite guard: enforce sentence count compression (count only micro content, not scaffold/signoff)
+      const microOnly = extractMicroReflection(revisedScript, scaffold, signoff);
+      const sentenceCount = microOnly.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
       if (sentenceCount > 3) {
-        console.warn(`[closing] Attempt ${attemptNumber}: Closing too long (${sentenceCount} sentences). Will be flagged in evaluation.`);
+        console.warn(`[closing] Attempt ${attemptNumber}: Closing micro content too long (${sentenceCount} sentences). Will be flagged in evaluation.`);
         // The evaluation will catch this and add blocking reason for next attempt
       }
 
@@ -397,7 +415,7 @@ export async function runClosingForDate(params: {
 
 function buildClosingFullRewritePrompt(params: {
   interpretive_frame: InterpretiveFrame;
-  previous_script: string;
+  previous_micro: string;
   editor_instructions: string[];
   episode_date: string;
 }) {
@@ -413,15 +431,21 @@ function buildClosingFullRewritePrompt(params: {
   return `
 ${PERMISSION_BLOCK}
 
-You are REVISING the entire closing based on editor feedback. You may rewrite, remove, or replace any part of the previous closing, including the opening.
+You are REVISING the micro-reflection content (the 2-3 sentences between the scaffold and sign-off).
 
-Here is the previous full closing:
+Here is the previous micro-reflection content:
 ---
-${params.previous_script}
+${params.previous_micro}
 ---
 
 Your editor has requested the following changes:
 ${instructions}
+
+CRITICAL: Return ONLY the revised micro-reflection (2-3 sentences). Do NOT include:
+- The scaffold ("As the day winds down..." / "All day had its own rhythm..." / "Energy is...")
+- The sign-off ("The Cosmic Forecast for..." / "We'll be back tomorrow...")
+
+The system will automatically prepend the scaffold and append the sign-off to your output.
 
 Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like: "the inbox triage", "the tiny correction you keep re-doing", "re-reading the same message", "double-checking calendar details", "one more errand / one more small fix"
 
@@ -429,10 +453,11 @@ CRITICAL: You must include (express naturally, not verbatim):
 - The day's core tension: ${axis.primary} vs ${axis.counter} (express through lived experience, do not use any set phrase for this contrast)
 - A timing note if provided: ${timingNote || "none"} (express naturally)
 - The temporal phase: ${params.interpretive_frame.temporal_phase} (express through tone, not by naming it)
-- A natural sign-off that feels human
-- At least 1-3 reflective sentences that invite integration or permission
+- 2-3 reflective sentences that invite integration or permission
 
 End with integration, not summary.
+
+CRITICAL: Do NOT include any sign-off. The system will append the locked sign-off automatically. Return ONLY your 2-3 reflective sentences, nothing else.
 
 The closing must start with exactly one of these phrases (verbatim, ASCII apostrophes) as the beginning of the segment:
 
@@ -455,16 +480,19 @@ Do not restate earlier language.
 Authoritative interpretive frame:
 ${JSON.stringify(sanitizeInterpretiveFrameForPrompt(params.interpretive_frame), null, 2)}
 
-CLOSING SHAPE CONSTRAINTS (NON-NEGOTIABLE):
+CLOSING SHAPE CONSTRAINTS (NON-NEGOTIABLE - STRICTLY ENFORCED):
 
-- Write a SHORT closing: exactly 1–3 sentences total.
+- Return EXACTLY 2-3 sentences. Count them. If you wrote more than 3, cut it down to 3. If you wrote 1, add 1 more.
+- Do NOT include any sign-off, closing line, or "tune in tomorrow" language. The system appends the locked sign-off automatically.
 - Do NOT give advice or directives.
 - The closing must start with exactly one of these phrases (verbatim, ASCII apostrophes) as the beginning of the segment: "It's okay to …" OR "You don't have to …" OR "You might notice …" (present tense only; no "will", "soon", "next", "tomorrow").
 - CRITICAL: Use plain ASCII apostrophes (') in the soft-permission phrase. Write: "It's" and "don't" (NOT curly quotes like "It's" or "don't"). The soft-permission phrase must be the first words of the closing (sentence 1), not sentence 2/3.
 - This is an observational reflection, not a takeaway.
 - If a lunation is referenced, it must appear in the first sentence or be felt implicitly.
-- End with a natural sense of closure or release (no calls to action).
-- Example with ASCII apostrophes at start: "It's okay to let the small stuff stay small tonight. The rest can wait."
+- End with a natural sense of closure or release (no calls to action, no sign-off).
+- No line breaks between sentences. Write as continuous prose.
+- No parentheticals, no brackets, no meta notes.
+- Example with ASCII apostrophes at start (2 sentences): "It's okay to let the small stuff stay small tonight. The rest can wait."
 
 Revision requirements:
 - Apply ALL editor instructions above.
@@ -474,13 +502,13 @@ Revision requirements:
 - Preserve what works; fix what doesn't.
 - Reflective and observational; no advice, no directives, no "you should".
 - Express the core tension (${axis.primary} vs ${axis.counter}) through lived experience, not as a named contrast.
-- CRITICAL: Do not reference the future outside the locked sign-off.
-  Specifically, do not use words/phrases like: tomorrow, next, later, soon, coming days, what's coming next, going to, will (outside the sign-off).
+- CRITICAL: Do not reference the future. The system will append the sign-off automatically.
+  Specifically, do not use words/phrases like: tomorrow, next, later, soon, coming days, what's coming next, going to, will.
   Keep the closing anchored to today/past/present ("as the day winds down…", "what you noticed today…").
   HARD CONSTRAINT: All verbs must be present or past tense (e.g., "you noticed", "it showed up", "you felt", not "you will notice", "it's going to show", "you'll feel").
-  Before finalizing, scan your draft and remove any mention of: tomorrow, next, later, soon, coming, will, going to. If you find any of these words (outside the locked sign-off), rewrite those sentences using present/past tense only.
-- Return the COMPLETE revised closing, not just a portion.
-- CRITICAL: Keep it to 1-3 sentences total. If you wrote more, cut it down.
+  Before finalizing, scan your draft and remove any mention of: tomorrow, next, soon, later, coming, will, going to. If you find any of these words, rewrite those sentences using present/past tense only.
+- Return ONLY your 2-3 reflective sentences. Do NOT include any sign-off, closing line, or "tune in" language. The system appends the sign-off automatically.
+- CRITICAL: Count your sentences. Return EXACTLY 2-3 sentences. If you wrote more than 3, cut it down to 3 immediately. No exceptions. No line breaks between sentences. Write as continuous prose.
 `.trim();
 }
 
