@@ -22,6 +22,10 @@ function requireEnv(name: string): string {
  * 
  * Designed to run periodically (e.g., every 5 minutes) to catch episodes
  * that become ready after the audio worker finishes segments.
+ * 
+ * Configuration:
+ * - CLOUDIA_STITCH_WORKER_SCAN_LIMIT: Max dates to scan per run (default: 30)
+ *   Increase this if you have a large backlog of ready episodes.
  */
 export async function runStitchWorkerOnce(params?: {
   limit?: number; // Max episodes to stitch per run (default: 1)
