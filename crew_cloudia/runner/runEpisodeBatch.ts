@@ -13,6 +13,8 @@ import { assertEpisodeIsPublishable } from "../editorial/gates/assertEpisodeIsPu
 import { RunSummaryCollector } from "./phaseG/runSummaryCollector.js";
 import { loadSkyStateDailyRange } from "../astro/ephemeris/persistence/loadSkyStateDailyRange.js";
 import { seedSkyStateRange } from "../tools/ephemeris/seedSkyStateRange.js";
+import { loadDailyFactsRange } from "../astro/technician/persistence/loadDailyFactsRange.js";
+import { seedDailyFactsRange } from "../tools/technician/seedDailyFactsRange.js";
 
 type ParsedArgs = {
   program_slug: string;
@@ -129,7 +131,23 @@ async function getMissingSkyStateDates(startDate: string, endDate: string): Prom
 }
 
 /**
- * Format seed commands for error messages
+ * Get missing astrology_daily_facts dates for a range
+ */
+async function getMissingDailyFactsDates(startDate: string, endDate: string): Promise<string[]> {
+  const map = await loadDailyFactsRange(startDate, endDate);
+  if (!map || typeof map !== "object") {
+    throw new Error(
+      `[preseed:l1] loadDailyFactsRange returned invalid value: ${map}. Expected object.`
+    );
+  }
+  return Object.entries(map)
+    .filter(([, v]) => v == null)
+    .map(([k]) => k)
+    .sort();
+}
+
+/**
+ * Format seed commands for error messages (Layer 0)
  */
 function formatSeedCommands(ranges: Array<{ start: string; end: string }>): string {
   return ranges
@@ -141,7 +159,19 @@ function formatSeedCommands(ranges: Array<{ start: string; end: string }>): stri
 }
 
 /**
- * Ensure Layer 0 (sky_state_daily) coverage for the requested range
+ * Format seed commands for error messages (Layer 1)
+ */
+function formatDailyFactsSeedCommands(ranges: Array<{ start: string; end: string }>): string {
+  return ranges
+    .map(
+      (r) =>
+        `npx tsx crew_cloudia/tools/technician/seedDailyFactsRange.ts ${r.start} ${r.end}`
+    )
+    .join("\n");
+}
+
+/**
+ * Ensure Layer 0 (sky_state_daily) and Layer 1 (astrology_daily_facts) coverage for the requested range
  * - If missing and noPreseed=false: auto-seed missing ranges
  * - If missing and noPreseed=true: throw with exact seed commands
  * 
@@ -154,44 +184,83 @@ export async function ensurePrereqsForRange(opts: {
 }): Promise<void> {
   const { startDate, endDate, noPreseed } = opts;
 
+  // Layer 0: sky_state_daily
   console.log(`[preseed:l0] requested=${startDate}..${endDate}`);
 
   const missing = await getMissingSkyStateDates(startDate, endDate);
   if (missing.length === 0) {
     console.log(`[preseed:l0] coverage=ok missing=0`);
-    return;
+  } else {
+    const ranges = toRanges(missing);
+    console.log(`[preseed:l0] coverage=missing missing_count=${missing.length} ranges=${JSON.stringify(ranges)}`);
+
+    if (noPreseed) {
+      const msg =
+        `Missing Layer 0 sky_state_daily for requested range ${startDate}..${endDate}.\n` +
+        `Run:\n${formatSeedCommands(ranges)}\n` +
+        `Then rerun your original command.`;
+      throw new Error(msg);
+    }
+
+    const t0 = Date.now();
+    for (const r of ranges) {
+      console.log(`[preseed:l0] seeding ${r.start}..${r.end}`);
+      await seedSkyStateRange(r.start, r.end);
+    }
+    const dt = Date.now() - t0;
+
+    const missingAfter = await getMissingSkyStateDates(startDate, endDate);
+    if (missingAfter.length > 0) {
+      const afterRanges = toRanges(missingAfter);
+      const msg =
+        `Layer 0 preseed attempted but coverage is still missing for ${startDate}..${endDate}.\n` +
+        `Attempted seed ranges: ${JSON.stringify(ranges)}\n` +
+        `Still missing: ${JSON.stringify(afterRanges)}\n` +
+        `Try re-running:\n${formatSeedCommands(afterRanges)}`;
+      throw new Error(msg);
+    }
+
+    console.log(`[preseed:l0] coverage=ok missing=0 duration_ms=${dt}`);
   }
 
-  const ranges = toRanges(missing);
-  console.log(`[preseed:l0] coverage=missing missing_count=${missing.length} ranges=${JSON.stringify(ranges)}`);
+  // Layer 1: astrology_daily_facts (runs after L0 succeeds)
+  console.log(`[preseed:l1] requested=${startDate}..${endDate}`);
 
-  if (noPreseed) {
-    const msg =
-      `Missing Layer 0 sky_state_daily for requested range ${startDate}..${endDate}.\n` +
-      `Run:\n${formatSeedCommands(ranges)}\n` +
-      `Then rerun your original command.`;
-    throw new Error(msg);
+  const missingFacts = await getMissingDailyFactsDates(startDate, endDate);
+  if (missingFacts.length === 0) {
+    console.log(`[preseed:l1] coverage=ok missing=0`);
+  } else {
+    const ranges = toRanges(missingFacts);
+    console.log(`[preseed:l1] coverage=missing missing_count=${missingFacts.length} ranges=${JSON.stringify(ranges)}`);
+
+    if (noPreseed) {
+      const msg =
+        `Missing Layer 1 astrology_daily_facts for requested range ${startDate}..${endDate}.\n` +
+        `Run:\n${formatDailyFactsSeedCommands(ranges)}\n` +
+        `Then rerun your original command.`;
+      throw new Error(msg);
+    }
+
+    const t1 = Date.now();
+    for (const r of ranges) {
+      console.log(`[preseed:l1] seeding ${r.start}..${r.end}`);
+      await seedDailyFactsRange(r.start, r.end);
+    }
+    const dt = Date.now() - t1;
+
+    const missingAfter = await getMissingDailyFactsDates(startDate, endDate);
+    if (missingAfter.length > 0) {
+      const afterRanges = toRanges(missingAfter);
+      const msg =
+        `Layer 1 preseed attempted but coverage is still missing for ${startDate}..${endDate}.\n` +
+        `Attempted seed ranges: ${JSON.stringify(ranges)}\n` +
+        `Still missing: ${JSON.stringify(afterRanges)}\n` +
+        `Try re-running:\n${formatDailyFactsSeedCommands(afterRanges)}`;
+      throw new Error(msg);
+    }
+
+    console.log(`[preseed:l1] coverage=ok missing=0 duration_ms=${dt}`);
   }
-
-  const t0 = Date.now();
-  for (const r of ranges) {
-    console.log(`[preseed:l0] seeding ${r.start}..${r.end}`);
-    await seedSkyStateRange(r.start, r.end);
-  }
-  const dt = Date.now() - t0;
-
-  const missingAfter = await getMissingSkyStateDates(startDate, endDate);
-  if (missingAfter.length > 0) {
-    const afterRanges = toRanges(missingAfter);
-    const msg =
-      `Layer 0 preseed attempted but coverage is still missing for ${startDate}..${endDate}.\n` +
-      `Attempted seed ranges: ${JSON.stringify(ranges)}\n` +
-      `Still missing: ${JSON.stringify(afterRanges)}\n` +
-      `Try re-running:\n${formatSeedCommands(afterRanges)}`;
-    throw new Error(msg);
-  }
-
-  console.log(`[preseed:l0] coverage=ok missing=0 duration_ms=${dt}`);
 }
 
 function deterministicEpisodeId(program_slug: string, episode_date: string): string {
