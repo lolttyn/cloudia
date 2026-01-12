@@ -11,12 +11,16 @@ import { runInterpreter } from "../interpretation/runInterpreter.js";
 import { runInterpreterCanonical } from "../astro/interpretation/runInterpreterCanonical.js";
 import { assertEpisodeIsPublishable } from "../editorial/gates/assertEpisodeIsPublishable.js";
 import { RunSummaryCollector } from "./phaseG/runSummaryCollector.js";
+import { loadSkyStateDailyRange } from "../astro/ephemeris/persistence/loadSkyStateDailyRange.js";
+import { seedSkyStateRange } from "../tools/ephemeris/seedSkyStateRange.js";
 
 type ParsedArgs = {
   program_slug: string;
   start_date: string;
   window_days: number;
   scripts_only: boolean;
+  no_preseed: boolean;
+  preseed_only: boolean;
 };
 
 const batchId = randomUUID();
@@ -25,12 +29,14 @@ function parseArgs(argv: string[]): ParsedArgs {
   const [, , program_slug, start_date, ...rest] = argv;
   if (!program_slug || !start_date) {
     throw new Error(
-      "Usage: tsx crew_cloudia/runner/runEpisodeBatch.ts <program_slug> <start_date YYYY-MM-DD> [--window-days N] [--scripts-only]"
+      "Usage: tsx crew_cloudia/runner/runEpisodeBatch.ts <program_slug> <start_date YYYY-MM-DD> [--window-days N] [--scripts-only] [--no-preseed] [--preseed-only]"
     );
   }
 
   let window_days = 1;
   let scripts_only = false;
+  let no_preseed = false;
+  let preseed_only = false;
 
   for (let i = 0; i < rest.length; i++) {
     const token = rest[i];
@@ -43,6 +49,10 @@ function parseArgs(argv: string[]): ParsedArgs {
       i += 1;
     } else if (token === "--scripts-only") {
       scripts_only = true;
+    } else if (token === "--no-preseed") {
+      no_preseed = true;
+    } else if (token === "--preseed-only") {
+      preseed_only = true;
     } else {
       // ignore unknown flags silently to keep behavior minimal
     }
@@ -52,7 +62,7 @@ function parseArgs(argv: string[]): ParsedArgs {
     throw new Error("--window-days must be >= 1");
   }
 
-  return { program_slug, start_date, window_days, scripts_only };
+  return { program_slug, start_date, window_days, scripts_only, no_preseed, preseed_only };
 }
 
 function expandDates(start: string, windowDays: number): string[] {
@@ -68,6 +78,115 @@ function expandDates(start: string, windowDays: number): string[] {
     dates.push(iso);
   }
   return dates;
+}
+
+/**
+ * Compress missing dates into contiguous ranges
+ * Example: [2026-01-01, 2026-01-02, 2026-01-05] -> [{start: '2026-01-01', end: '2026-01-02'}, {start: '2026-01-05', end: '2026-01-05'}]
+ */
+function toRanges(missingDates: string[]): Array<{ start: string; end: string }> {
+  if (missingDates.length === 0) return [];
+  const sorted = [...missingDates].sort(); // YYYY-MM-DD lex sort works
+  const ranges: Array<{ start: string; end: string }> = [];
+  let start = sorted[0];
+  let prev = sorted[0];
+
+  const addDays = (d: string, n: number) => {
+    const dt = new Date(`${d}T00:00:00Z`);
+    dt.setUTCDate(dt.getUTCDate() + n);
+    return dt.toISOString().slice(0, 10);
+  };
+
+  for (let i = 1; i < sorted.length; i++) {
+    const cur = sorted[i];
+    const expectedNext = addDays(prev, 1);
+    if (cur === expectedNext) {
+      prev = cur;
+      continue;
+    }
+    ranges.push({ start, end: prev });
+    start = cur;
+    prev = cur;
+  }
+  ranges.push({ start, end: prev });
+  return ranges;
+}
+
+/**
+ * Get missing sky_state_daily dates for a range
+ */
+async function getMissingSkyStateDates(startDate: string, endDate: string): Promise<string[]> {
+  const map = await loadSkyStateDailyRange(startDate, endDate);
+  return Object.entries(map)
+    .filter(([, v]) => v == null)
+    .map(([k]) => k)
+    .sort();
+}
+
+/**
+ * Format seed commands for error messages
+ */
+function formatSeedCommands(ranges: Array<{ start: string; end: string }>): string {
+  return ranges
+    .map(
+      (r) =>
+        `npx tsx crew_cloudia/tools/ephemeris/seedSkyStateRange.ts ${r.start} ${r.end}`
+    )
+    .join("\n");
+}
+
+/**
+ * Ensure Layer 0 (sky_state_daily) coverage for the requested range
+ * - If missing and noPreseed=false: auto-seed missing ranges
+ * - If missing and noPreseed=true: throw with exact seed commands
+ * 
+ * Exported for testing
+ */
+export async function ensurePrereqsForRange(opts: {
+  startDate: string;
+  endDate: string;
+  noPreseed: boolean;
+}): Promise<void> {
+  const { startDate, endDate, noPreseed } = opts;
+
+  console.log(`[preseed:l0] requested=${startDate}..${endDate}`);
+
+  const missing = await getMissingSkyStateDates(startDate, endDate);
+  if (missing.length === 0) {
+    console.log(`[preseed:l0] coverage=ok missing=0`);
+    return;
+  }
+
+  const ranges = toRanges(missing);
+  console.log(`[preseed:l0] coverage=missing missing_count=${missing.length} ranges=${JSON.stringify(ranges)}`);
+
+  if (noPreseed) {
+    const msg =
+      `Missing Layer 0 sky_state_daily for requested range ${startDate}..${endDate}.\n` +
+      `Run:\n${formatSeedCommands(ranges)}\n` +
+      `Then rerun your original command.`;
+    throw new Error(msg);
+  }
+
+  const t0 = Date.now();
+  for (const r of ranges) {
+    console.log(`[preseed:l0] seeding ${r.start}..${r.end}`);
+    await seedSkyStateRange(r.start, r.end);
+  }
+  const dt = Date.now() - t0;
+
+  const missingAfter = await getMissingSkyStateDates(startDate, endDate);
+  if (missingAfter.length > 0) {
+    const afterRanges = toRanges(missingAfter);
+    const msg =
+      `Layer 0 preseed attempted but coverage is still missing for ${startDate}..${endDate}.\n` +
+      `Attempted seed ranges: ${JSON.stringify(ranges)}\n` +
+      `Still missing: ${JSON.stringify(afterRanges)}\n` +
+      `Try re-running:\n${formatSeedCommands(afterRanges)}`;
+    throw new Error(msg);
+  }
+
+  console.log(`[preseed:l0] coverage=ok missing=0 duration_ms=${dt}`);
 }
 
 function deterministicEpisodeId(program_slug: string, episode_date: string): string {
@@ -200,7 +319,7 @@ export async function runForDate(
 }
 
 async function main() {
-  const { program_slug, start_date, window_days, scripts_only } = parseArgs(process.argv);
+  const { program_slug, start_date, window_days, scripts_only, no_preseed, preseed_only } = parseArgs(process.argv);
   const dates = expandDates(start_date, window_days);
 
   // Parse interpretation mode from environment (default to canonical for Phase G)
@@ -209,6 +328,19 @@ async function main() {
 
   const date_from = dates[0];
   const date_to = dates[dates.length - 1];
+
+  // Layer 0 preflight gate: check coverage and auto-seed if needed
+  await ensurePrereqsForRange({
+    startDate: date_from,
+    endDate: date_to,
+    noPreseed: no_preseed,
+  });
+
+  // If --preseed-only, exit after preseed step
+  if (preseed_only) {
+    console.log(`[preseed] preseed-only complete; exiting`);
+    return;
+  }
 
   // Create Phase G collector
   const collector = new RunSummaryCollector({
