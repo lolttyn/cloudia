@@ -8,12 +8,21 @@
  * Includes window logic for temporal fields (Phase 5.3).
  */
 
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 import { InterpretationInputs } from "./loadInterpretationInputs.js";
 import {
   DailyInterpretationSchema,
   type DailyInterpretation,
 } from "./schema/dailyInterpretation.schema.js";
-import interpretiveCanon from "../../interpretation/canon/interpretiveCanon_v1.json" assert { type: "json" };
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const interpretiveCanon = JSON.parse(
+  readFileSync(join(__dirname, "../../interpretation/canon/interpretiveCanon_v1.json"), "utf-8")
+);
 import type { InterpretiveFrame } from "../../interpretation/schema/InterpretiveFrame.js";
 import type { InterpretationSignal } from "../../interpretation/signals/signals.schema.js";
 import {

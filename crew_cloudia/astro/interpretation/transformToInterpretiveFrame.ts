@@ -24,7 +24,16 @@ import { type DailyInterpretation } from "./schema/dailyInterpretation.schema.js
 import { InterpretiveFrameSchema, type InterpretiveFrame } from "../../interpretation/schema/InterpretiveFrame.js";
 import { buildBundleIndex, hydrateInterpretationBundleRefs } from "./hydrateBundles.js";
 import type { InterpretationSignal } from "../../interpretation/signals/signals.schema.js";
-import interpretiveCanon from "../../interpretation/canon/interpretiveCanon_v1.json" assert { type: "json" };
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const interpretiveCanon = JSON.parse(
+  readFileSync(join(__dirname, "../../interpretation/canon/interpretiveCanon_v1.json"), "utf-8")
+);
 type InterpretiveCanon = typeof interpretiveCanon;
 
 /**

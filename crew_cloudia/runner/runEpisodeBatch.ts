@@ -27,6 +27,16 @@ type ParsedArgs = {
 
 const batchId = randomUUID();
 
+/**
+ * Custom error for preflight failures (no stack trace in CLI output)
+ */
+class PreflightError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "PreflightError";
+  }
+}
+
 function parseArgs(argv: string[]): ParsedArgs {
   const [, , program_slug, start_date, ...rest] = argv;
   if (!program_slug || !start_date) {
@@ -199,7 +209,7 @@ export async function ensurePrereqsForRange(opts: {
         `Missing Layer 0 sky_state_daily for requested range ${startDate}..${endDate}.\n` +
         `Run:\n${formatSeedCommands(ranges)}\n` +
         `Then rerun your original command.`;
-      throw new Error(msg);
+      throw new PreflightError(msg);
     }
 
     const t0 = Date.now();
@@ -217,7 +227,7 @@ export async function ensurePrereqsForRange(opts: {
         `Attempted seed ranges: ${JSON.stringify(ranges)}\n` +
         `Still missing: ${JSON.stringify(afterRanges)}\n` +
         `Try re-running:\n${formatSeedCommands(afterRanges)}`;
-      throw new Error(msg);
+      throw new PreflightError(msg);
     }
 
     console.log(`[preseed:l0] coverage=ok missing=0 duration_ms=${dt}`);
@@ -238,7 +248,7 @@ export async function ensurePrereqsForRange(opts: {
         `Missing Layer 1 astrology_daily_facts for requested range ${startDate}..${endDate}.\n` +
         `Run:\n${formatDailyFactsSeedCommands(ranges)}\n` +
         `Then rerun your original command.`;
-      throw new Error(msg);
+      throw new PreflightError(msg);
     }
 
     const t1 = Date.now();
@@ -256,7 +266,7 @@ export async function ensurePrereqsForRange(opts: {
         `Attempted seed ranges: ${JSON.stringify(ranges)}\n` +
         `Still missing: ${JSON.stringify(afterRanges)}\n` +
         `Try re-running:\n${formatDailyFactsSeedCommands(afterRanges)}`;
-      throw new Error(msg);
+      throw new PreflightError(msg);
     }
 
     console.log(`[preseed:l1] coverage=ok missing=0 duration_ms=${dt}`);
@@ -454,6 +464,10 @@ if (process.argv[1]) {
   })();
   if (invokedPath && invokedPath === import.meta.url) {
     main().catch((err) => {
+      if (err?.name === "PreflightError") {
+        console.error(err.message);
+        process.exit(1);
+      }
       console.error(err);
       process.exit(1);
     });

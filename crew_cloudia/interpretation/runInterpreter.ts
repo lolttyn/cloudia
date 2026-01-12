@@ -1,5 +1,14 @@
-import interpretiveCanon from "./canon/interpretiveCanon_v1.json" assert { type: "json" };
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 import { loadInterpretationBundles } from "./bundles/loadInterpretationBundles.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const interpretiveCanon = JSON.parse(
+  readFileSync(join(__dirname, "./canon/interpretiveCanon_v1.json"), "utf-8")
+);
 import { selectInterpretationBundles } from "./bundles/selectInterpretationBundles.js";
 import { deriveSignalsFromSkyFeatures } from "./signals/deriveSignalsFromSkyFeatures.js";
 import { extractSkyFeatures, SkyFeatures, SkyAspect } from "./sky/extractSkyFeatures.js";
