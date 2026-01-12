@@ -34,10 +34,15 @@ export async function runAudioWorkerOnce(params?: {
     const { data, error } = await supabase.rpc("audio_requeue_stale_generating", { 
       p_ttl_minutes: ttlMinutesValid 
     });
-    if (error) throw error;
-    if (typeof data === "number" && data > 0) {
+    if (error) {
+      console.warn("[audio-worker] stale requeue RPC error", { 
+        error: error.message, 
+        ttlMinutes: ttlMinutesValid 
+      });
+    } else {
+      const count = typeof data === "number" ? data : 0;
       console.log("[audio-worker] requeued stale generating", { 
-        count: data, 
+        count, 
         ttlMinutes: ttlMinutesValid 
       });
     }
