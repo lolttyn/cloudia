@@ -76,9 +76,22 @@ export async function runStitchWorkerOnce(params?: {
     return;
   }
 
-  // Check which ones don't have episode MP3 yet
-  const datesToStitch: string[] = [];
-  for (const date of readyDates.slice(0, limit)) {
+  // Scan up to scanLimit dates to find stitchable ones (don't limit to `limit` for discovery)
+  // This prevents premature "all stitched" conclusion when first N dates are already done
+  // Configurable via CLOUDIA_STITCH_WORKER_SCAN_LIMIT (default: 30)
+  const scanLimit = Number(process.env.CLOUDIA_STITCH_WORKER_SCAN_LIMIT ?? "30");
+  const datesToCheck = readyDates.slice(0, scanLimit);
+
+  let stitchedCount = 0;
+  let skippedCount = 0;
+
+  // Iterate through dates until we've stitched `limit` episodes or exhausted the list
+  for (const date of datesToCheck) {
+    // Stop if we've reached the stitch limit
+    if (stitchedCount >= limit) {
+      break;
+    }
+
     // Check if episode MP3 exists
     const episodePath = `cloudia/episodes/${date}/episode.mp3`;
     const { data: urlData, error: urlError } = await supabase.storage
@@ -87,31 +100,38 @@ export async function runStitchWorkerOnce(params?: {
 
     if (urlError || !urlData) {
       // Episode MP3 doesn't exist, needs stitching
-      datesToStitch.push(date);
+      try {
+        console.log(`[stitch-worker] stitching episode ${date}...`);
+        await runStitchEpisode({
+          programSlug,
+          episodeDate: date,
+        });
+        console.log(`[stitch-worker] successfully stitched ${date}`);
+        stitchedCount++;
+      } catch (err: any) {
+        const errorMessage = err?.message ?? String(err);
+        console.error(`[stitch-worker] failed to stitch ${date}:`, errorMessage);
+        // Continue to next episode (don't fail entire run)
+      }
     } else {
-      console.log(`[stitch-worker] episode ${date} already stitched, skipping`);
+      // Already stitched, skip and continue scanning
+      skippedCount++;
+      // Don't log every skip to avoid noise (only log if we're about to conclude)
     }
   }
 
-  if (datesToStitch.length === 0) {
-    console.log("[stitch-worker] all ready episodes already stitched");
-    return;
-  }
-
-  // Stitch each episode
-  for (const episodeDate of datesToStitch) {
-    try {
-      console.log(`[stitch-worker] stitching episode ${episodeDate}...`);
-      await runStitchEpisode({
-        programSlug,
-        episodeDate,
-      });
-      console.log(`[stitch-worker] successfully stitched ${episodeDate}`);
-    } catch (err: any) {
-      const errorMessage = err?.message ?? String(err);
-      console.error(`[stitch-worker] failed to stitch ${episodeDate}:`, errorMessage);
-      // Continue to next episode (don't fail entire run)
-    }
+  // Log summary
+  if (stitchedCount > 0) {
+    console.log(`[stitch-worker] stitched ${stitchedCount} episode(s), skipped ${skippedCount} already-stitched`);
+  } else if (skippedCount === datesToCheck.length) {
+    // All checked dates were already stitched
+    console.log(`[stitch-worker] checked ${skippedCount} episode(s), all already stitched`);
+  } else if (readyDates.length > scanLimit) {
+    // There are more dates beyond what we scanned
+    console.log(`[stitch-worker] checked ${datesToCheck.length} of ${readyDates.length} ready episodes, none needed stitching`);
+  } else {
+    // Exhausted all ready dates
+    console.log(`[stitch-worker] checked all ${readyDates.length} ready episode(s), none needed stitching`);
   }
 }
 
