@@ -1,4 +1,4 @@
-import { writeFile, unlink, readFile } from "node:fs/promises";
+import { writeFile, readFile, mkdir, access, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { execFile } from "node:child_process";
@@ -36,7 +36,12 @@ export async function stitchMp3(params: {
   const outputPath = join(workDir, "episode.mp3");
 
   try {
-    // Ensure work directory exists (writeFile will create parent dirs)
+    // Create temp directory (must exist before writing files)
+    await mkdir(workDir, { recursive: true });
+    
+    // Defensive check: verify directory was created
+    await access(workDir);
+    
     // Write each segment to a temp file
     for (let i = 0; i < segments.length; i++) {
       const segmentPath = join(workDir, `segment_${i}.mp3`);
@@ -82,12 +87,9 @@ export async function stitchMp3(params: {
       durationSeconds,
     };
   } finally {
-    // Cleanup: remove all temp files
-    const cleanupPaths = [...tempFiles, concatListPath, outputPath];
-    for (const path of cleanupPaths) {
-      await unlink(path).catch(() => {
-        // Ignore cleanup errors
-      });
-    }
+    // Cleanup: remove entire temp directory (recursive, force)
+    await rm(workDir, { recursive: true, force: true }).catch(() => {
+      // Ignore cleanup errors (directory may not exist or already cleaned up)
+    });
   }
 }

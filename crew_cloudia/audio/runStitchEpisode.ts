@@ -31,6 +31,12 @@ function parseArgs(): { programSlug: string; episodeDate: string } {
   return { programSlug, episodeDate };
 }
 
+/**
+ * Stitch episode audio from ready segments.
+ * 
+ * This is the main entrypoint for episode stitching.
+ * It can be called directly or via the stitch worker.
+ */
 export async function runStitchEpisode(params: {
   programSlug: string;
   episodeDate: string;
