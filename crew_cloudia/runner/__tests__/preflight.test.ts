@@ -61,6 +61,10 @@ describe("Preflight Gate", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     process.argv = ["node", "test", "cloudia", "2026-01-01", "--window-days", "3"];
+    // Default: no missing coverage (empty object means all dates present)
+    // Individual tests will override with mockResolvedValueOnce as needed
+    mockLoadSkyStateDailyRange.mockResolvedValue({});
+    mockSeedSkyStateRange.mockResolvedValue(undefined);
   });
 
   afterEach(() => {
@@ -72,14 +76,14 @@ describe("Preflight Gate", () => {
     mockLoadSkyStateDailyRange
       .mockResolvedValueOnce({
         "2026-01-01": null, // missing
-        "2026-01-02": { schema_version: "1.0.0" }, // exists
+        "2026-01-02": {}, // exists
         "2026-01-03": null, // missing
       })
       // Second call after seeding: all present
       .mockResolvedValueOnce({
-        "2026-01-01": { schema_version: "1.0.0" },
-        "2026-01-02": { schema_version: "1.0.0" },
-        "2026-01-03": { schema_version: "1.0.0" },
+        "2026-01-01": {},
+        "2026-01-02": {},
+        "2026-01-03": {},
       });
 
     mockSeedSkyStateRange.mockResolvedValue(undefined);
@@ -111,9 +115,9 @@ describe("Preflight Gate", () => {
         "2026-01-03": null,
       })
       .mockResolvedValueOnce({
-        "2026-01-01": { schema_version: "1.0.0" },
-        "2026-01-02": { schema_version: "1.0.0" },
-        "2026-01-03": { schema_version: "1.0.0" },
+        "2026-01-01": {},
+        "2026-01-02": {},
+        "2026-01-03": {},
       });
 
     mockSeedSkyStateRange.mockResolvedValue(undefined);
@@ -175,21 +179,14 @@ describe("Preflight Gate", () => {
   });
 
   it("--no-preseed: throws with exact seed commands when missing", async () => {
-    mockLoadSkyStateDailyRange.mockResolvedValueOnce({
+    const missingMap = {
       "2026-01-01": null,
-      "2026-01-02": { schema_version: "1.0.0" },
+      "2026-01-02": {}, // exists
       "2026-01-03": null,
-    });
+    };
+    mockLoadSkyStateDailyRange.mockResolvedValueOnce(missingMap);
 
     const { ensurePrereqsForRange } = await import("../runEpisodeBatch.js");
-
-    await expect(
-      ensurePrereqsForRange({
-        startDate: "2026-01-01",
-        endDate: "2026-01-03",
-        noPreseed: true,
-      })
-    ).rejects.toThrow("Missing Layer 0 sky_state_daily");
 
     // Should NOT call seeder
     expect(mockSeedSkyStateRange).not.toHaveBeenCalled();
@@ -201,7 +198,9 @@ describe("Preflight Gate", () => {
         endDate: "2026-01-03",
         noPreseed: true,
       });
+      expect.fail("Should have thrown");
     } catch (err: any) {
+      expect(err.message).toContain("Missing Layer 0 sky_state_daily");
       expect(err.message).toContain("npx tsx crew_cloudia/tools/ephemeris/seedSkyStateRange.ts");
       expect(err.message).toContain("2026-01-01");
       expect(err.message).toContain("2026-01-03");
@@ -210,9 +209,9 @@ describe("Preflight Gate", () => {
 
   it("--no-preseed: succeeds when coverage is complete", async () => {
     mockLoadSkyStateDailyRange.mockResolvedValueOnce({
-      "2026-01-01": { schema_version: "1.0.0" },
-      "2026-01-02": { schema_version: "1.0.0" },
-      "2026-01-03": { schema_version: "1.0.0" },
+      "2026-01-01": {},
+      "2026-01-02": {},
+      "2026-01-03": {},
     });
 
     const { ensurePrereqsForRange } = await import("../runEpisodeBatch.js");
@@ -229,8 +228,8 @@ describe("Preflight Gate", () => {
 
   it("coverage check: returns early when no missing dates", async () => {
     mockLoadSkyStateDailyRange.mockResolvedValueOnce({
-      "2026-01-01": { schema_version: "1.0.0" },
-      "2026-01-02": { schema_version: "1.0.0" },
+      "2026-01-01": {},
+      "2026-01-02": {},
     });
 
     const { ensurePrereqsForRange } = await import("../runEpisodeBatch.js");

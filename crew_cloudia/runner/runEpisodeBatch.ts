@@ -117,6 +117,11 @@ function toRanges(missingDates: string[]): Array<{ start: string; end: string }>
  */
 async function getMissingSkyStateDates(startDate: string, endDate: string): Promise<string[]> {
   const map = await loadSkyStateDailyRange(startDate, endDate);
+  if (!map || typeof map !== "object") {
+    throw new Error(
+      `[preseed:l0] loadSkyStateDailyRange returned invalid value: ${map}. Expected object.`
+    );
+  }
   return Object.entries(map)
     .filter(([, v]) => v == null)
     .map(([k]) => k)
