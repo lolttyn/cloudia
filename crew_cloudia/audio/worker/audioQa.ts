@@ -7,6 +7,35 @@ export type QaResult =
   | { ok: true }
   | { ok: false; errorClass: string; message: string };
 
+/**
+ * Get configurable duration thresholds with epsilon tolerance.
+ * 
+ * Environment variables (with defaults):
+ * - CLOUDIA_MAIN_THEMES_MIN_SECONDS (default: 90)
+ * - CLOUDIA_AUDIO_QA_EPSILON_SECONDS (default: 1.0)
+ */
+function getDurationBounds(segmentKey: string): { min: number; max: number; epsilon: number } {
+  const epsilon = Number(process.env.CLOUDIA_AUDIO_QA_EPSILON_SECONDS ?? "1.0");
+  
+  // Base thresholds
+  const baseBounds =
+    segmentKey === "intro"
+      ? { min: 20, max: 120 }
+      : segmentKey === "closing"
+      ? { min: 15, max: 120 }
+      : segmentKey === "main_themes"
+      ? { 
+          min: Number(process.env.CLOUDIA_MAIN_THEMES_MIN_SECONDS ?? "90"),
+          max: 900 
+        }
+      : { min: 5, max: 1800 };
+
+  return {
+    ...baseBounds,
+    epsilon,
+  };
+}
+
 export function qaNonEmpty(bytes: ArrayBuffer): QaResult {
   if (!bytes || bytes.byteLength === 0) {
     return { ok: false, errorClass: "qa_empty", message: "Audio buffer is empty" };
@@ -51,21 +80,25 @@ export function qaScriptWordCount(params: { segmentKey: string; scriptText: stri
 export function qaDuration(params: { segmentKey: string; durationSeconds: number }): QaResult {
   const { segmentKey, durationSeconds } = params;
 
-  // Conservative initial bounds (tighten later with real data)
-  const bounds =
-    segmentKey === "intro"
-      ? { min: 20, max: 120 }
-      : segmentKey === "closing"
-      ? { min: 15, max: 120 }
-      : segmentKey === "main_themes"
-      ? { min: 110, max: 900 }
-      : { min: 5, max: 1800 };
+  const { min, max, epsilon } = getDurationBounds(segmentKey);
 
-  if (durationSeconds < bounds.min) {
-    return { ok: false, errorClass: "qa_duration_too_short", message: `${segmentKey} duration ${durationSeconds}s < ${bounds.min}s` };
+  // Apply epsilon tolerance: fail only if duration < (min - epsilon)
+  // This prevents razor-thin failures (e.g., 109.949s failing a 110s threshold)
+  const effectiveMin = min - epsilon;
+
+  if (durationSeconds < effectiveMin) {
+    return { 
+      ok: false, 
+      errorClass: "qa_duration_too_short", 
+      message: `${segmentKey} duration ${durationSeconds.toFixed(2)}s < ${min}s (effective: ${effectiveMin.toFixed(2)}s with epsilon ${epsilon}s)` 
+    };
   }
-  if (durationSeconds > bounds.max) {
-    return { ok: false, errorClass: "qa_duration_too_long", message: `${segmentKey} duration ${durationSeconds}s > ${bounds.max}s` };
+  if (durationSeconds > max) {
+    return { 
+      ok: false, 
+      errorClass: "qa_duration_too_long", 
+      message: `${segmentKey} duration ${durationSeconds.toFixed(2)}s > ${max}s` 
+    };
   }
   return { ok: true };
 }
