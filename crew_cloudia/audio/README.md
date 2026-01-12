@@ -96,7 +96,27 @@ Failures → `audio_status = 'failed'` with error class + message
 
 ---
 
-## 7. TTS Integration
+## 7. Configuration
+
+**Environment Variables:**
+
+- `CLOUDIA_TTS_VOICE_ID` - ElevenLabs voice ID (required)
+- `CLOUDIA_TTS_MODEL_ID` - ElevenLabs model ID (required)
+- `ELEVENLABS_API_KEY` - ElevenLabs API key (required)
+- `SUPABASE_URL` - Supabase project URL (required)
+- `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key (required)
+- `CLOUDIA_AUDIO_POLL_MS` - Worker poll interval in milliseconds (default: 5000)
+- `CLOUDIA_AUDIO_WORKER_DISABLED` - Kill switch: set to `1` to disable worker
+- `CLOUDIA_AUDIO_GENERATING_TTL_MINUTES` - Stale generating job TTL (default: 15)
+  - Jobs stuck in `generating` state longer than this are requeued
+- `CLOUDIA_MAIN_THEMES_MIN_SECONDS` - Minimum duration for main_themes (default: 90)
+- `CLOUDIA_AUDIO_QA_EPSILON_SECONDS` - Duration QA tolerance (default: 1.0)
+- `CLOUDIA_MAIN_THEMES_MIN_WORDS` - Minimum word count for main_themes scripts (default: 280)
+- `CLOUDIA_STITCH_WORKER_SCAN_LIMIT` - Max dates to scan per stitch run (default: 30)
+
+---
+
+## 8. TTS Integration
 
 **Provider**: ElevenLabs  
 **Endpoint**: `https://api.elevenlabs.io/v1/text-to-speech/{voiceId}`  
@@ -108,7 +128,7 @@ Failures → `audio_status = 'failed'` with error class + message
 
 ---
 
-## 8. Episode Assembly (H3)
+## 9. Episode Assembly (H3)
 
 **Prerequisites**:
 - All required segments (`intro`, `main_themes`, `closing`) have `audio_status = 'ready'`
@@ -126,7 +146,7 @@ Failures → `audio_status = 'failed'` with error class + message
 
 ---
 
-## 9. What This Contract Does NOT Define Yet
+## 10. What This Contract Does NOT Define Yet
 
 - Publishing destinations & external IDs (H4 - in progress)
 - Structured logs + alerts (H5 - in progress)
@@ -134,7 +154,7 @@ Failures → `audio_status = 'failed'` with error class + message
 
 ---
 
-## 10. Worker Execution
+## 11. Worker Execution
 
 **Entrypoint**: `crew_cloudia/audio/worker/runAudioWorkerLoop.ts`
 
@@ -147,7 +167,7 @@ Failures → `audio_status = 'failed'` with error class + message
 
 ---
 
-## 11. Marking Segments Ready for Audio
+## 12. Marking Segments Ready for Audio
 
 **Function**: `markSegmentReadyForAudio({ episode_id, segment_key })`
 

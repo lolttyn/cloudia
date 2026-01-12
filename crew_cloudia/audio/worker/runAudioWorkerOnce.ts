@@ -25,11 +25,21 @@ export async function runAudioWorkerOnce(params?: {
   requireEnv("SUPABASE_SERVICE_ROLE_KEY");
 
   // Requeue stale generating jobs (best-effort)
+  // TTL is configurable via CLOUDIA_AUDIO_GENERATING_TTL_MINUTES (default: 15 minutes)
   try {
-    const { data, error } = await supabase.rpc("audio_requeue_stale_generating", { p_ttl_minutes: 30 });
+    const ttlMinutesRaw = process.env.CLOUDIA_AUDIO_GENERATING_TTL_MINUTES ?? "15";
+    const ttlMinutes = Number(ttlMinutesRaw);
+    const ttlMinutesValid = Number.isFinite(ttlMinutes) && ttlMinutes > 0 ? ttlMinutes : 15;
+    
+    const { data, error } = await supabase.rpc("audio_requeue_stale_generating", { 
+      p_ttl_minutes: ttlMinutesValid 
+    });
     if (error) throw error;
     if (typeof data === "number" && data > 0) {
-      console.log("[audio-worker] requeued stale generating", { count: data });
+      console.log("[audio-worker] requeued stale generating", { 
+        count: data, 
+        ttlMinutes: ttlMinutesValid 
+      });
     }
   } catch (e: any) {
     console.warn("[audio-worker] stale requeue failed (ignored)", { msg: e?.message ?? String(e) });
