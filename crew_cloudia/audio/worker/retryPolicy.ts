@@ -16,7 +16,8 @@ export function classifyError(e: unknown): { errorClass: string; message: string
 }
 
 export function decideRetry(params: { attempt: number; errorClass: string }): RetryDecision {
-  // Max 3 attempts total (attempt is 1-based once claimed)
+  // Max 3 failures total (attempt represents failure count after current failure is recorded)
+  // If this failure would bring total to 3 or more, don't retry
   if (params.attempt >= 3) return { shouldRetry: false, backoffMs: 0 };
 
   // Retry only transient classes

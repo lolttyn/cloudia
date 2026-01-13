@@ -49,7 +49,8 @@ pending → generating → ready | failed
 
 **Atomic claim**: RPC `audio_claim_pending_segment`
 - Updates `audio_status = 'generating'` atomically
-- Returns claimed segment row
+- Returns claimed segment row (including current `audio_attempt_count`)
+- **Does NOT increment `audio_attempt_count`** (see semantics below)
 - If zero rows returned → another worker claimed it
 
 **Stale recovery**: RPC `audio_requeue_stale_generating`
@@ -58,8 +59,14 @@ pending → generating → ready | failed
 
 **Retry policy**: RPC `audio_requeue_failed`
 - Re-enqueues failed segments based on error classification
-- Max 3 attempts total
+- Max 3 failures total (see `audio_attempt_count` semantics)
 - Retryable errors: `tts_rate_limited`, `tts_timeout`, `tts_network`
+
+**`audio_attempt_count` semantics (Option B):**
+- Represents **number of failures**, not number of claims
+- Incremented by `audio_mark_failed` RPC (not by claim)
+- Used for retry decisions: `audio_attempt_count >= 3` = terminal failure
+- See `AUDIO_ATTEMPT_COUNT_SEMANTICS.md` for details
 
 ---
 

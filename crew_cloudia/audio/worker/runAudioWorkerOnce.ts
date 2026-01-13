@@ -91,11 +91,13 @@ export async function runAudioWorkerOnce(params?: {
     });
 
     let claimed: any = null;
-    let attempt = 1;
+    let currentFailureCount = 0;
 
     try {
       claimed = await rpcClaimPendingSegment({ episodeId, segmentKey, jobKey });
-      attempt = Number(claimed?.audio_attempt_count ?? 1);
+      // audio_attempt_count represents number of failures (Option B semantics)
+      // Read current failure count (will be incremented by audio_mark_failed if this attempt fails)
+      currentFailureCount = Number(claimed?.audio_attempt_count ?? 0);
 
       const scriptText = row.script_text as string;
       
@@ -167,11 +169,12 @@ export async function runAudioWorkerOnce(params?: {
         console.error("[audio-worker] mark_failed failed", { episodeId, segmentKey, err: markErr?.message ?? String(markErr) });
       }
 
-      // Decide retry using current attempt count (if claim succeeded)
-      // We can fetch attempt from DB if needed, but simplest: assume attemptCount>=1 once claimed.
-      // If claim never happened, requeue doesn't matter.
+      // Decide retry using current failure count (if claim succeeded)
+      // audio_mark_failed will increment audio_attempt_count, so use currentFailureCount + 1
+      // for retry decision (represents failures after this failure is recorded)
       if (claimed) {
-        const decision = decideRetry({ attempt, errorClass });
+        const failureCountAfterThisFailure = currentFailureCount + 1;
+        const decision = decideRetry({ attempt: failureCountAfterThisFailure, errorClass });
         if (decision.shouldRetry) {
           try {
             await supabase.rpc("audio_requeue_failed", {

@@ -8,7 +8,9 @@
     "test": "env $(cat env.test | xargs) vitest run",
     "inspect:intro": "tsx run-intro.ts",
     "cloudia:batch": "tsx crew_cloudia/runner/runEpisodeBatch.ts",
-    "audio-worker": "tsx crew_cloudia/audio/worker/runAudioWorkerLoop.ts"
+    "audio-worker": "tsx crew_cloudia/audio/worker/runAudioWorkerLoop.ts",
+    "cloudia:weekly-scripts": "tsx crew_cloudia/ops/runWeeklyScriptsWindow.ts cloudia",
+    "cloudia:daily-stitch": "tsx crew_cloudia/ops/runDailyStitch.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.48.0",
