@@ -563,8 +563,10 @@ async function main() {
       failed: dateResults.filter((r) => !r.success).length,
       date_results: dateResults,
     };
-    console.log(`\n=== Machine-Readable Summary (JSON) ===`);
-    console.log(JSON.stringify(summary, null, 2));
+    // Use unique marker with batch_id to ensure uniqueness
+    const marker = `CLOUDIA_BATCH_SUMMARY_${batchId}`;
+    // Print single-line JSON for easier log parsing
+    console.log(`${marker}${JSON.stringify(summary)}`);
     
     // Exit non-zero if any failures occurred
     if (dateResults.some((r) => !r.success)) {

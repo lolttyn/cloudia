@@ -143,16 +143,15 @@ async function main() {
       stdout += text;
       process.stdout.write(text);
       
-      // Try to extract JSON summary from stdout (look for "=== Machine-Readable Summary (JSON) ===")
-      if (text.includes("=== Machine-Readable Summary (JSON) ===")) {
-        // Extract JSON that follows this marker
-        const jsonMatch = stdout.match(/=== Machine-Readable Summary \(JSON\) ===\s*\n(\{[\s\S]*\})/);
-        if (jsonMatch && jsonMatch[1]) {
-          try {
-            jsonSummary = JSON.parse(jsonMatch[1]);
-          } catch (e) {
-            // Ignore parse errors, will use full stdout
-          }
+      // Try to extract JSON summary from stdout (look for unique marker pattern)
+      // Marker format: CLOUDIA_BATCH_SUMMARY_{batchId}{JSON}
+      const jsonMatch = stdout.match(/CLOUDIA_BATCH_SUMMARY_[a-f0-9-]{36}(\{.*\})/);
+      if (jsonMatch && jsonMatch[1]) {
+        try {
+          jsonSummary = JSON.parse(jsonMatch[1]);
+        } catch (e) {
+          // Ignore parse errors, will use full stdout
+          console.warn(`[weekly-scripts] Failed to parse JSON summary: ${e}`);
         }
       }
     });
