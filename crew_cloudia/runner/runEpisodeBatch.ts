@@ -23,6 +23,14 @@ type ParsedArgs = {
   scripts_only: boolean;
   no_preseed: boolean;
   preseed_only: boolean;
+  continue_on_error: boolean;
+};
+
+export type DateRunResult = {
+  episode_date: string;
+  success: boolean;
+  error?: string;
+  error_type?: "episode_gate_failed" | "segment_generation_failed" | "mark_audio_failed" | "other";
 };
 
 const batchId = randomUUID();
@@ -41,7 +49,7 @@ function parseArgs(argv: string[]): ParsedArgs {
   const [, , program_slug, start_date, ...rest] = argv;
   if (!program_slug || !start_date) {
     throw new Error(
-      "Usage: tsx crew_cloudia/runner/runEpisodeBatch.ts <program_slug> <start_date YYYY-MM-DD> [--window-days N] [--scripts-only] [--no-preseed] [--preseed-only]"
+      "Usage: tsx crew_cloudia/runner/runEpisodeBatch.ts <program_slug> <start_date YYYY-MM-DD> [--window-days N] [--scripts-only] [--no-preseed] [--preseed-only] [--continue-on-error]"
     );
   }
 
@@ -49,6 +57,7 @@ function parseArgs(argv: string[]): ParsedArgs {
   let scripts_only = false;
   let no_preseed = false;
   let preseed_only = false;
+  let continue_on_error = false;
 
   for (let i = 0; i < rest.length; i++) {
     const token = rest[i];
@@ -65,6 +74,8 @@ function parseArgs(argv: string[]): ParsedArgs {
       no_preseed = true;
     } else if (token === "--preseed-only") {
       preseed_only = true;
+    } else if (token === "--continue-on-error") {
+      continue_on_error = true;
     } else {
       // ignore unknown flags silently to keep behavior minimal
     }
@@ -74,7 +85,7 @@ function parseArgs(argv: string[]): ParsedArgs {
     throw new Error("--window-days must be >= 1");
   }
 
-  return { program_slug, start_date, window_days, scripts_only, no_preseed, preseed_only };
+  return { program_slug, start_date, window_days, scripts_only, no_preseed, preseed_only, continue_on_error };
 }
 
 function expandDates(start: string, windowDays: number): string[] {
@@ -294,8 +305,9 @@ export async function runForDate(
   program_slug: string,
   episode_date: string,
   scripts_only: boolean,
-  collector?: RunSummaryCollector
-): Promise<void> {
+  collector?: RunSummaryCollector,
+  continue_on_error: boolean = false
+): Promise<DateRunResult> {
   const episode_id = deterministicEpisodeId(program_slug, episode_date);
   const today = new Date().toISOString().slice(0, 10);
   const time_context = episode_date === today ? "day_of" : "future";
@@ -386,24 +398,51 @@ export async function runForDate(
   // Quality thresholds are uniform across all episode dates.
   // All episodes must meet the same quality standards regardless of date.
   if (episodeGate.decision === "fail") {
-    throw new Error(
-      `Episode ${episode_date} failed editorial gate: ${episodeGate.failed_segments
-        .map((s) => s.segment_key)
-        .join(", ")}`
-    );
+    const errorMsg = `Episode ${episode_date} failed editorial gate: ${episodeGate.failed_segments
+      .map((s) => s.segment_key)
+      .join(", ")}`;
+    
+    if (continue_on_error) {
+      return {
+        episode_date,
+        success: false,
+        error: errorMsg,
+        error_type: "episode_gate_failed",
+      };
+    } else {
+      throw new Error(errorMsg);
+    }
   }
 
   // Publish-time enforcement: only run when we intend to publish / continue beyond scripts
   if (!scripts_only) {
-    await assertEpisodeIsPublishable({
-      episode_id,
-      required_segments: ["intro", "main_themes", "closing"],
-    });
+    try {
+      await assertEpisodeIsPublishable({
+        episode_id,
+        required_segments: ["intro", "main_themes", "closing"],
+      });
+    } catch (err: any) {
+      if (continue_on_error) {
+        return {
+          episode_date,
+          success: false,
+          error: err?.message ?? String(err),
+          error_type: "other",
+        };
+      } else {
+        throw err;
+      }
+    }
   }
+
+  return {
+    episode_date,
+    success: true,
+  };
 }
 
 async function main() {
-  const { program_slug, start_date, window_days, scripts_only, no_preseed, preseed_only } = parseArgs(process.argv);
+  const { program_slug, start_date, window_days, scripts_only, no_preseed, preseed_only, continue_on_error } = parseArgs(process.argv);
   const dates = expandDates(start_date, window_days);
 
   // Parse interpretation mode from environment (default to canonical for Phase G)
@@ -439,9 +478,50 @@ async function main() {
   });
 
   console.log(`[batch:start] ${batchId}`);
+  if (continue_on_error) {
+    console.log(`[batch] continue-on-error mode: will continue through all dates even if some fail`);
+  }
+
+  const dateResults: DateRunResult[] = [];
 
   for (const date of dates) {
-    await runForDate(program_slug, date, scripts_only, collector);
+    if (continue_on_error) {
+      try {
+        const result = await runForDate(program_slug, date, scripts_only, collector, continue_on_error);
+        dateResults.push(result);
+        if (!result.success) {
+          console.error(`[batch:date] ${date} FAILED: ${result.error}`);
+        }
+      } catch (err: any) {
+        // Catch any unexpected errors (e.g., from markSegmentReadyForAudio)
+        const errorMsg = err?.message ?? String(err);
+        console.error(`[batch:date] ${date} FAILED (unexpected error): ${errorMsg}`);
+        
+        // Detect error type from message
+        let errorType: DateRunResult["error_type"] = "other";
+        if (errorMsg.includes("script has") && errorMsg.includes("words")) {
+          errorType = "mark_audio_failed";
+        } else if (errorMsg.includes("failed editorial gate") || errorMsg.includes("failed segments")) {
+          errorType = "episode_gate_failed";
+        } else if (errorMsg.includes("did not achieve editor approval")) {
+          errorType = "segment_generation_failed";
+        }
+        
+        dateResults.push({
+          episode_date: date,
+          success: false,
+          error: errorMsg,
+          error_type: errorType,
+        });
+      }
+    } else {
+      // Original behavior: throw on first failure
+      const result = await runForDate(program_slug, date, scripts_only, collector, continue_on_error);
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+      dateResults.push(result);
+    }
   }
 
   console.log(`[batch:complete] ${batchId}`);
@@ -449,9 +529,48 @@ async function main() {
   // Print console summary table
   collector.printConsoleTable();
 
+  // Print per-date failure summary if continue-on-error was used
+  if (continue_on_error) {
+    const failed = dateResults.filter((r) => !r.success);
+    const succeeded = dateResults.filter((r) => r.success);
+    
+    console.log(`\n=== Batch Run Summary ===`);
+    console.log(`Total dates: ${dateResults.length}`);
+    console.log(`Succeeded: ${succeeded.length}`);
+    console.log(`Failed: ${failed.length}`);
+    
+    if (failed.length > 0) {
+      console.log(`\nFailed dates:`);
+      for (const result of failed) {
+        console.log(`  ${result.episode_date}: ${result.error_type ?? "unknown"} - ${result.error}`);
+      }
+    }
+  }
+
   // Write artifact to disk
   const artifactPath = `./artifacts/phase-g/baseline/${program_slug}/${date_from}__${date_to}__${batchId}.json`;
   await collector.writeArtifact(artifactPath);
+
+  // In continue-on-error mode, also write a machine-readable summary JSON to stdout
+  if (continue_on_error) {
+    const summary = {
+      batch_id: batchId,
+      program_slug,
+      date_from,
+      date_to,
+      total_dates: dateResults.length,
+      succeeded: dateResults.filter((r) => r.success).length,
+      failed: dateResults.filter((r) => !r.success).length,
+      date_results: dateResults,
+    };
+    console.log(`\n=== Machine-Readable Summary (JSON) ===`);
+    console.log(JSON.stringify(summary, null, 2));
+    
+    // Exit non-zero if any failures occurred
+    if (dateResults.some((r) => !r.success)) {
+      process.exit(1);
+    }
+  }
 }
 
 if (process.argv[1]) {

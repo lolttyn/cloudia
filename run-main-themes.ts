@@ -325,6 +325,17 @@ export async function runMainThemesForDate(params: {
     
     script = sanitizeForbiddenSigns(script, allowedSigns);
 
+    // Word count validation for main_themes (enforce during generation, not just at mark-ready)
+    // This prevents "scripts-only" runs from failing after approval due to short scripts
+    const wordCount = script.trim().split(/\s+/).filter((word) => word.length > 0).length;
+    const targetMinWords = Number(process.env.CLOUDIA_MAIN_THEMES_MIN_WORDS ?? "280");
+    if (wordCount < targetMinWords) {
+      // Add as blocking reason to trigger rewrite with expansion instruction
+      console.warn(
+        `[main_themes] Attempt ${attemptNumber}: Script has ${wordCount} words, minimum is ${targetMinWords}. Will request expansion.`
+      );
+    }
+
     // Phase D authority inversion: frame evaluator provides diagnostics only
     const frameEval = evaluateSegmentWithFrame({
       interpretive_frame: params.interpretive_frame,
@@ -388,11 +399,25 @@ export async function runMainThemesForDate(params: {
       }
     }
 
-    // Combine blocking reasons: frame (grounding/structural) + rubric (editorial quality)
+    // Combine blocking reasons: frame (grounding/structural) + rubric (editorial quality) + word count
     const allBlockingReasons = [
       ...finalFrameEval.blocking_reasons,
       ...finalRubricEval.blocking_reasons,
     ];
+
+    // Add word count check as blocking reason if script is too short
+    if (wordCount < targetMinWords) {
+      allBlockingReasons.push(
+        `word_count_below_min:${wordCount}<${targetMinWords} (targets ~110s audio at 150-170 wpm)`
+      );
+      // Add expansion instruction for rewrite
+      if (attempt < MAX_SEGMENT_RETRIES - 1) {
+        // Only add instruction if we have attempts remaining
+        rewriteInstructions.push(
+          `Expand the script to at least ${targetMinWords} words to meet minimum audio duration requirements. Add more detail, examples, or elaboration while maintaining the core message.`
+        );
+      }
+    }
 
     // CRITICAL: Persist EVERY attempt before checking pass/fail
     // This ensures we can see evolution even if later attempts fail

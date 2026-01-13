@@ -123,6 +123,7 @@ async function main() {
       "--window-days",
       String(windowDays),
       "--scripts-only",
+      "--continue-on-error",
     ];
 
     console.log(`[weekly-scripts] Executing: ${command} ${commandArgs.join(" ")}`);
@@ -130,6 +131,7 @@ async function main() {
     const startTime = Date.now();
     let stdout = "";
     let stderr = "";
+    let jsonSummary: Record<string, unknown> | null = null;
 
     const child = spawn(command, commandArgs, {
       stdio: ["ignore", "pipe", "pipe"],
@@ -140,6 +142,19 @@ async function main() {
       const text = data.toString();
       stdout += text;
       process.stdout.write(text);
+      
+      // Try to extract JSON summary from stdout (look for "=== Machine-Readable Summary (JSON) ===")
+      if (text.includes("=== Machine-Readable Summary (JSON) ===")) {
+        // Extract JSON that follows this marker
+        const jsonMatch = stdout.match(/=== Machine-Readable Summary \(JSON\) ===\s*\n(\{[\s\S]*\})/);
+        if (jsonMatch && jsonMatch[1]) {
+          try {
+            jsonSummary = JSON.parse(jsonMatch[1]);
+          } catch (e) {
+            // Ignore parse errors, will use full stdout
+          }
+        }
+      }
     });
 
     child.stderr?.on("data", (data: Buffer) => {
@@ -160,33 +175,36 @@ async function main() {
 
     const durationMs = Date.now() - startTime;
 
+    // Build output JSON with summary if available
+    const baseOutputJson = {
+      program_slug: programSlug,
+      start_date: startDate,
+      window_days: windowDays,
+      command: `${command} ${commandArgs.join(" ")}`,
+      duration_ms: durationMs,
+    };
+
     if (exitCode === 0) {
       // Success
       const outputJson = {
-        program_slug: programSlug,
-        start_date: startDate,
-        window_days: windowDays,
-        command: `${command} ${commandArgs.join(" ")}`,
-        duration_ms: durationMs,
+        ...baseOutputJson,
         completed_at: new Date().toISOString(),
+        ...(jsonSummary ? { summary: jsonSummary } : {}),
       };
 
       await completeBatchRun(runId, outputJson, `Completed successfully in ${durationMs}ms`);
       console.log(`[weekly-scripts] Completed run ${runId}`);
       process.exit(0);
     } else {
-      // Failure
+      // Failure (but may have partial results if continue-on-error was used)
       const errorMessage = `Command exited with code ${exitCode}`;
       const outputJson = {
-        program_slug: programSlug,
-        start_date: startDate,
-        window_days: windowDays,
-        command: `${command} ${commandArgs.join(" ")}`,
-        duration_ms: durationMs,
+        ...baseOutputJson,
         exit_code: exitCode,
         stdout: stdout.slice(-5000), // Last 5KB
         stderr: stderr.slice(-5000), // Last 5KB
         failed_at: new Date().toISOString(),
+        ...(jsonSummary ? { summary: jsonSummary } : {}),
       };
 
       await failBatchRun(runId, errorMessage, outputJson, `Failed after ${durationMs}ms`);
