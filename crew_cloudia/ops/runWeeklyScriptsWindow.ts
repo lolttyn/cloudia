@@ -124,6 +124,7 @@ async function main() {
       String(windowDays),
       "--scripts-only",
       "--continue-on-error",
+      "--retry-gate-failed",
     ];
 
     console.log(`[weekly-scripts] Executing: ${command} ${commandArgs.join(" ")}`);

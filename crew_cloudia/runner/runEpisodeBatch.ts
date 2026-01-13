@@ -24,6 +24,7 @@ type ParsedArgs = {
   no_preseed: boolean;
   preseed_only: boolean;
   continue_on_error: boolean;
+  retry_gate_failed: boolean;
 };
 
 export type DateRunResult = {
@@ -49,7 +50,7 @@ function parseArgs(argv: string[]): ParsedArgs {
   const [, , program_slug, start_date, ...rest] = argv;
   if (!program_slug || !start_date) {
     throw new Error(
-      "Usage: tsx crew_cloudia/runner/runEpisodeBatch.ts <program_slug> <start_date YYYY-MM-DD> [--window-days N] [--scripts-only] [--no-preseed] [--preseed-only] [--continue-on-error]"
+      "Usage: tsx crew_cloudia/runner/runEpisodeBatch.ts <program_slug> <start_date YYYY-MM-DD> [--window-days N] [--scripts-only] [--no-preseed] [--preseed-only] [--continue-on-error] [--retry-gate-failed]"
     );
   }
 
@@ -58,6 +59,7 @@ function parseArgs(argv: string[]): ParsedArgs {
   let no_preseed = false;
   let preseed_only = false;
   let continue_on_error = false;
+  let retry_gate_failed = false;
 
   for (let i = 0; i < rest.length; i++) {
     const token = rest[i];
@@ -76,6 +78,8 @@ function parseArgs(argv: string[]): ParsedArgs {
       preseed_only = true;
     } else if (token === "--continue-on-error") {
       continue_on_error = true;
+    } else if (token === "--retry-gate-failed") {
+      retry_gate_failed = true;
     } else {
       // ignore unknown flags silently to keep behavior minimal
     }
@@ -85,7 +89,7 @@ function parseArgs(argv: string[]): ParsedArgs {
     throw new Error("--window-days must be >= 1");
   }
 
-  return { program_slug, start_date, window_days, scripts_only, no_preseed, preseed_only, continue_on_error };
+  return { program_slug, start_date, window_days, scripts_only, no_preseed, preseed_only, continue_on_error, retry_gate_failed };
 }
 
 function expandDates(start: string, windowDays: number): string[] {
@@ -306,7 +310,8 @@ export async function runForDate(
   episode_date: string,
   scripts_only: boolean,
   collector?: RunSummaryCollector,
-  continue_on_error: boolean = false
+  continue_on_error: boolean = false,
+  retry_gate_failed: boolean = false
 ): Promise<DateRunResult> {
   const episode_id = deterministicEpisodeId(program_slug, episode_date);
   const today = new Date().toISOString().slice(0, 10);
@@ -342,6 +347,7 @@ export async function runForDate(
     time_context,
     interpretive_frame,
     collector,
+    retry_gate_failed,
   });
 
   const closingResult = await runClosingForDate({
@@ -442,7 +448,7 @@ export async function runForDate(
 }
 
 async function main() {
-  const { program_slug, start_date, window_days, scripts_only, no_preseed, preseed_only, continue_on_error } = parseArgs(process.argv);
+  const { program_slug, start_date, window_days, scripts_only, no_preseed, preseed_only, continue_on_error, retry_gate_failed } = parseArgs(process.argv);
   const dates = expandDates(start_date, window_days);
 
   // Parse interpretation mode from environment (default to canonical for Phase G)
@@ -487,7 +493,7 @@ async function main() {
   for (const date of dates) {
     if (continue_on_error) {
       try {
-        const result = await runForDate(program_slug, date, scripts_only, collector, continue_on_error);
+        const result = await runForDate(program_slug, date, scripts_only, collector, continue_on_error, retry_gate_failed);
         dateResults.push(result);
         if (!result.success) {
           console.error(`[batch:date] ${date} FAILED: ${result.error}`);
@@ -516,7 +522,7 @@ async function main() {
       }
     } else {
       // Original behavior: throw on first failure
-      const result = await runForDate(program_slug, date, scripts_only, collector, continue_on_error);
+      const result = await runForDate(program_slug, date, scripts_only, collector, continue_on_error, retry_gate_failed);
       if (!result.success) {
         throw new Error(result.error);
       }

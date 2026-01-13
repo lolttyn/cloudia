@@ -134,6 +134,7 @@ export async function runMainThemesForDate(params: {
   time_context: "day_of" | "future";
   interpretive_frame?: InterpretiveFrame;
   collector?: RunSummaryCollector;
+  retry_gate_failed?: boolean;
 }): Promise<{
   segment_key: string;
   gate_result: ReturnType<typeof evaluateEditorialGate>;
@@ -217,8 +218,8 @@ export async function runMainThemesForDate(params: {
   }
 
   if (latestAttempt && latestAttempt.gate_decision === "approve") {
-    // Already have an approved version - return it without generating new attempts
-    console.log(`[main_themes] Idempotency guard: found approved attempt ${latestAttempt.attempt_number}, skipping generation`);
+    // Already have an approved version - check if it passes gate evaluation
+    console.log(`[main_themes] Idempotency guard: found approved attempt ${latestAttempt.attempt_number}, evaluating gate...`);
     const diagnostics = mapDiagnosticsToEditorialViolations(
       performSelfCheck(latestAttempt.script_text, writing_contract)
     );
@@ -261,10 +262,29 @@ export async function runMainThemesForDate(params: {
       gate_result: gateResult,
     });
 
-    return {
-      segment_key: "main_themes",
-      gate_result: gateResult,
-    };
+    const gateDecision = gateResult.decision;
+
+    // Gate passed -> true idempotency: safe to skip
+    if (gateDecision === "approve") {
+      console.log(`[main_themes] Idempotency guard: approved attempt ${latestAttempt.attempt_number} passes gate, skipping generation`);
+      return {
+        segment_key: "main_themes",
+        gate_result: gateResult,
+      };
+    }
+
+    // Gate failed
+    if (!params.retry_gate_failed) {
+      console.log(`[main_themes] Idempotency guard: approved attempt ${latestAttempt.attempt_number} is gate-blocked (${gateDecision}), returning blocked result`);
+      return {
+        segment_key: "main_themes",
+        gate_result: gateResult,
+      };
+    }
+
+    // retry_gate_failed enabled -> DO NOT return; proceed to generation loop
+    console.log(`[main_themes] Approved attempt ${latestAttempt.attempt_number} is gate-blocked (${gateDecision}); retry_gate_failed enabled, regenerating...`);
+    // Fall through to generation loop below
   }
 
   let script = "";
