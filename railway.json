@@ -7,7 +7,6 @@
   "deploy": {
     "runtime": "V2",
     "numReplicas": 1,
-    "startCommand": "npm run audio-worker",
     "sleepApplication": false,
     "useLegacyStacker": false,
     "multiRegionConfig": {
