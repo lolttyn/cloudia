@@ -337,6 +337,7 @@ export async function runForDate(
     time_context,
     interpretive_frame,
     collector,
+    scripts_only,
   });
 
   const mainThemesResult = await runMainThemesForDate({
@@ -348,6 +349,7 @@ export async function runForDate(
     interpretive_frame,
     collector,
     retry_gate_failed,
+    scripts_only,
   });
 
   const closingResult = await runClosingForDate({
@@ -358,6 +360,7 @@ export async function runForDate(
     time_context,
     interpretive_frame,
     collector,
+    scripts_only,
   });
 
   const segment_results = [

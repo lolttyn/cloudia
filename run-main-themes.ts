@@ -135,6 +135,7 @@ export async function runMainThemesForDate(params: {
   interpretive_frame?: InterpretiveFrame;
   collector?: RunSummaryCollector;
   retry_gate_failed?: boolean;
+  scripts_only?: boolean;
 }): Promise<{
   segment_key: string;
   gate_result: ReturnType<typeof evaluateEditorialGate>;
@@ -578,10 +579,12 @@ export async function runMainThemesForDate(params: {
       gate_policy_version: gateResult.policy_version,
     });
 
-    await markSegmentReadyForAudio({
-      episode_id: params.episode_id,
-      segment_key: "main_themes",
-    });
+    if (!params.scripts_only) {
+      await markSegmentReadyForAudio({
+        episode_id: params.episode_id,
+        segment_key: "main_themes",
+      });
+    }
 
     // Record final for Phase G instrumentation
     if (params.collector) {

@@ -44,6 +44,7 @@ export async function runIntroForDate(params: {
   time_context: "day_of" | "future";
   interpretive_frame?: InterpretiveFrame;
   collector?: RunSummaryCollector;
+  scripts_only?: boolean;
 }): Promise<{
   segment_key: string;
   gate_result: ReturnType<typeof evaluateEditorialGate>;
@@ -319,10 +320,12 @@ export async function runIntroForDate(params: {
       gate_policy_version: gateResult.policy_version,
     });
 
-    await markSegmentReadyForAudio({
-      episode_id: params.episode_id,
-      segment_key: "intro",
-    });
+    if (!params.scripts_only) {
+      await markSegmentReadyForAudio({
+        episode_id: params.episode_id,
+        segment_key: "intro",
+      });
+    }
 
     // Record final for Phase G instrumentation
     if (params.collector) {
