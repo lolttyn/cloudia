@@ -69,6 +69,18 @@ export function generateEditInstructions(
         }
         break;
 
+      case reason === "CLOSING_PARENTHETICAL_ASTRO":
+        instructions.unshift(
+          "Remove all parenthetical astro mechanics (e.g., aspects, orbs, Sun-Moon parentheticals). Do not use parentheses in the closing."
+        );
+        break;
+
+      case reason === "CLOSING_OPENER_REPETITION":
+        instructions.unshift(
+          "Rewrite the opening sentence to avoid the template 'As the day winds down'. Use a fresh opener without that phrasing."
+        );
+        break;
+
       case reason === "SYSTEM_LEVEL_EXPLANATION":
         instructions.push(
           "Do not explain astrology. Translate it into lived human experience instead. Assume the listener trusts you; you don't need to justify your statements."

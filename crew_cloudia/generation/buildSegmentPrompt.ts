@@ -4,6 +4,10 @@ import { SegmentWritingContract } from "../editorial/types/SegmentWritingContrac
 import { EpisodeValidationResult } from "../editorial/validation/episodeValidationResult.js";
 import { PERMISSION_BLOCK } from "../editorial/prompts/permissionBlock.js";
 import { sanitizeInterpretiveFrameForPrompt } from "./prompt/sanitizeInterpretiveFrame.js";
+import {
+  extractPhaseNameFromFrame,
+  mapPhaseNameToLunationLabel,
+} from "../interpretation/lunationLabel.js";
 
 export type AssembledPrompt = {
   system_prompt: string;
@@ -179,26 +183,11 @@ ${
         const whyToday = frame.why_today_clause ?? "";
         const anchorLines = anchors.map((a) => `- "${a.label ?? ""}"`).join("\n");
         const lunationContextLabel = (frame as any)?.lunation_context?.label;
-        const lunationLabelMap: Record<string, string> = {
-          new: "New Moon",
-          waxing_crescent: "Waxing Crescent",
-          first_quarter: "First Quarter",
-          waxing_gibbous: "Waxing Gibbous",
-          full: "Full Moon",
-          waning_gibbous: "Waning Gibbous",
-          last_quarter: "Last Quarter",
-          waning_crescent: "Waning Crescent",
-          waxing: "Waxing Moon",
-          waning: "Waning Moon",
-        };
-        const phaseFromSignal = (frame as any)?.signals?.find?.(
-          (signal: any) => signal?.kind === "lunar_phase"
-        )?.meta?.phase_name;
-        const phaseKey = String(phaseFromSignal ?? "").toLowerCase();
+        const phaseNameForPrompt = extractPhaseNameFromFrame(frame as any);
+        const lunationLabelResult = mapPhaseNameToLunationLabel(phaseNameForPrompt);
         const lunationLabel =
           lunationContextLabel ??
-          lunationLabelMap[phaseKey] ??
-          undefined;
+          (lunationLabelResult.isFallback ? undefined : lunationLabelResult.label);
         const lunationLine =
           segment.segment_key === "main_themes"
             ? `- Lunation phase (use this label verbatim): "${lunationLabel ?? "Lunar phase"}"`

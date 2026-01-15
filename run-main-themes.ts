@@ -22,6 +22,10 @@ import { evaluateSegmentWithFrame } from "./crew_cloudia/editorial/showrunner/ev
 import { evaluateAdherenceRubric } from "./crew_cloudia/quality/adherence/adherence_rubric.js";
 import { PERMISSION_BLOCK } from "./crew_cloudia/editorial/prompts/permissionBlock.js";
 import { generateEditInstructions } from "./crew_cloudia/editorial/editor/generateEditInstructions.js";
+import {
+  extractPhaseNameFromFrame,
+  mapPhaseNameToLunationLabel,
+} from "./crew_cloudia/interpretation/lunationLabel.js";
 import { supabase } from "./crew_cloudia/lib/supabaseClient.js";
 import { RunSummaryCollector } from "./crew_cloudia/runner/phaseG/runSummaryCollector.js";
 
@@ -59,29 +63,10 @@ function sanitizeForbiddenSigns(
   return sanitized;
 }
 
-const LUNATION_LABELS: Record<string, string> = {
-  new: "New Moon",
-  waxing_crescent: "Waxing Crescent",
-  first_quarter: "First Quarter",
-  waxing_gibbous: "Waxing Gibbous",
-  full: "Full Moon",
-  waning_gibbous: "Waning Gibbous",
-  last_quarter: "Last Quarter",
-  waning_crescent: "Waning Crescent",
-  waxing: "Waxing Moon",
-  waning: "Waning Moon",
-};
-
 function getLunationLabel(frame: InterpretiveFrame): string | null {
-  const lunarPhaseSignal = frame.signals?.find?.(
-    (signal) => signal?.kind === "lunar_phase"
-  );
-  const phaseFromSignal =
-    lunarPhaseSignal?.meta && typeof lunarPhaseSignal.meta === "object"
-      ? (lunarPhaseSignal.meta as any).phase_name
-      : undefined;
-  const phaseKey = String(phaseFromSignal ?? "").toLowerCase();
-  return LUNATION_LABELS[phaseKey] ?? null;
+  const phaseName = extractPhaseNameFromFrame(frame);
+  const result = mapPhaseNameToLunationLabel(phaseName);
+  return result.isFallback ? null : result.label;
 }
 
 // Auto-repair: fix mechanical violations deterministically
@@ -210,8 +195,9 @@ export async function runMainThemesForDate(params: {
     ban_repetition: true,
   };
 
-  const lunationLabelForPrompt =
-    getLunationLabel(params.interpretive_frame) ?? "Lunar phase";
+  const phaseNameForPrompt = extractPhaseNameFromFrame(params.interpretive_frame);
+  const lunationLabelResult = mapPhaseNameToLunationLabel(phaseNameForPrompt);
+  const lunationLabelForPrompt = lunationLabelResult.label;
   const interpretiveFrameForPrompt = {
     ...params.interpretive_frame,
     lunation_context: { label: lunationLabelForPrompt },
@@ -362,6 +348,12 @@ export async function runMainThemesForDate(params: {
     segment_key: "main_themes",
   });
   console.log(`[main_themes] Starting generation with base attempt number: ${baseAttemptNumber} (will use attempts ${baseAttemptNumber} through ${baseAttemptNumber + MAX_SEGMENT_RETRIES - 1})`);
+  console.log("[lunation-label]", {
+    episode_date: params.episode_date,
+    phase_name: lunationLabelResult.phase_name ?? null,
+    derived_label: lunationLabelForPrompt,
+    fallback: lunationLabelResult.isFallback,
+  });
 
   for (let attempt = 0; attempt < MAX_SEGMENT_RETRIES; attempt++) {
     const attemptNumber = baseAttemptNumber + attempt;

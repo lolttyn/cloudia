@@ -525,6 +525,66 @@ function enforceMainThemesMoonTransitBan(
   }
 }
 
+function enforceMainThemesLunationLabelSpecificity(
+  script: string,
+  segment_key: string,
+  warnings: Set<string>,
+  score_breakdown: ScoreAdjustment[]
+): void {
+  if (segment_key !== "main_themes") return;
+  const firstSentence = splitSentences(script)[0]?.toLowerCase() ?? "";
+  if (firstSentence.includes("lunar phase")) {
+    warnings.add("MAIN_THEMES_LUNATION_LABEL_GENERIC");
+    addScore(score_breakdown, {
+      code: "MAIN_THEMES_LUNATION_LABEL_GENERIC",
+      delta: -0.5,
+      reason: "Generic lunation label ('Lunar phase') used in first sentence.",
+    });
+  }
+}
+
+function enforceClosingParentheticalAstroBan(
+  script: string,
+  segment_key: string,
+  blocking: Set<string>
+): void {
+  if (segment_key !== "closing") return;
+  const astroInParens =
+    /\(([^)]*(conjunction|opposition|trine|sextile|square|orb|sun-moon)[^)]*)\)/i;
+  if (astroInParens.test(script)) {
+    blocking.add("CLOSING_PARENTHETICAL_ASTRO");
+  }
+}
+
+function enforceClosingOpenerDiversity(
+  script: string,
+  segment_key: string,
+  previous_closings: string[] | undefined,
+  warnings: Set<string>,
+  blocking: Set<string>,
+  score_breakdown: ScoreAdjustment[]
+): void {
+  if (segment_key !== "closing") return;
+  const openerPattern = /^as the day winds down\b/i;
+  const startsWithPattern = openerPattern.test(script.trim());
+  if (!startsWithPattern) return;
+
+  warnings.add("CLOSING_OPENER_REPETITION");
+  addScore(score_breakdown, {
+    code: "CLOSING_OPENER_REPETITION",
+    delta: -0.5,
+    reason: "Closing opener repeats a common template.",
+  });
+
+  if (previous_closings && previous_closings.length > 0) {
+    const priorMatches = previous_closings.filter((c) =>
+      openerPattern.test(c.trim())
+    ).length;
+    if (priorMatches >= 2) {
+      blocking.add("CLOSING_OPENER_REPETITION");
+    }
+  }
+}
 function enforceSkyAnchorConsistency(
   text: string,
   lower: string,
@@ -758,6 +818,21 @@ export function evaluateAdherenceRubric(input: AdherenceInput): AdherenceResult 
   enforceBehavioralAffordance(lower, input.segment_key, blocking);
   enforceAdminMetaphorBan(script, lower, input.segment_key, episode_date, blocking);
   enforceMainThemesMoonTransitBan(script, lower, input.segment_key, episode_date, blocking);
+  enforceClosingParentheticalAstroBan(script, input.segment_key, blocking);
+  enforceClosingOpenerDiversity(
+    script,
+    input.segment_key,
+    input.previous_closings,
+    warnings,
+    blocking,
+    score_breakdown
+  );
+  enforceMainThemesLunationLabelSpecificity(
+    script,
+    input.segment_key,
+    warnings,
+    score_breakdown
+  );
   enforceSkyAnchorConsistency(script, lower, input.segment_key, input.interpretive_frame, episode_date, blocking);
 
   const repetition = input.segment_key === "closing" && input.previous_closings?.length
