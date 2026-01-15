@@ -400,6 +400,7 @@ export async function runMainThemesForDate(params: {
       script: script,
       segment_key: "main_themes",
       interpretive_frame: params.interpretive_frame,
+      episode_date: params.episode_date,
     });
 
     // Auto-repair: fix mechanical violations before final gate check
@@ -432,6 +433,7 @@ export async function runMainThemesForDate(params: {
         script: repairedScript,
         segment_key: "main_themes",
         interpretive_frame: params.interpretive_frame,
+        episode_date: params.episode_date,
       });
       
       const repairedBlockingReasons = [

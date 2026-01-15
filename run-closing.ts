@@ -237,6 +237,7 @@ export async function runClosingForDate(params: {
       segment_key: "closing",
       interpretive_frame: params.interpretive_frame,
       previous_closings: undefined, // TODO: fetch previous closings for repetition check
+      episode_date: params.episode_date,
     });
 
     // Combine blocking reasons: frame (structural) + rubric (editorial quality)

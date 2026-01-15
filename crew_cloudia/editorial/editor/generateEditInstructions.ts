@@ -45,9 +45,16 @@ export function generateEditInstructions(
         break;
 
       case reason === "HARD_BANNED_TROPES_ADMIN_METAPHORS":
-        instructions.push(
-          "Remove all work-admin metaphors (inbox, calendar, email, meetings, double-checking details, etc.). Replace with sensory, physical, interpersonal, or environmental moments (body, home, street, food, weather, commute, conversation, waiting, noise, silence)."
-        );
+        if (segmentKey === "intro") {
+          // Intro-specific: explicit banned words + length constraint
+          instructions.unshift(
+            "Do not use the words: calendar, inbox, email, message, meeting, triage, double-check, reread, correction. Replace with a physical/sensory example (home/body/street/food/weather). Output exactly 1-3 expressive sentences."
+          );
+        } else {
+          instructions.push(
+            "Remove all work-admin metaphors (inbox, calendar, email, meetings, double-checking details, etc.). Replace with sensory, physical, interpersonal, or environmental moments (body, home, street, food, weather, commute, conversation, waiting, noise, silence)."
+          );
+        }
         break;
 
       case reason === "SYSTEM_LEVEL_EXPLANATION":

@@ -13,6 +13,7 @@ export type AdherenceInput = {
   segment_key: AdherenceSegmentKey;
   interpretive_frame: InterpretiveFrame;
   previous_closings?: string[];
+  episode_date?: string; // YYYY-MM-DD for logging
 };
 
 export type AdherenceResult = {

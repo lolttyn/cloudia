@@ -605,8 +605,8 @@ export function evaluateAdherenceRubric(input: AdherenceInput): AdherenceResult 
   const paragraphs = script.split(/\n\s*\n/).filter((p) => p.trim().length > 0);
   const lower = script.toLowerCase().replace(/'/g, "'");
 
-  // Extract episode_date from interpretive_frame if available
-  const episode_date = input.interpretive_frame?.episode_date;
+  // Extract episode_date from input (preferred) or interpretive_frame (fallback)
+  const episode_date = input.episode_date || input.interpretive_frame?.episode_date;
 
   enforceHardBans(normalized, blocking);
   enforceSystemLevel(sentences, blocking);

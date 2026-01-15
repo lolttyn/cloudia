@@ -180,6 +180,7 @@ export async function runIntroForDate(params: {
       script: script,
       segment_key: "intro",
       interpretive_frame: params.interpretive_frame,
+      episode_date: params.episode_date,
     });
 
     // Combine blocking reasons: frame (structural) + rubric (editorial quality)

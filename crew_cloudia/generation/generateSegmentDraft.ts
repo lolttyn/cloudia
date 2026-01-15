@@ -250,14 +250,16 @@ Each sentence must:
 ${continuityLines.length ? "- Include at least one provided continuity hook." : ""}
 
 CRITICAL: Include at least two concrete micro-situations from lived experience. Use examples like:
-- "the inbox triage"
-- "the tiny correction you keep re-doing"
-- "re-reading the same message"
-- "double-checking calendar details"
-- "one more errand / one more small fix"
+- "the way your shoulders drop when you step outside"
+- "the keys you keep misplacing"
+- "the conversation that keeps replaying in your head"
+- "the dish left in the sink"
+- "the pause before you speak"
+- "the way the light hits the window"
+- "the breath you didn't realize you were holding"
 No abstract nouns without an example. Before finalizing, scan your draft and ensure you've included at least two concrete situations.
 
-Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like the ones above.
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into sensory, physical, interpersonal, or environmental moments (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Avoid work-admin metaphors (inbox, calendar, email, meetings).
 
 Additional constraints:
 - Do NOT include any greeting - the greeting is already in the scaffold above and will be combined with your sentences.
@@ -337,12 +339,14 @@ async function generateClosingDraft(params: {
 
   const user_prompt = `
 The dominant contrast is "${axisPrimary}" vs "${axisCounter}". Do not use any set phrase for this contrast. Reference it through lived experience; do not repeat any canned axis phrase.
-Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like:
-- "the inbox triage"
-- "the tiny correction you keep re-doing"
-- "re-reading the same message"
-- "double-checking calendar details"
-- "one more errand / one more small fix"
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into sensory, physical, interpersonal, or environmental moments (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Use concrete examples like:
+- "the way your shoulders drop when you step outside"
+- "the keys you keep misplacing"
+- "the conversation that keeps replaying in your head"
+- "the dish left in the sink"
+- "the pause before you speak"
+- "the way the light hits the window"
+Avoid work-admin metaphors (inbox, calendar, email, meetings, double-checking details, triage).
 Today's temporal phase is "${frame.temporal_phase}". Match the polarity without naming it:
 - building → anticipation, gathering, noticing
 - peak → intensity, presence, immediacy
