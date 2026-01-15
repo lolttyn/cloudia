@@ -429,19 +429,19 @@ function rewriteWithLivedWorld(
       const object = OBJECTS[Math.floor(Math.random() * OBJECTS.length)];
       const action = ACTIONS[Math.floor(Math.random() * ACTIONS.length)];
 
-      // Tilt with vocab modifier
+      // Tilt with vocab modifier (avoid banned templates)
       if (
         vocab.axis_primary === "precision" ||
         vocab.core_meanings.includes("refinement")
       ) {
-        return `${result} Notice how this shows up in the ${setting}, with ${object} and the way you ${action}.`;
+        return `${result} This shows up in the ${setting}, with ${object} as you ${action}.`;
       } else if (
         vocab.axis_primary === "meaning" ||
         vocab.core_meanings.includes("trajectory")
       ) {
-        return `${result} See how this connects to the ${setting}, the ${object} you hold, the ${action} you choose.`;
+        return `${result} The ${setting} and ${object} align as you ${action}.`;
       } else {
-        return `${result} Notice the ${setting}, the ${object}, the way you ${action}.`;
+        return `${result} In the ${setting}, you ${action} with ${object}.`;
       }
     }
 
@@ -449,6 +449,40 @@ function rewriteWithLivedWorld(
   }
 
   return text;
+}
+
+// Banned template patterns
+const BANNED_TEMPLATE_PATTERNS = [
+  /^Notice the/i,
+  /you reach for/i,
+  /connects to/i,
+  /\byour .* responding\.?$/i,
+  /^See how the/i,
+];
+
+function hasBannedTemplate(text: string): boolean {
+  return BANNED_TEMPLATE_PATTERNS.some((pattern) => pattern.test(text));
+}
+
+// Object-setting compatibility map (small, focused)
+const SETTING_OBJECT_COMPATIBILITY: Record<string, string[]> = {
+  kitchen: ["counter", "dish", "mug", "towel", "spoon", "fork", "knife", "plate", "bowl", "sink"],
+  bedroom: ["lamp", "pillow", "sheet", "charger", "book", "mirror"],
+  street: ["crosswalk", "bus stop", "storefront", "sidewalk", "traffic", "line"],
+  bathroom: ["sink", "mirror", "towel", "light"],
+  hallway: ["door", "light", "wall", "floor"],
+  doorway: ["door", "threshold", "light"],
+  window: ["light", "view", "glass"],
+  sink: ["dish", "mug", "towel", "water"],
+  table: ["plate", "mug", "book", "paper", "pen"],
+  chair: ["book", "phone", "notebook"],
+  couch: ["pillow", "book", "blanket"],
+};
+
+function isCompatible(setting: string, object: string): boolean {
+  const compatList = SETTING_OBJECT_COMPATIBILITY[setting.toLowerCase()];
+  if (!compatList) return true; // Unknown setting, allow
+  return compatList.some((c) => object.toLowerCase().includes(c.toLowerCase()));
 }
 
 function expandArray(
@@ -462,39 +496,55 @@ function expandArray(
   const result = [...items];
   const needed = minCount - items.length;
 
-  // First, try rewriting existing items
+  // First, try rewriting existing items (but avoid banned templates)
   for (let i = 0; i < Math.min(needed, items.length); i++) {
     const rewritten = rewriteWithLivedWorld(items[i], vocab);
-    if (rewritten !== items[i] && !result.includes(rewritten)) {
+    if (rewritten !== items[i] && !result.includes(rewritten) && !hasBannedTemplate(rewritten)) {
       result.push(rewritten);
     }
   }
 
   // Then generate new items by recombining lived-world bank + modifiers
   let attempts = 0;
-  const maxAttempts = 50;
+  const maxAttempts = 100;
   while (result.length < minCount && attempts < maxAttempts) {
     attempts++;
-    const setting = SETTINGS[Math.floor(Math.random() * SETTINGS.length)];
-    const object = OBJECTS[Math.floor(Math.random() * OBJECTS.length)];
+    
+    // Select compatible setting + object
+    let setting: string;
+    let object: string;
+    let compatible = false;
+    let compatAttempts = 0;
+    while (!compatible && compatAttempts < 20) {
+      setting = SETTINGS[Math.floor(Math.random() * SETTINGS.length)];
+      object = OBJECTS[Math.floor(Math.random() * OBJECTS.length)];
+      compatible = isCompatible(setting, object);
+      compatAttempts++;
+    }
+    
     const action = ACTIONS[Math.floor(Math.random() * ACTIONS.length)];
     const body = BODY_TOKENS[Math.floor(Math.random() * BODY_TOKENS.length)];
-    const social = SOCIAL_BEATS[Math.floor(Math.random() * SOCIAL_BEATS.length)];
 
-    // Use vocab to tilt framing - generate more natural combinations
+    // Generate item with coherence constraints (max 1 setting, max 2 objects, 1 action, 1 body)
+    // Use vocab to tilt framing - but avoid banned templates
     let newItem = "";
     if (vocab.axis_primary === "precision" || vocab.core_meanings.includes("refinement")) {
       // Precision: focus on details, careful actions
-      newItem = `Notice the ${setting}, how you ${action} with attention to the ${object}, your ${body} aware.`;
+      newItem = `In the ${setting}, you ${action} with the ${object}, your ${body} aware.`;
     } else if (vocab.axis_primary === "meaning" || vocab.core_meanings.includes("trajectory")) {
       // Meaning: broader connections
-      newItem = `See how the ${setting} connects to the ${object}, the way you ${action}, the ${social} that follows.`;
+      newItem = `The ${setting} and the ${object} align as you ${action}, your ${body} sensing the shift.`;
     } else if (vocab.axis_primary === "structure" || vocab.core_meanings.includes("structure")) {
       // Structure: deliberate, organized
-      newItem = `The ${setting} offers a place to ${action}, the ${object} in its place, your ${body} steady.`;
+      newItem = `The ${setting} offers a place to ${action}, the ${object} in place, your ${body} steady.`;
     } else {
-      // Default: balanced, observational
-      newItem = `Notice the ${setting}, the ${object} you reach for, how you ${action}, your ${body} responding.`;
+      // Default: balanced, observational (but not banned template)
+      newItem = `In the ${setting}, you ${action} with the ${object}, your ${body} aware.`;
+    }
+
+    // Check for banned templates
+    if (hasBannedTemplate(newItem)) {
+      continue; // Skip this item
     }
 
     // Check for duplicates and repetition
@@ -502,7 +552,13 @@ function expandArray(
     const hasDuplicate = result.some((item) => extractStem(item) === stem);
     const wouldRepeat = checkRepetition([...result, newItem]).length > 0;
     
-    if (!hasDuplicate && !wouldRepeat) {
+    // Check grounding: must have (setting OR object) AND action
+    const hasSetting = SETTINGS.some((s) => newItem.toLowerCase().includes(s.toLowerCase()));
+    const hasObject = OBJECTS.some((o) => newItem.toLowerCase().includes(o.toLowerCase()));
+    const hasAction = ACTIONS.some((a) => newItem.toLowerCase().includes(a.toLowerCase()));
+    const isGrounded = (hasSetting || hasObject) && hasAction;
+    
+    if (!hasDuplicate && !wouldRepeat && isGrounded) {
       result.push(newItem);
     }
   }
@@ -510,10 +566,31 @@ function expandArray(
   return result.slice(0, minCount);
 }
 
+function purgeAdminMetaphors(text: string): string {
+  let result = text;
+  
+  // Simple admin metaphor removal (no generation, just replacement)
+  result = result.replace(/\bcalendar (invite|invites|details)\b/gi, "scheduling considerations");
+  result = result.replace(/\binbox triage\b/gi, "sorting through items");
+  result = result.replace(/\btriage (your|the) inbox\b/gi, "sort through items");
+  result = result.replace(/\bre-?reading (an|the) (email|message)\b/gi, "revisiting past conversations");
+  result = result.replace(/\bre-?reading the same (email|message)\b/gi, "revisiting the same conversation");
+  result = result.replace(/\bdouble-?checking (a|the) (calendar|invite|email|message|details)\b/gi, "reviewing details");
+  result = result.replace(/\bdouble-?checking calendar details\b/gi, "reviewing scheduling details");
+  result = result.replace(/\b(one more )?(tiny|small) correction\b/gi, "one more adjustment");
+  result = result.replace(/\b(admin|life admin|paperwork)\b/gi, "organizing tasks");
+  result = result.replace(/\bmeetings?\b/gi, "conversations");
+  result = result.replace(/\bto-?do lists?\b/gi, "accumulated tasks");
+  result = result.replace(/\b(checklists?|task lists?)\b/gi, "organized steps");
+  
+  return result;
+}
+
 function transformBundle(
   bundle: any,
   vocabMap: Map<string, SignVocabulary>,
-  filename: string
+  filename: string,
+  adminPurgeOnly: boolean = false
 ): {
   bundle: any;
   changes: {
@@ -522,6 +599,59 @@ function transformBundle(
     replacement: string[];
   }[];
 } {
+  if (adminPurgeOnly) {
+    // Admin purge mode: only remove admin metaphors, no other transformations
+    const changes: { field: string; original: string[]; replacement: string[] }[] = [];
+    
+    // Transform opportunities[]
+    if (bundle.meaning?.opportunities) {
+      const original = [...bundle.meaning.opportunities];
+      const transformed = original.map((item: string) => purgeAdminMetaphors(item));
+      if (JSON.stringify(original) !== JSON.stringify(transformed)) {
+        bundle.meaning.opportunities = transformed;
+        changes.push({
+          field: "meaning.opportunities",
+          original,
+          replacement: transformed,
+        });
+      }
+    }
+    
+    // Transform do[]
+    if (bundle.guidance?.do) {
+      const original = [...bundle.guidance.do];
+      const transformed = original.map((item: string) => purgeAdminMetaphors(item));
+      if (JSON.stringify(original) !== JSON.stringify(transformed)) {
+        bundle.guidance.do = transformed;
+        changes.push({
+          field: "guidance.do",
+          original,
+          replacement: transformed,
+        });
+      }
+    }
+    
+    // Transform frames[]
+    if (bundle.meaning?.frames) {
+      const original = bundle.meaning.frames.map((f: any) => ({ ...f }));
+      const transformed = bundle.meaning.frames.map((frame: any) => ({
+        ...frame,
+        text: purgeAdminMetaphors(frame.text),
+      }));
+      if (JSON.stringify(original.map((f: any) => f.text)) !== JSON.stringify(transformed.map((f: any) => f.text))) {
+        bundle.meaning.frames = transformed;
+        changes.push({
+          field: "meaning.frames",
+          original: original.map((f: any) => f.text),
+          replacement: transformed.map((f: any) => f.text),
+        });
+      }
+    }
+    
+    return { bundle, changes };
+  }
+  
+  // Normal transformation mode (existing logic)
   const category = classifyBundle(bundle, filename);
   const changes: { field: string; original: string[]; replacement: string[] }[] = [];
 
@@ -548,11 +678,19 @@ function transformBundle(
     let transformed = original.map((item: string) => {
       let result = removeAdminMetaphors(item, vocab);
       result = rewriteWithLivedWorld(result, vocab);
+      // Remove banned templates
+      if (hasBannedTemplate(result)) {
+        // Rewrite to avoid banned template
+        const setting = SETTINGS[Math.floor(Math.random() * SETTINGS.length)];
+        const object = OBJECTS[Math.floor(Math.random() * OBJECTS.length)];
+        const action = ACTIONS[Math.floor(Math.random() * ACTIONS.length)];
+        result = `In the ${setting}, you ${action} with the ${object}.`;
+      }
       return result;
     });
 
-    // Remove duplicates
-    transformed = Array.from(new Set(transformed));
+    // Remove duplicates and banned templates
+    transformed = Array.from(new Set(transformed)).filter((item) => !hasBannedTemplate(item));
 
     // Expand to minimum quota
     transformed = expandArray(transformed, 6, vocab, allBundleItems);
@@ -573,11 +711,19 @@ function transformBundle(
     let transformed = original.map((item: string) => {
       let result = removeAdminMetaphors(item, vocab);
       result = rewriteWithLivedWorld(result, vocab);
+      // Remove banned templates
+      if (hasBannedTemplate(result)) {
+        // Rewrite to avoid banned template
+        const setting = SETTINGS[Math.floor(Math.random() * SETTINGS.length)];
+        const object = OBJECTS[Math.floor(Math.random() * OBJECTS.length)];
+        const action = ACTIONS[Math.floor(Math.random() * ACTIONS.length)];
+        result = `In the ${setting}, you ${action} with the ${object}.`;
+      }
       return result;
     });
 
-    // Remove duplicates
-    transformed = Array.from(new Set(transformed));
+    // Remove duplicates and banned templates
+    transformed = Array.from(new Set(transformed)).filter((item) => !hasBannedTemplate(item));
 
     // Expand to minimum quota
     transformed = expandArray(transformed, 6, vocab, allBundleItems);
@@ -598,13 +744,22 @@ function transformBundle(
     let transformed = bundle.meaning.frames.map((frame: any) => {
       let text = removeAdminMetaphors(frame.text, vocab);
       text = rewriteWithLivedWorld(text, vocab);
+      // Remove banned templates
+      if (hasBannedTemplate(text)) {
+        // Rewrite to avoid banned template
+        const setting = SETTINGS[Math.floor(Math.random() * SETTINGS.length)];
+        const object = OBJECTS[Math.floor(Math.random() * OBJECTS.length)];
+        const action = ACTIONS[Math.floor(Math.random() * ACTIONS.length)];
+        text = `In the ${setting}, you ${action} with the ${object}.`;
+      }
       return { ...frame, text };
     });
 
-    // Remove duplicates by text
+    // Remove duplicates by text and banned templates
     const seenTexts = new Set<string>();
     transformed = transformed.filter((frame: any) => {
       if (seenTexts.has(frame.text)) return false;
+      if (hasBannedTemplate(frame.text)) return false;
       seenTexts.add(frame.text);
       return true;
     });
@@ -620,11 +775,16 @@ function transformBundle(
         const social = SOCIAL_BEATS[Math.floor(Math.random() * SOCIAL_BEATS.length)];
         let newText = "";
         if (vocab.axis_primary === "precision" || vocab.core_meanings.includes("refinement")) {
-          newText = `Notice the ${setting}, how you ${action} with attention to the ${object}.`;
+          newText = `In the ${setting}, you ${action} with attention to the ${object}.`;
         } else if (vocab.axis_primary === "meaning" || vocab.core_meanings.includes("trajectory")) {
-          newText = `See how the ${setting} connects to the ${object}, the way you ${action}, the ${social} that follows.`;
+          newText = `The ${setting} and ${object} align as you ${action}, the ${social} that follows.`;
         } else {
-          newText = `Notice the ${setting}, the ${object} you reach for, how you ${action}.`;
+          newText = `In the ${setting}, you ${action} with the ${object}.`;
+        }
+        
+        // Skip if banned template
+        if (hasBannedTemplate(newText)) {
+          continue;
         }
 
         transformed.push({
@@ -745,6 +905,7 @@ function main() {
   const targetTaxonomy = taxonomyArg
     ? taxonomyArg.split("=")[1] || "moon_in_sign"
     : "moon_in_sign";
+  const adminPurgeMode = args.includes("--mode") && args.includes("admin_purge");
 
   const bundlesDir = path.resolve(
     __dirname,
@@ -758,8 +919,14 @@ function main() {
     .readdirSync(bundlesDir)
     .filter((f) => f.endsWith(".json"))
     .filter((f) => {
+      if (targetTaxonomy === "all" || adminPurgeMode) {
+        return true; // Process all files
+      }
       if (targetTaxonomy === "moon_in_sign") {
         return f.startsWith("moon_in_");
+      }
+      if (targetTaxonomy === "sun_in_sign") {
+        return f.startsWith("sun_in_");
       }
       return true;
     });
@@ -822,7 +989,8 @@ function main() {
     const { bundle: transformed, changes } = transformBundle(
       bundle,
       vocabMap,
-      file
+      file,
+      adminPurgeMode
     );
 
     // Validate transformed bundle (only report post-transformation errors)
@@ -832,24 +1000,39 @@ function main() {
       ...(transformed.meaning?.frames?.map((f: any) => f.text) || []),
     ];
 
-    for (const item of transformedItems) {
-      // Check admin metaphors
-      const adminMatches = checkAdminMetaphors(item);
-      if (adminMatches.length > 0) {
-        audit.validation_errors.push({
-          file,
-          rule: "admin_metaphor_ban",
-          message: `Found admin metaphors after transformation: ${adminMatches.join(", ")} - "${item}"`,
-        });
-      }
+    // Skip full validation in admin purge mode (we're only removing admin metaphors)
+    if (!adminPurgeMode) {
+      for (const item of transformedItems) {
+        // Check admin metaphors
+        const adminMatches = checkAdminMetaphors(item);
+        if (adminMatches.length > 0) {
+          audit.validation_errors.push({
+            file,
+            rule: "admin_metaphor_ban",
+            message: `Found admin metaphors after transformation: ${adminMatches.join(", ")} - "${item}"`,
+          });
+        }
 
-      // Check abstract grounding
-      if (!checkAbstractGrounded(item)) {
-        audit.validation_errors.push({
-          file,
-          rule: "abstract_without_grounding",
-          message: `Abstract noun without grounded token after transformation: "${item}"`,
-        });
+        // Check abstract grounding
+        if (!checkAbstractGrounded(item)) {
+          audit.validation_errors.push({
+            file,
+            rule: "abstract_without_grounding",
+            message: `Abstract noun without grounded token after transformation: "${item}"`,
+          });
+        }
+      }
+    } else {
+      // In admin purge mode, only check for remaining admin metaphors
+      for (const item of transformedItems) {
+        const adminMatches = checkAdminMetaphors(item);
+        if (adminMatches.length > 0) {
+          audit.validation_errors.push({
+            file,
+            rule: "admin_metaphor_ban",
+            message: `Found admin metaphors after purge: ${adminMatches.join(", ")} - "${item}"`,
+          });
+        }
       }
     }
 

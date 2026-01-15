@@ -1,0 +1,105 @@
+{
+    "slug": "saturn_square_mercury",
+    "version": 1,
+    "kind": "aspect",
+    "title": "Saturn square Mercury",
+    "summary": "A pressure-test on thinking and communication: constraints expose weak logic, sloppy planning, and unspoken assumptions. The win condition is precision, pacing, and mature boundaries-especially around commitments and messaging.",
+    "trigger": {
+      "signal_key": "saturn_square_mercury",
+      "constraints": {
+        "orb_max_degrees": 3
+      }
+    },
+    "meaning": {
+      "headline": "Today's friction isn't lack of intelligence-it's the cost of imprecision.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "This transit tends to slow the mind down on purpose: it surfaces where your plan, your words, or your timeline doesn't actually hold."
+        },
+        {
+          "speakability": "must_say",
+          "text": "If something feels harder to articulate, treat that as a signal to tighten the thinking-not as a sign you're 'behind.'"
+        },
+        {
+          "speakability": "can_say",
+          "text": "Expect more edits than usual: the first draft is rarely the final draft under Saturn-Mercury pressure."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Conversations may feel more serious or more easily misunderstood-especially when people skip definitions."
+        },
+        {
+          "speakability": "avoid",
+          "text": "This means your communications will go badly today."
+        }
+      ],
+      "frictions": [
+        "Overthinking that turns into avoidance",
+        "Harsh self-critique or 'I'm not good enough' narratives",
+        "Misunderstandings caused by vague language or missing context",
+        "Delays from underestimating time/effort",
+        "Rigid thinking: mistaking caution for truth",
+        "Authority friction: feedback that stings but improves the work"
+      ],
+      "opportunities": [
+        "Editing and clarifying until your message is actually clean",
+        "Building a plan that survives reality (time, budget, energy)",
+        "Setting boundaries around availability and responsiveness",
+        "Making one high-quality decision instead of ten rushed ones",
+        "Turning anxiety into a checklist and a timeline"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Write the problem in one sentence, then define the key terms you're using.",
+        "Reduce scope: pick the smallest version that still matters and ship that.",
+        "Confirm assumptions explicitly (timeline, owner, definition of done).",
+        "Prefer asynchronous clarity: summarize decisions in writing after a call.",
+        "If you're stuck, ask: 'What exactly would make this true?' and list the evidence.",
+        "Build friction into the plan: add buffer time and name the risks."
+      ],
+      "avoid": [
+        "Making promises you can't operationalize",
+        "Arguing semantics without first agreeing on definitions",
+        "Catastrophizing a delay into an identity verdict",
+        "Sending emotionally loaded messages when you're unclear on the facts",
+        "Confusing 'more thinking' with 'better thinking'"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "Treat confusion as a cue to tighten the definition, not to doubt your capacity."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Slow is fine today-sloppy is expensive."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Predicting inevitable outcomes (e.g., 'this will fail,' 'you will get rejected')",
+        "Deterministic mind-reading (e.g., 'they intend to undermine you')",
+        "Medical/legal/financial directives framed as certainty"
+      ],
+      "allowed_framing": [
+        "Tendency language: 'can', 'may', 'often', 'watch for'",
+        "Agency-forward framing: 'you can respond by...', 'a useful move is...'",
+        "Contextual uncertainty: 'depending on workload and stress levels...'"
+      ]
+    },
+    "tags": [
+      "cognition",
+      "communication",
+      "constraints",
+      "editing",
+      "boundaries",
+      "timeline"
+    ],
+    "sources": [
+      "Modern psychological astrology (non-predictive framing)",
+      "Saturn as constraint/structure; Mercury as cognition/communication archetype"
+    ]
+  }
+  

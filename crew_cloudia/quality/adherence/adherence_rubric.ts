@@ -434,8 +434,10 @@ function enforceBehavioralAffordance(
 }
 
 function enforceAdminMetaphorBan(
+  text: string,
   lower: string,
   segment_key: string,
+  episode_date: string | undefined,
   blocking: Set<string>
 ): void {
   // Apply to intro and main_themes (optionally closing)
@@ -449,10 +451,25 @@ function enforceAdminMetaphorBan(
     /\bdouble-?checking (a|the) (calendar|invite|email|message|details)\b/,
     /\b(one more )?(tiny|small) correction\b/,
     /\b(admin|life admin|paperwork)\b/,
+    /\bmeetings?\b/, // Added: meetings in admin context
   ];
 
   for (const pattern of adminTropePatterns) {
-    if (pattern.test(lower)) {
+    const match = lower.match(pattern);
+    if (match) {
+      const matchLower = match[0].toLowerCase();
+      const idx = lower.indexOf(matchLower);
+      const start = Math.max(0, idx - 60);
+      const end = Math.min(text.length, idx + match[0].length + 60);
+
+      console.log("[admin-ban-hit]", {
+        episode_date: episode_date || "unknown",
+        segment_key,
+        pattern: pattern.source,
+        match: match[0],
+        context: text.slice(start, end),
+      });
+
       blocking.add("HARD_BANNED_TROPES_ADMIN_METAPHORS");
       return; // Only need one match to block
     }
@@ -586,7 +603,10 @@ export function evaluateAdherenceRubric(input: AdherenceInput): AdherenceResult 
   const normalized = normalizeText(script);
   const sentences = splitSentences(script);
   const paragraphs = script.split(/\n\s*\n/).filter((p) => p.trim().length > 0);
-  const lower = script.toLowerCase().replace(/’/g, "'");
+  const lower = script.toLowerCase().replace(/'/g, "'");
+
+  // Extract episode_date from interpretive_frame if available
+  const episode_date = input.interpretive_frame?.episode_date;
 
   enforceHardBans(normalized, blocking);
   enforceSystemLevel(sentences, blocking);
@@ -594,7 +614,7 @@ export function evaluateAdherenceRubric(input: AdherenceInput): AdherenceResult 
   enforceLunationFrontLoad(script, input.segment_key, input.interpretive_frame, blocking);
   enforceRelationalTranslation(lower, input.segment_key, blocking);
   enforceBehavioralAffordance(lower, input.segment_key, blocking);
-  enforceAdminMetaphorBan(lower, input.segment_key, blocking);
+  enforceAdminMetaphorBan(script, lower, input.segment_key, episode_date, blocking);
 
   const repetition = input.segment_key === "closing" && input.previous_closings?.length
     ? checkClosingRepetition(script, input.previous_closings)
