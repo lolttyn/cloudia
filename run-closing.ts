@@ -108,11 +108,19 @@ export async function runClosingForDate(params: {
   let rewriteInstructions: string[] = [];
   let approved = false;
   let lastDecision: EditorFeedback["decision"] | null = null;
+  let finalAttemptNumber: number | null = null;
+
+  // Get the base attempt number for this run (increments from previous runs)
+  const baseAttemptNumber = await getNextAttemptNumber({
+    episode_id: params.episode_id,
+    segment_key: "closing",
+  });
+  console.log(`[closing] Starting generation with base attempt number: ${baseAttemptNumber} (will use attempts ${baseAttemptNumber} through ${baseAttemptNumber + MAX_SEGMENT_RETRIES - 1})`);
 
   let scaffold = "";
   let signoff = "";
   for (let attempt = 0; attempt < MAX_SEGMENT_RETRIES; attempt++) {
-    const attemptNumber = attempt + 1;
+    const attemptNumber = baseAttemptNumber + attempt;
     const axisPrimary = params.interpretive_frame.dominant_contrast_axis.primary;
     const axisCounter = params.interpretive_frame.dominant_contrast_axis.counter;
     const timingNote =
@@ -293,6 +301,7 @@ export async function runClosingForDate(params: {
       // Both evaluators pass - approve
       approved = true;
       lastDecision = "APPROVE";
+      finalAttemptNumber = attemptNumber;
       break;
     }
 
@@ -367,15 +376,15 @@ export async function runClosingForDate(params: {
 
   // NOTE: persistSegmentVersion is now called INSIDE the loop for every attempt.
   // We only upsert the snapshot here on final success.
+  // The attempt number is baseAttemptNumber + attempt, which was already persisted.
 
   if (gateResult.decision === "approve") {
-    // Get the final attempt number (should match what was persisted in the loop)
-    const finalAttemptNumber = await getNextAttemptNumber({
+    // Use the tracked final attempt number from the loop (the one that was approved)
+    // If for some reason it's null, fall back to querying (shouldn't happen)
+    const actualFinalAttempt = finalAttemptNumber ?? (await getNextAttemptNumber({
       episode_id: params.episode_id,
       segment_key: "closing",
-    });
-    // Subtract 1 because getNextAttemptNumber returns the NEXT number
-    const actualFinalAttempt = finalAttemptNumber - 1;
+    })) - 1;
 
     await upsertCurrentSegment({
       episode_id: params.episode_id,
