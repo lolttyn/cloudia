@@ -1,99 +1,111 @@
 {
-    "slug": "moon_in_scorpio",
-    "version": 1,
-    "kind": "planet_in_sign",
-    "title": "Moon in Scorpio",
-    "summary": "An intense emotional climate that seeks depth and honesty. Feelings run concentrated, with a desire to get to the root of trust, loyalty, and power dynamics.",
-    "trigger": {
-      "signal_key": "moon_in_scorpio"
-    },
-    "meaning": {
-      "headline": "Emotions lean penetrating, private, and focused on what truly matters.",
-      "frames": [
-        {
-          "speakability": "must_say",
-          "text": "With the Moon in Scorpio, moods prefer truth over gloss and depth over surface." 
-        },
-        {
-          "speakability": "must_say",
-          "text": "Intuition about motives sharpens, inviting honest conversation." 
-        },
-        {
-          "speakability": "can_say",
-          "text": "Privacy and containment can feel protective." 
-        },
-        {
-          "speakability": "can_say",
-          "text": "Release and renewal can follow brave honesty." 
-        },
-        {
-          "speakability": "avoid",
-          "text": "Crisis is inevitable." 
-        }
-      ],
-      "frictions": [
-        "Assuming worst-case motives",
-        "Guarding emotions so tightly that support cannot enter",
-        "Testing loyalty instead of asking for reassurance",
-        "Fixating on control",
-        "Holding onto resentment"
-      ],
-      "opportunities": [
-        "Having a candid conversation about trust",
-        "Focusing on one core task with full attention",
-        "Letting go of what no longer deserves energy",
-        "Practicing confidentiality and respect for boundaries",
-        "Engaging in deep reflection or therapy work"
-      ]
-    },
-    "guidance": {
-      "do": [
-        "Share sensitive topics with someone you trust.",
-        "Choose one priority to handle thoroughly.",
-        "Use grounding practices when emotions intensify.",
-        "State needs plainly instead of testing people.",
-        "Allow space for rest after deep work."
-      ],
-      "avoid": [
-        "Assuming betrayal without evidence",
-        "Using secrecy as control",
-        "Burning bridges to feel decisive",
-        "Ruminating on revenge or scorekeeping",
-        "Staying in intensity without relief"
-      ],
-      "reusable_lines": [
-        {
-          "speakability": "must_say",
-          "text": "The mood is deep and truth-seeking today."
-        },
-        {
-          "speakability": "can_say",
-          "text": "Careful honesty can clear the air under this sky."
-        }
-      ]
-    },
-    "safety": {
-      "forbidden_claims": [
-        "Predictions of crisis or betrayal",
-        "Identity statements about Scorpio Moons",
-        "Deterministic claims about obsession"
-      ],
-      "allowed_framing": [
-        "Environmental focus on depth and honesty",
-        "Agency-based choices about boundaries and disclosure",
-        "Contextual language about renewal"
-      ]
-    },
-    "tags": [
-      "depth",
-      "honesty",
-      "intensity",
-      "trust",
-      "privacy",
-      "renewal"
+  "slug": "moon_in_scorpio",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Moon in Scorpio",
+  "summary": "An intense emotional climate that seeks depth and honesty. Feelings run concentrated, with a desire to get to the root of trust, loyalty, and power dynamics.",
+  "trigger": {
+    "signal_key": "moon_in_scorpio"
+  },
+  "meaning": {
+    "headline": "Emotions lean penetrating, private, and focused on what truly matters.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "With the Moon in Scorpio, moods prefer truth over gloss and depth over surface."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Intuition about motives sharpens, inviting honest conversation."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Privacy and containment can feel protective."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Release and renewal can follow brave honesty."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Crisis is inevitable."
+      }
     ],
-    "sources": [
-      "Lunar transit through Scorpio",
-      "Moon in Scorpio as short-term climate of depth"
+    "frictions": [
+      "Assuming worst-case motives",
+      "Guarding emotions so tightly that support cannot enter",
+      "Testing loyalty instead of asking for reassurance",
+      "Fixating on control",
+      "Holding onto resentment"
+    ],
+    "opportunities": [
+      "Having a candid conversation about trust",
+      "Focusing on one core task with full attention",
+      "Letting go of what no longer deserves energy",
+      "Practicing confidentiality and respect for boundaries",
+      "Engaging in deep reflection or therapy work",
+      "Notice the kitchen, the gloves you reach for, how you touch, your fingers responding."
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Share sensitive topics with someone you trust.",
+      "Choose one priority to handle thoroughly.",
+      "Use grounding practices when emotions intensify.",
+      "State needs plainly instead of testing people.",
+      "Allow space for rest after deep work.",
+      "Notice the threshold, the backpack you reach for, how you hug, your chest responding."
+    ],
+    "avoid": [
+      "Assuming betrayal without evidence",
+      "Using secrecy as control",
+      "Burning bridges to feel decisive",
+      "Ruminating on revenge or scorekeeping",
+      "Staying in intensity without relief"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "The mood is deep and truth-seeking today."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Careful honesty can clear the air under this sky."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions of crisis or betrayal",
+      "Identity statements about Scorpio Moons",
+      "Deterministic claims about obsession"
+    ],
+    "allowed_framing": [
+      "Environmental focus on depth and honesty",
+      "Agency-based choices about boundaries and disclosure",
+      "Contextual language about renewal"
+    ]
+  },
+  "tags": [
+    "depth",
+    "honesty",
+    "intensity",
+    "trust",
+    "privacy",
+    "renewal"
+  ],
+  "sources": [
+    "Lunar transit through Scorpio",
+    "Moon in Scorpio as short-term climate of depth"
+  ],
+  "meta": {
+    "source_version": "refactored_v1",
+    "avoid_tokens": [
+      "inbox",
+      "calendar",
+      "email",
+      "double-check",
+      "triage"
     ]
   }
+}

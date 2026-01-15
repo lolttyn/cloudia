@@ -1,0 +1,99 @@
+{
+    "slug": "moon_in_aquarius",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Moon in Aquarius",
+    "summary": "A cool emotional climate that favors perspective and community thinking. Feelings process through ideas, shared causes, and stepping back to see the system.",
+    "trigger": {
+      "signal_key": "moon_in_aquarius"
+    },
+    "meaning": {
+      "headline": "Emotions lean objective, future-focused, and socially aware.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Moon in Aquarius, moods may detach slightly to gain clarity." 
+        },
+        {
+          "speakability": "must_say",
+          "text": "Group dynamics and collective impact feel more noticeable." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Problem-solving benefits from unconventional angles." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Shared values and causes can reconnect feeling." 
+        },
+        {
+          "speakability": "avoid",
+          "text": "Emotions are irrelevant or unwelcome." 
+        }
+      ],
+      "frictions": [
+        "Feeling distant from personal needs",
+        "Intellectualizing instead of feeling",
+        "Treating relationships as transactions",
+        "Pushing change without consensus",
+        "Overemphasizing being different"
+      ],
+      "opportunities": [
+        "Discussing plans with communities of interest",
+        "Testing new approaches with data",
+        "Setting boundaries using principled language",
+        "Helping someone through practical perspective",
+        "Connecting feelings to a larger cause"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Name the principle guiding your decision.",
+        "Check in with trusted peers for feedback.",
+        "Balance analysis with a quick body scan for emotion.",
+        "Design a small experiment to try a new idea.",
+        "Stay open to others' pacing and context."
+      ],
+      "avoid": [
+        "Using detachment to dodge vulnerability",
+        "Assuming everyone shares your vision",
+        "Overriding feelings with logic only",
+        "Disengaging from intimacy to stay efficient",
+        "Chasing novelty without considering impact"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "The mood is cool-headed and tuned to the bigger picture today."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Shared values and smart experiments carry emotions forward under this sky."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Identity statements about Aquarius Moons",
+        "Promises about technological or social outcomes",
+        "Deterministic claims about detachment"
+      ],
+      "allowed_framing": [
+        "Environmental focus on perspective and community",
+        "Agency-based choices about experimentation and boundaries",
+        "Contextual language about balancing logic and feeling"
+      ]
+    },
+    "tags": [
+      "perspective",
+      "community",
+      "innovation",
+      "objectivity",
+      "future",
+      "experimentation"
+    ],
+    "sources": [
+      "Lunar transit through Aquarius",
+      "Moon in Aquarius as short-term climate of perspective"
+    ]
+  }

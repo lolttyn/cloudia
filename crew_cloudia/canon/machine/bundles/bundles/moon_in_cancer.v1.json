@@ -1,99 +1,111 @@
 {
-    "slug": "moon_in_cancer",
-    "version": 1,
-    "kind": "planet_in_sign",
-    "title": "Moon in Cancer",
-    "summary": "A tender emotional climate that prioritizes safety and connection. Feelings swell easily, and attention goes to home, belonging, and what feels protective.",
-    "trigger": {
-      "signal_key": "moon_in_cancer"
-    },
-    "meaning": {
-      "headline": "Emotions lean protective, nostalgic, and responsive to closeness.",
-      "frames": [
-        {
-          "speakability": "must_say",
-          "text": "With the Moon in Cancer, moods heighten sensitivity to care and comfort." 
-        },
-        {
-          "speakability": "must_say",
-          "text": "There is a pull toward familiar people, spaces, and rituals." 
-        },
-        {
-          "speakability": "can_say",
-          "text": "Feelings may ebb and flow quickly, like tides." 
-        },
-        {
-          "speakability": "can_say",
-          "text": "Gentle support helps decisions land." 
-        },
-        {
-          "speakability": "avoid",
-          "text": "Everyone will retreat or become overly sentimental." 
-        }
-      ],
-      "frictions": [
-        "Taking neutral feedback personally",
-        "Clinging to comfort instead of choosing what is needed",
-        "Withdrawing without communicating",
-        "Assuming others know what will soothe you",
-        "Overextending care and feeling depleted"
-      ],
-      "opportunities": [
-        "Checking in with loved ones or teammates",
-        "Creating cozy conditions for important work",
-        "Honoring memories or traditions that replenish",
-        "Naming emotions before making choices",
-        "Setting boundaries that protect energy"
-      ]
-    },
-    "guidance": {
-      "do": [
-        "Reach out to someone you trust for a brief connection.",
-        "Make your space feel comforting before tackling tasks.",
-        "Let feelings move through writing, tears, or conversation.",
-        "Offer and request support with clear terms.",
-        "Plan quieter time if the day runs emotionally full."
-      ],
-      "avoid": [
-        "Expecting others to intuit your needs",
-        "Avoiding decisions to stay comfortable",
-        "Overgiving until resentment builds",
-        "Replaying old hurts instead of addressing current needs",
-        "Equating vulnerability with weakness"
-      ],
-      "reusable_lines": [
-        {
-          "speakability": "must_say",
-          "text": "The mood is sensitive and seeks safety and warmth today."
-        },
-        {
-          "speakability": "can_say",
-          "text": "Gentle boundaries and care go further than force under this sky."
-        }
-      ]
-    },
-    "safety": {
-      "forbidden_claims": [
-        "Predictions about family or domestic outcomes",
-        "Identity statements about Cancer Moons",
-        "Deterministic claims about mood swings"
-      ],
-      "allowed_framing": [
-        "Environmental focus on tenderness and safety",
-        "Agency-based choices for soothing and boundaries",
-        "Contextual language about emotional pacing"
-      ]
-    },
-    "tags": [
-      "care",
-      "home",
-      "safety",
-      "belonging",
-      "emotion",
-      "nurture"
+  "slug": "moon_in_cancer",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Moon in Cancer",
+  "summary": "A tender emotional climate that prioritizes safety and connection. Feelings swell easily, and attention goes to home, belonging, and what feels protective.",
+  "trigger": {
+    "signal_key": "moon_in_cancer"
+  },
+  "meaning": {
+    "headline": "Emotions lean protective, nostalgic, and responsive to closeness.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "With the Moon in Cancer, moods heighten sensitivity to care and comfort."
+      },
+      {
+        "speakability": "must_say",
+        "text": "There is a pull toward familiar people, spaces, and rituals."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Feelings may ebb and flow quickly, like tides."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Gentle support helps decisions land."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Everyone will retreat or become overly sentimental."
+      }
     ],
-    "sources": [
-      "Lunar transit through Cancer",
-      "Moon in Cancer as short-term climate of care"
+    "frictions": [
+      "Taking neutral feedback personally",
+      "Clinging to comfort instead of choosing what is needed",
+      "Withdrawing without communicating",
+      "Assuming others know what will soothe you",
+      "Overextending care and feeling depleted"
+    ],
+    "opportunities": [
+      "Checking in with loved ones or teammates",
+      "Creating cozy conditions for important work",
+      "Honoring memories or traditions that replenish",
+      "Naming emotions before making choices",
+      "Setting boundaries that protect energy",
+      "Notice the door, the towel you reach for, how you look, your ears responding."
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Reach out to someone you trust for a brief connection.",
+      "Make your space feel comforting before tackling tasks.",
+      "Let feelings move through writing, tears, or conversation.",
+      "Offer and request support with clear terms.",
+      "Plan quieter time if the day runs emotionally full.",
+      "Notice the stair, the backpack you reach for, how you wait, your throat responding."
+    ],
+    "avoid": [
+      "Expecting others to intuit your needs",
+      "Avoiding decisions to stay comfortable",
+      "Overgiving until resentment builds",
+      "Replaying old hurts instead of addressing current needs",
+      "Equating vulnerability with weakness"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "The mood is sensitive and seeks safety and warmth today."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Gentle boundaries and care go further than force under this sky."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions about family or domestic outcomes",
+      "Identity statements about Cancer Moons",
+      "Deterministic claims about mood swings"
+    ],
+    "allowed_framing": [
+      "Environmental focus on tenderness and safety",
+      "Agency-based choices for soothing and boundaries",
+      "Contextual language about emotional pacing"
+    ]
+  },
+  "tags": [
+    "care",
+    "home",
+    "safety",
+    "belonging",
+    "emotion",
+    "nurture"
+  ],
+  "sources": [
+    "Lunar transit through Cancer",
+    "Moon in Cancer as short-term climate of care"
+  ],
+  "meta": {
+    "source_version": "refactored_v1",
+    "avoid_tokens": [
+      "inbox",
+      "calendar",
+      "email",
+      "double-check",
+      "triage"
     ]
   }
+}

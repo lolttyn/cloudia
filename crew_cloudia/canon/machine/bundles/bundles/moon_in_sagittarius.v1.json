@@ -1,99 +1,111 @@
 {
-    "slug": "moon_in_sagittarius",
-    "version": 1,
-    "kind": "planet_in_sign",
-    "title": "Moon in Sagittarius",
-    "summary": "An expansive emotional climate that seeks meaning, movement, and perspective. Feelings crave room to roam, share stories, and reconnect with big-picture purpose.",
-    "trigger": {
-      "signal_key": "moon_in_sagittarius"
-    },
-    "meaning": {
-      "headline": "Emotions lean adventurous, candid, and eager for possibilities.",
-      "frames": [
-        {
-          "speakability": "must_say",
-          "text": "With the Moon in Sagittarius, moods brighten with openness and appetite for growth." 
-        },
-        {
-          "speakability": "must_say",
-          "text": "Honest sharing and exploration feel especially refreshing." 
-        },
-        {
-          "speakability": "can_say",
-          "text": "Movement, travel, or learning can shift perspective." 
-        },
-        {
-          "speakability": "can_say",
-          "text": "Humor can defuse heaviness if it stays respectful." 
-        },
-        {
-          "speakability": "avoid",
-          "text": "Optimism guarantees success." 
-        }
-      ],
-      "frictions": [
-        "Overcommitting out of excitement",
-        "Speaking bluntly without care",
-        "Skipping details or timelines",
-        "Restlessness with constraints",
-        "Chasing distraction instead of purpose"
-      ],
-      "opportunities": [
-        "Planning or taking a short adventure",
-        "Sharing knowledge or stories with others",
-        "Reconnecting with guiding values",
-        "Learning something new to refresh motivation",
-        "Creating space to brainstorm without immediate judgment"
-      ]
-    },
-    "guidance": {
-      "do": [
-        "Name the value or curiosity driving your actions.",
-        "Add buffer time to travel or meetings.",
-        "Check facts before broadcasting bold claims.",
-        "Invite diverse viewpoints to widen perspective.",
-        "Balance enthusiasm with one concrete next step."
-      ],
-      "avoid": [
-        "Saying yes to everything that sounds exciting",
-        "Using blunt truth to avoid empathy",
-        "Skipping logistics because they feel boring",
-        "Treating restlessness as failure",
-        "Assuming others share your risk tolerance"
-      ],
-      "reusable_lines": [
-        {
-          "speakability": "must_say",
-          "text": "The mood reaches for inspiration and open horizons today."
-        },
-        {
-          "speakability": "can_say",
-          "text": "Curiosity and honest enthusiasm carry conversations under this sky."
-        }
-      ]
-    },
-    "safety": {
-      "forbidden_claims": [
-        "Promises of travel or success",
-        "Identity statements about Sagittarius Moons",
-        "Deterministic claims about optimism"
-      ],
-      "allowed_framing": [
-        "Environmental focus on exploration and meaning",
-        "Agency-based choices about risk and scope",
-        "Contextual language about perspective and honesty"
-      ]
-    },
-    "tags": [
-      "exploration",
-      "optimism",
-      "learning",
-      "travel",
-      "candor",
-      "purpose"
+  "slug": "moon_in_sagittarius",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Moon in Sagittarius",
+  "summary": "An expansive emotional climate that seeks meaning, movement, and perspective. Feelings crave room to roam, share stories, and reconnect with big-picture purpose.",
+  "trigger": {
+    "signal_key": "moon_in_sagittarius"
+  },
+  "meaning": {
+    "headline": "Emotions lean adventurous, candid, and eager for possibilities.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "With the Moon in Sagittarius, moods brighten with openness and appetite for growth."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Honest sharing and exploration feel especially refreshing."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Movement, travel, or learning can shift perspective."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Humor can defuse heaviness if it stays respectful."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Optimism guarantees success."
+      }
     ],
-    "sources": [
-      "Lunar transit through Sagittarius",
-      "Moon in Sagittarius as short-term climate of exploration"
+    "frictions": [
+      "Overcommitting out of excitement",
+      "Speaking bluntly without care",
+      "Skipping details or timelines",
+      "Restlessness with constraints",
+      "Chasing distraction instead of purpose"
+    ],
+    "opportunities": [
+      "Planning or taking a short adventure",
+      "Sharing knowledge or stories with others",
+      "Reconnecting with what matters—notice it in the entryway, the keys you reach for, the way you close",
+      "Learning something new to refresh motivation",
+      "Creating space to brainstorm without immediate judgment",
+      "See how the sidewalk connects to the candle, the way you rest, the thanks that follows."
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Name the value or curiosity driving your actions.",
+      "Add buffer time to travel or conversations.",
+      "Check facts before broadcasting bold claims.",
+      "Invite diverse viewpoints to widen perspective.",
+      "Balance enthusiasm with one concrete next step.",
+      "See how the counter connects to the paper, the way you sit, the attention that follows."
+    ],
+    "avoid": [
+      "Saying yes to everything that sounds exciting",
+      "Using blunt truth to avoid empathy",
+      "Skipping logistics because they feel boring",
+      "Treating restlessness as failure",
+      "Assuming others share your risk tolerance"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "The mood reaches for inspiration and open horizons today."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Curiosity and honest enthusiasm carry conversations under this sky."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of travel or success",
+      "Identity statements about Sagittarius Moons",
+      "Deterministic claims about optimism"
+    ],
+    "allowed_framing": [
+      "Environmental focus on exploration and meaning",
+      "Agency-based choices about risk and scope",
+      "Contextual language about perspective and honesty"
+    ]
+  },
+  "tags": [
+    "exploration",
+    "optimism",
+    "learning",
+    "travel",
+    "candor",
+    "purpose"
+  ],
+  "sources": [
+    "Lunar transit through Sagittarius",
+    "Moon in Sagittarius as short-term climate of exploration"
+  ],
+  "meta": {
+    "source_version": "refactored_v1",
+    "avoid_tokens": [
+      "inbox",
+      "calendar",
+      "email",
+      "double-check",
+      "triage"
     ]
   }
+}

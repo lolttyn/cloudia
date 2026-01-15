@@ -1,99 +1,111 @@
 {
-    "slug": "moon_in_pisces",
-    "version": 1,
-    "kind": "planet_in_sign",
-    "title": "Moon in Pisces",
-    "summary": "A soft emotional climate that heightens sensitivity and imagination. Feelings blur edges, inviting rest, compassion, and creative flow.",
-    "trigger": {
-      "signal_key": "moon_in_pisces"
-    },
-    "meaning": {
-      "headline": "Emotions lean porous, dreamy, and receptive to subtle cues.",
-      "frames": [
-        {
-          "speakability": "must_say",
-          "text": "With the Moon in Pisces, moods become more impressionable and empathetic." 
-        },
-        {
-          "speakability": "must_say",
-          "text": "Imagination and intuition color perceptions." 
-        },
-        {
-          "speakability": "can_say",
-          "text": "Creative or spiritual practice can be soothing." 
-        },
-        {
-          "speakability": "can_say",
-          "text": "Rest and quiet help keep boundaries clear." 
-        },
-        {
-          "speakability": "avoid",
-          "text": "Everyone will feel lost or overwhelmed." 
-        }
-      ],
-      "frictions": [
-        "Difficulty distinguishing your feelings from others'",
-        "Vague plans or slippery timelines",
-        "Escaping into fantasy instead of resting",
-        "Saying yes to avoid disappointing",
-        "Misreading signals due to wishful thinking"
-      ],
-      "opportunities": [
-        "Resting and letting ideas drift into view",
-        "Expressing feelings through art or music",
-        "Offering compassion without self-erasure",
-        "Practicing gentle boundaries",
-        "Concluding loose ends with grace"
-      ]
-    },
-    "guidance": {
-      "do": [
-        "Schedule quiet time to decompress.",
-        "Write down dreams or insights before they fade.",
-        "Use grounding techniques to stay present.",
-        "Clarify plans in writing to avoid confusion.",
-        "Choose soothing media and company." 
-      ],
-      "avoid": [
-        "Overcommitting because it feels kinder",
-        "Numbing out when rest would help",
-        "Letting vague language hide your needs",
-        "Taking on others' emotions without consent",
-        "Assuming intuition equals fact"
-      ],
-      "reusable_lines": [
-        {
-          "speakability": "must_say",
-          "text": "The mood is porous and imaginative today, so keep boundaries gentle and clear."
-        },
-        {
-          "speakability": "can_say",
-          "text": "Soft focus and rest let the right insights surface under this sky."
-        }
-      ]
-    },
-    "safety": {
-      "forbidden_claims": [
-        "Identity statements about Pisces Moons",
-        "Promises of spiritual outcomes",
-        "Deterministic claims about confusion"
-      ],
-      "allowed_framing": [
-        "Environmental focus on empathy and imagination",
-        "Agency-based choices about boundaries and rest",
-        "Contextual language about endings and integration"
-      ]
-    },
-    "tags": [
-      "imagination",
-      "compassion",
-      "rest",
-      "intuition",
-      "boundaries",
-      "closure"
+  "slug": "moon_in_pisces",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Moon in Pisces",
+  "summary": "A soft emotional climate that heightens sensitivity and imagination. Feelings blur edges, inviting rest, compassion, and creative flow.",
+  "trigger": {
+    "signal_key": "moon_in_pisces"
+  },
+  "meaning": {
+    "headline": "Emotions lean porous, dreamy, and receptive to subtle cues.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "With the Moon in Pisces, moods become more impressionable and empathetic."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Imagination and intuition color perceptions."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Creative or spiritual practice can be soothing."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Rest and quiet help keep boundaries clear."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Everyone will feel lost or overwhelmed."
+      }
     ],
-    "sources": [
-      "Lunar transit through Pisces",
-      "Moon in Pisces as short-term climate of sensitivity"
+    "frictions": [
+      "Difficulty distinguishing your feelings from others'",
+      "Vague plans or slippery timelines",
+      "Escaping into fantasy instead of resting",
+      "Saying yes to avoid disappointing",
+      "Misreading signals due to wishful thinking"
+    ],
+    "opportunities": [
+      "Resting and letting ideas drift into view",
+      "Expressing feelings through art or music",
+      "Offering compassion without self-erasure",
+      "Practicing gentle boundaries",
+      "Concluding loose ends with grace",
+      "Notice the path, the wallet you reach for, how you hear, your spine responding."
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Schedule quiet time to decompress.",
+      "Write down dreams or insights before they fade.",
+      "Use grounding techniques to stay present.",
+      "Clarify plans in writing to avoid confusion.",
+      "Choose soothing media and company.",
+      "Notice the edge, the candle you reach for, how you sense, your eyes responding."
+    ],
+    "avoid": [
+      "Overcommitting because it feels kinder",
+      "Numbing out when rest would help",
+      "Letting vague language hide your needs",
+      "Taking on others' emotions without consent",
+      "Assuming intuition equals fact"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "The mood is porous and imaginative today, so keep boundaries gentle and clear."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Soft focus and rest let the right insights surface under this sky."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Identity statements about Pisces Moons",
+      "Promises of spiritual outcomes",
+      "Deterministic claims about confusion"
+    ],
+    "allowed_framing": [
+      "Environmental focus on empathy and imagination",
+      "Agency-based choices about boundaries and rest",
+      "Contextual language about endings and integration"
+    ]
+  },
+  "tags": [
+    "imagination",
+    "compassion",
+    "rest",
+    "intuition",
+    "boundaries",
+    "closure"
+  ],
+  "sources": [
+    "Lunar transit through Pisces",
+    "Moon in Pisces as short-term climate of sensitivity"
+  ],
+  "meta": {
+    "source_version": "refactored_v1",
+    "avoid_tokens": [
+      "inbox",
+      "calendar",
+      "email",
+      "double-check",
+      "triage"
     ]
   }
+}

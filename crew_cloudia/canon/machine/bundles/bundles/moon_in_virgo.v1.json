@@ -1,99 +1,111 @@
 {
-    "slug": "moon_in_virgo",
-    "version": 1,
-    "kind": "planet_in_sign",
-    "title": "Moon in Virgo",
-    "summary": "A practical emotional climate that focuses on details and service. Feelings express through fixing, organizing, and making systems kinder and cleaner.",
-    "trigger": {
-      "signal_key": "moon_in_virgo"
-    },
-    "meaning": {
-      "headline": "Emotions lean analytical, precise, and eager to improve things.",
-      "frames": [
-        {
-          "speakability": "must_say",
-          "text": "With the Moon in Virgo, moods notice small glitches and want to resolve them." 
-        },
-        {
-          "speakability": "must_say",
-          "text": "Care shows up through useful actions and practical support." 
-        },
-        {
-          "speakability": "can_say",
-          "text": "Tidying or organizing can soothe worries." 
-        },
-        {
-          "speakability": "can_say",
-          "text": "Feedback lands best when it is kind and actionable." 
-        },
-        {
-          "speakability": "avoid",
-          "text": "Perfection is required to feel okay." 
-        }
-      ],
-      "frictions": [
-        "Nitpicking when reassurance would help",
-        "Spinning on minor flaws",
-        "Overextending to be helpful",
-        "Downplaying emotions as inefficiency",
-        "Difficulty resting until everything feels tidy"
-      ],
-      "opportunities": [
-        "Clearing inboxes, surfaces, or to-do lists",
-        "Creating checklists or templates",
-        "Offering practical assistance to someone",
-        "Scheduling health and maintenance tasks",
-        "Breaking down a complex job into steps"
-      ]
-    },
-    "guidance": {
-      "do": [
-        "Pick one area to declutter or optimize.",
-        "Translate worries into a simple checklist.",
-        "Offer specific, kind feedback where useful.",
-        "Make time for body care between tasks.",
-        "Celebrate small fixes as progress."
-      ],
-      "avoid": [
-        "Criticizing to manage anxiety",
-        "Trying to perfect everything at once",
-        "Skipping meals or breaks while troubleshooting",
-        "Expecting others to match your standards instantly",
-        "Using tasks to avoid feeling"
-      ],
-      "reusable_lines": [
-        {
-          "speakability": "must_say",
-          "text": "The mood is practical and ready to tidy loose ends today."
-        },
-        {
-          "speakability": "can_say",
-          "text": "Small, caring fixes bring calm under this sky."
-        }
-      ]
-    },
-    "safety": {
-      "forbidden_claims": [
-        "Identity statements about Virgo Moons",
-        "Deterministic claims about anxiety or perfectionism",
-        "Promises of flawless outcomes"
-      ],
-      "allowed_framing": [
-        "Environmental focus on refinement and service",
-        "Agency-based choices about pacing and standards",
-        "Contextual language about practical soothing"
-      ]
-    },
-    "tags": [
-      "refinement",
-      "service",
-      "organization",
-      "health",
-      "precision",
-      "maintenance"
+  "slug": "moon_in_virgo",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Moon in Virgo",
+  "summary": "A practical emotional climate that focuses on details and service. Feelings express through fixing, organizing, and making systems kinder and cleaner.",
+  "trigger": {
+    "signal_key": "moon_in_virgo"
+  },
+  "meaning": {
+    "headline": "Emotions lean analytical, precise, and eager to improve things.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "With the Moon in Virgo, moods notice small glitches and want to resolve them."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Care shows up through useful actions and practical support."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Tidying or organizing can soothe worries."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Feedback lands best when it is kind and actionable."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Perfection is required to feel okay."
+      }
     ],
-    "sources": [
-      "Lunar transit through Virgo",
-      "Moon in Virgo as short-term climate of refinement"
+    "frictions": [
+      "Nitpicking when reassurance would help",
+      "Spinning on minor flaws",
+      "Overextending to be helpful",
+      "Downplaying emotions as inefficiency",
+      "Difficulty resting until everything feels tidy"
+    ],
+    "opportunities": [
+      "organizing physical spaces, surfaces, or accumulated tasks",
+      "Creating organized steps or templates",
+      "Offering practical assistance to someone",
+      "Scheduling health and maintenance tasks",
+      "Breaking down a complex job into steps",
+      "Notice the park, how you arrange with attention to the receipt, your forehead aware."
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Pick one area to declutter or optimize.",
+      "Translate worries into a simple organized steps.",
+      "Offer specific, kind feedback where useful.",
+      "Make time for body care between tasks.",
+      "Celebrate small fixes as progress.",
+      "Notice the garden, how you rinse with attention to the purse, your eyes aware."
+    ],
+    "avoid": [
+      "Criticizing to manage anxiety",
+      "Trying to perfect everything at once",
+      "Skipping meals or breaks while troubleshooting",
+      "Expecting others to match your standards instantly",
+      "Using tasks to avoid feeling"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "The mood is practical and ready to tidy loose ends today."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Small, caring fixes bring calm under this sky."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Identity statements about Virgo Moons",
+      "Deterministic claims about anxiety or perfectionism",
+      "Promises of flawless outcomes"
+    ],
+    "allowed_framing": [
+      "Environmental focus on refinement and service",
+      "Agency-based choices about pacing and standards",
+      "Contextual language about practical soothing"
+    ]
+  },
+  "tags": [
+    "refinement",
+    "service",
+    "organization",
+    "health",
+    "precision",
+    "maintenance"
+  ],
+  "sources": [
+    "Lunar transit through Virgo",
+    "Moon in Virgo as short-term climate of refinement"
+  ],
+  "meta": {
+    "source_version": "refactored_v1",
+    "avoid_tokens": [
+      "inbox",
+      "calendar",
+      "email",
+      "double-check",
+      "triage"
     ]
   }
+}

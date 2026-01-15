@@ -1,99 +1,111 @@
 {
-    "slug": "moon_in_leo",
-    "version": 1,
-    "kind": "planet_in_sign",
-    "title": "Moon in Leo",
-    "summary": "A bright emotional climate that seeks expression and affirmation. Feelings want to be shared openly, and energy rises with play, creativity, and being witnessed.",
-    "trigger": {
-      "signal_key": "moon_in_leo"
-    },
-    "meaning": {
-      "headline": "Emotions lean theatrical, warm, and eager to be seen.",
-      "frames": [
-        {
-          "speakability": "must_say",
-          "text": "With the Moon in Leo, moods grow more expressive and bold." 
-        },
-        {
-          "speakability": "must_say",
-          "text": "Attention gravitates toward celebration, creativity, and recognition." 
-        },
-        {
-          "speakability": "can_say",
-          "text": "Warm gestures can thaw tension." 
-        },
-        {
-          "speakability": "can_say",
-          "text": "Playful competition can energize projects." 
-        },
-        {
-          "speakability": "avoid",
-          "text": "Everyone needs applause or validation right now." 
-        }
-      ],
-      "frictions": [
-        "Overreacting to perceived slights",
-        "Centering yourself to manage discomfort",
-        "Burning out from constant performance",
-        "Deflecting feedback with drama",
-        "Comparing attention levels instead of collaborating"
-      ],
-      "opportunities": [
-        "Sharing appreciation generously",
-        "Presenting work in a way that feels fun",
-        "Infusing tasks with creativity",
-        "Practicing confident self-expression",
-        "Spotlighting others to build morale"
-      ]
-    },
-    "guidance": {
-      "do": [
-        "Offer sincere praise where it is due.",
-        "Show your work in progress instead of hiding it.",
-        "Add playful breaks to refuel energy.",
-        "Lead with warmth when making requests.",
-        "Check in with your body before pushing through for applause."
-      ],
-      "avoid": [
-        "Making every moment a performance",
-        "Taking silence as rejection",
-        "Neglecting rest while chasing excitement",
-        "Dismissing feedback that feels uncomfortable",
-        "Competing for attention inside collaboration"
-      ],
-      "reusable_lines": [
-        {
-          "speakability": "must_say",
-          "text": "The mood is expressive and craves warm connection today."
-        },
-        {
-          "speakability": "can_say",
-          "text": "A little celebration goes a long way under this sky."
-        }
-      ]
-    },
-    "safety": {
-      "forbidden_claims": [
-        "Promises of praise or recognition",
-        "Identity statements about Leo Moons",
-        "Deterministic claims about pride or ego"
-      ],
-      "allowed_framing": [
-        "Environmental focus on expression and warmth",
-        "Agency-based choices about visibility and rest",
-        "Contextual language about play and encouragement"
-      ]
-    },
-    "tags": [
-      "expression",
-      "warmth",
-      "visibility",
-      "creativity",
-      "celebration",
-      "confidence"
+  "slug": "moon_in_leo",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Moon in Leo",
+  "summary": "A bright emotional climate that seeks expression and affirmation. Feelings want to be shared openly, and energy rises with play, creativity, and being witnessed.",
+  "trigger": {
+    "signal_key": "moon_in_leo"
+  },
+  "meaning": {
+    "headline": "Emotions lean theatrical, warm, and eager to be seen.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "With the Moon in Leo, moods grow more expressive and bold."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Attention gravitates toward celebration, creativity, and recognition."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Warm gestures can thaw tension."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Playful competition can energize projects."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Everyone needs applause or validation right now."
+      }
     ],
-    "sources": [
-      "Lunar transit through Leo",
-      "Moon in Leo as short-term climate of expression"
+    "frictions": [
+      "Overreacting to perceived slights",
+      "Centering yourself to manage discomfort",
+      "Burning out from constant performance",
+      "Deflecting feedback with drama",
+      "Comparing attention levels instead of collaborating"
+    ],
+    "opportunities": [
+      "Sharing appreciation generously",
+      "Presenting work in a way that feels fun",
+      "Infusing tasks with creativity",
+      "Practicing confident self-expression",
+      "Spotlighting others to build morale",
+      "Notice the seat, the fork you reach for, how you smell, your elbows responding."
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Offer sincere praise where it is due.",
+      "Show your work in progress instead of hiding it.",
+      "Add playful breaks to refuel energy.",
+      "Lead with warmth when making requests.",
+      "Check in with your body before pushing through for applause.",
+      "Notice the doorway, the backpack you reach for, how you wait, your breath responding."
+    ],
+    "avoid": [
+      "Making every moment a performance",
+      "Taking silence as rejection",
+      "Neglecting rest while chasing excitement",
+      "Dismissing feedback that feels uncomfortable",
+      "Competing for attention inside collaboration"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "The mood is expressive and craves warm connection today."
+      },
+      {
+        "speakability": "can_say",
+        "text": "A little celebration goes a long way under this sky."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of praise or recognition",
+      "Identity statements about Leo Moons",
+      "Deterministic claims about pride or ego"
+    ],
+    "allowed_framing": [
+      "Environmental focus on expression and warmth",
+      "Agency-based choices about visibility and rest",
+      "Contextual language about play and encouragement"
+    ]
+  },
+  "tags": [
+    "expression",
+    "warmth",
+    "visibility",
+    "creativity",
+    "celebration",
+    "confidence"
+  ],
+  "sources": [
+    "Lunar transit through Leo",
+    "Moon in Leo as short-term climate of expression"
+  ],
+  "meta": {
+    "source_version": "refactored_v1",
+    "avoid_tokens": [
+      "inbox",
+      "calendar",
+      "email",
+      "double-check",
+      "triage"
     ]
   }
+}

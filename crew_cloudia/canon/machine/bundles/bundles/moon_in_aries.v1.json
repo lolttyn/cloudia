@@ -1,99 +1,111 @@
 {
-    "slug": "moon_in_aries",
-    "version": 1,
-    "kind": "planet_in_sign",
-    "title": "Moon in Aries",
-    "summary": "A brief emotional climate that runs hot and quick. Feelings surface fast, attention sharpens on immediate needs, and momentum builds through direct action.",
-    "trigger": {
-      "signal_key": "moon_in_aries"
-    },
-    "meaning": {
-      "headline": "Emotions lean toward urgency and straightforward expression.",
-      "frames": [
-        {
-          "speakability": "must_say",
-          "text": "With the Moon in Aries, moods speed up and prefer clear, direct outlets." 
-        },
-        {
-          "speakability": "must_say",
-          "text": "Feelings may motivate quick starts or decisive statements." 
-        },
-        {
-          "speakability": "can_say",
-          "text": "Energy rises when there is something concrete to tackle." 
-        },
-        {
-          "speakability": "can_say",
-          "text": "Short bursts of effort can relieve restlessness." 
-        },
-        {
-          "speakability": "avoid",
-          "text": "Conflict is inevitable or required." 
-        }
-      ],
-      "frictions": [
-        "Snapping when patience would help",
-        "Starting arguments to discharge energy",
-        "Impulsive decisions fueled by mood",
-        "Rushing past others' pace",
-        "Feeling restless without a clear target"
-      ],
-      "opportunities": [
-        "Initiating a stalled task",
-        "Saying what you need plainly",
-        "Channeling heat through movement",
-        "Acting on small wins to build momentum",
-        "Practicing courage in low-stakes ways"
-      ]
-    },
-    "guidance": {
-      "do": [
-        "Name the priority and move on it.",
-        "Use physical activity to release tension.",
-        "Keep requests short and clear.",
-        "Plan quick breaks so urgency does not overrun the day.",
-        "Check impact before hitting send."
-      ],
-      "avoid": [
-        "Pushing others faster than they consent",
-        "Treating every irritation as a fight",
-        "Making irreversible choices in a spike of feeling",
-        "Skipping safety steps to save time",
-        "Mistaking motion for progress"
-      ],
-      "reusable_lines": [
-        {
-          "speakability": "must_say",
-          "text": "The mood moves quickly and wants direct outlets today."
-        },
-        {
-          "speakability": "can_say",
-          "text": "Short, bold actions clear the air under this sky."
-        }
-      ]
-    },
-    "safety": {
-      "forbidden_claims": [
-        "Predictions of accidents or fights",
-        "Identity statements about Aries Moons",
-        "Guarantees of anger or conflict"
-      ],
-      "allowed_framing": [
-        "Environmental focus on urgency",
-        "Agency-based choices to channel heat",
-        "Contextual language about pacing and consent"
-      ]
-    },
-    "tags": [
-      "urgency",
-      "action",
-      "courage",
-      "directness",
-      "momentum",
-      "restlessness"
+  "slug": "moon_in_aries",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Moon in Aries",
+  "summary": "A brief emotional climate that runs hot and quick. Feelings surface fast, attention sharpens on immediate needs, and momentum builds through direct action.",
+  "trigger": {
+    "signal_key": "moon_in_aries"
+  },
+  "meaning": {
+    "headline": "Emotions lean toward urgency and straightforward expression.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "With the Moon in Aries, moods speed up and prefer clear, direct outlets."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Feelings may motivate quick starts or decisive statements."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Energy rises when there is something concrete to tackle."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Short bursts of effort can relieve restlessness."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Conflict is inevitable or required."
+      }
     ],
-    "sources": [
-      "Lunar transit through Aries",
-      "Moon in Aries as short-term climate of initiative"
+    "frictions": [
+      "Snapping when patience would help",
+      "Starting arguments to discharge energy",
+      "Impulsive decisions fueled by mood",
+      "Rushing past others' pace",
+      "Feeling restless without a clear target"
+    ],
+    "opportunities": [
+      "Initiating a stalled task",
+      "Saying what you need plainly",
+      "Channeling heat through movement",
+      "Acting on small wins to build momentum",
+      "Practicing courage in low-stakes ways",
+      "Notice the space, the switch you reach for, how you lean, your hands responding."
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Name the priority and move on it.",
+      "Use physical activity to release tension.",
+      "Keep requests short and clear.",
+      "Plan quick breaks so urgency does not overrun the day.",
+      "Check impact before hitting send.",
+      "Notice the corner, the scarf you reach for, how you notice, your breath responding."
+    ],
+    "avoid": [
+      "Pushing others faster than they consent",
+      "Treating every irritation as a fight",
+      "Making irreversible choices in a spike of feeling",
+      "Skipping safety steps to save time",
+      "Mistaking motion for progress"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "The mood moves quickly and wants direct outlets today."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Short, bold actions clear the air under this sky."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions of accidents or fights",
+      "Identity statements about Aries Moons",
+      "Guarantees of anger or conflict"
+    ],
+    "allowed_framing": [
+      "Environmental focus on urgency",
+      "Agency-based choices to channel heat",
+      "Contextual language about pacing and consent"
+    ]
+  },
+  "tags": [
+    "urgency",
+    "action",
+    "courage",
+    "directness",
+    "momentum",
+    "restlessness"
+  ],
+  "sources": [
+    "Lunar transit through Aries",
+    "Moon in Aries as short-term climate of initiative"
+  ],
+  "meta": {
+    "source_version": "refactored_v1",
+    "avoid_tokens": [
+      "inbox",
+      "calendar",
+      "email",
+      "double-check",
+      "triage"
     ]
   }
+}

@@ -1,0 +1,99 @@
+{
+    "slug": "moon_in_taurus",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Moon in Taurus",
+    "summary": "A grounded emotional climate that favors steadiness and comfort. Feelings settle through familiar routines, sensory anchors, and practical reassurance.",
+    "trigger": {
+      "signal_key": "moon_in_taurus"
+    },
+    "meaning": {
+      "headline": "Emotions lean toward steadiness and preference for simple, reliable options.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Moon in Taurus, moods prefer calm, predictable pacing." 
+        },
+        {
+          "speakability": "must_say",
+          "text": "Comfort and tangible security feel more important than novelty." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Small sensory pleasures can restore patience." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Consistency helps emotions stay even." 
+        },
+        {
+          "speakability": "avoid",
+          "text": "Nothing meaningful can change right now." 
+        }
+      ],
+      "frictions": [
+        "Reluctance to shift plans even when needed",
+        "Overindulgence to self-soothe",
+        "Resistance to feedback that alters comfort",
+        "Slowing down so much that momentum dips",
+        "Holding resources tightly out of caution"
+      ],
+      "opportunities": [
+        "Reinforcing routines that bring calm",
+        "Making steady progress on maintenance tasks",
+        "Checking budgets and supplies for peace of mind",
+        "Adding sensory grounding to stressful moments",
+        "Choosing durable solutions over quick fixes"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Eat, rest, and hydrate before making decisions.",
+        "Tend to errands that stabilize your day.",
+        "Use touchpoints like scent or music to stay grounded.",
+        "Move at a consistent pace rather than sprinting.",
+        "Confirm basics (money, time, materials) before new commitments."
+      ],
+      "avoid": [
+        "Digging in only to avoid discomfort",
+        "Buying or consuming more than needed for relief",
+        "Dismissing others' urgency without context",
+        "Postponing necessary updates indefinitely",
+        "Equating calm with passivity"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "The mood steadies and prefers simple, reliable comfort today."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Gentle routines and sensory grounding go a long way under this sky."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Guarantees about finances or stability",
+        "Identity claims about Taurus Moons",
+        "Deterministic statements about stubbornness"
+      ],
+      "allowed_framing": [
+        "Environmental focus on steadiness and comfort",
+        "Agency-based choices about pacing and resourcing",
+        "Contextual language about maintenance and grounding"
+      ]
+    },
+    "tags": [
+      "steadiness",
+      "comfort",
+      "resources",
+      "patience",
+      "grounding",
+      "maintenance"
+    ],
+    "sources": [
+      "Lunar transit through Taurus",
+      "Moon in Taurus as short-term climate of stability"
+    ]
+  }

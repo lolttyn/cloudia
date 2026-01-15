@@ -1,0 +1,99 @@
+{
+    "slug": "moon_in_capricorn",
+    "version": 1,
+    "kind": "planet_in_sign",
+    "title": "Moon in Capricorn",
+    "summary": "A disciplined emotional climate that prioritizes responsibility and results. Feelings move toward practicality, structure, and what will hold up over time.",
+    "trigger": {
+      "signal_key": "moon_in_capricorn"
+    },
+    "meaning": {
+      "headline": "Emotions lean measured, pragmatic, and focused on follow-through.",
+      "frames": [
+        {
+          "speakability": "must_say",
+          "text": "With the Moon in Capricorn, moods prefer concrete plans and clear responsibilities." 
+        },
+        {
+          "speakability": "must_say",
+          "text": "Serious topics feel easier to address; accountability is front of mind." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Low-drama environments help feelings stay steady." 
+        },
+        {
+          "speakability": "can_say",
+          "text": "Long-term thinking can soothe short-term anxiety." 
+        },
+        {
+          "speakability": "avoid",
+          "text": "Joy or softness are off-limits." 
+        }
+      ],
+      "frictions": [
+        "Self-critique for not doing enough",
+        "Withholding emotion to stay efficient",
+        "Impatience with anything that seems wasteful",
+        "Overworking to manage worry",
+        "Judging others for different pacing"
+      ],
+      "opportunities": [
+        "Setting realistic milestones",
+        "Recommitting to a habit that supports goals",
+        "Cleaning up responsibilities and deadlines",
+        "Showing care through reliability",
+        "Making decisions based on durability, not urgency"
+      ]
+    },
+    "guidance": {
+      "do": [
+        "Outline the top priorities and schedule them.",
+        "Break large tasks into manageable steps.",
+        "Keep language factual when emotions feel compressed.",
+        "Rest intentionally to maintain capacity.",
+        "Acknowledge progress instead of only gaps."
+      ],
+      "avoid": [
+        "Equating worth with productivity",
+        "Pushing emotions aside indefinitely",
+        "Taking on extra obligations to prove reliability",
+        "Dismissing help because you want control",
+        "Treating rest as a reward instead of a need"
+      ],
+      "reusable_lines": [
+        {
+          "speakability": "must_say",
+          "text": "The mood is sober and ready for accountable action today."
+        },
+        {
+          "speakability": "can_say",
+          "text": "Steady, structured moves ease pressure under this sky."
+        }
+      ]
+    },
+    "safety": {
+      "forbidden_claims": [
+        "Identity statements about Capricorn Moons",
+        "Deterministic claims about success or failure",
+        "Moralizing productivity"
+      ],
+      "allowed_framing": [
+        "Environmental focus on responsibility and structure",
+        "Agency-based choices about pacing and rest",
+        "Contextual language about durability"
+      ]
+    },
+    "tags": [
+      "responsibility",
+      "structure",
+      "discipline",
+      "goals",
+      "pacing",
+      "stability"
+    ],
+    "sources": [
+      "Lunar transit through Capricorn",
+      "Moon in Capricorn as short-term climate of responsibility"
+    ]
+  }
