@@ -274,6 +274,20 @@ export async function runMainThemesForDate(params: {
       // Gate passed -> true idempotency: safe to skip
       if (gateDecision === "approve") {
         console.log(`[main_themes] Idempotency guard: approved attempt ${latestAttempt.attempt_number} passes gate, skipping generation`);
+        
+        // Still mark ready for audio if not in scripts-only mode (segment may have been marked before, but ensure it's marked)
+        if (!params.scripts_only) {
+          try {
+            await markSegmentReadyForAudio({
+              episode_id: params.episode_id,
+              segment_key: "main_themes",
+            });
+          } catch (err: any) {
+            // Log but don't fail - segment might already be marked or have validation issues
+            console.warn(`[main_themes] Failed to mark ready for audio (idempotency path): ${err?.message ?? String(err)}`);
+          }
+        }
+        
         return {
           segment_key: "main_themes",
           gate_result: gateResult,
