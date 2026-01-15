@@ -40,9 +40,7 @@ export function buildClosingScaffold(params: {
   // Do NOT include axis statement in scaffold - it gets inserted verbatim and contains banned phrases like "meaning over minutiae"
   // The axis should be expressed naturally in the LLM-generated micro content between scaffold and signoff
   // Only include timing note if provided, but don't reference the axis statement
-  const bridge = params.timing_note
-    ? `All day had its own rhythm (${params.timing_note}).`
-    : `All day had its own rhythm.`;
+  const bridge = `All day had its own rhythm.`;
   const phaseLine = `Energy is ${params.temporal_phase} right now—tune to that, don't force it.`;
   const signoff = `The Cosmic Forecast for ${dateStr} is brought to you by the Intergalactic Public Broadcasting Network.\nWe'll be back tomorrow, skygazer.`;
 

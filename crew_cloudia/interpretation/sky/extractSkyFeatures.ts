@@ -107,6 +107,16 @@ function offsetDate(base: string, deltaDays: number): string {
 export async function extractSkyFeatures(input: { date: string }): Promise<SkyFeatures> {
   const today = await computeSkyState({ date: input.date, timezone: "UTC" });
 
+  // Temporary debug: confirm lunar phase_name is present in sky_state
+  console.log("[lunar-raw]", {
+    episode_date: input.date,
+    sky_state_typeof: typeof today,
+    sky_state_keys: Object.keys((today as any) ?? {}),
+    lunar_keys: Object.keys((today as any)?.lunar ?? {}),
+    phase_name: (today as any)?.lunar?.phase_name ?? null,
+    phaseName: (today as any)?.lunar?.phaseName ?? null,
+  });
+
   const sunSign = titleCase(today.bodies.sun.sign);
   const moonSign = titleCase(today.bodies.moon.sign);
   const moonPhase = deriveMoonPhase(
@@ -178,7 +188,7 @@ export async function extractSkyFeatures(input: { date: string }): Promise<SkyFe
     moon: {
       sign: moonSign,
       phase: moonPhase,
-      phase_name: today.lunar?.phase_name,
+      phase_name: (today as any)?.lunar?.phase_name ?? (today as any)?.lunar?.phaseName ?? null,
       longitude: today.bodies.moon.longitude,
     },
     highlights,

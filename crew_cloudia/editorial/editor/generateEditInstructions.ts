@@ -25,6 +25,9 @@ export function generateEditInstructions(
         
         // Phase D: Give clear alternatives, not just prohibitions
         if (segmentKey === "main_themes") {
+          instructions.unshift(
+            "You may replace metaphors, but only with body/home/street/food/weather imagery. Do not reference moon sign, ingress, or specific signs. Do not use admin/work productivity scenes."
+          );
           instructions.push(
             `Delete the banned phrase "${bannedPhrase}" entirely. ` +
             `Express the idea through a lived experience, choice, or action—not a concept or contrast. ` +
@@ -51,6 +54,11 @@ export function generateEditInstructions(
             "Do not use the words: calendar, inbox, email, message, meeting, triage, double-check, reread, correction. Replace with a physical/sensory example (home/body/street/food/weather). Output exactly 1-3 expressive sentences."
           );
         } else {
+          if (segmentKey === "main_themes") {
+            instructions.unshift(
+              "You may replace metaphors, but only with body/home/street/food/weather imagery. Do not reference moon sign, ingress, or specific signs. Do not use admin/work productivity scenes."
+            );
+          }
           instructions.push(
             "Remove all work-admin metaphors (inbox, calendar, email, meetings, double-checking details, etc.). Replace with sensory, physical, interpersonal, or environmental moments (body, home, street, food, weather, commute, conversation, waiting, noise, silence)."
           );
@@ -59,6 +67,9 @@ export function generateEditInstructions(
 
       case reason === "MAIN_THEMES_MOON_TRANSIT_BAN":
         if (segmentKey === "main_themes") {
+          instructions.unshift(
+            "You may replace metaphors, but only with body/home/street/food/weather imagery. Do not reference moon sign, ingress, or specific signs. Do not use admin/work productivity scenes."
+          );
           instructions.unshift(
             "Remove all Moon sign or Moon movement references. Re-anchor the interpretation to the current lunation phase only (e.g., New Moon, Waxing Crescent, First Quarter). Do not introduce new metaphors. Preserve the existing message and tone."
           );

@@ -34,6 +34,15 @@ declare const process: {
   exit(code?: number): never;
 };
 
+function sanitizeClosingParentheticals(text: string): string {
+  const withoutParens = text.replace(/\([^)]*\)/g, "");
+  return withoutParens
+    .replace(/\s+([.,!?;:])/g, "$1")
+    .replace(/\s{2,}/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 export async function runClosingForDate(params: {
   program_slug: string;
   episode_date: string; // YYYY-MM-DD
@@ -144,6 +153,7 @@ export async function runClosingForDate(params: {
       });
       const micro = extractMicroReflection(draft.draft_script, scaffold, signoff);
       script = assembleClosingScript(scaffold, micro, signoff);
+      script = sanitizeClosingParentheticals(script);
       previousScript = script; // Store for comparison in next iteration
     } else {
       // CRITICAL: Pass the FULL closing script to the writer, not just the micro-reflection
@@ -182,6 +192,7 @@ export async function runClosingForDate(params: {
       
       // Append canonical sign-off (system always controls this)
       revisedScript = assembleClosingScript(scaffold, revisedScript, signoff);
+      revisedScript = sanitizeClosingParentheticals(revisedScript);
       
       console.log(`[closing] Rewrite returned full script (${revisedScript.length} chars). New hash: ${createHash("md5").update(revisedScript).digest("hex").substring(0, 8)}`);
 

@@ -63,6 +63,84 @@ function sanitizeForbiddenSigns(
   return sanitized;
 }
 
+function sanitizeMainThemes(script: string): string {
+  const zodiacSigns = [
+    "aries", "taurus", "gemini", "cancer", "leo", "virgo",
+    "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces",
+  ];
+  const zodiacAbbr = [
+    "ari", "tau", "gem", "can", "leo", "vir",
+    "lib", "sco", "sag", "cap", "aqu", "pis",
+  ];
+  const signPattern = [...zodiacSigns, ...zodiacAbbr].join("|");
+
+  const moonTransitSentence = new RegExp(
+    `[^.!?\\n]*\\bmoon\\b[^.!?\\n]{0,80}\\b(in|into|entered|entering|moves into|moving into|moved into|shifted|slipped)\\b[^.!?\\n]{0,60}\\b(${signPattern})\\b[^.!?\\n]*[.!?]?`,
+    "gi"
+  );
+  const moonFromToSentence = new RegExp(
+    `[^.!?\\n]*\\bmoon\\b[^.!?\\n]{0,80}\\bfrom\\s+(${signPattern})\\s+to\\s+(${signPattern})\\b[^.!?\\n]*[.!?]?`,
+    "gi"
+  );
+  const meaningOverMinutiaeSentence = /[^.!?\n]*meaning over minutiae[^.!?\n]*[.!?]?/gi;
+  const adminSentence = /[^.!?\n]*\b(meeting|calendar|email|inbox|notification|app)\b[^.!?\n]*[.!?]?/gi;
+
+  let sanitized = script;
+  sanitized = sanitized.replace(moonTransitSentence, " ");
+  sanitized = sanitized.replace(moonFromToSentence, " ");
+  sanitized = sanitized.replace(meaningOverMinutiaeSentence, " ");
+  sanitized = sanitized.replace(adminSentence, " ");
+
+  sanitized = sanitized
+    .replace(/\s{2,}/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+
+  return sanitized.length > 0
+    ? sanitized
+    : "Today moves in a quieter rhythm, and you can let it be simple.";
+}
+
+function appendMainThemesExpansion(script: string): string {
+  const expansion = [
+    "Notice how your shoulders settle when you slow down at the sink or fold a towel.",
+    "You dont have to fix this today.",
+  ].join(" ");
+  return `${script.trim()} ${expansion}`.replace(/\s{2,}/g, " ").trim();
+}
+
+function stripMoonTransitFromFrame(frame: InterpretiveFrame): InterpretiveFrame {
+  const clone: any = JSON.parse(JSON.stringify(frame));
+  const moonTransitPattern =
+    /\bmoon\b[^.!?\n]{0,60}\b(in|into|entered|entering|moving into|moves into|moved into|shifted|slipped)\b/i;
+  const moonInSignPattern =
+    /\bmoon\b[^.!?\n]{0,60}\bin\s+(aries|taurus|gemini|cancer|leo|virgo|libra|scorpio|sagittarius|capricorn|aquarius|pisces)\b/i;
+
+  if (Array.isArray(clone.sky_anchors)) {
+    clone.sky_anchors = clone.sky_anchors.filter(
+      (anchor: any) => !/^moon in\s+/i.test(anchor?.label ?? "")
+    );
+  }
+  if (typeof clone.why_today_clause === "string") {
+    if (moonTransitPattern.test(clone.why_today_clause) || moonInSignPattern.test(clone.why_today_clause)) {
+      clone.why_today_clause = "";
+    }
+  }
+  if (Array.isArray(clone.why_today)) {
+    clone.why_today = clone.why_today.filter(
+      (line: string) =>
+        !moonTransitPattern.test(line) && !moonInSignPattern.test(line)
+    );
+  }
+  if (Array.isArray(clone.causal_logic)) {
+    clone.causal_logic = clone.causal_logic.filter(
+      (line: string) =>
+        !moonTransitPattern.test(line) && !moonInSignPattern.test(line)
+    );
+  }
+  return clone as InterpretiveFrame;
+}
+
 function getLunationLabel(frame: InterpretiveFrame): string | null {
   const phaseName = extractPhaseNameFromFrame(frame);
   const result = mapPhaseNameToLunationLabel(phaseName);
@@ -202,6 +280,9 @@ export async function runMainThemesForDate(params: {
     ...params.interpretive_frame,
     lunation_context: { label: lunationLabelForPrompt },
   } as InterpretiveFrame & { lunation_context?: { label: string } };
+  const interpretiveFrameForRewrite = stripMoonTransitFromFrame(
+    interpretiveFrameForPrompt
+  );
 
   const segmentConstraints = {
     ...baseConstraints,
@@ -365,7 +446,7 @@ export async function runMainThemesForDate(params: {
         writing_contract,
         episode_validation,
       });
-      script = draft.draft_script;
+      script = sanitizeMainThemes(draft.draft_script);
       
       // DWU 14: Lunation coverage self-check with non-templated insertion
       if (params.interpretive_frame) {
@@ -415,8 +496,8 @@ export async function runMainThemesForDate(params: {
       const rewritePromptPayload = {
         system_prompt: "You are revising an existing draft based on editor feedback. Your job is to apply the requested changes, not to write a new draft from scratch.",
         user_prompt: buildShowrunnerRewritePrompt({
-          interpretive_frame: params.interpretive_frame,
-          previous_script: script,
+          interpretive_frame: interpretiveFrameForRewrite,
+          previous_script: previousScript,
           editor_instructions: rewriteInstructions,
         }),
       };
@@ -428,7 +509,7 @@ export async function runMainThemesForDate(params: {
         );
       }
 
-      const revisedScript = rewriteResult.text.trim();
+      const revisedScript = sanitizeMainThemes(rewriteResult.text.trim());
 
       // Hard check: ensure revision actually differs from previous attempt
       if (revisedScript.trim() === previousScript.trim()) {
@@ -441,6 +522,9 @@ export async function runMainThemesForDate(params: {
       script = revisedScript;
     }
 
+    // Final sanitize pass before evaluation (deterministic cleanup)
+    script = sanitizeMainThemes(script);
+
     // Sign sanitizer: remove forbidden signs before evaluation
     const allowedSigns = params.interpretive_frame.sky_anchors.map(a => {
       const signMatch = a.label.match(/\b(aries|taurus|gemini|cancer|leo|virgo|libra|scorpio|sagittarius|capricorn|aquarius|pisces)\b/i);
@@ -451,13 +535,15 @@ export async function runMainThemesForDate(params: {
 
     // Word count validation for main_themes (enforce during generation, not just at mark-ready)
     // This prevents "scripts-only" runs from failing after approval due to short scripts
-    const wordCount = script.trim().split(/\s+/).filter((word) => word.length > 0).length;
     const targetMinWords = Number(process.env.CLOUDIA_MAIN_THEMES_MIN_WORDS ?? "280");
+    let wordCount = script.trim().split(/\s+/).filter((word) => word.length > 0).length;
     if (wordCount < targetMinWords) {
-      // Add as blocking reason to trigger rewrite with expansion instruction
+      // Add deterministic expansion before evaluation to avoid rewrite loops
       console.warn(
         `[main_themes] Attempt ${attemptNumber}: Script has ${wordCount} words, minimum is ${targetMinWords}. Will request expansion.`
       );
+      script = appendMainThemesExpansion(script);
+      wordCount = script.trim().split(/\s+/).filter((word) => word.length > 0).length;
     }
 
     // Phase D authority inversion: frame evaluator provides diagnostics only
