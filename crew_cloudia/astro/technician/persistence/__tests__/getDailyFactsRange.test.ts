@@ -72,6 +72,7 @@ describe("getDailyFactsRange", () => {
     transits_secondary: [],
     background_conditions: [],
     excluded: [],
+    interpreter_transits_v1: [],
   };
 
   beforeEach(() => {

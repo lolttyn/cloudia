@@ -112,7 +112,7 @@ export async function computeSkyState(input: ComputeSkyStateInput) {
   );
 
   return {
-    schema_version: "1.0.0",
+    schema_version: "1.1.0",
     meta: {
       engine: "swisseph",
       engine_version: engineVersion,

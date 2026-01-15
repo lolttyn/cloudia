@@ -5,7 +5,24 @@ import { deriveDailyFactsFromSkyState } from "./crew_cloudia/astro/technician/as
 import { TECHNICIAN_POLICY_V1 } from "./crew_cloudia/astro/technician/policy/technicianPolicy.v1.js";
 import { upsertDailyFacts } from "./crew_cloudia/astro/technician/persistence/upsertDailyFacts.js";
 
-const DATES = ["2026-01-07","2026-01-08","2026-01-09","2026-01-10","2026-01-11","2026-01-12","2026-01-13"];
+const START_DATE = "2026-01-01";
+const END_DATE = "2026-01-24"; // inclusive
+
+function enumerateDatesInclusive(start: string, end: string): string[] {
+  const out: string[] = [];
+  const d = new Date(`${start}T00:00:00Z`);
+  const e = new Date(`${end}T00:00:00Z`);
+
+  for (; d <= e; d.setUTCDate(d.getUTCDate() + 1)) {
+    const yyyy = d.getUTCFullYear();
+    const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
+    const dd = String(d.getUTCDate()).padStart(2, "0");
+    out.push(`${yyyy}-${mm}-${dd}`);
+  }
+  return out;
+}
+
+const DATES = enumerateDatesInclusive(START_DATE, END_DATE);
 
 (async () => {
   for (const date of DATES) {

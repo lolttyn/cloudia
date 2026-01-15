@@ -1,6 +1,8 @@
 import "dotenv/config";
 import { supabase } from "../lib/supabaseClient";
 
+const EXPECTED_CLOUDIA_TTS_VOICE_ID = "1v78XBG1KZLJujPAJPKI";
+
 function requireEnv(name: string): string {
   const value = process.env[name];
   if (!value) {
@@ -51,6 +53,13 @@ export async function markSegmentReadyForAudio(params: {
 }): Promise<void> {
   const ttsVoiceId = requireEnv("CLOUDIA_TTS_VOICE_ID");
   const ttsModelId = requireEnv("CLOUDIA_TTS_MODEL_ID");
+
+  // Guardrail: prevent env drift from silently stamping the wrong voice onto segments.
+  if (ttsVoiceId !== EXPECTED_CLOUDIA_TTS_VOICE_ID) {
+    throw new Error(
+      `Refusing to mark segment pending: CLOUDIA_TTS_VOICE_ID must be "${EXPECTED_CLOUDIA_TTS_VOICE_ID}" but got "${ttsVoiceId}"`
+    );
+  }
 
   // Fetch script_text to validate length before marking pending
   const { data: segment, error: fetchError } = await supabase

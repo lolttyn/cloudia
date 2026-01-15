@@ -25,6 +25,7 @@ type ParsedArgs = {
   preseed_only: boolean;
   continue_on_error: boolean;
   retry_gate_failed: boolean;
+  force_regenerate: boolean;
 };
 
 export type DateRunResult = {
@@ -50,7 +51,7 @@ function parseArgs(argv: string[]): ParsedArgs {
   const [, , program_slug, start_date, ...rest] = argv;
   if (!program_slug || !start_date) {
     throw new Error(
-      "Usage: tsx crew_cloudia/runner/runEpisodeBatch.ts <program_slug> <start_date YYYY-MM-DD> [--window-days N] [--scripts-only] [--no-preseed] [--preseed-only] [--continue-on-error] [--retry-gate-failed]"
+      "Usage: tsx crew_cloudia/runner/runEpisodeBatch.ts <program_slug> <start_date YYYY-MM-DD> [--window-days N] [--scripts-only] [--no-preseed] [--preseed-only] [--continue-on-error] [--retry-gate-failed] [--force-regenerate]"
     );
   }
 
@@ -60,6 +61,7 @@ function parseArgs(argv: string[]): ParsedArgs {
   let preseed_only = false;
   let continue_on_error = false;
   let retry_gate_failed = false;
+  let force_regenerate = false;
 
   for (let i = 0; i < rest.length; i++) {
     const token = rest[i];
@@ -80,6 +82,8 @@ function parseArgs(argv: string[]): ParsedArgs {
       continue_on_error = true;
     } else if (token === "--retry-gate-failed") {
       retry_gate_failed = true;
+    } else if (token === "--force-regenerate") {
+      force_regenerate = true;
     } else {
       // ignore unknown flags silently to keep behavior minimal
     }
@@ -89,7 +93,7 @@ function parseArgs(argv: string[]): ParsedArgs {
     throw new Error("--window-days must be >= 1");
   }
 
-  return { program_slug, start_date, window_days, scripts_only, no_preseed, preseed_only, continue_on_error, retry_gate_failed };
+  return { program_slug, start_date, window_days, scripts_only, no_preseed, preseed_only, continue_on_error, retry_gate_failed, force_regenerate };
 }
 
 function expandDates(start: string, windowDays: number): string[] {
@@ -311,7 +315,8 @@ export async function runForDate(
   scripts_only: boolean,
   collector?: RunSummaryCollector,
   continue_on_error: boolean = false,
-  retry_gate_failed: boolean = false
+  retry_gate_failed: boolean = false,
+  force_regenerate: boolean = false
 ): Promise<DateRunResult> {
   const episode_id = deterministicEpisodeId(program_slug, episode_date);
   const today = new Date().toISOString().slice(0, 10);
@@ -350,6 +355,7 @@ export async function runForDate(
     collector,
     retry_gate_failed,
     scripts_only,
+    force_regenerate,
   });
 
   const closingResult = await runClosingForDate({
@@ -451,7 +457,7 @@ export async function runForDate(
 }
 
 async function main() {
-  const { program_slug, start_date, window_days, scripts_only, no_preseed, preseed_only, continue_on_error, retry_gate_failed } = parseArgs(process.argv);
+  const { program_slug, start_date, window_days, scripts_only, no_preseed, preseed_only, continue_on_error, retry_gate_failed, force_regenerate } = parseArgs(process.argv);
   const dates = expandDates(start_date, window_days);
 
   // Parse interpretation mode from environment (default to canonical for Phase G)
@@ -496,7 +502,7 @@ async function main() {
   for (const date of dates) {
     if (continue_on_error) {
       try {
-        const result = await runForDate(program_slug, date, scripts_only, collector, continue_on_error, retry_gate_failed);
+        const result = await runForDate(program_slug, date, scripts_only, collector, continue_on_error, retry_gate_failed, force_regenerate);
         dateResults.push(result);
         if (!result.success) {
           console.error(`[batch:date] ${date} FAILED: ${result.error}`);
@@ -525,7 +531,7 @@ async function main() {
       }
     } else {
       // Original behavior: throw on first failure
-      const result = await runForDate(program_slug, date, scripts_only, collector, continue_on_error, retry_gate_failed);
+      const result = await runForDate(program_slug, date, scripts_only, collector, continue_on_error, retry_gate_failed, force_regenerate);
       if (!result.success) {
         throw new Error(result.error);
       }

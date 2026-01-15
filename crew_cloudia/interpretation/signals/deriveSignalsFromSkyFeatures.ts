@@ -50,11 +50,6 @@ function normalizeDeg(value: number) {
   return v;
 }
 
-function angularSeparation(a: number, b: number) {
-  const diff = Math.abs(normalizeDeg(a) - normalizeDeg(b));
-  return Math.min(diff, 360 - diff);
-}
-
 function isOppositeSign(a: string, b: string): boolean {
   const ai = SIGNS.indexOf(a.toLowerCase());
   const bi = SIGNS.indexOf(b.toLowerCase());
@@ -121,7 +116,8 @@ export function deriveSignalsFromSkyFeatures(
   });
 
   // Lunation detection: high-salience, single-dominant triggers.
-  const elongation = angularSeparation(features.sun.longitude, features.moon.longitude);
+  // Use directed elongation (Moon - Sun) in [0, 360) for metadata (preserves direction).
+  const elongation = normalizeDeg(features.moon.longitude - features.sun.longitude);
   if (features.moon.phase === "new" && features.sun.sign === features.moon.sign) {
     signals.push({
       signal_key: newMoonKey(features.sun.sign),

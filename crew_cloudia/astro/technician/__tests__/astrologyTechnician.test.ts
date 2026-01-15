@@ -90,7 +90,7 @@ describe("astrologyTechnician (pure functions)", () => {
       const facts = deriveDailyFactsFromSkyState(sky, TECHNICIAN_POLICY_V1, date);
       
       expect(facts.source).toBeDefined();
-      expect(facts.source.sky_state_schema_version).toBe("1.0.0");
+      expect(facts.source.sky_state_schema_version).toBe("1.1.0");
       expect(facts.source.engine).toBe("swisseph");
       expect(facts.source.engine_version).toBeDefined();
       expect(facts.source.ephemeris_fileset).toBeDefined();

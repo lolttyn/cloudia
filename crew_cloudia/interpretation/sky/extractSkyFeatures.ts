@@ -53,12 +53,12 @@ function angularSeparation(a: number, b: number) {
 }
 
 function deriveMoonPhase(sunLon: number, moonLon: number): SkyFeatures["moon"]["phase"] {
-  const sep = angularSeparation(sunLon, moonLon);
-  if (sep < 45) return "new";
-  if (sep < 135) return "waxing";
-  if (sep < 225) return "full";
-  if (sep < 315) return "waning";
-  return "new";
+  // Directed elongation preserves waxing vs waning.
+  const elongation = normalizeDeg(moonLon - sunLon); // [0, 360)
+  if (elongation < 45 || elongation >= 315) return "new";
+  if (elongation < 135) return "waxing";
+  if (elongation < 225) return "full";
+  return "waning";
 }
 
 function detectSunMoonAspect(

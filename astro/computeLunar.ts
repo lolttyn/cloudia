@@ -15,6 +15,20 @@ export type LunarPhaseName =
 
 export interface LunarPhase {
   phase_name: LunarPhaseName;
+  /**
+   * Directed Sun→Moon elongation in degrees, normalized to [0, 360).
+   * Computed as (moon_longitude - sun_longitude + 360) % 360.
+   */
+  elongation_deg: number;
+  /**
+   * Absolute smallest separation angle in degrees, normalized to [0, 180].
+   * This is derived from elongation: min(elongation, 360 - elongation).
+   */
+  phase_angle_abs_deg: number;
+  /**
+   * Back-compat alias for phase_angle_abs_deg.
+   * Historically this was stored as the absolute smallest separation angle.
+   */
   phase_angle_deg: number;
   illumination_pct: number;
 }
@@ -29,11 +43,10 @@ function normalizeDegrees(value: number): number {
 }
 
 /**
- * Compute angular separation between two longitudes (0-180 degrees)
+ * Compute directed elongation (Moon - Sun) in degrees, normalized to [0, 360).
  */
-function angularSeparation(lon1: number, lon2: number): number {
-  const diff = Math.abs(normalizeDegrees(lon1) - normalizeDegrees(lon2));
-  return Math.min(diff, 360 - diff);
+function directedElongation(sunLon: number, moonLon: number): number {
+  return normalizeDegrees(moonLon - sunLon);
 }
 
 /**
@@ -100,14 +113,21 @@ export function computeLunarPhase(
   sunLongitude: number,
   moonLongitude: number
 ): LunarPhase {
-  // Phase angle is the angular separation (elongation)
-  const phaseAngleDeg = angularSeparation(sunLongitude, moonLongitude);
-  const phaseName = phaseNameFromAngle(phaseAngleDeg);
-  const illuminationPct = illuminationFromPhaseAngle(phaseAngleDeg);
+  // Directed elongation preserves waxing/waning direction.
+  const elongationDeg = directedElongation(sunLongitude, moonLongitude);
+
+  // Absolute smallest separation is still useful for illumination (0-180).
+  const phaseAngleAbsDeg = Math.min(elongationDeg, 360 - elongationDeg);
+
+  const phaseName = phaseNameFromAngle(elongationDeg);
+  const illuminationPct = illuminationFromPhaseAngle(phaseAngleAbsDeg);
 
   return {
     phase_name: phaseName,
-    phase_angle_deg: Number(phaseAngleDeg.toFixed(4)),
+    elongation_deg: Number(elongationDeg.toFixed(4)),
+    phase_angle_abs_deg: Number(phaseAngleAbsDeg.toFixed(4)),
+    // Back-compat key (kept equal to abs angle)
+    phase_angle_deg: Number(phaseAngleAbsDeg.toFixed(4)),
     illumination_pct: illuminationPct,
   };
 }

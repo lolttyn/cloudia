@@ -10,10 +10,10 @@ sky_state is the canonical, deterministic JSON output produced by Layer 0 epheme
 - Validated: schema-conformant or it fails; no best-effort recovery.
 - Traceable: data_version and computation metadata must be present.
 
-## Canonical JSON Example (v1.0.0)
+## Canonical JSON Example (v1.1.0)
 ```
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "meta": {
     "engine": "swisseph",
     "engine_version": "unversioned",
@@ -90,10 +90,11 @@ sky_state is the canonical, deterministic JSON output produced by Layer 0 epheme
     - `type` (string, required): Aspect type label (e.g., conjunction, opposition, square, trine, sextile).
     - `orb_deg` (number, required): Orbital separation difference from exact aspect, in degrees.
 - `lunar` (object, required): Lunar phase data. Currently empty object; reserved for future implementation.
-  - When implemented:
-    - `phase_name` (string, required): Canonical lunar phase label (e.g., new, waxing_crescent, first_quarter, waxing_gibbous, full, waning_gibbous, last_quarter, waning_crescent).
-    - `phase_angle_deg` (number, required): Sun–Moon elongation angle in degrees.
-    - `illumination_pct` (number, required): Percent illumination of the lunar disc.
+  - `phase_name` (string, required): Canonical lunar phase label (e.g., new, waxing_crescent, first_quarter, waxing_gibbous, full, waning_gibbous, last_quarter, waning_crescent).
+  - `elongation_deg` (number, required in v1.1.0): **Directed** Sun→Moon elongation in degrees, normalized to \([0, 360)\), computed as \((moon\_lon - sun\_lon + 360) \% 360\).
+  - `phase_angle_abs_deg` (number, required in v1.1.0): Absolute smallest separation in degrees, normalized to \([0, 180]\), computed as \(min(elongation, 360 - elongation)\).
+  - `phase_angle_deg` (number, required): Back-compat alias for `phase_angle_abs_deg` (absolute smallest separation in degrees, \([0, 180]\)).
+  - `illumination_pct` (number, required): Percent illumination of the lunar disc.
 
 ## Explicit Exclusions
 - No interpretation, meanings, or textual narratives.

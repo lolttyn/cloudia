@@ -103,7 +103,7 @@ describe("runInterpreterCanonical", () => {
       },
       aspects: [],
       lunar: {
-        phase_name: "waxing",
+        phase_name: "waxing_crescent",
         phase_angle_deg: 45,
         illumination_pct: 25,
       },

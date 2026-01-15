@@ -9,6 +9,8 @@ import { classifyError, decideRetry, sleep } from "./retryPolicy";
 import { getMp3DurationSecondsFromBytes } from "./ffprobeDuration";
 import { detectLeadingTrailingSilenceFromMp3Bytes } from "./silenceDetect";
 
+const EXPECTED_CLOUDIA_TTS_VOICE_ID = "1v78XBG1KZLJujPAJPKI";
+
 function requireEnv(name: string) {
   if (!process.env[name]) throw new Error(`Missing env var: ${name}`);
 }
@@ -99,6 +101,15 @@ export async function runAudioWorkerOnce(params?: {
       // Read current failure count (will be incremented by audio_mark_failed if this attempt fails)
       currentFailureCount = Number(claimed?.audio_attempt_count ?? 0);
 
+      // Guardrail: never ship audio with an unexpected voice ID, even if data drifted.
+      if (ttsVoiceId !== EXPECTED_CLOUDIA_TTS_VOICE_ID) {
+        const errorClass = "tts_wrong_voice_id";
+        const message = `Refusing to synthesize: cloudia_segments.tts_voice_id="${ttsVoiceId}" (expected "${EXPECTED_CLOUDIA_TTS_VOICE_ID}")`;
+        console.error("[audio-worker] wrong voice id", { episodeId, segmentKey, jobKey, ttsVoiceId });
+        await rpcMarkFailed({ episodeId, segmentKey, jobKey, errorClass, errorMessage: message });
+        continue;
+      }
+
       const scriptText = row.script_text as string;
       
       // Check script word count before TTS (deterministic, cheap)
@@ -182,7 +193,12 @@ export async function runAudioWorkerOnce(params?: {
               p_segment_key: segmentKey,
               p_reason: `retrying after ${errorClass}`,
             });
-            console.log("[audio-worker] requeued for retry", { episodeId, segmentKey, attempt, backoffMs: decision.backoffMs });
+            console.log("[audio-worker] requeued for retry", {
+              episodeId,
+              segmentKey,
+              attempt: failureCountAfterThisFailure,
+              backoffMs: decision.backoffMs,
+            });
             await sleep(decision.backoffMs);
           } catch (requeueErr: any) {
             console.error("[audio-worker] requeue_failed failed", { episodeId, segmentKey, err: requeueErr?.message ?? String(requeueErr) });

@@ -136,6 +136,7 @@ export async function runMainThemesForDate(params: {
   collector?: RunSummaryCollector;
   retry_gate_failed?: boolean;
   scripts_only?: boolean;
+  force_regenerate?: boolean;
 }): Promise<{
   segment_key: string;
   gate_result: ReturnType<typeof evaluateEditorialGate>;
@@ -204,88 +205,94 @@ export async function runMainThemesForDate(params: {
   const time_context = params.time_context ?? (params.episode_date === today ? "day_of" : "future");
   const writing_contract = getWritingContract("main_themes");
 
-  // Idempotency guard: if latest attempt is already approved, return it immediately
-  const { data: latestAttempt, error: latestError } = await supabase
-    .from("cloudia_segment_versions")
-    .select("script_text, gate_decision, attempt_number")
-    .eq("episode_id", params.episode_id)
-    .eq("segment_key", "main_themes")
-    .order("attempt_number", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
-  if (latestError) {
-    throw new Error(`Failed to check existing attempts: ${latestError.message}`);
+  if (params.force_regenerate) {
+    console.log("[main_themes] force_regenerate enabled: bypassing idempotency guard");
   }
 
-  if (latestAttempt && latestAttempt.gate_decision === "approve") {
-    // Already have an approved version - check if it passes gate evaluation
-    console.log(`[main_themes] Idempotency guard: found approved attempt ${latestAttempt.attempt_number}, evaluating gate...`);
-    const diagnostics = mapDiagnosticsToEditorialViolations(
-      performSelfCheck(latestAttempt.script_text, writing_contract)
-    );
+  // Idempotency guard: if latest attempt is already approved, return it immediately
+  if (!params.force_regenerate) {
+    const { data: latestAttempt, error: latestError } = await supabase
+      .from("cloudia_segment_versions")
+      .select("script_text, gate_decision, attempt_number")
+      .eq("episode_id", params.episode_id)
+      .eq("segment_key", "main_themes")
+      .order("attempt_number", { ascending: false })
+      .limit(1)
+      .maybeSingle();
 
-    const gateResult = evaluateEditorialGate({
-      episode_id: params.episode_id,
-      episode_date: params.episode_date,
-      segment_key: "main_themes",
-      time_context,
-      generated_script: latestAttempt.script_text,
-      diagnostics,
-      segment_contract: {
-        allows_rewrites: false,
-      },
-      policy_version: "v0.1",
-      max_attempts_remaining: 0,
-    });
+    if (latestError) {
+      throw new Error(`Failed to check existing attempts: ${latestError.message}`);
+    }
 
-    // Record the existing attempt to collector for Phase G instrumentation
-    if (params.collector) {
-      params.collector.recordAttempt({
+    if (latestAttempt && latestAttempt.gate_decision === "approve") {
+      // Already have an approved version - check if it passes gate evaluation
+      console.log(`[main_themes] Idempotency guard: found approved attempt ${latestAttempt.attempt_number}, evaluating gate...`);
+      const diagnostics = mapDiagnosticsToEditorialViolations(
+        performSelfCheck(latestAttempt.script_text, writing_contract)
+      );
+
+      const gateResult = evaluateEditorialGate({
+        episode_id: params.episode_id,
         episode_date: params.episode_date,
         segment_key: "main_themes",
-        attempt_number: latestAttempt.attempt_number,
-        decision: "approve",
-        blocking_reasons: [],
-        script_text: latestAttempt.script_text,
+        time_context,
+        generated_script: latestAttempt.script_text,
+        diagnostics,
+        segment_contract: {
+          allows_rewrites: false,
+        },
+        policy_version: "v0.1",
+        max_attempts_remaining: 0,
       });
-      params.collector.recordFinal({
+
+      // Record the existing attempt to collector for Phase G instrumentation
+      if (params.collector) {
+        params.collector.recordAttempt({
+          episode_date: params.episode_date,
+          segment_key: "main_themes",
+          attempt_number: latestAttempt.attempt_number,
+          decision: "approve",
+          blocking_reasons: [],
+          script_text: latestAttempt.script_text,
+        });
+        params.collector.recordFinal({
+          episode_date: params.episode_date,
+          segment_key: "main_themes",
+          final_decision: gateResult.decision,
+        });
+      }
+
+      await persistEditorialGateResult({
+        episode_id: params.episode_id,
         episode_date: params.episode_date,
         segment_key: "main_themes",
-        final_decision: gateResult.decision,
+        gate_result: gateResult,
       });
+
+      const gateDecision = gateResult.decision;
+
+      // Gate passed -> true idempotency: safe to skip
+      if (gateDecision === "approve") {
+        console.log(`[main_themes] Idempotency guard: approved attempt ${latestAttempt.attempt_number} passes gate, skipping generation`);
+        return {
+          segment_key: "main_themes",
+          gate_result: gateResult,
+        };
+      }
+
+      // Gate failed
+      if (!params.retry_gate_failed) {
+        console.log(`[main_themes] Idempotency guard: approved attempt ${latestAttempt.attempt_number} is gate-blocked (${gateDecision}), returning blocked result`);
+        return {
+          segment_key: "main_themes",
+          gate_result: gateResult,
+        };
+      }
+
+      // retry_gate_failed enabled -> DO NOT return; proceed to generation loop
+      console.log(`[main_themes] Approved attempt ${latestAttempt.attempt_number} is gate-blocked (${gateDecision}); retry_gate_failed enabled, regenerating...`);
+      // Fall through to generation loop below
     }
-
-    await persistEditorialGateResult({
-      episode_id: params.episode_id,
-      episode_date: params.episode_date,
-      segment_key: "main_themes",
-      gate_result: gateResult,
-    });
-
-    const gateDecision = gateResult.decision;
-
-    // Gate passed -> true idempotency: safe to skip
-    if (gateDecision === "approve") {
-      console.log(`[main_themes] Idempotency guard: approved attempt ${latestAttempt.attempt_number} passes gate, skipping generation`);
-      return {
-        segment_key: "main_themes",
-        gate_result: gateResult,
-      };
-    }
-
-    // Gate failed
-    if (!params.retry_gate_failed) {
-      console.log(`[main_themes] Idempotency guard: approved attempt ${latestAttempt.attempt_number} is gate-blocked (${gateDecision}), returning blocked result`);
-      return {
-        segment_key: "main_themes",
-        gate_result: gateResult,
-      };
-    }
-
-    // retry_gate_failed enabled -> DO NOT return; proceed to generation loop
-    console.log(`[main_themes] Approved attempt ${latestAttempt.attempt_number} is gate-blocked (${gateDecision}); retry_gate_failed enabled, regenerating...`);
-    // Fall through to generation loop below
   }
 
   let script = "";
