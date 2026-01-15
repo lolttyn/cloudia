@@ -113,9 +113,17 @@ function autoRepairMechanicalViolations(
     const scriptLower = repaired.toLowerCase();
     for (const anchor of interpretiveFrame.sky_anchors) {
       if (!scriptLower.includes(anchor.label.toLowerCase())) {
-        // Append a sentence mentioning the anchor
-        const anchorSentence = `Because ${anchor.label}, you might notice this shift.`;
-        repaired = `${repaired.trim()}\n\n${anchorSentence}`;
+        // Inject anchor reference in first paragraph (prepend or after first sentence)
+        const firstSentenceEnd = repaired.search(/[.!?]\s+/);
+        if (firstSentenceEnd > 0 && firstSentenceEnd < 200) {
+          // Insert after first sentence
+          const anchorClause = ` — with ${anchor.label} setting the tone.`;
+          repaired = repaired.slice(0, firstSentenceEnd + 1) + anchorClause + repaired.slice(firstSentenceEnd + 1);
+        } else {
+          // Prepend short anchor reference
+          const anchorSentence = `Start from this: ${anchor.label}.`;
+          repaired = `${anchorSentence}\n\n${repaired.trim()}`;
+        }
         needsRecheck = true;
         console.log(`[auto-repair] Added missing sky anchor: ${anchor.label}`);
         break; // Only add one anchor per repair pass
@@ -334,6 +342,34 @@ export async function runMainThemesForDate(params: {
         episode_validation,
       });
       script = draft.draft_script;
+      
+      // DWU 12: Cheap anchor coverage self-check before evaluation
+      if (params.interpretive_frame && params.interpretive_frame.sky_anchors.length > 0) {
+        const scriptLower = script.toLowerCase();
+        const hasAnchor = params.interpretive_frame.sky_anchors.some((anchor) =>
+          scriptLower.includes(anchor.label.toLowerCase())
+        );
+        
+        if (!hasAnchor) {
+          // Auto-inject anchor reference in first paragraph (first ~80 words)
+          const firstAnchor = params.interpretive_frame.sky_anchors[0];
+          
+          // Try to insert after first sentence boundary
+          const firstSentenceEnd = script.search(/[.!?]\s+/);
+          if (firstSentenceEnd > 0 && firstSentenceEnd < 200) {
+            // Insert clause after first sentence
+            const anchorClause = ` — with ${firstAnchor.label} setting the tone.`;
+            script = script.slice(0, firstSentenceEnd + 1) + anchorClause + script.slice(firstSentenceEnd + 1);
+          } else {
+            // Prepend short anchor reference if no clear sentence boundary
+            const anchorSentence = `Start from this: ${firstAnchor.label}.`;
+            script = `${anchorSentence}\n\n${script.trim()}`;
+          }
+          
+          console.log(`[anchor-self-check] Auto-injected sky anchor reference: ${firstAnchor.label}`);
+        }
+      }
+      
       previousScript = script; // Store for comparison in next iteration
     } else {
       // CRITICAL: This is a REVISION, not a retry

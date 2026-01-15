@@ -129,6 +129,18 @@ export function generateEditInstructions(
         );
         break;
         
+      case reason === "UNGROUNDED_INTERPRETATION":
+        if (segmentKey === "main_themes") {
+          instructions.unshift(
+            "Add explicit sky anchor references (e.g., 'Moon in Capricorn') to ground your interpretation. Do not add new metaphors—just ground the existing message by referencing 1-2 sky anchors from the provided list in the first paragraph."
+          );
+        } else {
+          instructions.push(
+            "Address the issue flagged as: UNGROUNDED_INTERPRETATION. Revise the text to resolve it."
+          );
+        }
+        break;
+
       case reason.startsWith("intro:") || reason.startsWith("closing:"):
         // Most intro structural issues are now warnings, not blockers
         // Only handle critical ones here
