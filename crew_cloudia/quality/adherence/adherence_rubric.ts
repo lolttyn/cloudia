@@ -476,6 +476,99 @@ function enforceAdminMetaphorBan(
   }
 }
 
+function enforceSkyAnchorConsistency(
+  text: string,
+  lower: string,
+  segment_key: string,
+  interpretive_frame: InterpretiveFrame | undefined,
+  episode_date: string | undefined,
+  blocking: Set<string>
+): void {
+  // Only apply to main_themes (where sky anchor consistency matters most)
+  if (segment_key !== "main_themes") return;
+  if (!interpretive_frame?.sky_anchors || interpretive_frame.sky_anchors.length === 0) return;
+
+  // Extract allowed sign names from sky_anchors
+  const allowedSigns = new Set<string>();
+  for (const anchor of interpretive_frame.sky_anchors) {
+    const signMatch = anchor.label.match(/\b(aries|taurus|gemini|cancer|leo|virgo|libra|scorpio|sagittarius|capricorn|aquarius|pisces)\b/i);
+    if (signMatch) {
+      allowedSigns.add(signMatch[1].toLowerCase());
+    }
+  }
+
+  // If no signs found in anchors, skip check (unlikely but safe)
+  if (allowedSigns.size === 0) return;
+
+  // Check for mentions of zodiac signs in the script
+  const zodiacSigns = [
+    "aries", "taurus", "gemini", "cancer", "leo", "virgo",
+    "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"
+  ];
+
+  for (const sign of zodiacSigns) {
+    // Check if sign is mentioned in the script
+    const signRegex = new RegExp(`\\b${sign}\\b`, "i");
+    if (signRegex.test(lower)) {
+      // If sign is mentioned but not in allowed list, block
+      if (!allowedSigns.has(sign.toLowerCase())) {
+        const signIndex = lower.indexOf(sign.toLowerCase());
+        const start = Math.max(0, signIndex - 60);
+        const end = Math.min(text.length, signIndex + sign.length + 60);
+
+        console.log("[sky-anchor-consistency-hit]", {
+          episode_date: episode_date || "unknown",
+          segment_key,
+          forbidden_sign: sign,
+          allowed_signs: Array.from(allowedSigns),
+          context: text.slice(start, end),
+        });
+
+        blocking.add("SKY_ANCHOR_CONSISTENCY");
+        return; // Only need one violation to block
+      }
+    }
+  }
+
+  // Also check for contradictory ingress claims (e.g., "moved into Capricorn" when Capricorn isn't anchored)
+  const ingressPatterns = [
+    /\bmoved into\s+(\w+)/i,
+    /\bmoving into\s+(\w+)/i,
+    /\bentered\s+(\w+)/i,
+    /\bentering\s+(\w+)/i,
+    /\bshifted (?:out of|into)\s+(\w+)/i,
+    /\bslipped (?:out of|into)\s+(\w+)/i,
+  ];
+
+  for (const pattern of ingressPatterns) {
+    const match = lower.match(pattern);
+    if (match && match[1]) {
+      const mentionedSign = match[1].toLowerCase();
+      // Check if the mentioned sign is a valid zodiac sign
+      if (zodiacSigns.includes(mentionedSign)) {
+        // If it's a sign but not in allowed list, block
+        if (!allowedSigns.has(mentionedSign)) {
+          const matchIndex = lower.indexOf(match[0]);
+          const start = Math.max(0, matchIndex - 60);
+          const end = Math.min(text.length, matchIndex + match[0].length + 60);
+
+          console.log("[sky-anchor-consistency-hit]", {
+            episode_date: episode_date || "unknown",
+            segment_key,
+            forbidden_ingress: match[0],
+            mentioned_sign: mentionedSign,
+            allowed_signs: Array.from(allowedSigns),
+            context: text.slice(start, end),
+          });
+
+          blocking.add("SKY_ANCHOR_CONSISTENCY");
+          return;
+        }
+      }
+    }
+  }
+}
+
 function applyAuthorialCompression(sentences: string[]): ScoreAdjustment[] {
   const adjustments: ScoreAdjustment[] = [];
   for (const sentence of sentences) {
@@ -615,6 +708,7 @@ export function evaluateAdherenceRubric(input: AdherenceInput): AdherenceResult 
   enforceRelationalTranslation(lower, input.segment_key, blocking);
   enforceBehavioralAffordance(lower, input.segment_key, blocking);
   enforceAdminMetaphorBan(script, lower, input.segment_key, episode_date, blocking);
+  enforceSkyAnchorConsistency(script, lower, input.segment_key, input.interpretive_frame, episode_date, blocking);
 
   const repetition = input.segment_key === "closing" && input.previous_closings?.length
     ? checkClosingRepetition(script, input.previous_closings)

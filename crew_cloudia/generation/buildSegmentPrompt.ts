@@ -157,7 +157,7 @@ Work these into one flowing thought (no labels, no lists):
 - Sky anchors: ${anchorLines || "- none"}
 - Why-today clause: "${whyToday}"
 
-${segment.segment_key === "main_themes" && anchors.length > 0 ? `CRITICAL: In the first paragraph (first ~80 words), explicitly reference 1-2 sky anchors from the list above (e.g., "${anchors[0]?.label ?? ""}"), using plain language. This grounds your interpretation in the actual sky.` : ""}
+${segment.segment_key === "main_themes" && anchors.length > 0 ? `CRITICAL FORMAT REQUIREMENT: Your first sentence must contain exactly one sky anchor label verbatim from the list above (e.g., "${anchors[0]?.label ?? ""}"). The first sentence must be a normal, flowing sentence that includes this anchor label—do not use a label prefix like "OPENING_ANCHOR:". This is a hard format constraint that must be satisfied.` : ""}
 
 Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into **sensory, physical, interpersonal, or environmental moments** (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Avoid work-admin metaphors (inbox, calendar, email, meetings).
 `;

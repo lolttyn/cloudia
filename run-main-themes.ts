@@ -343,7 +343,7 @@ export async function runMainThemesForDate(params: {
       });
       script = draft.draft_script;
       
-      // DWU 12: Cheap anchor coverage self-check before evaluation
+      // DWU 14: Cheap anchor coverage self-check with non-templated insertion
       if (params.interpretive_frame && params.interpretive_frame.sky_anchors.length > 0) {
         const scriptLower = script.toLowerCase();
         const hasAnchor = params.interpretive_frame.sky_anchors.some((anchor) =>
@@ -351,22 +351,35 @@ export async function runMainThemesForDate(params: {
         );
         
         if (!hasAnchor) {
-          // Auto-inject anchor reference in first paragraph (first ~80 words)
+          // Auto-inject anchor reference using random variant (non-templated)
           const firstAnchor = params.interpretive_frame.sky_anchors[0];
+          
+          // Random variants to avoid template attractor
+          const anchorClauseVariants = [
+            `, under ${firstAnchor.label}`,
+            `, anchored by ${firstAnchor.label}`,
+            `, with ${firstAnchor.label} in the mix`,
+            `, with ${firstAnchor.label} overhead`,
+            ` — ${firstAnchor.label}`,
+          ];
+          
+          // Pick random variant
+          const randomVariant = anchorClauseVariants[
+            Math.floor(Math.random() * anchorClauseVariants.length)
+          ];
           
           // Try to insert after first sentence boundary
           const firstSentenceEnd = script.search(/[.!?]\s+/);
           if (firstSentenceEnd > 0 && firstSentenceEnd < 200) {
-            // Insert clause after first sentence
-            const anchorClause = ` — with ${firstAnchor.label} setting the tone.`;
-            script = script.slice(0, firstSentenceEnd + 1) + anchorClause + script.slice(firstSentenceEnd + 1);
+            // Insert clause after first sentence (within first ~120 chars)
+            script = script.slice(0, firstSentenceEnd + 1) + randomVariant + script.slice(firstSentenceEnd + 1);
           } else {
-            // Prepend short anchor reference if no clear sentence boundary
-            const anchorSentence = `Start from this: ${firstAnchor.label}.`;
-            script = `${anchorSentence}\n\n${script.trim()}`;
+            // If no clear sentence boundary, append to first ~120 chars
+            const insertPoint = Math.min(120, script.length);
+            script = script.slice(0, insertPoint) + randomVariant + script.slice(insertPoint);
           }
           
-          console.log(`[anchor-self-check] Auto-injected sky anchor reference: ${firstAnchor.label}`);
+          console.log(`[anchor-self-check] Auto-injected sky anchor reference: ${firstAnchor.label} (variant: ${randomVariant})`);
         }
       }
       

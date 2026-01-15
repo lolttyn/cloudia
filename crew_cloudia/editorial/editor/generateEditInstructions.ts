@@ -141,6 +141,18 @@ export function generateEditInstructions(
         }
         break;
 
+      case reason === "SKY_ANCHOR_CONSISTENCY":
+        if (segmentKey === "main_themes") {
+          instructions.unshift(
+            "Remove any mentions of zodiac signs or sign transitions that are not present in the provided sky anchors. Only reference signs that appear in the sky anchors list. Do not mention sign ingresses (e.g., 'moved into Capricorn') unless that sign is explicitly listed in the sky anchors."
+          );
+        } else {
+          instructions.push(
+            "Remove any mentions of zodiac signs that are not present in the provided sky anchors. Only reference signs that appear in the sky anchors list."
+          );
+        }
+        break;
+
       case reason.startsWith("intro:") || reason.startsWith("closing:"):
         // Most intro structural issues are now warnings, not blockers
         // Only handle critical ones here
