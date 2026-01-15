@@ -57,6 +57,18 @@ export function generateEditInstructions(
         }
         break;
 
+      case reason === "MAIN_THEMES_MOON_TRANSIT_BAN":
+        if (segmentKey === "main_themes") {
+          instructions.unshift(
+            "Remove all Moon sign or Moon movement references. Re-anchor the interpretation to the current lunation phase only (e.g., New Moon, Waxing Crescent, First Quarter). Do not introduce new metaphors. Preserve the existing message and tone."
+          );
+        } else {
+          instructions.push(
+            "Remove Moon sign or Moon movement references. Re-anchor to lunation phase only."
+          );
+        }
+        break;
+
       case reason === "SYSTEM_LEVEL_EXPLANATION":
         instructions.push(
           "Do not explain astrology. Translate it into lived human experience instead. Assume the listener trusts you; you don't need to justify your statements."
@@ -132,7 +144,7 @@ export function generateEditInstructions(
       case reason === "UNGROUNDED_INTERPRETATION":
         if (segmentKey === "main_themes") {
           instructions.unshift(
-            "Add explicit sky anchor references (e.g., 'Moon in Capricorn') to ground your interpretation. Do not add new metaphors—just ground the existing message by referencing 1-2 sky anchors from the provided list in the first paragraph."
+            "Ground the interpretation using the lunation phase only (e.g., New Moon, Waxing Moon). Do not add new metaphors—just anchor the existing message to the current lunation phase in the first paragraph."
           );
         } else {
           instructions.push(

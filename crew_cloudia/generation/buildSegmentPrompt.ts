@@ -57,7 +57,7 @@ ${
 }
 ${
   segment.segment_key === "main_themes"
-    ? `Main themes cue: focus on the heart of the day. On lunation days it’s the single lunation idea—do not enumerate or split themes. Let meaning unfold naturally: what today’s really about, why it shows up now, how it might show up, and how seriously to hold it—all in one flowing paragraph.`.trim()
+    ? `Main themes cue: focus on the heart of the day. On lunation days it’s the single lunation idea—do not enumerate or split themes. Let meaning unfold naturally: what today’s really about, why it shows up now, how it might show up, and how seriously to hold it—all in one flowing paragraph. Hard constraint: do not mention Moon sign or Moon ingress. Do not describe the Moon moving between signs. Anchor the interpretation to lunation only.`.trim()
     : ""
 }
 ${
@@ -94,12 +94,48 @@ Formatting rules:
   const sanitizedInterpretiveFrame = sanitizeInterpretiveFrameForPrompt(
     interpretiveFrame as any
   );
+  const stripMoonTransitFromFrame = (frame: any): any => {
+    if (!frame) return frame;
+    const clone = JSON.parse(JSON.stringify(frame));
+    const moonTransitPattern =
+      /\bmoon\b[^.!?\n]{0,60}\b(in|entered|enters|entering|moving into|moves into|moved into|shifted|slipped)\b/i;
+    const moonInSignPattern =
+      /\bmoon\b[^.!?\n]{0,60}\bin\s+(aries|taurus|gemini|cancer|leo|virgo|libra|scorpio|sagittarius|capricorn|aquarius|pisces)\b/i;
+
+    if (Array.isArray(clone.sky_anchors)) {
+      clone.sky_anchors = clone.sky_anchors.filter(
+        (anchor: any) => !/^moon in\s+/i.test(anchor?.label ?? "")
+      );
+    }
+    if (typeof clone.why_today_clause === "string") {
+      if (moonTransitPattern.test(clone.why_today_clause) || moonInSignPattern.test(clone.why_today_clause)) {
+        clone.why_today_clause = "";
+      }
+    }
+    if (Array.isArray(clone.why_today)) {
+      clone.why_today = clone.why_today.filter(
+        (line: string) =>
+          !moonTransitPattern.test(line) && !moonInSignPattern.test(line)
+      );
+    }
+    if (Array.isArray(clone.causal_logic)) {
+      clone.causal_logic = clone.causal_logic.filter(
+        (line: string) =>
+          !moonTransitPattern.test(line) && !moonInSignPattern.test(line)
+      );
+    }
+    return clone;
+  };
+  const sanitizedInterpretiveFrameForSegment =
+    segment.segment_key === "main_themes"
+      ? stripMoonTransitFromFrame(sanitizedInterpretiveFrame)
+      : sanitizedInterpretiveFrame;
 
   // Create sanitized constraints for payload
   const sanitizedConstraints = segment.constraints
     ? {
         ...segment.constraints,
-        interpretive_frame: sanitizedInterpretiveFrame,
+        interpretive_frame: sanitizedInterpretiveFrameForSegment,
       }
     : segment.constraints;
 
@@ -142,8 +178,37 @@ ${
         const anchors = frame.sky_anchors ?? [];
         const whyToday = frame.why_today_clause ?? "";
         const anchorLines = anchors.map((a) => `- "${a.label ?? ""}"`).join("\n");
+        const lunationContextLabel = (frame as any)?.lunation_context?.label;
+        const lunationLabelMap: Record<string, string> = {
+          new: "New Moon",
+          waxing_crescent: "Waxing Crescent",
+          first_quarter: "First Quarter",
+          waxing_gibbous: "Waxing Gibbous",
+          full: "Full Moon",
+          waning_gibbous: "Waning Gibbous",
+          last_quarter: "Last Quarter",
+          waning_crescent: "Waning Crescent",
+          waxing: "Waxing Moon",
+          waning: "Waning Moon",
+        };
+        const phaseFromSignal = (frame as any)?.signals?.find?.(
+          (signal: any) => signal?.kind === "lunar_phase"
+        )?.meta?.phase_name;
+        const phaseKey = String(phaseFromSignal ?? "").toLowerCase();
+        const lunationLabel =
+          lunationContextLabel ??
+          lunationLabelMap[phaseKey] ??
+          undefined;
+        const lunationLine =
+          segment.segment_key === "main_themes"
+            ? `- Lunation phase (use this label verbatim): "${lunationLabel ?? "Lunar phase"}"`
+            : `- Sky anchors: ${anchorLines || "- none"}`;
+        const whyTodayLine =
+          segment.segment_key === "main_themes"
+            ? '- Why-today clause: (use the lunation phase label only; do not mention Moon sign or ingress)'
+            : `- Why-today clause: "${whyToday}"`;
         return `Authoritative interpretive frame for this day:
-${JSON.stringify(sanitizedInterpretiveFrame, null, 2)}
+${JSON.stringify(sanitizedInterpretiveFrameForSegment, null, 2)}
 
 Interpretation bundles (allowed meaning only):
 ${JSON.stringify(
@@ -154,10 +219,11 @@ ${JSON.stringify(
 
 Work these into one flowing thought (no labels, no lists):
 - Dominant contrast (primary vs counter): "${axisPrimary}" vs "${axisCounter}" (reference through lived experience; do not repeat any canned axis phrase)
-- Sky anchors: ${anchorLines || "- none"}
-- Why-today clause: "${whyToday}"
+${lunationLine}
+${whyTodayLine}
 
-${segment.segment_key === "main_themes" && anchors.length > 0 ? `CRITICAL FORMAT REQUIREMENT: Your first sentence must contain exactly one sky anchor label verbatim from the list above (e.g., "${anchors[0]?.label ?? ""}"). The first sentence must be a normal, flowing sentence that includes this anchor label—do not use a label prefix like "OPENING_ANCHOR:". This is a hard format constraint that must be satisfied.` : ""}
+${segment.segment_key === "main_themes" ? `HARD CONSTRAINT: Do not mention Moon sign or Moon ingress. Do not describe the Moon moving between signs. Anchor the interpretation to lunation only, using the lunation phase label provided above.` : ""}
+${segment.segment_key === "main_themes" ? `CRITICAL FORMAT REQUIREMENT: Your first sentence must include the lunation phase label "${lunationLabel ?? "Lunar phase"}" verbatim exactly once. Allowed openings include: "${lunationLabel ?? "Lunar phase"}: ...", "Under the ${lunationLabel ?? "Lunar phase"}, ...", or "With the ${lunationLabel ?? "Lunar phase"} overhead, ...". The first sentence must be a normal, flowing sentence; do not use any other label prefix or colon.` : ""}
 
 Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into **sensory, physical, interpersonal, or environmental moments** (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Avoid work-admin metaphors (inbox, calendar, email, meetings).
 `;

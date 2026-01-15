@@ -149,28 +149,31 @@ export function evaluateSegmentWithFrame(params: {
   }
 
   // Hard gate: astrological grounding (sky anchors + because + anchor tie)
-  for (const anchor of frame.sky_anchors) {
-    if (!scriptLower.includes(anchor.label.toLowerCase())) {
-      const msg = `Astro grounding: reference sky anchor "${anchor.label}".`;
-      notes.push(msg);
-      rewrite_instructions.push(msg);
+  // Main themes: do not require sky anchor labels (Moon sign is banned for main_themes).
+  if (params.segment_key !== "main_themes") {
+    for (const anchor of frame.sky_anchors) {
+      if (!scriptLower.includes(anchor.label.toLowerCase())) {
+        const msg = `Astro grounding: reference sky anchor "${anchor.label}".`;
+        notes.push(msg);
+        rewrite_instructions.push(msg);
+      }
     }
-  }
 
-  // Ingress language must include the static anchor for ingress-sensitive bodies
-  for (const anchor of frame.sky_anchors) {
-    const labelLower = anchor.label.toLowerCase();
-    const body = ingressSensitiveBodies.find((b) => labelLower.startsWith(`${b} in `));
-    if (!body) continue;
+    // Ingress language must include the static anchor for ingress-sensitive bodies
+    for (const anchor of frame.sky_anchors) {
+      const labelLower = anchor.label.toLowerCase();
+      const body = ingressSensitiveBodies.find((b) => labelLower.startsWith(`${b} in `));
+      if (!body) continue;
 
-    const bodyMentionedWithIngress =
-      ingressLanguagePattern.test(scriptLower) && scriptLower.includes(body);
+      const bodyMentionedWithIngress =
+        ingressLanguagePattern.test(scriptLower) && scriptLower.includes(body);
 
-    if (bodyMentionedWithIngress && !scriptLower.includes(labelLower)) {
-      const msg = `Ingress language detected for ${body} without static anchor "${anchor.label}".`;
-      notes.push(msg);
-      rewrite_instructions.push(`Include the exact anchor "${anchor.label}" when mentioning ${body} ingress.`);
-      blocking_reasons.push(`segment:ingress_anchor_missing:${body}`);
+      if (bodyMentionedWithIngress && !scriptLower.includes(labelLower)) {
+        const msg = `Ingress language detected for ${body} without static anchor "${anchor.label}".`;
+        notes.push(msg);
+        rewrite_instructions.push(`Include the exact anchor "${anchor.label}" when mentioning ${body} ingress.`);
+        blocking_reasons.push(`segment:ingress_anchor_missing:${body}`);
+      }
     }
   }
 

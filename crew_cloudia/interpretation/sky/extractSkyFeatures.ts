@@ -21,6 +21,7 @@ export type SkyFeatures = {
   moon: {
     sign: string;
     phase: "new" | "waxing" | "full" | "waning";
+    phase_name?: string;
     longitude: number;
   };
   highlights: SkyAspect[];
@@ -177,6 +178,7 @@ export async function extractSkyFeatures(input: { date: string }): Promise<SkyFe
     moon: {
       sign: moonSign,
       phase: moonPhase,
+      phase_name: today.lunar?.phase_name,
       longitude: today.bodies.moon.longitude,
     },
     highlights,

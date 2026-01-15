@@ -476,6 +476,55 @@ function enforceAdminMetaphorBan(
   }
 }
 
+function enforceMainThemesMoonTransitBan(
+  text: string,
+  lower: string,
+  segment_key: string,
+  episode_date: string | undefined,
+  blocking: Set<string>
+): void {
+  if (segment_key !== "main_themes") return;
+
+  const zodiacSigns = [
+    "aries", "taurus", "gemini", "cancer", "leo", "virgo",
+    "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"
+  ];
+  const zodiacAbbr = [
+    "ari", "tau", "gem", "can", "leo", "vir",
+    "lib", "sco", "sag", "cap", "aqu", "pis"
+  ];
+  const signPattern = [...zodiacSigns, ...zodiacAbbr].join("|");
+
+  const moonTransitPatterns: RegExp[] = [
+    new RegExp(`\\bmoon\\b[^.!?\\n]{0,60}\\b(is in|isn't in|isnt in|in|\\'s in|’s in)\\s+(${signPattern})\\b`, "i"),
+    /\bmoon\b[^.!?\n]{0,60}\bin\s+(this|that)\s+sign\b/i,
+    /\bmoon\b[^.!?\n]{0,60}\b(entered|enters|entering|moving into|moves into|moved into|shifted|slipped)\b/i,
+    new RegExp(`\\bmoon\\b[^.!?\\n]{0,80}\\bfrom\\s+(${signPattern})\\s+to\\s+(${signPattern})\\b`, "i"),
+    new RegExp(`\\blunar\\b[^.!?\\n]{0,60}\\b(entered|enters|entering|moving into|moves into|moved into|shifted|slipped)\\b`, "i"),
+    new RegExp(`\\blunar\\b[^.!?\\n]{0,60}\\b(in|into)\\s+(${signPattern})\\b`, "i"),
+  ];
+
+  for (const pattern of moonTransitPatterns) {
+    const match = text.match(pattern);
+    if (match) {
+      const idx = text.toLowerCase().indexOf(match[0].toLowerCase());
+      const start = Math.max(0, idx - 60);
+      const end = Math.min(text.length, idx + match[0].length + 60);
+
+      console.log("[main-themes-moon-transit-ban]", {
+        episode_date: episode_date || "unknown",
+        segment_key,
+        match: match[0],
+        pattern: pattern.source,
+        context: text.slice(start, end),
+      });
+
+      blocking.add("MAIN_THEMES_MOON_TRANSIT_BAN");
+      return;
+    }
+  }
+}
+
 function enforceSkyAnchorConsistency(
   text: string,
   lower: string,
@@ -708,6 +757,7 @@ export function evaluateAdherenceRubric(input: AdherenceInput): AdherenceResult 
   enforceRelationalTranslation(lower, input.segment_key, blocking);
   enforceBehavioralAffordance(lower, input.segment_key, blocking);
   enforceAdminMetaphorBan(script, lower, input.segment_key, episode_date, blocking);
+  enforceMainThemesMoonTransitBan(script, lower, input.segment_key, episode_date, blocking);
   enforceSkyAnchorConsistency(script, lower, input.segment_key, input.interpretive_frame, episode_date, blocking);
 
   const repetition = input.segment_key === "closing" && input.previous_closings?.length

@@ -59,6 +59,31 @@ function sanitizeForbiddenSigns(
   return sanitized;
 }
 
+const LUNATION_LABELS: Record<string, string> = {
+  new: "New Moon",
+  waxing_crescent: "Waxing Crescent",
+  first_quarter: "First Quarter",
+  waxing_gibbous: "Waxing Gibbous",
+  full: "Full Moon",
+  waning_gibbous: "Waning Gibbous",
+  last_quarter: "Last Quarter",
+  waning_crescent: "Waning Crescent",
+  waxing: "Waxing Moon",
+  waning: "Waning Moon",
+};
+
+function getLunationLabel(frame: InterpretiveFrame): string | null {
+  const lunarPhaseSignal = frame.signals?.find?.(
+    (signal) => signal?.kind === "lunar_phase"
+  );
+  const phaseFromSignal =
+    lunarPhaseSignal?.meta && typeof lunarPhaseSignal.meta === "object"
+      ? (lunarPhaseSignal.meta as any).phase_name
+      : undefined;
+  const phaseKey = String(phaseFromSignal ?? "").toLowerCase();
+  return LUNATION_LABELS[phaseKey] ?? null;
+}
+
 // Auto-repair: fix mechanical violations deterministically
 function autoRepairMechanicalViolations(
   script: string,
@@ -185,9 +210,16 @@ export async function runMainThemesForDate(params: {
     ban_repetition: true,
   };
 
+  const lunationLabelForPrompt =
+    getLunationLabel(params.interpretive_frame) ?? "Lunar phase";
+  const interpretiveFrameForPrompt = {
+    ...params.interpretive_frame,
+    lunation_context: { label: lunationLabelForPrompt },
+  } as InterpretiveFrame & { lunation_context?: { label: string } };
+
   const segmentConstraints = {
     ...baseConstraints,
-    interpretive_frame: params.interpretive_frame,
+    interpretive_frame: interpretiveFrameForPrompt,
   } as SegmentPromptInput["constraints"];
 
   const segment: SegmentPromptInput = {
@@ -343,43 +375,44 @@ export async function runMainThemesForDate(params: {
       });
       script = draft.draft_script;
       
-      // DWU 14: Cheap anchor coverage self-check with non-templated insertion
-      if (params.interpretive_frame && params.interpretive_frame.sky_anchors.length > 0) {
+      // DWU 14: Lunation coverage self-check with non-templated insertion
+      if (params.interpretive_frame) {
         const scriptLower = script.toLowerCase();
-        const hasAnchor = params.interpretive_frame.sky_anchors.some((anchor) =>
-          scriptLower.includes(anchor.label.toLowerCase())
-        );
-        
-        if (!hasAnchor) {
-          // Auto-inject anchor reference using random variant (non-templated)
-          const firstAnchor = params.interpretive_frame.sky_anchors[0];
-          
-          // Random variants to avoid template attractor
-          const anchorClauseVariants = [
-            `, under ${firstAnchor.label}`,
-            `, anchored by ${firstAnchor.label}`,
-            `, with ${firstAnchor.label} in the mix`,
-            `, with ${firstAnchor.label} overhead`,
-            ` — ${firstAnchor.label}`,
+        const requiredLabel = lunationLabelForPrompt;
+        const hasLunation = scriptLower.includes(requiredLabel.toLowerCase());
+
+        if (!hasLunation) {
+          // Auto-inject lunation reference using random variant (non-templated)
+          const lunationClauseVariants = [
+            `, under the ${requiredLabel}`,
+            `, anchored by the ${requiredLabel}`,
+            `, with the ${requiredLabel} in the mix`,
+            `, with the ${requiredLabel} overhead`,
+            ` — the ${requiredLabel}`,
           ];
-          
-          // Pick random variant
-          const randomVariant = anchorClauseVariants[
-            Math.floor(Math.random() * anchorClauseVariants.length)
-          ];
-          
-          // Try to insert after first sentence boundary
+
+          const randomVariant =
+            lunationClauseVariants[
+              Math.floor(Math.random() * lunationClauseVariants.length)
+            ];
+
           const firstSentenceEnd = script.search(/[.!?]\s+/);
           if (firstSentenceEnd > 0 && firstSentenceEnd < 200) {
-            // Insert clause after first sentence (within first ~120 chars)
-            script = script.slice(0, firstSentenceEnd + 1) + randomVariant + script.slice(firstSentenceEnd + 1);
+            script =
+              script.slice(0, firstSentenceEnd + 1) +
+              randomVariant +
+              script.slice(firstSentenceEnd + 1);
           } else {
-            // If no clear sentence boundary, append to first ~120 chars
             const insertPoint = Math.min(120, script.length);
-            script = script.slice(0, insertPoint) + randomVariant + script.slice(insertPoint);
+            script =
+              script.slice(0, insertPoint) +
+              randomVariant +
+              script.slice(insertPoint);
           }
-          
-          console.log(`[anchor-self-check] Auto-injected sky anchor reference: ${firstAnchor.label} (variant: ${randomVariant})`);
+
+          console.log(
+            `[anchor-self-check] Auto-injected lunation reference: ${requiredLabel} (variant: ${randomVariant})`
+          );
         }
       }
       

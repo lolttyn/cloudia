@@ -112,7 +112,10 @@ export function deriveSignalsFromSkyFeatures(
     kind: "lunar_phase",
     salience: moonPhaseSalience(features.moon.phase),
     source: "sky_features",
-    meta: { phase: features.moon.phase },
+    meta: {
+      phase: features.moon.phase,
+      phase_name: features.moon.phase_name,
+    },
   });
 
   // Lunation detection: high-salience, single-dominant triggers.
