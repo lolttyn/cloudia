@@ -42,16 +42,61 @@ const LUNATION_FEELING_MARKERS = [
 ];
 
 const HUMAN_REFERENTS = [
+  // Body
+  "breath",
+  "shoulders",
+  "jaw",
+  "stomach",
+  "sleep",
+  "appetite",
+  "pulse",
+  "tension",
+  // Home
+  "sink",
+  "dishes",
+  "laundry",
+  "door",
+  "light",
+  "clutter",
+  "repairs",
+  // Street/Environment
+  "crosswalk",
+  "bus",
+  "line",
+  "traffic",
+  "cold air",
+  "sunlight",
+  // Interpersonal
   "text",
   "phone",
-  "inbox",
-  "coffee",
-  "clothes",
-  "meeting",
-  "project",
   "friend",
   "partner",
-  "coworker",
+  "stranger",
+  "conversation",
+  "apology",
+  "boundary",
+  // Objects
+  "keys",
+  "shoes",
+  "bag",
+  "receipt",
+  "spilled",
+  "dropped",
+  "cracked",
+  // Time/Moment
+  "waiting",
+  "late",
+  "early",
+  "pause",
+  "linger",
+  // Other lived moments
+  "coffee",
+  "clothes",
+  "food",
+  "weather",
+  "commute",
+  "noise",
+  "silence",
 ];
 
 const SOCIAL_SCENARIOS = [
@@ -388,6 +433,32 @@ function enforceBehavioralAffordance(
   blocking.add("NO_BEHAVIORAL_AFFORDANCE");
 }
 
+function enforceAdminMetaphorBan(
+  lower: string,
+  segment_key: string,
+  blocking: Set<string>
+): void {
+  // Apply to intro and main_themes (optionally closing)
+  if (!["intro", "main_themes"].includes(segment_key)) return;
+
+  // Admin metaphor trope patterns (case-insensitive via lower)
+  const adminTropePatterns = [
+    /\bcalendar (invite|invites|details)\b/,
+    /\binbox triage\b|\btriage (your|the) inbox\b/,
+    /\bre-?reading (an|the) (email|message)\b|\bre-?reading the same (email|message)\b/,
+    /\bdouble-?checking (a|the) (calendar|invite|email|message|details)\b/,
+    /\b(one more )?(tiny|small) correction\b/,
+    /\b(admin|life admin|paperwork)\b/,
+  ];
+
+  for (const pattern of adminTropePatterns) {
+    if (pattern.test(lower)) {
+      blocking.add("HARD_BANNED_TROPES_ADMIN_METAPHORS");
+      return; // Only need one match to block
+    }
+  }
+}
+
 function applyAuthorialCompression(sentences: string[]): ScoreAdjustment[] {
   const adjustments: ScoreAdjustment[] = [];
   for (const sentence of sentences) {
@@ -523,6 +594,7 @@ export function evaluateAdherenceRubric(input: AdherenceInput): AdherenceResult 
   enforceLunationFrontLoad(script, input.segment_key, input.interpretive_frame, blocking);
   enforceRelationalTranslation(lower, input.segment_key, blocking);
   enforceBehavioralAffordance(lower, input.segment_key, blocking);
+  enforceAdminMetaphorBan(lower, input.segment_key, blocking);
 
   const repetition = input.segment_key === "closing" && input.previous_closings?.length
     ? checkClosingRepetition(script, input.previous_closings)

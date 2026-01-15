@@ -456,17 +456,11 @@ export async function runMainThemesForDate(params: {
     ];
 
     // Add word count check as blocking reason if script is too short
-    if (wordCount < targetMinWords) {
+    const hasWordCountIssue = wordCount < targetMinWords;
+    if (hasWordCountIssue) {
       allBlockingReasons.push(
         `word_count_below_min:${wordCount}<${targetMinWords} (targets ~110s audio at 150-170 wpm)`
       );
-      // Add expansion instruction for rewrite
-      if (attempt < MAX_SEGMENT_RETRIES - 1) {
-        // Only add instruction if we have attempts remaining
-        rewriteInstructions.push(
-          `Expand the script to at least ${targetMinWords} words to meet minimum audio duration requirements. Add more detail, examples, or elaboration while maintaining the core message.`
-        );
-      }
     }
 
     // CRITICAL: Persist EVERY attempt before checking pass/fail
@@ -557,6 +551,13 @@ export async function runMainThemesForDate(params: {
     // If no specific rewrite instructions, use notes
     if (rewriteInstructions.length === 0) {
       rewriteInstructions = [...frameEval.notes, ...Array.from(rubricEval.warnings)];
+    }
+
+    // PRIORITIZE word count expansion instruction when present
+    if (hasWordCountIssue && attempt < MAX_SEGMENT_RETRIES - 1) {
+      const expansionInstruction = `Expand the script to at least ${targetMinWords} words to meet minimum audio duration requirements. Add more detail, examples, or elaboration while maintaining the core message. Add 2-3 concrete lived moments and one additional emotional turn.`;
+      // Put expansion instruction FIRST to prioritize it
+      rewriteInstructions = [expansionInstruction, ...rewriteInstructions];
     }
 
     // Store current script for next iteration's comparison
@@ -697,12 +698,26 @@ function buildShowrunnerRewritePrompt(params: {
       ? params.editor_instructions.map((i, idx) => `${idx + 1}. ${i}`).join("\n")
       : "No specific instructions provided.";
 
+  // Check if first instruction is about word count expansion
+  const hasWordCountExpansion = params.editor_instructions.length > 0 && 
+    params.editor_instructions[0].toLowerCase().includes("expand") &&
+    params.editor_instructions[0].toLowerCase().includes("words");
+  
+  // Extract target word count if present
+  const wordCountMatch = params.editor_instructions[0]?.match(/at least (\d+) words/i);
+  const targetMinWords = wordCountMatch ? wordCountMatch[1] : null;
+
+  const lengthRequirementBlock = hasWordCountExpansion && targetMinWords
+    ? `**Length requirement (HARD):** Output **>= ${targetMinWords} words**. Do not shorten. If you add content, add **2–3 concrete lived moments** and **one additional emotional turn**.
+
+`
+    : "";
+
   return `
 ${PERMISSION_BLOCK}
 
 You are REVISING an existing draft based on editor feedback. This is not a new draft—you must actively change the previous version.
-
-Non-negotiable format requirement:
+${lengthRequirementBlock}Non-negotiable format requirement:
 - Your revision MUST include at least one of these exact phrases (case-insensitive): "you don't have to", "you dont have to", "take the space", "let this sit", "not today", "this isn't urgent", "wait", "stop", "don't", or "dont".
 - These phrases can appear anywhere in your revision, but at least one MUST be present or the draft will be rejected.
 
@@ -750,7 +765,7 @@ Behavioral affordance (REQUIRED):
 Revision requirements:
 - Apply ALL editor instructions above.
 - **MANDATORY: Include at least one of these exact phrases: "you don't have to", "you dont have to", "take the space", "let this sit", "not today", "this isn't urgent", "wait", "stop", "don't", or "dont". This phrase MUST appear in your revision or it will be rejected.**
-- Do not repeat language from the previous version.
+- ${hasWordCountExpansion ? 'Avoid verbatim repetition where possible, **but do not sacrifice length**. Some structural reuse is allowed to meet minimum length.' : 'Do not repeat language from the previous version.'}
 - Preserve what works; fix what doesn't.
 - Preserve the dominant_contrast_axis meaning, but translate it into human experience.
 - Include the specified sky anchors and causal logic using "because".

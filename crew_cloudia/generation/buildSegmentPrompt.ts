@@ -157,7 +157,7 @@ Work these into one flowing thought (no labels, no lists):
 - Sky anchors: ${anchorLines || "- none"}
 - Why-today clause: "${whyToday}"
 
-Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like: "the inbox triage", "the tiny correction you keep re-doing", "re-reading the same message", "double-checking calendar details", "one more errand / one more small fix"
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into **sensory, physical, interpersonal, or environmental moments** (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Avoid work-admin metaphors (inbox, calendar, email, meetings).
 `;
       })()
     : ""
@@ -207,7 +207,7 @@ CRITICAL: You must begin with this exact greeting (verbatim, ASCII apostrophes o
 
 After the greeting above, state the dominant tension by showing "${axisPrimary}" vs "${axisCounter}" through lived experience (do not use any set phrase for this contrast). Include the why-today clause ("${whyTodayClause}"). Name at least one sky anchor by label (e.g., ${anchorExample}) and use "because" once to link meaning to a sky anchor. Reinforce the dominant contrast as lived tension; do not introduce new themes.
 
-Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like: "the inbox triage", "the tiny correction you keep re-doing", "re-reading the same message", "double-checking calendar details", "one more errand / one more small fix"
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into **sensory, physical, interpersonal, or environmental moments** (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Avoid work-admin metaphors (inbox, calendar, email, meetings).
 `.trim();
       })()
     : ""
@@ -216,7 +216,7 @@ Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, us
 ${
   segment.segment_key === "closing"
     ? `
-Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, use concrete examples like: "the inbox triage", "the tiny correction you keep re-doing", "re-reading the same message", "double-checking calendar details", "one more errand / one more small fix"
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into **sensory, physical, interpersonal, or environmental moments** (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Avoid work-admin metaphors (inbox, calendar, email, meetings).
 
 You must end the episode with the following exact sign-off (verbatim). Do not paraphrase or alter it:
 

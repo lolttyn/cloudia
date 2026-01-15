@@ -138,11 +138,11 @@ function pickWhyToday(
 
     if (ingress.window === "next_24h" && ingress.to_sign !== currentSign) {
       reasons.push(
-        `The ${bodyLabel} is in ${currentSign} today and enters ${ingress.to_sign} within the next 24 hours, emphasizing ${moonEntry.core_meanings[0]}.`
+        `The ${bodyLabel} is in ${currentSign} today and enters ${ingress.to_sign} within the next 24 hours, and you may feel the pace change.`
       );
     } else {
       reasons.push(
-        `The ${bodyLabel} is in ${currentSign} today after entering from ${ingress.from_sign} within the past 24 hours, emphasizing ${moonEntry.core_meanings[0]}.`
+        `The ${bodyLabel} is in ${currentSign} today after entering from ${ingress.from_sign} within the past 24 hours, shifting the emotional center of gravity.`
       );
     }
     reasons.push(templates.ingress);

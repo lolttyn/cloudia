@@ -44,6 +44,12 @@ export function generateEditInstructions(
         }
         break;
 
+      case reason === "HARD_BANNED_TROPES_ADMIN_METAPHORS":
+        instructions.push(
+          "Remove all work-admin metaphors (inbox, calendar, email, meetings, double-checking details, etc.). Replace with sensory, physical, interpersonal, or environmental moments (body, home, street, food, weather, commute, conversation, waiting, noise, silence)."
+        );
+        break;
+
       case reason === "SYSTEM_LEVEL_EXPLANATION":
         instructions.push(
           "Do not explain astrology. Translate it into lived human experience instead. Assume the listener trusts you; you don't need to justify your statements."
@@ -58,7 +64,7 @@ export function generateEditInstructions(
 
       case reason === "NO_RELATIONAL_TRANSLATION":
         instructions.push(
-          "Add a concrete human scenario, emotion, or bodily sensation to ground the idea. Use specific, contemporary referents (texts, meetings, body sensations, conversations)."
+          "Add a concrete human scenario, emotion, or bodily sensation to ground the idea. Use specific, lived-world referents (body sensations, home, street, food, weather, commute, conversation, waiting, noise, silence). Avoid work-admin metaphors (inbox, calendar, email, meetings)."
         );
         break;
 
