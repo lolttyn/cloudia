@@ -43,10 +43,11 @@ export async function getSkyStateRange(
     if (state === null) {
       missingDates.push(date);
     } else {
-      // Validate schema_version - throw if mismatch
-      if (state.schema_version !== "1.0.0") {
+      // Validate schema_version - accept both 1.0.0 and 1.1.0
+      const validVersions = ["1.0.0", "1.1.0"];
+      if (!validVersions.includes(state.schema_version)) {
         throw new Error(
-          `Schema version mismatch for ${date}: expected "1.0.0", got "${state.schema_version}". Refusing to overwrite.`
+          `Schema version mismatch for ${date}: expected one of ${validVersions.join(", ")}, got "${state.schema_version}". Refusing to overwrite.`
         );
       }
     }

@@ -221,7 +221,7 @@ async function deriveWhyToday(
       );
     } else {
       reasons.push(
-        `The ${moonIngress.body} is in ${moonIngress.from_sign} today after entering from ${moonIngress.to_sign} within the past 24 hours, emphasizing ${moonEntry.core_meanings[0]}.`
+        `The ${moonIngress.body} is in ${moonIngress.to_sign} today after entering from ${moonIngress.from_sign} within the past 24 hours, emphasizing ${moonEntry.core_meanings[0]}.`
       );
     }
     reasons.push(canon.why_today_templates.ingress);
@@ -232,7 +232,7 @@ async function deriveWhyToday(
       );
     } else {
       reasons.push(
-        `The ${sunIngress.body} is in ${sunIngress.from_sign} today after entering from ${sunIngress.to_sign} within the past 24 hours, emphasizing ${moonEntry.core_meanings[0]}.`
+        `The ${sunIngress.body} is in ${sunIngress.to_sign} today after entering from ${sunIngress.from_sign} within the past 24 hours, emphasizing ${moonEntry.core_meanings[0]}.`
       );
     }
     reasons.push(canon.why_today_templates.ingress);

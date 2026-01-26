@@ -102,10 +102,11 @@ export async function getDailyFactsRange(
           );
         }
 
-        // Validate sky_state schema version matches what we expect
-        if (skyState.schema_version !== "1.0.0") {
+        // Validate sky_state schema version - accept both 1.0.0 and 1.1.0
+        const validSkyVersions = ["1.0.0", "1.1.0"];
+        if (!validSkyVersions.includes(skyState.schema_version)) {
           throw new Error(
-            `Sky state schema version mismatch for ${date}: expected "1.0.0", got "${skyState.schema_version}"`
+            `Sky state schema version mismatch for ${date}: expected one of ${validSkyVersions.join(", ")}, got "${skyState.schema_version}"`
           );
         }
 
