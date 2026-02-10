@@ -924,9 +924,13 @@ Required references (express naturally, not verbatim):
 ${params.interpretive_frame.sky_anchors.map((a) => `- Sky anchor: ${a.label} (reference naturally, body + sign)`).join("\n")}
 - Why today matters: ${params.interpretive_frame.why_today_clause} (express naturally, not verbatim)
 
-Required continuity lines (MUST appear verbatim, once each, anywhere in the script):
-${params.interpretive_frame.continuity?.references_yesterday ? `- Yesterday: "${params.interpretive_frame.continuity.references_yesterday}"` : "- Yesterday: (none)"}
-${params.interpretive_frame.continuity?.references_tomorrow ? `- Tomorrow: "${params.interpretive_frame.continuity.references_tomorrow}"` : "- Tomorrow: (none)"}
+Continuity (weave into script naturally; do NOT output the labels "Yesterday:", "Tomorrow:", or "(none)" as literal text):
+${params.interpretive_frame.continuity?.references_yesterday || params.interpretive_frame.continuity?.references_tomorrow
+  ? [
+      params.interpretive_frame.continuity?.references_yesterday && `- Yesterday: "${params.interpretive_frame.continuity.references_yesterday}"`,
+      params.interpretive_frame.continuity?.references_tomorrow && `- Tomorrow: "${params.interpretive_frame.continuity.references_tomorrow}"`,
+    ].filter(Boolean).join("\n")
+  : "- No continuity callbacks for this episode."}
 
 Sign hygiene (STRICT - VIOLATION WILL CAUSE REJECTION):
 - ALLOWED signs (ONLY these may be mentioned): ${params.interpretive_frame.sky_anchors.map(a => {
@@ -946,7 +950,7 @@ Revision requirements:
 - Preserve what works; fix what doesn't.
 - Preserve the dominant_contrast_axis meaning, but translate it into human experience.
 - Include the specified sky anchors and causal logic using "because".
-- Include the continuity lines above verbatim (do not paraphrase them).
+- If continuity lines are provided above, weave that content into the script naturally; do not output "(none)", "Yesterday:", or "Tomorrow:" as literal text.
 - Write in natural, conversational prose.
 - Match the frame's confidence_level in tone; do not increase certainty.
 - Do not add new themes; fix only the issues identified by the editor.
