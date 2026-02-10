@@ -53,6 +53,8 @@ export async function runClosingForDate(params: {
   interpretive_frame?: InterpretiveFrame;
   collector?: RunSummaryCollector;
   scripts_only?: boolean;
+  /** When true, bypass idempotency guard and regenerate even if an approved version exists. */
+  force_regenerate?: boolean;
   /** Optional editorial direction (regeneration flow). Sanitized before prompt injection. */
   editorial_feedback?: string;
   /** Scripts from earlier this week for narrative arc continuity. */

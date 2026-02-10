@@ -349,6 +349,7 @@ export async function runForDate(
     interpretive_frame,
     collector,
     scripts_only,
+    force_regenerate,
     prior_scripts,
   });
 
@@ -375,6 +376,7 @@ export async function runForDate(
     interpretive_frame,
     collector,
     scripts_only,
+    force_regenerate,
     prior_scripts,
   });
 
