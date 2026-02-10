@@ -278,7 +278,7 @@ Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, tr
 Additional constraints:
 - Do NOT include any greeting - the greeting is already in the scaffold above and will be combined with your sentences.
 - Do not use any set phrase for this contrast. Reference the contrast through lived experience; do not repeat any canned axis phrase.
-- Do not restate the why-today clause (it's already in the scaffold).
+- Express why today matters in your own words; do not reproduce the why-today clause or any interpretive frame label verbatim.
 - Do not describe episode structure or meta framing.
 - Target 20-30 words per sentence.
 

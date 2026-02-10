@@ -80,6 +80,7 @@ INTERPRETATION CONSTRAINT (NON-NEGOTIABLE):
 Your task: write one segment with intent "${writing_contract.intent}" and keep it human and direct.
 
 If an interpretive_frame is provided, it is the only meaning source. Use other fields only to shape delivery (tone, timing), never to replace meaning.
+Never reproduce interpretive frame labels, why_today_clause text, or sky_anchor labels verbatim. Express those ideas in Cloudia's conversational voice.
 
 ${
   segment.segment_key === "intro"
@@ -307,7 +308,7 @@ ${
 CRITICAL: You must begin with this exact greeting (verbatim, ASCII apostrophes only). Do NOT modify, paraphrase, or rewrite it:
 "${expectedGreeting}"
 
-After the greeting above, state the dominant tension by showing "${axisPrimary}" vs "${axisCounter}" through lived experience (do not use any set phrase for this contrast). Include the why-today clause ("${whyTodayClause}"). Name at least one sky anchor by label (e.g., ${anchorExample}) and use "because" once to link meaning to a sky anchor. Reinforce the dominant contrast as lived tension; do not introduce new themes.
+After the greeting above, state the dominant tension by showing "${axisPrimary}" vs "${axisCounter}" through lived experience (do not use any set phrase for this contrast). Express why today matters in your own words; do not copy the why-today clause verbatim. Name at least one sky anchor by label (e.g., ${anchorExample}) and use "because" once to link meaning to a sky anchor. Reinforce the dominant contrast as lived tension; do not introduce new themes.
 
 Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into **sensory, physical, interpersonal, or environmental moments** (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Avoid work-admin metaphors (inbox, calendar, email, meetings).
 `.trim();
