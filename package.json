@@ -11,7 +11,8 @@
     "audio-worker": "tsx crew_cloudia/audio/worker/runAudioWorkerLoop.ts",
     "cloudia:weekly-scripts": "tsx crew_cloudia/ops/runWeeklyScriptsWindow.ts cloudia",
     "cloudia:daily-stitch": "tsx crew_cloudia/ops/runDailyStitch.ts",
-    "regen-worker": "tsx crew_cloudia/ops/runRegenWorkerLoop.ts"
+    "regen-worker": "tsx crew_cloudia/ops/runRegenWorkerLoop.ts",
+    "regen-worker-once": "tsx crew_cloudia/ops/runRegenWorkerOnce.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.48.0",
