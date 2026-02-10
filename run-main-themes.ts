@@ -36,6 +36,28 @@ declare const process: {
   exit(code?: number): never;
 };
 
+/** One-line teaching example (element/ruler) per sign for "teach don't assert" prompting. */
+const SIGN_TEACHING_EXAMPLES: Record<string, string> = {
+  aries: "Aries is a fire sign ruled by Mars — think initiative and quick response.",
+  taurus: "Taurus is an earth sign ruled by Venus — think steadiness and sensory grounding.",
+  gemini: "Gemini is an air sign ruled by Mercury — think curiosity and mental restlessness.",
+  cancer: "Cancer is a water sign ruled by the Moon — think mood and what needs tending.",
+  leo: "Leo is a fire sign ruled by the Sun — think visibility and heart-forward energy.",
+  virgo: "Virgo is an earth sign ruled by Mercury — think refinement and useful detail.",
+  libra: "Libra is an air sign ruled by Venus — think balance and relationship.",
+  scorpio: "Scorpio is a water sign ruled by Pluto — think depth and what's under the surface.",
+  sagittarius: "Sagittarius is a fire sign ruled by Jupiter — think big-picture optimism and restless curiosity.",
+  capricorn: "Capricorn is an earth sign ruled by Saturn — think structure and steady progress.",
+  aquarius: "Aquarius is an air sign ruled by Uranus — think detachment and sudden shifts.",
+  pisces: "Pisces is a water sign ruled by Neptune — think softening and imagination.",
+};
+
+function getTeachingExampleForAnchor(label: string): string {
+  const signMatch = label.match(/\b(aries|taurus|gemini|cancer|leo|virgo|libra|scorpio|sagittarius|capricorn|aquarius|pisces)\b/i);
+  const sign = signMatch ? signMatch[1].toLowerCase() : null;
+  return sign ? SIGN_TEACHING_EXAMPLES[sign] ?? "" : "";
+}
+
 // Sign sanitizer: remove sentences containing forbidden zodiac signs not in allowlist
 function sanitizeForbiddenSigns(
   script: string,
@@ -921,7 +943,10 @@ ${JSON.stringify(params.interpretive_frame, null, 2)}
 
 Required references (express naturally, not verbatim):
 - The core tension: ${params.interpretive_frame.dominant_contrast_axis.primary} vs ${params.interpretive_frame.dominant_contrast_axis.counter} (express through lived experience, not as a named contrast)
-${params.interpretive_frame.sky_anchors.map((a) => `- Sky anchor: ${a.label} (reference naturally, body + sign)`).join("\n")}
+${params.interpretive_frame.sky_anchors.map((a) => {
+  const ex = getTeachingExampleForAnchor(a.label ?? "");
+  return ex ? `- Sky anchor: ${a.label} (Example teaching moment: "${ex}")` : `- Sky anchor: ${a.label} (reference naturally, body + sign)`;
+}).join("\n")}
 - Why today matters: ${params.interpretive_frame.why_today_clause} (express naturally, not verbatim)
 
 Continuity (weave into script naturally; do NOT output the labels "Yesterday:", "Tomorrow:", or "(none)" as literal text):
