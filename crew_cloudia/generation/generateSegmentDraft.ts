@@ -3,6 +3,7 @@ import { SegmentPromptInput } from "../editorial/contracts/segmentPromptInput.js
 import { SegmentWritingContract } from "../editorial/types/SegmentWritingContract.js";
 import { EpisodeValidationResult } from "../editorial/validation/episodeValidationResult.js";
 import { buildSegmentPrompt } from "./buildSegmentPrompt.js";
+import { sanitizeEditorialFeedback } from "./sanitizeEditorialFeedback.js";
 import { CLOUDIA_LLM_CONFIG, invokeLLM } from "./invokeLLM.js";
 import { buildIntroScaffold } from "./introScaffold.js";
 import { buildClosingScaffold } from "./closingScaffold.js";
@@ -277,7 +278,11 @@ ${JSON.stringify(
   null,
   2
 )}
-
+${
+  (params.segment.constraints as { editorial_feedback?: string } | undefined)?.editorial_feedback
+    ? `\n\nEditorial direction from reviewer (incorporate this guidance):\n${sanitizeEditorialFeedback((params.segment.constraints as { editorial_feedback?: string }).editorial_feedback!)}\n\n`
+    : ""
+}
 Return only the two sentences, nothing else.`.trim();
 
   const llm_result = await invokeLLM(
@@ -384,7 +389,11 @@ ${JSON.stringify(
   null,
   2
 )}
-
+${
+  (params.segment.constraints as { editorial_feedback?: string } | undefined)?.editorial_feedback
+    ? `\n\nEditorial direction from reviewer (incorporate this guidance):\n${sanitizeEditorialFeedback((params.segment.constraints as { editorial_feedback?: string }).editorial_feedback!)}\n\n`
+    : ""
+}
 Return only the two sentences, nothing else.`.trim();
 
   const llm_result = await invokeLLM(

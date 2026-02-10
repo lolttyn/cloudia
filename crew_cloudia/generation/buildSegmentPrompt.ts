@@ -4,6 +4,7 @@ import { SegmentWritingContract } from "../editorial/types/SegmentWritingContrac
 import { EpisodeValidationResult } from "../editorial/validation/episodeValidationResult.js";
 import { PERMISSION_BLOCK } from "../editorial/prompts/permissionBlock.js";
 import { sanitizeInterpretiveFrameForPrompt } from "./prompt/sanitizeInterpretiveFrame.js";
+import { sanitizeEditorialFeedback } from "./sanitizeEditorialFeedback.js";
 import {
   extractPhaseNameFromFrame,
   mapPhaseNameToLunationLabel,
@@ -294,6 +295,11 @@ Length:
 Between ${writing_contract.length_constraints.min_words}
 and ${writing_contract.length_constraints.max_words} words.
 
+${
+  (segment.constraints as { editorial_feedback?: string } | undefined)?.editorial_feedback
+    ? `Editorial direction from reviewer (incorporate this guidance):\n${sanitizeEditorialFeedback((segment.constraints as { editorial_feedback?: string }).editorial_feedback!)}\n\n`
+    : ""
+}
 Output instructions:
 - No headings, numbering, or bullet lists in the final response.
 - One flowing piece of prose; do not enumerate ideas. If you use multiple examples, weave them into the same conversational flow.

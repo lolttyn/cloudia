@@ -16,6 +16,8 @@ export type SegmentPromptInput = {
     max_ideas: number; // required, >= 1
     must_acknowledge_uncertainty: boolean;
     ban_repetition: boolean;
+    /** Optional editorial direction from reviewer (regeneration flow). Sanitized before prompt injection. */
+    editorial_feedback?: string;
   };
 };
 

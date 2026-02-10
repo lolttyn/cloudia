@@ -45,6 +45,8 @@ export async function runIntroForDate(params: {
   interpretive_frame?: InterpretiveFrame;
   collector?: RunSummaryCollector;
   scripts_only?: boolean;
+  /** Optional editorial direction (regeneration flow). Sanitized before prompt injection. */
+  editorial_feedback?: string;
 }): Promise<{
   segment_key: string;
   gate_result: ReturnType<typeof evaluateEditorialGate>;
@@ -91,6 +93,7 @@ export async function runIntroForDate(params: {
       max_ideas: 1,
       must_acknowledge_uncertainty: false,
       ban_repetition: true,
+      ...(params.editorial_feedback != null ? { editorial_feedback: params.editorial_feedback } : {}),
     },
   };
 

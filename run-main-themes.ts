@@ -233,6 +233,8 @@ export async function runMainThemesForDate(params: {
   retry_gate_failed?: boolean;
   scripts_only?: boolean;
   force_regenerate?: boolean;
+  /** Optional editorial direction (regeneration flow). Sanitized before prompt injection. */
+  editorial_feedback?: string;
 }): Promise<{
   segment_key: string;
   gate_result: ReturnType<typeof evaluateEditorialGate>;
@@ -287,6 +289,7 @@ export async function runMainThemesForDate(params: {
   const segmentConstraints = {
     ...baseConstraints,
     interpretive_frame: interpretiveFrameForPrompt,
+    ...(params.editorial_feedback != null ? { editorial_feedback: params.editorial_feedback } : {}),
   } as SegmentPromptInput["constraints"];
 
   const segment: SegmentPromptInput = {
