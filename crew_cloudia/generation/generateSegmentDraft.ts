@@ -6,7 +6,7 @@ import { buildSegmentPrompt, formatPriorScriptsBlock } from "./buildSegmentPromp
 import { sanitizeEditorialFeedback } from "./sanitizeEditorialFeedback.js";
 import { CLOUDIA_LLM_CONFIG, invokeLLM } from "./invokeLLM.js";
 import { buildIntroScaffold } from "./introScaffold.js";
-import { buildClosingScaffold } from "./closingScaffold.js";
+import { buildClosingScaffold, FRAMING_EXAMPLES, BRIDGE_EXAMPLES, PHASE_LINE_EXAMPLES } from "./closingScaffold.js";
 
 export type SegmentGenerationResult = {
   segment_key: string;
@@ -358,8 +358,15 @@ async function generateClosingDraft(params: {
     ? formatPriorScriptsBlock({ prior_scripts: priorScripts, episode_date: params.segment.episode_date })
     : "";
 
+  const phaseExamples = PHASE_LINE_EXAMPLES[frame.temporal_phase as string] ?? PHASE_LINE_EXAMPLES.baseline;
   const user_prompt = `
 ${priorBlock}The dominant contrast is "${axisPrimary}" vs "${axisCounter}". Do not use any set phrase for this contrast. Reference it through lived experience; do not repeat any canned axis phrase.
+
+Variation: The scaffold above already provides an opening and energy line. Your two sentences are the reflective middle. They should reference today's specific content, not generic settling imagery—if today was about bold first steps, close with that energy; if it was about clearing space, reference that. When prior scripts are provided, avoid repeating the same closing pattern as recent days.
+
+Example openings (for tone only; one is already in the scaffold): ${FRAMING_EXAMPLES.slice(0, 3).map((s) => `"${s}"`).join("; ")}
+Example energy phrasings for this phase: ${phaseExamples.slice(0, 2).map((s) => `"${s}"`).join("; ")}
+
 Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into sensory, physical, interpersonal, or environmental moments (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Use concrete examples like:
 - "the way your shoulders drop when you step outside"
 - "the breath you didn't realize you were holding"
