@@ -160,9 +160,10 @@ export async function runClosingForDate(params: {
         writing_contract,
         episode_validation,
       });
-      const micro = extractMicroReflection(draft.draft_script, scaffold, signoff);
+      let micro = extractMicroReflection(draft.draft_script, scaffold, signoff);
+      micro = capMicroSentences(micro, 3);
+      micro = sanitizeClosingParentheticals(micro);
       script = assembleClosingScript(scaffold, micro, signoff);
-      script = sanitizeClosingParentheticals(script);
       previousScript = script; // Store for comparison in next iteration
     } else {
       // CRITICAL: Pass the FULL closing script to the writer, not just the micro-reflection
@@ -199,19 +200,12 @@ export async function runClosingForDate(params: {
         revisedScript = revisedScript.slice(0, signoffIndex).trim();
       }
       
-      // Append canonical sign-off (system always controls this)
-      revisedScript = assembleClosingScript(scaffold, revisedScript, signoff);
-      revisedScript = sanitizeClosingParentheticals(revisedScript);
+      // Hard cap: truncate micro to at most 3 sentences (same rule as evaluator) so we pass expressive_window_length
+      let revisedMicro = capMicroSentences(revisedScript.trim(), 3);
+      revisedMicro = sanitizeClosingParentheticals(revisedMicro);
+      revisedScript = assembleClosingScript(scaffold, revisedMicro, signoff);
       
       console.log(`[closing] Rewrite returned full script (${revisedScript.length} chars). New hash: ${createHash("md5").update(revisedScript).digest("hex").substring(0, 8)}`);
-
-      // Post-rewrite guard: enforce sentence count compression (count only micro content, not scaffold/signoff)
-      const microOnly = extractMicroReflection(revisedScript, scaffold, signoff);
-      const sentenceCount = microOnly.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
-      if (sentenceCount > 3) {
-        console.warn(`[closing] Attempt ${attemptNumber}: Closing micro content too long (${sentenceCount} sentences). Will be flagged in evaluation.`);
-        // The evaluation will catch this and add blocking reason for next attempt
-      }
 
       script = revisedScript;
 
@@ -453,9 +447,13 @@ function buildClosingFullRewritePrompt(params: {
   editor_instructions: string[];
   episode_date: string;
 }) {
+  const hasLengthInstruction = params.editor_instructions.some(
+    (i) => /reduce|no more than 3|3 sentences|1-3 reflective/i.test(i)
+  );
   const instructions =
     params.editor_instructions.length > 0
-      ? params.editor_instructions.map((i, idx) => `${idx + 1}. ${i}`).join("\n")
+      ? (hasLengthInstruction ? "You must return exactly 2 or 3 sentences. Nothing more.\n\n" : "") +
+        params.editor_instructions.map((i, idx) => `${idx + 1}. ${i}`).join("\n")
       : "No specific instructions provided.";
 
   const axis = params.interpretive_frame.dominant_contrast_axis;
@@ -550,6 +548,19 @@ function extractMicroReflection(script: string, scaffold: string, signoff: strin
   const withoutScaffold = script.replace(scaffold, "").trim();
   const withoutSignoff = withoutScaffold.replace(signoff, "").trim();
   return withoutSignoff;
+}
+
+/** Same sentence-splitting as evaluateClosingWithFrame. Caps micro to maxSentences and reassembles. */
+function capMicroSentences(micro: string, maxSentences: number): string {
+  const sentences = micro
+    .split(/[.!?]+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+  if (sentences.length <= maxSentences) return micro.trim();
+  const truncated = sentences.slice(0, maxSentences);
+  let result = truncated.join(". ").trim();
+  if (result.length && !/[.!?]$/.test(result)) result += ".";
+  return result;
 }
 
 function assembleClosingScript(scaffold: string, micro: string, signoff: string): string {
