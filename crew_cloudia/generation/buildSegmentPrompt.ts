@@ -84,12 +84,12 @@ Never reproduce interpretive frame labels, why_today_clause text, or sky_anchor 
 
 ${
   segment.segment_key === "intro"
-    ? `Intro cue: open with the moment and make it obvious what kind of day this is. No previews or lists—let it feel like the first breaths of a conversation.`.trim()
+    ? `Intro cue: open with the moment and make it obvious what kind of day this is. No previews or lists—let it feel like the first breaths of a conversation. When introducing a Moon sign, briefly explain its element and ruling planet in one casual line—e.g. "Capricorn is Saturn's sign, which is why everything feels like it needs a checklist today" or "Sagittarius is fire ruled by Jupiter, so your emotional range opens up." When mentioning the Sun sign, occasionally explain what the Sun in that sign means for collective energy.`.trim()
     : ""
 }
 ${
   segment.segment_key === "main_themes"
-    ? `Main themes cue: focus on the heart of the day. On lunation days it’s the single lunation idea—do not enumerate or split themes. Let meaning unfold naturally: what today’s really about, why it shows up now, how it might show up, and how seriously to hold it—all in one flowing paragraph. Hard constraint: do not mention Moon sign or Moon ingress. Do not describe the Moon moving between signs. Anchor the interpretation to lunation only.`.trim()
+    ? `Main themes cue: focus on the heart of the day. On lunation days it’s the single lunation idea—do not enumerate or split themes. Let meaning unfold naturally: what today’s really about, why it shows up now, how it might show up, and how seriously to hold it—all in one flowing paragraph. Teach the listener in passing—briefly explain the mechanics of the sign or phase energy rather than just asserting what they should feel. Hard constraint: do not mention Moon sign or Moon ingress. Do not describe the Moon moving between signs. Anchor the interpretation to lunation only.`.trim()
     : ""
 }
 ${
@@ -259,6 +259,7 @@ ${whyTodayLine}
 
 ${segment.segment_key === "main_themes" ? `HARD CONSTRAINT: Do not mention Moon sign or Moon ingress. Do not describe the Moon moving between signs. Anchor the interpretation to lunation only, using the lunation phase label provided above.` : ""}
 ${segment.segment_key === "main_themes" ? `CRITICAL FORMAT REQUIREMENT: Your first sentence must include the lunation phase label "${lunationLabel ?? "Lunar phase"}" verbatim exactly once. Allowed openings include: "${lunationLabel ?? "Lunar phase"}: ...", "Under the ${lunationLabel ?? "Lunar phase"}, ...", or "With the ${lunationLabel ?? "Lunar phase"} overhead, ...". The first sentence must be a normal, flowing sentence; do not use any other label prefix or colon.` : ""}
+${segment.segment_key === "main_themes" ? `Teach the listener in passing—briefly explain the mechanics of the sign or phase energy (element, ruler, or collective Sun) rather than just asserting what they should feel. ` : ""}
 ${segment.segment_key === "main_themes" ? `A soft permission closer like "you don't have to fix this today" should appear at most 2–3 times per week. On other days, end differently—with a concrete micro-action, a gentle reframe, or by letting your last thought land without a tagline.${priorScriptsBlock ? " Check the prior days' scripts above to see if you've already used a permission closer this week." : ""}` : ""}
 
 Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into **behavioral, observational moments**—what you do, choose, or notice in daily life (body, home, street, food, weather, commute, conversation, waiting). Avoid work-admin metaphors (inbox, calendar, email, meetings).
@@ -309,7 +310,7 @@ ${
 CRITICAL: You must begin with this exact greeting (verbatim, ASCII apostrophes only). Do NOT modify, paraphrase, or rewrite it:
 "${expectedGreeting}"
 
-After the greeting above, state the dominant tension by showing "${axisPrimary}" vs "${axisCounter}" through lived experience (do not use any set phrase for this contrast). Express why today matters in your own words; do not copy the why-today clause verbatim. Name at least one sky anchor by label (e.g., ${anchorExample}) and use "because" once to link meaning to a sky anchor. Reinforce the dominant contrast as lived tension; do not introduce new themes.
+After the greeting above, state the dominant tension by showing "${axisPrimary}" vs "${axisCounter}" through lived experience (do not use any set phrase for this contrast). Express why today matters in your own words; do not copy the why-today clause verbatim. Name at least one sky anchor by label (e.g., ${anchorExample}) and add one short, tossed-off explanation of why that sign feels the way it does (element or ruler in casual language). Use "because" once to link meaning to a sky anchor. Reinforce the dominant contrast as lived tension; do not introduce new themes.
 
 Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into **behavioral, observational moments**—what you do, choose, or notice in daily life (body, home, street, food, weather, commute, conversation, waiting). Avoid work-admin metaphors (inbox, calendar, email, meetings).
 `.trim();
