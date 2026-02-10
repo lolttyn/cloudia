@@ -251,13 +251,21 @@ ${continuityLines.length ? "- Include at least one provided continuity hook." : 
 
 CRITICAL: Include at least two concrete micro-situations from lived experience. Use examples like:
 - "the way your shoulders drop when you step outside"
-- "the keys you keep misplacing"
-- "the conversation that keeps replaying in your head"
-- "the dish left in the sink"
+- "the breath you didn't realize you were holding"
 - "the pause before you speak"
 - "the way the light hits the window"
-- "the breath you didn't realize you were holding"
-No abstract nouns without an example. Before finalizing, scan your draft and ensure you've included at least two concrete situations.
+- "the warmth of the mug in your hands"
+- "the sound of your footsteps on the stairs"
+- "the weight of your phone in your pocket"
+- "the hum of the refrigerator in a quiet room"
+- "the feeling of cool air on your face"
+- "the smell of coffee brewing"
+- "the creak of the floor under your feet"
+- "the way your jaw unclenches"
+- "the texture of the steering wheel"
+- "the rhythm of your walking pace"
+- "the moment before you open a door"
+No abstract nouns without an example. Before finalizing, scan your draft and ensure you've included at least two concrete situations. IMPORTANT: Vary your examples—do not reuse the same micro-situations across episodes.
 
 Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into sensory, physical, interpersonal, or environmental moments (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Avoid work-admin metaphors (inbox, calendar, email, meetings).
 
@@ -341,12 +349,16 @@ async function generateClosingDraft(params: {
 The dominant contrast is "${axisPrimary}" vs "${axisCounter}". Do not use any set phrase for this contrast. Reference it through lived experience; do not repeat any canned axis phrase.
 Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into sensory, physical, interpersonal, or environmental moments (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Use concrete examples like:
 - "the way your shoulders drop when you step outside"
-- "the keys you keep misplacing"
-- "the conversation that keeps replaying in your head"
-- "the dish left in the sink"
+- "the breath you didn't realize you were holding"
 - "the pause before you speak"
 - "the way the light hits the window"
-Avoid work-admin metaphors (inbox, calendar, email, meetings, double-checking details, triage).
+- "the warmth of the mug in your hands"
+- "the hum of the refrigerator in a quiet room"
+- "the feeling of cool air on your face"
+- "the way your jaw unclenches"
+- "the rhythm of your walking pace"
+- "the moment before you open a door"
+Avoid work-admin metaphors (inbox, calendar, email, meetings, double-checking details, triage). IMPORTANT: Vary your examples—do not reuse the same micro-situations across episodes.
 Today's temporal phase is "${frame.temporal_phase}". Match the polarity without naming it:
 - building → anticipation, gathering, noticing
 - peak → intensity, presence, immediacy
