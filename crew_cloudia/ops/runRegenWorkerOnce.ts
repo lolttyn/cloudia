@@ -67,7 +67,7 @@ export async function runRegenWorkerOnce(): Promise<void> {
   const episodeDate = req.episode_date;
   const segments = req.segments ?? [];
   const sanitizedFeedback = sanitizeEditorialFeedback(req.feedback);
-  const batchId = `regen-${requestId}`;
+  const batchId = crypto.randomUUID();
   const today = new Date().toISOString().slice(0, 10);
   const timeContext = episodeDate === today ? ("day_of" as const) : ("future" as const);
 
@@ -127,9 +127,8 @@ export async function runRegenWorkerOnce(): Promise<void> {
     }
 
     const resultNotes =
-      notes.length > 0
-        ? notes.join("; ").slice(0, RESULT_NOTES_MAX)
-        : "No segments processed";
+      "Regen: " +
+      (notes.length > 0 ? notes.join("; ").slice(0, RESULT_NOTES_MAX - 7) : "No segments processed");
 
     const { error: updateErr } = await supabase
       .from("regeneration_requests")
