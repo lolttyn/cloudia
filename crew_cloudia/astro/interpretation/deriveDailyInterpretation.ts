@@ -725,7 +725,7 @@ async function mapSkyStateToSkyFeatures(
       legacyPhase = "waxing";
     } else if (phaseName === "full") {
       legacyPhase = "full";
-    } else if (phaseName.startsWith("waning")) {
+    } else if (phaseName.startsWith("waning") || phaseName === "last_quarter") {
       legacyPhase = "waning";
     }
   }
