@@ -9,6 +9,7 @@ import { sanitizeEditorialFeedback } from "../generation/sanitizeEditorialFeedba
 
 const PROGRAM_SLUG = "cloudia";
 const RESULT_NOTES_MAX = 2000;
+const STALE_PROCESSING_MS = 15 * 60 * 1000;
 
 function requireEnv(name: string): string {
   const v = process.env[name];
@@ -28,6 +29,25 @@ type RegenRow = {
 export async function runRegenWorkerOnce(): Promise<void> {
   requireEnv("SUPABASE_URL");
   requireEnv("SUPABASE_SERVICE_ROLE_KEY");
+
+  // Mark rows stuck in processing longer than 15 minutes as failed (Timed out).
+  const staleCutoff = new Date(Date.now() - STALE_PROCESSING_MS).toISOString();
+  const { data: staleRows, error: staleErr } = await supabase
+    .from("regeneration_requests")
+    .update({
+      status: "failed",
+      completed_at: new Date().toISOString(),
+      result_notes: "Timed out",
+    })
+    .eq("status", "processing")
+    .or(`processing_started_at.is.null,processing_started_at.lt.${staleCutoff}`)
+    .select("id");
+
+  if (staleErr) {
+    console.warn("[regen-worker] stale cleanup failed", { msg: staleErr.message });
+  } else if (staleRows?.length) {
+    console.log("[regen-worker] marked stale", { count: staleRows.length, ids: staleRows.map((r) => r.id) });
+  }
 
   const { data: rows, error } = await supabase.rpc("regen_claim_pending");
 
