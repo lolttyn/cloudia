@@ -165,6 +165,7 @@ export async function runClosingForDate(params: {
       let micro = extractMicroReflection(draft.draft_script, scaffold, signoff);
       micro = capMicroSentences(micro, 3);
       micro = sanitizeClosingParentheticals(micro);
+      micro = stripLeadingTrailingQuotes(micro);
       script = assembleClosingScript(scaffold, micro, signoff);
       previousScript = script; // Store for comparison in next iteration
     } else {
@@ -205,6 +206,7 @@ export async function runClosingForDate(params: {
       // Hard cap: truncate micro to at most 3 sentences (same rule as evaluator) so we pass expressive_window_length
       let revisedMicro = capMicroSentences(revisedScript.trim(), 3);
       revisedMicro = sanitizeClosingParentheticals(revisedMicro);
+      revisedMicro = stripLeadingTrailingQuotes(revisedMicro);
       revisedScript = assembleClosingScript(scaffold, revisedMicro, signoff);
       
       console.log(`[closing] Rewrite returned full script (${revisedScript.length} chars). New hash: ${createHash("md5").update(revisedScript).digest("hex").substring(0, 8)}`);
@@ -550,6 +552,11 @@ function extractMicroReflection(script: string, scaffold: string, signoff: strin
   const withoutScaffold = script.replace(scaffold, "").trim();
   const withoutSignoff = withoutScaffold.replace(signoff, "").trim();
   return withoutSignoff;
+}
+
+/** Remove leading/trailing quote characters from micro (model sometimes outputs stray ' or "). */
+function stripLeadingTrailingQuotes(micro: string): string {
+  return micro.replace(/^[\s'""`]+|[\s'""`]+$/g, "").trim();
 }
 
 /** Same sentence-splitting as evaluateClosingWithFrame. Caps micro to maxSentences and reassembles. */
