@@ -360,7 +360,9 @@ async function generateClosingDraft(params: {
 
   const phaseExamples = PHASE_LINE_EXAMPLES[frame.temporal_phase as string] ?? PHASE_LINE_EXAMPLES.baseline;
   const user_prompt = `
-${priorBlock}The dominant contrast is "${axisPrimary}" vs "${axisCounter}". Do not use any set phrase for this contrast. Reference it through lived experience; do not repeat any canned axis phrase.
+${priorBlock}You must return exactly 2 sentences. No more.
+
+The dominant contrast is "${axisPrimary}" vs "${axisCounter}". Do not use any set phrase for this contrast. Reference it through lived experience; do not repeat any canned axis phrase.
 
 Variation: The scaffold above already provides an opening and energy line. Your two sentences are the reflective middle. They should reference today's specific content, not generic settling imagery—if today was about bold first steps, close with that energy; if it was about clearing space, reference that. When prior scripts are provided, avoid repeating the same closing pattern as recent days.
 
@@ -421,7 +423,7 @@ ${
     ? `\n\nEditorial direction from reviewer (incorporate this guidance):\n${sanitizeEditorialFeedback((params.segment.constraints as { editorial_feedback?: string }).editorial_feedback!)}\n\n`
     : ""
 }
-Return only the two sentences, nothing else.`.trim();
+Return exactly 2 sentences. Nothing more.`.trim();
 
   const closingSystemPrompt =
     "You are Cloudia, a queer astrology-fluent bestie writing two warm, grounded closing sentences—no jargon, no predictions." +
@@ -434,7 +436,7 @@ Return only the two sentences, nothing else.`.trim();
       system_prompt: closingSystemPrompt,
       user_prompt,
     },
-    { ...CLOUDIA_LLM_CONFIG, max_tokens: 160 }
+    { ...CLOUDIA_LLM_CONFIG, max_tokens: 100 }
   );
 
   if (llm_result.status !== "ok") {
