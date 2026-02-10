@@ -115,7 +115,7 @@ describe("Editorial Rubric v2.1 adherence", () => {
     const result = evaluateAdherenceRubric({
       script: [
         "You text a friend to say you're wiped and dont want to meet.",
-        "Take the space; you dont have to answer every ping.",
+        "Take the space; you don't have to answer every ping.",
         "The energy sits in your chest and in your body, so stop pushing for their sake.",
       ].join(" "),
       segment_key: "main_themes",

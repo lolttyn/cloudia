@@ -110,14 +110,6 @@ function sanitizeMainThemes(script: string): string {
     : "Today moves in a quieter rhythm, and you can let it be simple.";
 }
 
-function appendMainThemesExpansion(script: string): string {
-  const expansion = [
-    "Notice how your shoulders settle when you slow down at the sink or fold a towel.",
-    "You don't have to fix this today.",
-  ].join(" ");
-  return `${script.trim()} ${expansion}`.replace(/\s{2,}/g, " ").trim();
-}
-
 function stripMoonTransitFromFrame(frame: InterpretiveFrame): InterpretiveFrame {
   const clone: any = JSON.parse(JSON.stringify(frame));
   const moonTransitPattern =
@@ -166,7 +158,7 @@ function autoRepairMechanicalViolations(
   let repaired = script;
   let needsRecheck = false;
   
-  // Repair NO_BEHAVIORAL_AFFORDANCE
+  // Repair NO_BEHAVIORAL_AFFORDANCE: use rotating closers (permission phrase, micro-action, reframe) so we don't repeat the same line daily
   if (blockingReasons.includes("NO_BEHAVIORAL_AFFORDANCE")) {
     const AFFORDANCE_MARKERS = [
       "you don't have to",
@@ -178,16 +170,22 @@ function autoRepairMechanicalViolations(
       "stop",
       "don't",
     ];
-    
     const scriptLower = repaired.toLowerCase();
-    const hasAffordance = AFFORDANCE_MARKERS.some(marker => scriptLower.includes(marker));
-    
+    const hasAffordance = AFFORDANCE_MARKERS.some((marker) => scriptLower.includes(marker));
     if (!hasAffordance) {
-      // Append a sentence with the first affordance marker (use exact marker text)
-      const affordanceSentence = `You don't have to fix this today.`;
+      const ROTATING_CLOSERS = [
+        "You don't have to fix this today.",
+        "Take the space you need.",
+        "Let this sit if it needs to.",
+        "It's okay to leave it for now.",
+        "Not today—you can come back to it.",
+      ];
+      const episodeDate = interpretiveFrame?.date ?? new Date().toISOString().slice(0, 10);
+      const index = episodeDate.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0) % ROTATING_CLOSERS.length;
+      const affordanceSentence = ROTATING_CLOSERS[index];
       repaired = `${repaired.trim()}\n\n${affordanceSentence}`;
       needsRecheck = true;
-      console.log(`[auto-repair] Added behavioral affordance marker: "${affordanceSentence}"`);
+      console.log(`[auto-repair] Added behavioral affordance (rotating): "${affordanceSentence}"`);
     }
   }
   
@@ -556,11 +554,9 @@ export async function runMainThemesForDate(params: {
     const targetMinWords = Number(process.env.CLOUDIA_MAIN_THEMES_MIN_WORDS ?? "280");
     let wordCount = script.trim().split(/\s+/).filter((word) => word.length > 0).length;
     if (wordCount < targetMinWords) {
-      // Add deterministic expansion before evaluation to avoid rewrite loops
       console.warn(
         `[main_themes] Attempt ${attemptNumber}: Script has ${wordCount} words, minimum is ${targetMinWords}. Will request expansion.`
       );
-      script = appendMainThemesExpansion(script);
       wordCount = script.trim().split(/\s+/).filter((word) => word.length > 0).length;
     }
 
@@ -899,7 +895,7 @@ ${PERMISSION_BLOCK}
 
 You are REVISING an existing draft based on editor feedback. This is not a new draft—you must actively change the previous version.
 ${lengthRequirementBlock}Non-negotiable format requirement:
-- Your revision MUST include at least one of these exact phrases (case-insensitive): "you don't have to", "you dont have to", "take the space", "let this sit", "not today", "this isn't urgent", "wait", "stop", "don't", or "dont".
+- Your revision MUST include at least one of these exact phrases (case-insensitive): "you don't have to", "take the space", "let this sit", "not today", "this isn't urgent", "wait", "stop", or "don't".
 - These phrases can appear anywhere in your revision, but at least one MUST be present or the draft will be rejected.
 
 Here is the previous draft:
@@ -910,7 +906,7 @@ ${params.previous_script}
 Your editor has requested the following changes:
 ${instructions}
 
-CRITICAL: You MUST include at least one of these exact phrases somewhere in your revision: "you don't have to", "you dont have to", "take the space", "let this sit", "not today", "this isn't urgent", "wait", "stop", "don't", or "dont". This is non-negotiable and will cause the draft to be rejected if missing.
+CRITICAL: You MUST include at least one of these exact phrases somewhere in your revision: "you don't have to", "take the space", "let this sit", "not today", "this isn't urgent", "wait", "stop", or "don't". This is non-negotiable and will cause the draft to be rejected if missing.
 
 Focus on translation, not explanation.
 
@@ -945,7 +941,7 @@ Behavioral affordance (REQUIRED):
 
 Revision requirements:
 - Apply ALL editor instructions above.
-- **MANDATORY: Include at least one of these exact phrases: "you don't have to", "you dont have to", "take the space", "let this sit", "not today", "this isn't urgent", "wait", "stop", "don't", or "dont". This phrase MUST appear in your revision or it will be rejected.**
+- **MANDATORY: Include at least one of these exact phrases: "you don't have to", "take the space", "let this sit", "not today", "this isn't urgent", "wait", "stop", or "don't". This phrase MUST appear in your revision or it will be rejected.**
 - ${hasWordCountExpansion ? 'Avoid verbatim repetition where possible, **but do not sacrifice length**. Some structural reuse is allowed to meet minimum length.' : 'Do not repeat language from the previous version.'}
 - Preserve what works; fix what doesn't.
 - Preserve the dominant_contrast_axis meaning, but translate it into human experience.

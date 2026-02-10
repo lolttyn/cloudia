@@ -119,14 +119,14 @@ const EMBODIED_SIGNALS = [
 ];
 
 const AFFORDANCE_MARKERS = [
-  "you dont have to",
+  "you don't have to",
   "not today",
   "let this sit",
-  "this isnt urgent",
+  "this isn't urgent",
   "take the space",
   "wait",
   "stop",
-  "dont",
+  "don't",
 ];
 
 const BODY_OR_EMOTION_MARKERS = [

@@ -259,6 +259,7 @@ ${whyTodayLine}
 
 ${segment.segment_key === "main_themes" ? `HARD CONSTRAINT: Do not mention Moon sign or Moon ingress. Do not describe the Moon moving between signs. Anchor the interpretation to lunation only, using the lunation phase label provided above.` : ""}
 ${segment.segment_key === "main_themes" ? `CRITICAL FORMAT REQUIREMENT: Your first sentence must include the lunation phase label "${lunationLabel ?? "Lunar phase"}" verbatim exactly once. Allowed openings include: "${lunationLabel ?? "Lunar phase"}: ...", "Under the ${lunationLabel ?? "Lunar phase"}, ...", or "With the ${lunationLabel ?? "Lunar phase"} overhead, ...". The first sentence must be a normal, flowing sentence; do not use any other label prefix or colon.` : ""}
+${segment.segment_key === "main_themes" ? `A soft permission closer like "you don't have to fix this today" should appear at most 2–3 times per week. On other days, end differently—with a concrete micro-action, a gentle reframe, or by letting your last thought land without a tagline.${priorScriptsBlock ? " Check the prior days' scripts above to see if you've already used a permission closer this week." : ""}` : ""}
 
 Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into **sensory, physical, interpersonal, or environmental moments** (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Avoid work-admin metaphors (inbox, calendar, email, meetings).
 `;
