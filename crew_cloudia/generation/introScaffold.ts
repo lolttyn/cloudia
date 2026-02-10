@@ -89,11 +89,10 @@ export function buildIntroScaffold(params: {
       (n) => `The ${n.body} is in ${n.current} today and enters ${n.next} soon.`
     ) ?? [];
 
-  // Do NOT include axis statement in scaffold - it gets inserted verbatim and contains banned phrases
-  // The axis should be expressed naturally in the LLM-generated micro content that follows the scaffold
+  // Do NOT include why_today_clause or axis in scaffold — pass as context only so the model rephrases.
+  // Including them verbatim caused leaked frame labels (e.g. "today releases and integrates; refinement over expansion").
   return [
     greeting,
-    params.why_today_clause,
     ...anchorLines,
     ...ingressLines,
   ].join("\n");
