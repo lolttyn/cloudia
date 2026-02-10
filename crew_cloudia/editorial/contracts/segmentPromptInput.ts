@@ -1,3 +1,5 @@
+import type { PriorScripts } from "../../runner/priorScripts.js";
+
 export type SegmentPromptInput = {
   episode_date: string; // ISO date
   segment_key: "intro" | "main_themes" | "reflection" | "closing";
@@ -18,6 +20,8 @@ export type SegmentPromptInput = {
     ban_repetition: boolean;
     /** Optional editorial direction from reviewer (regeneration flow). Sanitized before prompt injection. */
     editorial_feedback?: string;
+    /** Scripts from earlier this week for narrative arc continuity. Injected into prompt when present. */
+    prior_scripts?: PriorScripts;
   };
 };
 

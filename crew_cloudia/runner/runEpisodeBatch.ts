@@ -15,6 +15,11 @@ import { loadSkyStateDailyRange } from "../astro/ephemeris/persistence/loadSkySt
 import { seedSkyStateRange } from "../tools/ephemeris/seedSkyStateRange.js";
 import { loadDailyFactsRange } from "../astro/technician/persistence/loadDailyFactsRange.js";
 import { seedDailyFactsRange } from "../tools/technician/seedDailyFactsRange.js";
+import {
+  type PriorScripts,
+  loadPriorScriptsFromDb,
+  priorWeekRange,
+} from "./priorScripts.js";
 
 type ParsedArgs = {
   program_slug: string;
@@ -316,8 +321,9 @@ export async function runForDate(
   collector?: RunSummaryCollector,
   continue_on_error: boolean = false,
   retry_gate_failed: boolean = false,
-  force_regenerate: boolean = false
-): Promise<DateRunResult> {
+  force_regenerate: boolean = false,
+  prior_scripts: PriorScripts = {}
+): Promise<DateRunResult & { approved_scripts?: PriorScripts[string] }> {
   const episode_id = deterministicEpisodeId(program_slug, episode_date);
   const today = new Date().toISOString().slice(0, 10);
   const time_context = episode_date === today ? "day_of" : "future";
@@ -343,6 +349,7 @@ export async function runForDate(
     interpretive_frame,
     collector,
     scripts_only,
+    prior_scripts,
   });
 
   const mainThemesResult = await runMainThemesForDate({
@@ -356,6 +363,7 @@ export async function runForDate(
     retry_gate_failed,
     scripts_only,
     force_regenerate,
+    prior_scripts,
   });
 
   const closingResult = await runClosingForDate({
@@ -367,6 +375,7 @@ export async function runForDate(
     interpretive_frame,
     collector,
     scripts_only,
+    prior_scripts,
   });
 
   const segment_results = [
@@ -450,9 +459,16 @@ export async function runForDate(
     }
   }
 
+  const approved_scripts: PriorScripts[string] = {
+    intro: introResult.approved_script_text,
+    main_themes: mainThemesResult.approved_script_text,
+    closing: closingResult.approved_script_text,
+  };
+
   return {
     episode_date,
     success: true,
+    approved_scripts,
   };
 }
 
@@ -497,13 +513,36 @@ async function main() {
     console.log(`[batch] continue-on-error mode: will continue through all dates even if some fail`);
   }
 
+  // Load prior scripts from DB for [first_date - 6, first_date - 1] (narrative arc continuity)
+  let prior_scripts: PriorScripts = {};
+  const weekRange = priorWeekRange(date_from);
+  if (weekRange) {
+    try {
+      prior_scripts = await loadPriorScriptsFromDb({
+        program_slug,
+        start_date: weekRange.start_date,
+        end_date: weekRange.end_date,
+        deterministicEpisodeId,
+      });
+      const count = Object.keys(prior_scripts).length;
+      if (count > 0) {
+        console.log(`[batch:narrative] loaded prior scripts for ${count} date(s) from DB (${weekRange.start_date}..${weekRange.end_date})`);
+      }
+    } catch (err: any) {
+      console.warn(`[batch:narrative] could not load prior scripts from DB: ${err?.message ?? err}`);
+    }
+  }
+
   const dateResults: DateRunResult[] = [];
 
   for (const date of dates) {
     if (continue_on_error) {
       try {
-        const result = await runForDate(program_slug, date, scripts_only, collector, continue_on_error, retry_gate_failed, force_regenerate);
+        const result = await runForDate(program_slug, date, scripts_only, collector, continue_on_error, retry_gate_failed, force_regenerate, prior_scripts);
         dateResults.push(result);
+        if (result.success && result.approved_scripts) {
+          prior_scripts[date] = result.approved_scripts;
+        }
         if (!result.success) {
           console.error(`[batch:date] ${date} FAILED: ${result.error}`);
         }
@@ -531,11 +570,14 @@ async function main() {
       }
     } else {
       // Original behavior: throw on first failure
-      const result = await runForDate(program_slug, date, scripts_only, collector, continue_on_error, retry_gate_failed, force_regenerate);
+      const result = await runForDate(program_slug, date, scripts_only, collector, continue_on_error, retry_gate_failed, force_regenerate, prior_scripts);
       if (!result.success) {
         throw new Error(result.error);
       }
       dateResults.push(result);
+      if (result.approved_scripts) {
+        prior_scripts[date] = result.approved_scripts;
+      }
     }
   }
 

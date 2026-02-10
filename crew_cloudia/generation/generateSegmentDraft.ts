@@ -2,7 +2,7 @@ import { EpisodeEditorialPlan } from "../editorial/planner/types.js";
 import { SegmentPromptInput } from "../editorial/contracts/segmentPromptInput.js";
 import { SegmentWritingContract } from "../editorial/types/SegmentWritingContract.js";
 import { EpisodeValidationResult } from "../editorial/validation/episodeValidationResult.js";
-import { buildSegmentPrompt } from "./buildSegmentPrompt.js";
+import { buildSegmentPrompt, formatPriorScriptsBlock } from "./buildSegmentPrompt.js";
 import { sanitizeEditorialFeedback } from "./sanitizeEditorialFeedback.js";
 import { CLOUDIA_LLM_CONFIG, invokeLLM } from "./invokeLLM.js";
 import { buildIntroScaffold } from "./introScaffold.js";
@@ -236,8 +236,13 @@ async function generateIntroDraft(params: {
   // Extract from scaffold - first line is the greeting
   const expectedGreeting = scaffold.split("\n")[0];
 
+  const priorScripts = (params.segment.constraints as { prior_scripts?: Record<string, { main_themes?: string }> } | undefined)?.prior_scripts;
+  const priorBlock = priorScripts && Object.keys(priorScripts).length > 0
+    ? formatPriorScriptsBlock({ prior_scripts: priorScripts, episode_date: params.segment.episode_date })
+    : "";
+
   const user_prompt = `
-CRITICAL: The greeting below is LOCKED. It must appear verbatim in the final intro. Do NOT modify, paraphrase, or rewrite it. You may only write exactly two sentences that come AFTER this greeting.
+${priorBlock}CRITICAL: The greeting below is LOCKED. It must appear verbatim in the final intro. Do NOT modify, paraphrase, or rewrite it. You may only write exactly two sentences that come AFTER this greeting.
 
 LOCKED GREETING (copy verbatim, ASCII apostrophes only):
 "${expectedGreeting}"
@@ -293,10 +298,15 @@ ${
 }
 Return only the two sentences, nothing else.`.trim();
 
+  const systemPrompt =
+    "You are Cloudia, a queer astrology-fluent bestie writing two warm, conversational sentences—no jargon, no formality." +
+    (priorBlock
+      ? " When prior scripts are provided above, build on the narrative arc—callbacks, progression, or contrast—without repeating the same patterns."
+      : "");
+
   const llm_result = await invokeLLM(
     {
-      system_prompt:
-        "You are Cloudia, a queer astrology-fluent bestie writing two warm, conversational sentences—no jargon, no formality.",
+      system_prompt: systemPrompt,
       user_prompt,
     },
     { ...CLOUDIA_LLM_CONFIG, max_tokens: 160 }
@@ -350,8 +360,13 @@ async function generateClosingDraft(params: {
     temporal_phase: (frame.temporal_phase as any) ?? "baseline",
   });
 
+  const priorScripts = (params.segment.constraints as { prior_scripts?: Record<string, { main_themes?: string }> } | undefined)?.prior_scripts;
+  const priorBlock = priorScripts && Object.keys(priorScripts).length > 0
+    ? formatPriorScriptsBlock({ prior_scripts: priorScripts, episode_date: params.segment.episode_date })
+    : "";
+
   const user_prompt = `
-The dominant contrast is "${axisPrimary}" vs "${axisCounter}". Do not use any set phrase for this contrast. Reference it through lived experience; do not repeat any canned axis phrase.
+${priorBlock}The dominant contrast is "${axisPrimary}" vs "${axisCounter}". Do not use any set phrase for this contrast. Reference it through lived experience; do not repeat any canned axis phrase.
 Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into sensory, physical, interpersonal, or environmental moments (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Use concrete examples like:
 - "the way your shoulders drop when you step outside"
 - "the breath you didn't realize you were holding"
@@ -408,10 +423,15 @@ ${
 }
 Return only the two sentences, nothing else.`.trim();
 
+  const closingSystemPrompt =
+    "You are Cloudia, a queer astrology-fluent bestie writing two warm, grounded closing sentences—no jargon, no predictions." +
+    (priorBlock
+      ? " When prior scripts are provided above, avoid repeating the same closing pattern or permission phrase as recent days."
+      : "");
+
   const llm_result = await invokeLLM(
     {
-      system_prompt:
-        "You are Cloudia, a queer astrology-fluent bestie writing two warm, grounded closing sentences—no jargon, no predictions.",
+      system_prompt: closingSystemPrompt,
       user_prompt,
     },
     { ...CLOUDIA_LLM_CONFIG, max_tokens: 160 }

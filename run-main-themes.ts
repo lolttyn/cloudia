@@ -28,6 +28,7 @@ import {
 } from "./crew_cloudia/interpretation/lunationLabel.js";
 import { supabase } from "./crew_cloudia/lib/supabaseClient.js";
 import { RunSummaryCollector } from "./crew_cloudia/runner/phaseG/runSummaryCollector.js";
+import type { PriorScripts } from "./crew_cloudia/runner/priorScripts.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -243,9 +244,13 @@ export async function runMainThemesForDate(params: {
   force_regenerate?: boolean;
   /** Optional editorial direction (regeneration flow). Sanitized before prompt injection. */
   editorial_feedback?: string;
+  /** Scripts from earlier this week for narrative arc continuity. */
+  prior_scripts?: PriorScripts;
 }): Promise<{
   segment_key: string;
   gate_result: ReturnType<typeof evaluateEditorialGate>;
+  /** Set when gate approves; used by batch to accumulate prior_scripts for next date. */
+  approved_script_text?: string;
 }> {
   if (!params.interpretive_frame) {
     throw new Error("interpretive_frame is required for main_themes generation");
@@ -298,6 +303,7 @@ export async function runMainThemesForDate(params: {
     ...baseConstraints,
     interpretive_frame: interpretiveFrameForPrompt,
     ...(params.editorial_feedback != null ? { editorial_feedback: params.editorial_feedback } : {}),
+    ...(params.prior_scripts != null ? { prior_scripts: params.prior_scripts } : {}),
   } as SegmentPromptInput["constraints"];
 
   const segment: SegmentPromptInput = {
@@ -409,6 +415,7 @@ export async function runMainThemesForDate(params: {
         return {
           segment_key: "main_themes",
           gate_result: gateResult,
+          approved_script_text: latestAttempt.script_text,
         };
       }
 
@@ -809,6 +816,7 @@ export async function runMainThemesForDate(params: {
   return {
     segment_key: "main_themes",
     gate_result: gateResult,
+    ...(gateResult.decision === "approve" ? { approved_script_text: script } : {}),
   };
 }
 

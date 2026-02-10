@@ -15,6 +15,32 @@ export type AssembledPrompt = {
   user_prompt: string;
 };
 
+/** Format prior week scripts for narrative arc (main_themes only). Exported for intro/closing hybrid prompts. */
+export function formatPriorScriptsBlock(opts: {
+  prior_scripts: Record<string, { main_themes?: string }>;
+  episode_date: string;
+}): string {
+  const { prior_scripts, episode_date } = opts;
+  const datesBeforeToday = Object.keys(prior_scripts)
+    .filter((d) => d < episode_date)
+    .sort();
+  if (datesBeforeToday.length === 0) return "";
+  const lines: string[] = [
+    "## Scripts from earlier this week (for narrative continuity)",
+    "Use these to maintain arc—callbacks, progression, contrast. Don't copy or repeat. Today's script must be grounded in today's sky data.",
+    "",
+  ];
+  for (const date of datesBeforeToday) {
+    const main = prior_scripts[date]?.main_themes;
+    if (main?.trim()) {
+      lines.push(`[${date}]`);
+      lines.push("main_themes: " + main.trim().replace(/\n/g, " ").slice(0, 2000));
+      lines.push("");
+    }
+  }
+  return lines.join("\n") + "\n";
+}
+
 export function buildSegmentPrompt(input: {
   episode_plan: EpisodeEditorialPlan;
   segment: SegmentPromptInput;
@@ -89,6 +115,17 @@ Voice rules:
 Formatting rules:
 - Do not use headings, numbering, or bullet lists in the output.
 - Questions are ${writing_contract.formatting_rules.allow_questions ? "allowed" : "not allowed"}.
+${
+  (segment.constraints as { prior_scripts?: Record<string, { intro?: string; main_themes?: string; closing?: string }> } | undefined)?.prior_scripts &&
+  Object.keys((segment.constraints as any).prior_scripts).length > 0
+    ? `
+
+NARRATIVE ARC (when prior scripts are provided below):
+The podcast is a continuous daily story. Each episode builds on the previous days—you can reference yesterday's themes, show how energy evolved, create callbacks, or draw contrasts. The sky doesn't stop between episodes and neither should the narrative.
+When the Moon or energy shifts, acknowledge the transition as a story beat: what were we working with yesterday, and how does today's energy shift that?
+Never repeat the same metaphor, advice, or structural pattern from the previous 3 days. If yesterday ended with a permission phrase like "you don't have to fix this today," today needs a different landing.`
+    : ""
+}
 `.trim();
 
   const interpretiveFrame =
@@ -165,9 +202,16 @@ Formatting rules:
           .join("\n")
       : "- none";
 
+  // --- Prior scripts block (narrative arc): main_themes only, dates before today ---
+  const priorScripts = (segment.constraints as { prior_scripts?: Record<string, { main_themes?: string }> } | undefined)?.prior_scripts;
+  const priorScriptsBlock =
+    priorScripts && Object.keys(priorScripts).length > 0
+      ? formatPriorScriptsBlock({ prior_scripts: priorScripts, episode_date: segment.episode_date })
+      : "";
+
   // --- USER PROMPT (what to say today) ---
   const user_prompt = `
-Episode context:
+${priorScriptsBlock}Episode context:
 ${segment_plan.intent.join(", ")}
 
 ${

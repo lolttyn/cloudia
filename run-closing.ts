@@ -27,6 +27,7 @@ import { generateEditInstructions } from "./crew_cloudia/editorial/editor/genera
 import { buildClosingScaffold } from "./crew_cloudia/generation/closingScaffold.js";
 import { RunSummaryCollector } from "./crew_cloudia/runner/phaseG/runSummaryCollector.js";
 import { sanitizeInterpretiveFrameForPrompt } from "./crew_cloudia/generation/prompt/sanitizeInterpretiveFrame.js";
+import type { PriorScripts } from "./crew_cloudia/runner/priorScripts.js";
 
 declare const process: {
   env: Record<string, string | undefined>;
@@ -54,9 +55,13 @@ export async function runClosingForDate(params: {
   scripts_only?: boolean;
   /** Optional editorial direction (regeneration flow). Sanitized before prompt injection. */
   editorial_feedback?: string;
+  /** Scripts from earlier this week for narrative arc continuity. */
+  prior_scripts?: PriorScripts;
 }): Promise<{
   segment_key: string;
   gate_result: ReturnType<typeof evaluateEditorialGate>;
+  /** Set when gate approves; used by batch to accumulate prior_scripts for next date. */
+  approved_script_text?: string;
 }> {
   if (!params.interpretive_frame) {
     throw new Error("interpretive_frame is required for closing generation");
@@ -101,6 +106,7 @@ export async function runClosingForDate(params: {
       must_acknowledge_uncertainty: false,
       ban_repetition: true,
       ...(params.editorial_feedback != null ? { editorial_feedback: params.editorial_feedback } : {}),
+      ...(params.prior_scripts != null ? { prior_scripts: params.prior_scripts } : {}),
     },
   };
 
@@ -437,6 +443,7 @@ export async function runClosingForDate(params: {
   return {
     segment_key: "closing",
     gate_result: gateResult,
+    ...(gateResult.decision === "approve" ? { approved_script_text: script } : {}),
   };
 }
 
