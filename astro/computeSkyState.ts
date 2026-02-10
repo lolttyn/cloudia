@@ -25,6 +25,9 @@ export interface ComputeSkyStateInput {
   timezone: "UTC";
 }
 
+/** End-of-day UTC (23:59:59) so ingresses during the US day are captured for that calendar date. */
+const END_OF_DAY_UTC = 23 + 59 / 60 + 59 / 3600;
+
 const BODY_ORDER = [
   "sun",
   "moon",
@@ -65,7 +68,7 @@ export async function computeSkyState(input: ComputeSkyStateInput) {
   }
 
   const date = input.date;
-  const jd = julianDayFor(date, 12.0); // 12:00 UTC
+  const jd = julianDayFor(date, END_OF_DAY_UTC); // 23:59 UTC — captures ingresses during US day
   const timestampGenerated = new Date().toISOString();
 
   // Get metadata (deterministic)
@@ -122,7 +125,7 @@ export async function computeSkyState(input: ComputeSkyStateInput) {
     },
     timestamp: {
       date,
-      utc_datetime: `${date}T12:00:00.000Z`,
+      utc_datetime: `${date}T23:59:59.000Z`,
       timezone: "UTC",
       julian_day: jd,
     },
