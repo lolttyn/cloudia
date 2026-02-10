@@ -290,6 +290,7 @@ CRITICAL: Include at least two concrete, behavioral or observational moments fro
 - "skipping the shortcut and taking the longer route"
 - "needing to stand up and move before the next task"
 No abstract nouns without an example. Ground in behavior and small daily observations, not in object-to-cosmic-meaning chains. IMPORTANT: Vary your examples—do not reuse the same situations across episodes.
+${priorBlock ? `Do not reuse any specific behavioral image (e.g. "lingering by the window," "second cup of coffee") that appeared in the prior days' scripts. Check the prior scripts block above and vary your grounding details.` : ""}
 
 Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into behavioral, observational moments—what you do, choose, or notice in daily life (body, home, street, food, weather, commute, conversation, waiting). Avoid work-admin metaphors (inbox, calendar, email, meetings).
 
