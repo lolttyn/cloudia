@@ -35,7 +35,7 @@ declare const process: {
   exit(code?: number): never;
 };
 
-// Sign sanitizer: remove forbidden zodiac signs not in allowlist
+// Sign sanitizer: remove sentences containing forbidden zodiac signs not in allowlist
 function sanitizeForbiddenSigns(
   script: string,
   allowedSigns: string[]
@@ -44,22 +44,30 @@ function sanitizeForbiddenSigns(
     "aries", "taurus", "gemini", "cancer", "leo", "virgo",
     "libra", "scorpio", "sagittarius", "capricorn", "aquarius", "pisces"
   ];
-  
-  const scriptLower = script.toLowerCase();
+
   let sanitized = script;
-  
+
   for (const sign of zodiacSigns) {
     const signLower = sign.toLowerCase();
     const allowed = allowedSigns.some(a => a.toLowerCase().includes(signLower));
-    
-    if (!allowed && scriptLower.includes(signLower)) {
-      // Replace forbidden sign mentions with generic phrasing
-      const regex = new RegExp(`\\b${sign}\\b`, "gi");
-      sanitized = sanitized.replace(regex, "that sign");
-      console.log(`[sanitize] Replaced forbidden sign "${sign}" with "that sign"`);
+
+    if (!allowed) {
+      // Remove entire sentences containing the forbidden sign
+      const sentenceWithSign = new RegExp(
+        `[^.!?\\n]*\\b${sign}\\b[^.!?\\n]*[.!?]?`,
+        "gi"
+      );
+      const before = sanitized;
+      sanitized = sanitized.replace(sentenceWithSign, " ");
+      if (before !== sanitized) {
+        console.log(`[sanitize] Removed sentence(s) containing forbidden sign "${sign}"`);
+      }
     }
   }
-  
+
+  // Clean up whitespace
+  sanitized = sanitized.replace(/\s{2,}/g, " ").trim();
+
   return sanitized;
 }
 
@@ -104,7 +112,7 @@ function sanitizeMainThemes(script: string): string {
 function appendMainThemesExpansion(script: string): string {
   const expansion = [
     "Notice how your shoulders settle when you slow down at the sink or fold a towel.",
-    "You dont have to fix this today.",
+    "You don't have to fix this today.",
   ].join(" ");
   return `${script.trim()} ${expansion}`.replace(/\s{2,}/g, " ").trim();
 }
@@ -160,14 +168,14 @@ function autoRepairMechanicalViolations(
   // Repair NO_BEHAVIORAL_AFFORDANCE
   if (blockingReasons.includes("NO_BEHAVIORAL_AFFORDANCE")) {
     const AFFORDANCE_MARKERS = [
-      "you dont have to",
+      "you don't have to",
       "not today",
       "let this sit",
-      "this isnt urgent",
+      "this isn't urgent",
       "take the space",
       "wait",
       "stop",
-      "dont",
+      "don't",
     ];
     
     const scriptLower = repaired.toLowerCase();
@@ -175,7 +183,7 @@ function autoRepairMechanicalViolations(
     
     if (!hasAffordance) {
       // Append a sentence with the first affordance marker (use exact marker text)
-      const affordanceSentence = `You dont have to fix this today.`;
+      const affordanceSentence = `You don't have to fix this today.`;
       repaired = `${repaired.trim()}\n\n${affordanceSentence}`;
       needsRecheck = true;
       console.log(`[auto-repair] Added behavioral affordance marker: "${affordanceSentence}"`);
