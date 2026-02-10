@@ -185,6 +185,31 @@ async function generateGenericDraft(params: {
   };
 }
 
+/** Normalize for greeting comparison (match evaluateIntroWithFrame). */
+function normalizeForGreeting(s: string): string {
+  return s
+    .normalize("NFKC")
+    .replace(/[''`]/g, "'")
+    .replace(/\r\n/g, "\n")
+    .replace(/\u00A0/g, " ")
+    .trim();
+}
+
+/** If model echoed the greeting, strip it so scaffold + micro doesn't duplicate it. */
+function stripLeadingDuplicateGreeting(micro: string, expectedGreeting: string): string {
+  const normMicro = normalizeForGreeting(micro);
+  const normGreeting = normalizeForGreeting(expectedGreeting);
+  if (normMicro === normGreeting) return ""; // model returned only the greeting
+  if (!normMicro.startsWith(normGreeting)) return micro;
+  // Find cut index in original string (micro may have different length due to unicode/quotes)
+  for (let i = 0; i <= micro.length; i++) {
+    if (normalizeForGreeting(micro.slice(0, i)) === normGreeting) {
+      return micro.slice(i).replace(/^\s*\n?/, "").trimStart();
+    }
+  }
+  return micro.slice(expectedGreeting.length).replace(/^\s*\n?/, "").trimStart();
+}
+
 async function generateIntroDraft(params: {
   segment: SegmentPromptInput;
   interpretive_frame?: {
@@ -311,7 +336,10 @@ Return only the two sentences, nothing else.`.trim();
     );
   }
 
-  const micro = llm_result.text.trim();
+  let micro = llm_result.text.trim();
+  // Bug 1: model sometimes echoes the greeting — strip it so we don't double it (scaffold already has it)
+  const expectedGreetingForStrip = scaffold.split("\n")[0];
+  micro = stripLeadingDuplicateGreeting(micro, expectedGreetingForStrip);
   return {
     text: `${scaffold}\n${micro}`,
     mode: "hybrid",
