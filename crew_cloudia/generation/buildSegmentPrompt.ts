@@ -261,7 +261,7 @@ ${segment.segment_key === "main_themes" ? `HARD CONSTRAINT: Do not mention Moon 
 ${segment.segment_key === "main_themes" ? `CRITICAL FORMAT REQUIREMENT: Your first sentence must include the lunation phase label "${lunationLabel ?? "Lunar phase"}" verbatim exactly once. Allowed openings include: "${lunationLabel ?? "Lunar phase"}: ...", "Under the ${lunationLabel ?? "Lunar phase"}, ...", or "With the ${lunationLabel ?? "Lunar phase"} overhead, ...". The first sentence must be a normal, flowing sentence; do not use any other label prefix or colon.` : ""}
 ${segment.segment_key === "main_themes" ? `A soft permission closer like "you don't have to fix this today" should appear at most 2–3 times per week. On other days, end differently—with a concrete micro-action, a gentle reframe, or by letting your last thought land without a tagline.${priorScriptsBlock ? " Check the prior days' scripts above to see if you've already used a permission closer this week." : ""}` : ""}
 
-Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into **sensory, physical, interpersonal, or environmental moments** (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Avoid work-admin metaphors (inbox, calendar, email, meetings).
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into **behavioral, observational moments**—what you do, choose, or notice in daily life (body, home, street, food, weather, commute, conversation, waiting). Avoid work-admin metaphors (inbox, calendar, email, meetings).
 `;
       })()
     : ""
@@ -311,7 +311,7 @@ CRITICAL: You must begin with this exact greeting (verbatim, ASCII apostrophes o
 
 After the greeting above, state the dominant tension by showing "${axisPrimary}" vs "${axisCounter}" through lived experience (do not use any set phrase for this contrast). Express why today matters in your own words; do not copy the why-today clause verbatim. Name at least one sky anchor by label (e.g., ${anchorExample}) and use "because" once to link meaning to a sky anchor. Reinforce the dominant contrast as lived tension; do not introduce new themes.
 
-Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into **sensory, physical, interpersonal, or environmental moments** (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Avoid work-admin metaphors (inbox, calendar, email, meetings).
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into **behavioral, observational moments**—what you do, choose, or notice in daily life (body, home, street, food, weather, commute, conversation, waiting). Avoid work-admin metaphors (inbox, calendar, email, meetings).
 `.trim();
       })()
     : ""
@@ -320,7 +320,7 @@ Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, tr
 ${
   segment.segment_key === "closing"
     ? `
-Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into **sensory, physical, interpersonal, or environmental moments** (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Avoid work-admin metaphors (inbox, calendar, email, meetings).
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into **behavioral, observational moments**—what you do, choose, or notice in daily life (body, home, street, food, weather, commute, conversation, waiting). Avoid work-admin metaphors (inbox, calendar, email, meetings).
 
 You must end the episode with the following exact sign-off (verbatim). Do not paraphrase or alter it:
 

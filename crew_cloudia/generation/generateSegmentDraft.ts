@@ -255,25 +255,18 @@ Each sentence must:
 - Acknowledge today's temporal phase "${temporalPhase}" and intensity "${intensity}".
 ${continuityLines.length ? "- Include at least one provided continuity hook." : ""}
 
-CRITICAL: Include at least two concrete micro-situations from lived experience. Use examples like:
-- "the way your shoulders drop when you step outside"
-- "the breath you didn't realize you were holding"
-- "the pause before you speak"
-- "the way the light hits the window"
-- "the warmth of the mug in your hands"
-- "the sound of your footsteps on the stairs"
-- "the weight of your phone in your pocket"
-- "the hum of the refrigerator in a quiet room"
-- "the feeling of cool air on your face"
-- "the smell of coffee brewing"
-- "the creak of the floor under your feet"
-- "the way your jaw unclenches"
-- "the texture of the steering wheel"
-- "the rhythm of your walking pace"
-- "the moment before you open a door"
-No abstract nouns without an example. Before finalizing, scan your draft and ensure you've included at least two concrete situations. IMPORTANT: Vary your examples—do not reuse the same micro-situations across episodes.
+CRITICAL: Include at least two concrete, behavioral or observational moments from daily life—what you do, choose, or notice. Use examples like:
+- "you might linger over a second cup of coffee"
+- "don't be surprised if you feel like reorganizing your desk"
+- "you might catch yourself slowing down on your walk"
+- "the way you pause before answering a text"
+- "reaching for the same snack when you're thinking something through"
+- "staring out the window a beat longer than usual"
+- "skipping the shortcut and taking the longer route"
+- "needing to stand up and move before the next task"
+No abstract nouns without an example. Ground in behavior and small daily observations, not in object-to-cosmic-meaning chains. IMPORTANT: Vary your examples—do not reuse the same situations across episodes.
 
-Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into sensory, physical, interpersonal, or environmental moments (body, home, street, food, weather, commute, conversation, waiting, noise, silence). Avoid work-admin metaphors (inbox, calendar, email, meetings).
+Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into behavioral, observational moments—what you do, choose, or notice in daily life (body, home, street, food, weather, commute, conversation, waiting). Avoid work-admin metaphors (inbox, calendar, email, meetings).
 
 Additional constraints:
 - Do NOT include any greeting - the greeting is already in the scaffold above and will be combined with your sentences.
