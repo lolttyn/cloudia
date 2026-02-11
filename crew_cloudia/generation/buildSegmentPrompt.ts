@@ -9,6 +9,7 @@ import {
   extractPhaseNameFromFrame,
   mapPhaseNameToLunationLabel,
 } from "../interpretation/lunationLabel.js";
+import { getMoonAndSunMechanicsBlock } from "./signMechanics.js";
 
 export type AssembledPrompt = {
   system_prompt: string;
@@ -234,6 +235,10 @@ ${
         const lunationLabel =
           lunationContextLabel ??
           (lunationLabelResult.isFallback ? undefined : lunationLabelResult.label);
+        const signMechanicsBlock =
+          segment.segment_key === "main_themes"
+            ? getMoonAndSunMechanicsBlock(anchors)
+            : "";
         const lunationLine =
           segment.segment_key === "main_themes"
             ? `- Lunation phase (use this label verbatim): "${lunationLabel ?? "Lunar phase"}"`
@@ -259,7 +264,8 @@ ${whyTodayLine}
 
 ${segment.segment_key === "main_themes" ? `HARD CONSTRAINT: Do not mention Moon sign or Moon ingress. Do not describe the Moon moving between signs. Anchor the interpretation to lunation only, using the lunation phase label provided above. Only reference celestial bodies that appear in the interpretive frame provided. Do not introduce planets, asteroids, or points that are not part of today's frame.` : ""}
 ${segment.segment_key === "main_themes" ? `CRITICAL FORMAT REQUIREMENT: Your first sentence must include the lunation phase label "${lunationLabel ?? "Lunar phase"}" verbatim exactly once. Allowed openings include: "${lunationLabel ?? "Lunar phase"}: ...", "Under the ${lunationLabel ?? "Lunar phase"}, ...", or "With the ${lunationLabel ?? "Lunar phase"} overhead, ...". The first sentence must be a normal, flowing sentence; do not use any other label prefix or colon.` : ""}
-${segment.segment_key === "main_themes" ? `Teach the listener in passing—briefly explain the mechanics of the phase energy (element, ruler, or collective Sun) rather than just asserting what they should feel. Example teaching moments to emulate: "The waning Moon is a time to release what's done rather than start new threads." "Sagittarius is a fire sign ruled by Jupiter — think big-picture optimism and restless curiosity." "Capricorn is Saturn's earth sign, which is why everything can feel like it needs a checklist." Use this style: one short, tossed-off line that names element or ruler and links to how it shows up. ` : ""}
+${segment.segment_key === "main_themes" && signMechanicsBlock ? `Sign mechanics (you MUST include one brief teaching moment using this — non-negotiable):\n${signMechanicsBlock}\n` : ""}
+${segment.segment_key === "main_themes" ? `Teach the listener in passing—briefly explain the mechanics of the phase energy (element, ruler, or collective Sun) rather than just asserting what they should feel. Use the sign mechanics above if provided. ` : ""}
 ${segment.segment_key === "main_themes" ? `A soft permission closer like "you don't have to fix this today" should appear at most 2–3 times per week. On other days, end differently—with a concrete micro-action, a gentle reframe, or by letting your last thought land without a tagline.${priorScriptsBlock ? " Check the prior days' scripts above to see if you've already used a permission closer this week." : ""}` : ""}
 
 Never use the phrase "meaning over minutiae" (or close paraphrases). Instead, translate into **behavioral, observational moments**—what you do, choose, or notice in daily life (body, home, street, food, weather, commute, conversation, waiting). Avoid work-admin metaphors (inbox, calendar, email, meetings).

@@ -7,6 +7,7 @@ import { sanitizeEditorialFeedback } from "./sanitizeEditorialFeedback.js";
 import { CLOUDIA_LLM_CONFIG, invokeLLM } from "./invokeLLM.js";
 import { buildIntroScaffold } from "./introScaffold.js";
 import { buildClosingScaffold, FRAMING_EXAMPLES, BRIDGE_EXAMPLES, PHASE_LINE_EXAMPLES } from "./closingScaffold.js";
+import { getMoonAndSunMechanicsBlock } from "./signMechanics.js";
 
 export type SegmentGenerationResult = {
   segment_key: string;
@@ -250,6 +251,8 @@ async function generateIntroDraft(params: {
     throw new Error("Intro generation requires at least one sky anchor label");
   }
 
+  const signMechanicsBlock = getMoonAndSunMechanicsBlock(frame.sky_anchors ?? []);
+
   const temporalPhase = frame.temporal_phase;
   const intensity = frame.intensity_modifier;
   const continuityLines = [
@@ -273,6 +276,7 @@ LOCKED GREETING (copy verbatim, ASCII apostrophes only):
 "${expectedGreeting}"
 
 Write exactly two sentences that follow the greeting above.
+${signMechanicsBlock ? `\nSign mechanics (inject one brief teaching moment using this):\n${signMechanicsBlock}\n` : ""}
 Each sentence must:
 - Reference at least one of these sky anchors by label: ${anchorLabels.join(", ")}.
 - Reinforce the dominant contrast by showing "${axisPrimary}" vs "${axisCounter}" in real-life moments (no slogans).

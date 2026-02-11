@@ -26,6 +26,7 @@ import {
   extractPhaseNameFromFrame,
   mapPhaseNameToLunationLabel,
 } from "./crew_cloudia/interpretation/lunationLabel.js";
+import { getMoonAndSunMechanicsBlock } from "./crew_cloudia/generation/signMechanics.js";
 import { supabase } from "./crew_cloudia/lib/supabaseClient.js";
 import { RunSummaryCollector } from "./crew_cloudia/runner/phaseG/runSummaryCollector.js";
 import type { PriorScripts } from "./crew_cloudia/runner/priorScripts.js";
@@ -912,6 +913,8 @@ function buildShowrunnerRewritePrompt(params: {
 `
     : "";
 
+  const signMechanicsBlock = getMoonAndSunMechanicsBlock(params.interpretive_frame.sky_anchors ?? []);
+
   return `
 ${PERMISSION_BLOCK}
 
@@ -942,6 +945,7 @@ Authoritative interpretive frame:
 ${JSON.stringify(params.interpretive_frame, null, 2)}
 
 Only reference celestial bodies that appear in the interpretive frame provided. Do not introduce planets, asteroids, or points that are not part of today's frame.
+${signMechanicsBlock ? `\nSign mechanics (you MUST include one brief teaching moment — non-negotiable):\n${signMechanicsBlock}\n` : ""}
 
 Required references (express naturally, not verbatim):
 - The core tension: ${params.interpretive_frame.dominant_contrast_axis.primary} vs ${params.interpretive_frame.dominant_contrast_axis.counter} (express through lived experience, not as a named contrast)
