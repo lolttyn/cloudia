@@ -941,6 +941,8 @@ Avoid summarizing the day as a concept.
 Authoritative interpretive frame:
 ${JSON.stringify(params.interpretive_frame, null, 2)}
 
+Only reference celestial bodies that appear in the interpretive frame provided. Do not introduce planets, asteroids, or points that are not part of today's frame.
+
 Required references (express naturally, not verbatim):
 - The core tension: ${params.interpretive_frame.dominant_contrast_axis.primary} vs ${params.interpretive_frame.dominant_contrast_axis.counter} (express through lived experience, not as a named contrast)
 ${params.interpretive_frame.sky_anchors.map((a) => {
