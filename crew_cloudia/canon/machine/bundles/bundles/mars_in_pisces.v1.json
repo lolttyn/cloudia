@@ -1,0 +1,99 @@
+{
+  "slug": "mars_in_pisces",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mars in Pisces",
+  "summary": "Drive diffuses into intuition, compassion, and imagination. Action is guided by feeling and ideals, sometimes drifting without a clear map. The opportunity is to pair sensitivity with gentle but real momentum.",
+  "trigger": {
+    "signal_key": "mars_in_pisces"
+  },
+  "meaning": {
+    "headline": "Energy moves fluidly, motivated by empathy and vision.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mars in Pisces channels effort into creative, spiritual, or compassionate pursuits."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Actions follow intuition and the desire to ease suffering."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Flow states and daydreams may shape direction."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Soft approaches can be surprisingly effective."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Going with the flow means avoiding accountability or boundaries."
+      }
+    ],
+    "frictions": [
+      "Procrastination or drifting",
+      "Taking on others' pain and losing focus",
+      "Avoiding confrontation even when needed",
+      "Escapism through substances or distractions",
+      "Confusion about priorities"
+    ],
+    "opportunities": [
+      "Creative projects, music, or film",
+      "Volunteering or gentle support",
+      "Restorative movement like yoga or swimming",
+      "Meditation or reflection before acting",
+      "Imagining new solutions with compassion"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Set small, heartfelt goals for the day.",
+      "Use timers or partners to keep momentum.",
+      "Clarify boundaries before offering help.",
+      "Translate intuition into a first concrete step.",
+      "Rest when needed, then re-engage." 
+    ],
+    "avoid": [
+      "Agreeing to tasks out of guilt",
+      "Letting fantasy replace planning",
+      "Blurring your needs with others'",
+      "Numbing out when feelings rise",
+      "Promising more than you can give"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Let compassion move you-and let boundaries steer you."
+      },
+      {
+        "speakability": "can_say",
+        "text": "A small, inspired step counts more than drifting."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Spiritual or healing promises",
+      "Guarantees about mental health",
+      "Encouraging boundaryless action"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can soften motivation and invite creativity",
+      "Agency-forward language: you choose how to act on intuition",
+      "Contextual framing: gentleness helps when paired with clarity"
+    ]
+  },
+  "tags": [
+    "action",
+    "compassion",
+    "creativity",
+    "intuition",
+    "boundaries",
+    "flow"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mars as drive/assertion archetype in daily cycles"
+  ]
+}

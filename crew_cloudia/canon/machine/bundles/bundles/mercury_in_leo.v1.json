@@ -1,0 +1,99 @@
+{
+  "slug": "mercury_in_leo",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mercury in Leo",
+  "summary": "Communication takes on a confident, expressive tone. Messages favor storytelling, bold declarations, and being heard. The opportunity is to lead with warmth and clarity without overshadowing others.",
+  "trigger": {
+    "signal_key": "mercury_in_leo"
+  },
+  "meaning": {
+    "headline": "Voice wants to shine and be recognized.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mercury in Leo elevates dramatic flair, creative language, and statements delivered with conviction."
+      },
+      {
+        "speakability": "must_say",
+        "text": "It can inspire others when paired with generosity and listening."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Pride in ideas can motivate follow-through when tied to purpose."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Clarity improves when you focus on the core message rather than embellishment."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Being outspoken guarantees approval or leadership."
+      }
+    ],
+    "frictions": [
+      "Dominating conversation",
+      "Taking feedback as a threat to identity",
+      "Overpromising to maintain image",
+      "Centering personal story in every discussion",
+      "Dismissing quieter contributors"
+    ],
+    "opportunities": [
+      "Presenting ideas with enthusiasm",
+      "Public speaking or pitching",
+      "Offering sincere praise",
+      "Clarifying vision for a team",
+      "Bringing warmth to otherwise dry topics"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Lead with the headline and the heart of the story.",
+      "Invite others to contribute and credit them.",
+      "Check that tone matches audience needs.",
+      "Translate passion into specific next steps.",
+      "Use confidence to advocate for shared goals."
+    ],
+    "avoid": [
+      "Turning updates into monologues",
+      "Ignoring data that complicates your narrative",
+      "Reacting defensively to edits",
+      "Using charm to bypass accountability",
+      "Assuming enthusiasm replaces consent"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Speak boldly, and pair it with space for response."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Confidence carries best when it serves the story, not the spotlight."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of fame or recognition",
+      "Claims that charisma ensures success",
+      "Predictions about others' admiration"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can boost confidence in communication",
+      "Agency-forward language: you choose how to share the stage",
+      "Contextual framing: expressive tone helps when anchored in substance"
+    ]
+  },
+  "tags": [
+    "communication",
+    "confidence",
+    "leadership",
+    "storytelling",
+    "expression",
+    "creativity"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mercury as mind/communication archetype in daily cycles"
+  ]
+}

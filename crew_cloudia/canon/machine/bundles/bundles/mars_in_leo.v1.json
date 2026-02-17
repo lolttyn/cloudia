@@ -1,0 +1,99 @@
+{
+  "slug": "mars_in_leo",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mars in Leo",
+  "summary": "Drive is confident, expressive, and eager to lead. Actions seek recognition and align with pride or creative flair. The opportunity is to move boldly while staying collaborative and accountable.",
+  "trigger": {
+    "signal_key": "mars_in_leo"
+  },
+  "meaning": {
+    "headline": "Energy wants to shine and inspire, not hide.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mars in Leo fuels courageous action, performance, and taking up space."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Motivation grows when efforts feel meaningful or visible."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Creative projects and play compete for attention."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Loyalty and heart can guide leadership."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Being center stage guarantees success or agreement."
+      }
+    ],
+    "frictions": [
+      "Ego clashes",
+      "Overspending energy to impress",
+      "Ignoring feedback",
+      "Taking things personally when challenged",
+      "Dominating group efforts"
+    ],
+    "opportunities": [
+      "Presenting or pitching confidently",
+      "Championing a cause or teammate",
+      "Bringing enthusiasm to stalled plans",
+      "Expressing creativity through action",
+      "Practicing generous leadership"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Share credit while you lead.",
+      "Check ego against the goal.",
+      "Use storytelling to inspire action.",
+      "Set boundaries on energy and spending.",
+      "Seek feedback before declaring victory."
+    ],
+    "avoid": [
+      "Performing without a plan",
+      "Assuming applause equals consent",
+      "Brushing off quieter voices",
+      "Letting pride prevent course correction",
+      "Treating risk as proof of bravery"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Lead boldly, and keep the team in the spotlight too."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Pride can power action when it stays aligned with purpose."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of fame or victory",
+      "Assumptions about loyalty",
+      "Guarantees that confidence overrides risk"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can boost confidence and leadership",
+      "Agency-forward language: you choose how to use visibility",
+      "Contextual framing: boldness helps when paired with care"
+    ]
+  },
+  "tags": [
+    "action",
+    "confidence",
+    "leadership",
+    "creativity",
+    "performance",
+    "enthusiasm"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mars as drive/assertion archetype in daily cycles"
+  ]
+}

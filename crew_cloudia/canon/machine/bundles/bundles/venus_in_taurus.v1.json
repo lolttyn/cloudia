@@ -1,0 +1,99 @@
+{
+  "slug": "venus_in_taurus",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Venus in Taurus",
+  "summary": "Affection slows down and seeks stability. Pleasure leans toward comfort, reliability, and tangible expressions of care. The opportunity is to savor and invest in what feels lasting.",
+  "trigger": {
+    "signal_key": "venus_in_taurus"
+  },
+  "meaning": {
+    "headline": "Connection values steadiness, simplicity, and sensual grounding.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Venus in Taurus emphasizes loyalty, consistency, and enjoyment of physical or material comforts."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Relationships benefit from showing up reliably rather than dramatically."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Taste and values lean toward quality and practicality."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Small rituals of care become meaningful."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Comfort means nothing needs to change or be addressed."
+      }
+    ],
+    "frictions": [
+      "Attachment to routines that need updating",
+      "Possessiveness or resistance to change",
+      "Overindulgence in food, spending, or rest",
+      "Difficulty voicing dissatisfaction",
+      "Slow adaptation to others' needs"
+    ],
+    "opportunities": [
+      "Strengthening trust through consistency",
+      "Investing in durable goods or experiences",
+      "Sharing meals or sensory pleasures",
+      "Clarifying shared values around resources",
+      "Creating soothing environments"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Show love through dependable actions.",
+      "Budget for pleasures you truly value.",
+      "State boundaries calmly and early.",
+      "Invite steady routines that support connection.",
+      "Notice when comfort is restorative versus avoidant."
+    ],
+    "avoid": [
+      "Equating stability with stagnation",
+      "Hoarding resources out of fear",
+      "Using gifts to replace conversation",
+      "Ignoring partner feedback to keep peace",
+      "Overindulging to escape discomfort"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Consistency and care speak louder than rush or spectacle."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Savor what feels solid while staying open to needed adjustments."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions of financial or romantic outcomes",
+      "Moralizing comfort-seeking",
+      "Guarantees of loyalty"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can encourage steadiness and appreciation",
+      "Agency-forward language: you choose how to invest and share",
+      "Contextual framing: comfort helps when it is conscious"
+    ]
+  },
+  "tags": [
+    "relationships",
+    "stability",
+    "values",
+    "pleasure",
+    "loyalty",
+    "comfort"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Venus as relating/values archetype in daily cycles"
+  ]
+}

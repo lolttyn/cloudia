@@ -1,0 +1,99 @@
+{
+  "slug": "mars_in_aries",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mars in Aries",
+  "summary": "Energy is hot, direct, and ready to act. Courage rises, along with impatience for delays. The opportunity is to channel initiative into clear targets instead of scattering or rushing.",
+  "trigger": {
+    "signal_key": "mars_in_aries"
+  },
+  "meaning": {
+    "headline": "Drive seeks immediate action and visible progress.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mars in Aries amplifies boldness, competition, and the urge to start."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Momentum builds quickly when direction is named."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Physical outlets help manage restlessness."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Short, decisive efforts beat long deliberation today."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Force is the same as leadership or guarantees success."
+      }
+    ],
+    "frictions": [
+      "Impulsive decisions",
+      "Starting fights to release tension",
+      "Dropping tasks once novelty fades",
+      "Ignoring input from others",
+      "Accidents from moving too fast"
+    ],
+    "opportunities": [
+      "Launching a stalled project",
+      "Making a clear ask",
+      "Taking action on a personal goal",
+      "Advocating for yourself or others",
+      "Using exercise to focus energy"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Pick one priority and tackle it first.",
+      "Warm up before physical exertion.",
+      "Signal your pace so others can opt in or out.",
+      "Pause briefly before reacting.",
+      "Use confidence to open doors, not push through them."
+    ],
+    "avoid": [
+      "Assuming speed equals accuracy",
+      "Pushing past consent",
+      "Overcommitting in the moment",
+      "Ignoring recovery needs",
+      "Turning every task into a battle"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Aim the spark at one clear target."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Quick moves land best when they include a check-in."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions of conflict or injury",
+      "Promises of victory",
+      "Encouraging reckless behavior"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can energize initiative and courage",
+      "Agency-forward language: you choose how to direct the drive",
+      "Contextual framing: speed helps when matched with awareness"
+    ]
+  },
+  "tags": [
+    "action",
+    "initiative",
+    "courage",
+    "momentum",
+    "boundaries",
+    "focus"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mars as drive/assertion archetype in daily cycles"
+  ]
+}

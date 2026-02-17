@@ -1,0 +1,102 @@
+{
+  "slug": "sun_sextile_venus",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Sun sextile Venus",
+  "summary": "A supportive bridge between self-expression and connection. Interactions feel warmer, and it is easier to align choices with what feels pleasant and genuine. The opportunity is to cultivate ease without avoiding substance.",
+  "trigger": {
+    "signal_key": "sun_sextile_venus",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Identity and relating cooperate, opening space for smooth exchanges.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Sun-Venus sextiles support social grace and creative expression that reflects true values."
+      },
+      {
+        "speakability": "must_say",
+        "text": "It is easier to appreciate beauty and connection without feeling you have to perform for it."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Small gestures of appreciation can land well today."
+      },
+      {
+        "speakability": "can_say",
+        "text": "This is a favorable time to refresh aesthetics or refine a shared plan."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Harmony means you can skip boundaries or hard conversations."
+      }
+    ],
+    "frictions": [
+      "Agreeing too quickly to keep things smooth",
+      "Sugarcoating feedback",
+      "Letting convenience replace sincerity",
+      "Avoiding initiative because comfort is available",
+      "Overextending socially"
+    ],
+    "opportunities": [
+      "Making invitations or reconnecting",
+      "Updating shared expectations gently",
+      "Investing in art, design, or simple pleasures",
+      "Aligning spending with values",
+      "Expressing appreciation clearly"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Say yes to interactions that feel mutual.",
+      "Share compliments that are specific and real.",
+      "Tidy or beautify a space to match your mood.",
+      "Review budgets or plans through a values lens.",
+      "Use lightness to open the door to meaningful topics."
+    ],
+    "avoid": [
+      "Committing out of politeness",
+      "Ignoring your own preferences",
+      "Spending impulsively to chase pleasure",
+      "Letting charm stand in for follow-through",
+      "Smoothing over issues that need clarity"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Ease in connection can support choices that feel authentic."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Use warmth to invite substance, not to avoid it."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of romantic or financial gain",
+      "Deterministic statements about popularity",
+      "Assumptions that charm will solve conflicts"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can smooth interactions and creative work",
+      "Agency-based language: you choose how to participate",
+      "Contextual framing: ease helps when paired with clarity"
+    ]
+  },
+  "tags": [
+    "relationships",
+    "values",
+    "ease",
+    "creativity",
+    "aesthetics",
+    "alignment"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Sun-Venus sextile as social support"
+  ]
+}

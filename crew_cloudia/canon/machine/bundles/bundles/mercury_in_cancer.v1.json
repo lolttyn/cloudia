@@ -1,0 +1,99 @@
+{
+  "slug": "mercury_in_cancer",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mercury in Cancer",
+  "summary": "Communication takes on a caring, subjective tone. Memories, family matters, and emotional context shape how information is received. The opportunity is to speak with empathy while still naming facts.",
+  "trigger": {
+    "signal_key": "mercury_in_cancer"
+  },
+  "meaning": {
+    "headline": "Mind and mood are intertwined, inviting attentive listening.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mercury in Cancer heightens sensitivity to tone and subtext, emphasizing protective or nurturing communication."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Information sticks when it connects to personal meaning or memory."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Storytelling and imagery help ideas land."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Private conversations may feel safer than public debate."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Emotional tone overrides logic or guarantees understanding."
+      }
+    ],
+    "frictions": [
+      "Taking feedback personally",
+      "Withholding information to avoid vulnerability",
+      "Indirect communication that confuses others",
+      "Ruminating on past comments",
+      "Overprotecting loved ones from necessary truths"
+    ],
+    "opportunities": [
+      "Checking in on loved ones",
+      "Sharing origin stories behind a decision",
+      "Organizing home or family logistics",
+      "Creating supportive meeting spaces",
+      "Using memory to inform current choices"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "State feelings and facts separately.",
+      "Use gentle tone without hiding the point.",
+      "Ask clarifying questions before assuming intent.",
+      "Create safe containers for sensitive topics.",
+      "Give yourself time to process before replying."
+    ],
+    "avoid": [
+      "Assuming silence equals safety",
+      "Letting nostalgia block needed change",
+      "Using guilt to get agreement",
+      "Holding grudges instead of naming hurt",
+      "Overexplaining to manage others' feelings"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Lead with care, but keep the message clear."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Memory can guide you-just confirm what is true now."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Predictions of family or relationship outcomes",
+      "Psychological diagnoses or trauma claims",
+      "Guarantees that emotions will dictate reality"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can sensitize communication to emotional context",
+      "Agency-forward language: you choose how much to share and when",
+      "Contextual framing: empathy helps when paired with clarity"
+    ]
+  },
+  "tags": [
+    "communication",
+    "empathy",
+    "memory",
+    "boundaries",
+    "family",
+    "listening"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mercury as mind/communication archetype in daily cycles"
+  ]
+}

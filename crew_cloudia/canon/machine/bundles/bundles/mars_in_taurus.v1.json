@@ -1,0 +1,99 @@
+{
+  "slug": "mars_in_taurus",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mars in Taurus",
+  "summary": "Energy is steady and persistent. Action favors tangible results, patience, and consistency over speed. The opportunity is to build momentum slowly and stick with what you start.",
+  "trigger": {
+    "signal_key": "mars_in_taurus"
+  },
+  "meaning": {
+    "headline": "Drive moves deliberately toward practical outcomes.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mars in Taurus supports endurance, reliability, and work that accumulates over time."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Motivation increases when effort leads to security or tangible comfort."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Resistance to change can be strength when protecting what matters."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Physical grounding-gardening, walking, building-helps focus."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Steady pace equals stubbornness or laziness."
+      }
+    ],
+    "frictions": [
+      "Inertia at the start",
+      "Reluctance to pivot when needed",
+      "Overindulgence instead of action",
+      "Holding onto tasks past their value",
+      "Ignoring urgency until it piles up"
+    ],
+    "opportunities": [
+      "Working through tasks that need patience",
+      "Building sustainable routines",
+      "Investing effort in long-term rewards",
+      "Focusing on body-based activities",
+      "Simplifying plans to essentials"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Set a clear, realistic pace.",
+      "Use tactile rewards to stay engaged.",
+      "Stick with one task until a milestone is reached.",
+      "Check in on whether resistance is protective or avoidant.",
+      "Maintain your body with stretching and rest."
+    ],
+    "avoid": [
+      "Staying stuck out of sheer habit",
+      "Letting comfort replace progress",
+      "Ignoring deadlines",
+      "Assuming slowness means failure",
+      "Piling tasks without prioritizing"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Slow, steady effort can make today's progress stick."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Protect your pace, and keep moving."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Financial guarantees",
+      "Moralizing slow pace",
+      "Promises that patience prevents all problems"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can build endurance and follow-through",
+      "Agency-forward language: you choose what deserves sustained effort",
+      "Contextual framing: steadiness helps when tasks are prioritized"
+    ]
+  },
+  "tags": [
+    "action",
+    "persistence",
+    "stability",
+    "patience",
+    "resources",
+    "focus"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mars as drive/assertion archetype in daily cycles"
+  ]
+}

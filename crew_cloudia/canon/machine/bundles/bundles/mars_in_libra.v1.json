@@ -1,0 +1,99 @@
+{
+  "slug": "mars_in_libra",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Mars in Libra",
+  "summary": "Action seeks balance, partnership, and fair play. Motivation rises in collaboration but can hesitate when choices feel lopsided. The opportunity is to move together with clarity on boundaries and goals.",
+  "trigger": {
+    "signal_key": "mars_in_libra"
+  },
+  "meaning": {
+    "headline": "Drive wants cooperation and harmony without losing direction.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mars in Libra channels energy into negotiation, teamwork, and justice-oriented action."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Initiative increases when efforts feel mutual and equitable."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Charm can open doors, but decisions still need clarity."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Physical movement with others-dancing, sports-feels motivating."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Avoiding conflict is the same as resolving it."
+      }
+    ],
+    "frictions": [
+      "Indecision from weighing every perspective",
+      "Passive-aggressive responses",
+      "Acting only after others move first",
+      "Using charm to delay decisions",
+      "Giving up your stance to keep peace"
+    ],
+    "opportunities": [
+      "Joint planning sessions",
+      "Mediating disagreements",
+      "Taking decisive action on fairness issues",
+      "Setting shared boundaries",
+      "Aligning aesthetics and function in projects"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "State your position before negotiating.",
+      "Invite input, then choose a path.",
+      "Use clear timelines for shared tasks.",
+      "Balance charm with direct asks.",
+      "Move your body to release tension before difficult talks."
+    ],
+    "avoid": [
+      "Stalling decisions to avoid discomfort",
+      "Agreeing to things you resent",
+      "Expecting others to lead every time",
+      "Equating politeness with passivity",
+      "Letting fairness debates replace action"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Act together-fairly and clearly."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Diplomacy works best when it ends in a decision."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Promises of legal or relationship outcomes",
+      "Assumptions that peacekeeping prevents conflict",
+      "Guarantees that everyone will agree"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can aid collaborative action",
+      "Agency-forward language: you choose when to compromise or assert",
+      "Contextual framing: balance helps when paired with clarity"
+    ]
+  },
+  "tags": [
+    "action",
+    "collaboration",
+    "diplomacy",
+    "balance",
+    "decision_making",
+    "fairness"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mars as drive/assertion archetype in daily cycles"
+  ]
+}

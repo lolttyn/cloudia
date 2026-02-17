@@ -1,0 +1,99 @@
+{
+  "slug": "venus_in_capricorn",
+  "version": 1,
+  "kind": "planet_in_sign",
+  "title": "Venus in Capricorn",
+  "summary": "Affection is steady, pragmatic, and goal-oriented. Loyalty and reliability matter more than flash. The opportunity is to build trust through consistent action and clear commitments.",
+  "trigger": {
+    "signal_key": "venus_in_capricorn"
+  },
+  "meaning": {
+    "headline": "Connection values responsibility, structure, and long-term investment.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Venus in Capricorn favors dependable gestures, clear promises, and practical support."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Respect is shown through follow-through and honoring boundaries."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Shared ambitions or projects can deepen bonds."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Elegance leans toward minimalism and quality over quantity."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Serious tone means affection is absent or transactional."
+      }
+    ],
+    "frictions": [
+      "Work overshadowing intimacy",
+      "Overfunctioning to prove worth",
+      "Rigid expectations of how love should look",
+      "Reluctance to show vulnerability",
+      "Using duty to avoid pleasure"
+    ],
+    "opportunities": [
+      "Setting realistic agreements",
+      "Reviewing shared finances or goals",
+      "Demonstrating care through reliability",
+      "Celebrating milestones modestly",
+      "Building traditions that last"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "State commitments and timelines clearly.",
+      "Make space for affection alongside responsibility.",
+      "Invest in quality rather than excess.",
+      "Share what support you can offer without overextending.",
+      "Acknowledge emotions even when tone is practical."
+    ],
+    "avoid": [
+      "Assuming seriousness equals coldness",
+      "Taking on all duties to feel deserving",
+      "Dismissing spontaneity entirely",
+      "Using achievements to substitute for intimacy",
+      "Overcontrolling joint plans"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Steady care and clear promises build trust today."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Let structure support affection, not replace it."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Financial or career predictions",
+      "Guarantees of relationship longevity",
+      "Moralizing productivity"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can stabilize commitments and boundaries",
+      "Agency-forward language: you choose what you can promise",
+      "Contextual framing: reliability helps when paired with openness"
+    ]
+  },
+  "tags": [
+    "relationships",
+    "commitment",
+    "structure",
+    "responsibility",
+    "loyalty",
+    "stability"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Venus as relating/values archetype in daily cycles"
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "slug": "sun_opposition_mercury",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Sun opposition Mercury",
+  "summary": "Identity and viewpoint pull in opposite directions. What you intend to express may clash with how you're processing information. The opportunity is to let feedback sharpen clarity instead of defaulting to defensiveness.",
+  "trigger": {
+    "signal_key": "sun_opposition_mercury",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Self-expression and thinking mirror each other from opposite sides.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Sun-Mercury oppositions surface tension between personal stance and the facts or messages being received."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Communication can feel confrontational, but it also reveals blind spots if approached with curiosity."
+      },
+      {
+        "speakability": "can_say",
+        "text": "You may notice a gap between the story you want to tell and the information available."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Debate can be productive when aimed at clarity rather than winning."
+      },
+      {
+        "speakability": "avoid",
+        "text": "This aspect forces conflict or proves someone is wrong."
+      }
+    ],
+    "frictions": [
+      "Taking disagreement as a personal attack",
+      "Speaking over others to defend a position",
+      "Cherry-picking facts to protect ego",
+      "Paralysis from over-analyzing options",
+      "Misreading tone and intent"
+    ],
+    "opportunities": [
+      "Refining arguments with better information",
+      "Practicing active listening",
+      "Separating identity from opinion",
+      "Updating plans after receiving new data",
+      "Articulating boundaries without shutting down dialogue"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Ask clarifying questions before responding.",
+      "Write down what you think you heard to test it.",
+      "Let evidence inform your stance.",
+      "Own your perspective without needing consensus.",
+      "Pause if conversation heat rises, then return deliberately."
+    ],
+    "avoid": [
+      "Assuming disagreement equals disrespect",
+      "Talking to win rather than to understand",
+      "Retreating into silence to avoid discomfort",
+      "Assuming tone over text or vice versa tells the whole story",
+      "Spreading unverified claims to back a point"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "Let the tension between what you think and what you hear sharpen your clarity."
+      },
+      {
+        "speakability": "can_say",
+        "text": "You can defend a point without defending your whole identity."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Declaring outcomes of arguments or negotiations",
+      "Assuming someone will be exposed as wrong",
+      "Framing conflict as unavoidable"
+    ],
+    "allowed_framing": [
+      "Possibility language: can reveal gaps, can clarify",
+      "Agency-forward framing: you choose how to respond to disagreement",
+      "Contextual framing: conversations may feel charged, so pacing helps"
+    ]
+  },
+  "tags": [
+    "communication",
+    "clarity",
+    "listening",
+    "ego",
+    "discernment",
+    "boundaries"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Sun-Mercury opposition as clarity tension"
+  ]
+}

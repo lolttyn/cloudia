@@ -1,13 +1,13 @@
 {
-    "slug": "sun_conjunct_moon",
+    "slug": "sun_conjunction_moon",
     "version": 1,
     "kind": "aspect",
-    "title": "Sun conjunct Moon",
+    "title": "Sun conjunction Moon",
     "summary": "A moment of alignment between inner experience and outward expression. Feelings and intentions move in the same direction, reducing friction and clarifying priorities. The opportunity is to act from coherence rather than impulse.",
     "trigger": {
-      "signal_key": "sun_moon_conjunction",
+      "signal_key": "sun_conjunction_moon",
       "constraints": {
-        "orb_max_degrees": 6
+        "orb_max_degrees": 3
       }
     },
     "meaning": {

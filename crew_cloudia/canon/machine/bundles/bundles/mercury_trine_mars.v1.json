@@ -1,0 +1,102 @@
+{
+  "slug": "mercury_trine_mars",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Mercury trine Mars",
+  "summary": "Quick thinking and action align smoothly. Decisions can be made with confidence, and direct language feels energized without being harsh. The opportunity is to harness sharp focus for meaningful moves.",
+  "trigger": {
+    "signal_key": "mercury_trine_mars",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Mind and drive are in sync, enabling decisive, clear communication.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Mercury-Mars trines support confident speech and fast problem-solving."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Taking action on ideas feels natural when direction is set."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Debates can be lively and productive when kept goal-oriented."
+      },
+      {
+        "speakability": "can_say",
+        "text": "This is a good time for decisive emails, pitches, or troubleshooting."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Speed guarantees accuracy or agreement."
+      }
+    ],
+    "frictions": [
+      "Talking over people slower to respond",
+      "Impatience with ambiguity",
+      "Leaping to conclusions",
+      "Using sharp words unnecessarily",
+      "Assuming confidence equals permission"
+    ],
+    "opportunities": [
+      "Making clear requests",
+      "Advancing stalled decisions",
+      "Repairing or optimizing systems quickly",
+      "Expressing boundaries plainly",
+      "Channeling mental energy into physical action"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Lead with a clear ask or proposal.",
+      "Confirm consent before moving quickly.",
+      "Use concise language, then invite questions.",
+      "Apply energy to tasks that benefit from speed.",
+      "Take short breaks to keep accuracy high."
+    ],
+    "avoid": [
+      "Assuming others keep your pace",
+      "Cutting corners on verification",
+      "Mistaking volume for impact",
+      "Pushing decisions where stakes are unclear",
+      "Responding while irritated"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "When thought and action sync, clarity can move fast."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Use the sharp focus for decisions that benefit from momentum."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of success or persuasion",
+      "Predictions of conflict or accidents",
+      "Claims that bluntness will always be rewarded"
+    ],
+    "allowed_framing": [
+      "Supportive framing: can energize decisive thinking",
+      "Agency-forward language: you choose pacing and tone",
+      "Contextual framing: smooth flow helps if paired with care"
+    ]
+  },
+  "tags": [
+    "communication",
+    "action",
+    "decisiveness",
+    "focus",
+    "momentum",
+    "problem_solving"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Mercury-Mars trine as decisive clarity"
+  ]
+}

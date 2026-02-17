@@ -1,0 +1,102 @@
+{
+  "slug": "sun_conjunction_mars",
+  "version": 1,
+  "kind": "aspect",
+  "title": "Sun conjunction Mars",
+  "summary": "A surge of self-directed drive. Purpose and action line up, making it easier to push forward with confidence. The opportunity is decisive momentum without steamrolling yourself or others.",
+  "trigger": {
+    "signal_key": "sun_conjunction_mars",
+    "constraints": {
+      "orb_max_degrees": 3
+    }
+  },
+  "meaning": {
+    "headline": "Identity and initiative are fused, creating direct momentum.",
+    "frames": [
+      {
+        "speakability": "must_say",
+        "text": "Sun-Mars conjunctions amplify willpower, making it easier to act on personal priorities."
+      },
+      {
+        "speakability": "must_say",
+        "text": "Energy runs hot and focused, supporting decisive moves when direction is clear."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Confidence increases when purpose and effort are aligned."
+      },
+      {
+        "speakability": "can_say",
+        "text": "This is a strong day for initiating something you intend to sustain."
+      },
+      {
+        "speakability": "avoid",
+        "text": "Today guarantees victory or overrides all obstacles."
+      }
+    ],
+    "frictions": [
+      "Impatience with slower pacing",
+      "Taking pushback personally",
+      "Overcommitting out of adrenaline",
+      "Ignoring limits until after action",
+      "Assuming urgency equals importance"
+    ],
+    "opportunities": [
+      "Making a bold start on a priority",
+      "Claiming agency in areas that felt stalled",
+      "Channeling courage into constructive action",
+      "Setting a clear pace and sticking to it",
+      "Aligning leadership with tangible steps"
+    ]
+  },
+  "guidance": {
+    "do": [
+      "Name the goal before you sprint toward it.",
+      "Direct extra energy into one meaningful task.",
+      "Move first, then adjust based on feedback.",
+      "Use physical outlets to prevent agitation.",
+      "Pair confidence with accountability."
+    ],
+    "avoid": [
+      "Starting fights to release tension",
+      "Treating speed as proof of rightness",
+      "Pushing past clear boundaries",
+      "Ignoring recovery needs",
+      "Assuming others are on your timetable"
+    ],
+    "reusable_lines": [
+      {
+        "speakability": "must_say",
+        "text": "When purpose and drive fuse, momentum comes quickly."
+      },
+      {
+        "speakability": "can_say",
+        "text": "Lead with intention, not just adrenaline."
+      }
+    ]
+  },
+  "safety": {
+    "forbidden_claims": [
+      "Guarantees of conquest, success, or dominance",
+      "Predictions of conflict or injury",
+      "Framing aggression as inevitable"
+    ],
+    "allowed_framing": [
+      "Process-based language: supports initiative, energizes action",
+      "Agency-forward framing: you choose where to aim this push",
+      "Contextual framing: momentum helps if paired with direction"
+    ]
+  },
+  "tags": [
+    "initiative",
+    "drive",
+    "confidence",
+    "leadership",
+    "momentum",
+    "agency"
+  ],
+  "sources": [
+    "Modern psychological astrology",
+    "Sun-Mars conjunction as drive alignment"
+  ]
+}
